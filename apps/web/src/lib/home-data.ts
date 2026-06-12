@@ -6,7 +6,7 @@ export const homeScenes: Scene[] = [
     realm: "ancient_road",
     titleKey: "realms.ancientRoad.title",
     summaryKey: "realms.ancientRoad.summary",
-    coverAsset: "/images/home/ancient-road.webp",
+    coverAsset: "/images/home/ancient-road-user.webp",
     updatedAt: "2026-06-12",
     cta: {
       labelKey: "realms.ancientRoad.cta",
@@ -18,7 +18,7 @@ export const homeScenes: Scene[] = [
     realm: "lychee_field",
     titleKey: "realms.lycheeField.title",
     summaryKey: "realms.lycheeField.summary",
-    coverAsset: "/images/home/lychee-field.webp",
+    coverAsset: "/images/home/lychee-field-user.webp",
     updatedAt: "2026-06-12",
     cta: {
       labelKey: "realms.lycheeField.cta",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { CalendarDays, CloudSun, Map, MoveRight, ShieldCheck, Sprout } from "lucide-react"
+import { CalendarDays, CloudSun, Map, MoveRight, ShieldCheck, Sprout, UserRound } from "lucide-react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { featuredPlayCards, homeScenes, previewStats } from "@web/lib/home-data"
@@ -62,13 +62,22 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
               {t("nav.adoption")}
             </Link>
           </nav>
-          <Link
-            className="hidden h-10 items-center gap-2 rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-rice sm:inline-flex"
-            href="#realms"
-          >
-            {t("nav.start")}
-            <MoveRight aria-hidden="true" className="h-4 w-4" />
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              className="inline-flex h-10 items-center gap-2 rounded-full border border-white/18 px-3 text-sm font-semibold text-white transition hover:bg-white/10 sm:px-4"
+              href="#top"
+            >
+              <UserRound aria-hidden="true" className="h-4 w-4" />
+              {t("nav.login")}
+            </Link>
+            <Link
+              className="hidden h-10 items-center gap-2 rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-rice sm:inline-flex"
+              href="#realms"
+            >
+              {t("nav.start")}
+              <MoveRight aria-hidden="true" className="h-4 w-4" />
+            </Link>
+          </div>
         </Section>
       </header>
 
@@ -160,6 +169,53 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
         </div>
       </Section>
 
+      <Section className="grid gap-5 pt-20 lg:grid-cols-[1.08fr_0.92fr]">
+        <div
+          className="overflow-hidden rounded-lg border border-stone bg-white shadow-soft"
+          id="booking-preview"
+        >
+          <div className="relative aspect-[16/9]">
+            <Image
+              alt={t("booking.imageAlt")}
+              className="object-cover"
+              fill
+              sizes="(min-width: 1024px) 55vw, 100vw"
+              src="/images/home/courtyard-booking-generated.webp"
+            />
+          </div>
+          <div className="p-6">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-water">
+              {t("booking.eyebrow")}
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold">{t("booking.title")}</h2>
+            <p className="mt-3 text-sm leading-7 text-ink/68">{t("booking.body")}</p>
+            <div className="mt-5 inline-flex rounded-full border border-stone px-4 py-2 text-sm font-semibold text-ink/72">
+              {t("booking.status")}
+            </div>
+          </div>
+        </div>
+        <div
+          className="rounded-lg border border-stone bg-ink p-6 text-white shadow-soft"
+          id="adoption-preview"
+        >
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-white/58">
+            {t("adoption.eyebrow")}
+          </p>
+          <h2 className="mt-3 text-3xl font-extrabold">{t("adoption.title")}</h2>
+          <p className="mt-3 text-sm leading-7 text-white/70">{t("adoption.body")}</p>
+          <div className="mt-6 grid gap-3">
+            {[1, 2, 3].map((item) => (
+              <div className="rounded-md bg-white/8 p-4" key={item}>
+                <div className="text-sm font-semibold">{t(`adoption.steps.${item}.title`)}</div>
+                <div className="mt-1 text-sm leading-6 text-white/62">
+                  {t(`adoption.steps.${item}.body`)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
       <Section className="pt-20" id="realms">
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div>
@@ -207,52 +263,6 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
         </div>
       </Section>
 
-      <Section className="grid gap-5 pt-20 lg:grid-cols-[1.08fr_0.92fr]">
-        <div
-          className="overflow-hidden rounded-lg border border-stone bg-white shadow-soft"
-          id="booking-preview"
-        >
-          <div className="relative aspect-[16/9]">
-            <Image
-              alt={t("booking.imageAlt")}
-              className="object-cover"
-              fill
-              sizes="(min-width: 1024px) 55vw, 100vw"
-              src="/images/home/stone-house.webp"
-            />
-          </div>
-          <div className="p-6">
-            <p className="text-sm font-bold uppercase tracking-[0.18em] text-water">
-              {t("booking.eyebrow")}
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold">{t("booking.title")}</h2>
-            <p className="mt-3 text-sm leading-7 text-ink/68">{t("booking.body")}</p>
-            <div className="mt-5 inline-flex rounded-full border border-stone px-4 py-2 text-sm font-semibold text-ink/72">
-              {t("booking.status")}
-            </div>
-          </div>
-        </div>
-        <div
-          className="rounded-lg border border-stone bg-ink p-6 text-white shadow-soft"
-          id="adoption-preview"
-        >
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-white/58">
-            {t("adoption.eyebrow")}
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold">{t("adoption.title")}</h2>
-          <p className="mt-3 text-sm leading-7 text-white/70">{t("adoption.body")}</p>
-          <div className="mt-6 grid gap-3">
-            {[1, 2, 3].map((item) => (
-              <div className="rounded-md bg-white/8 p-4" key={item}>
-                <div className="text-sm font-semibold">{t(`adoption.steps.${item}.title`)}</div>
-                <div className="mt-1 text-sm leading-6 text-white/62">
-                  {t(`adoption.steps.${item}.body`)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
     </main>
   )
 }

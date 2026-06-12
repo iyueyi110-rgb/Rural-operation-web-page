@@ -22,6 +22,7 @@
       "weather": "Weather",
       "booking": "Courtyards",
       "adoption": "Adoption",
+      "login": "Login",
       "start": "Start"
     },
     "hero": {
