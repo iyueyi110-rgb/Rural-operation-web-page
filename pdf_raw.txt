@@ -1,0 +1,1492 @@
+基于AIGC的⾛⻢村乡村系统深度研究与两份执⾏计划
+研究依据与总体判断
+你提供的两份项⽬材料，已经把⾛⻢村的⽅向明确为“云脉寿岭，荔⽔⾛⻢”，并进⼀步收敛成“⼀云统三 脉，四境织多院”的系统框架：AIGC 云脑要服务于资源建档、内容⽣成、游客导览、农事管理、⽣态监测与活 动复盘，⽽不是做⼀个独⽴的“炫技⼤屏”；四个核⼼体验场景则聚焦“古道叙事境、荔⽥共⽣境、韧⾕研学 境、岭上共居境”。同时，材料也明确了项⽬的现实边界：概念研究范围约 1.8 平⽅公⾥，常住⼈⼝约 400‒ 500 ⼈且 60 岁以上居多，当前产业仍以传统种植和初级销售为主，村内道路局部较窄、⾼差明显，且不适合以 重建设、重景区化思路推进。换句话说，这个项⽬⾸先是⼀个“轻平台、重运营、强共益”的乡村系统，⽽不 是⼀个先造 App、再找内容填充的互联⽹产品。ﬁleciteturn ﬁle  ﬁleciteturn ﬁle 
+如果把“参考阿那亚 App”理解为“参考阿那亚的平台能⼒”，那么最值得借鉴的不是视觉⻛格，⽽是其三层 结构。阿那亚官⽅信息把“⽂旅度假、全维运营、⽂化发展、⽣活社群”放在同⼀平台逻辑中，并把商业、酒 店、⺠宿、物业、餐饮、艺术、⾳乐、戏剧、影视、⽣活等内容放在统⼀运营框架⾥；其官⽹同时⽀持简体中 ⽂、English 和⽇本語。这说明⾛⻢村更适合复制的是“⽬的地层 + 运营层 + 内容层 + 社群层”的信息架构，⽽ 不是照搬⼀个海边度假社区的界⾯样式。 1
+从交易链路⻆度看，拈花湾官⽹展⽰了“景区⻔票、年卡、酒店客栈、度假套餐、游玩⽇期选择、⽴即预 订”的清晰电商结构，这种“内容介绍―库存选择―⽇期选择―⽴即订购”的路径，很适合作为⾛⻢村未 来“院落预约 + 票务预购 + 农⽂旅套餐”的交易参考。阿那亚提供了“内容与⽣活⽅式平台”范式，拈花湾提 供了“⽂旅交易⻚”范式，两者合起来，刚好对应你要做的前台体验系统。 2
+从技术侧看，建议把项⽬定义为“两套系统、⼀个数据底座、⼀个模型⽹关”。前台系统负责把四境内容、路 线、预约、认养、反馈、账⼾和⽀付组织成⽤⼾体验闭环；后台系统负责把⽹⻚数据、⾃有订单、游客反馈、 天⽓与经营指标转成⽇常运营表格和“明⽇优化建议”。模型层不要绑定单⼀供应商。OpenAI 官⽅已明确建议 新项⽬优先采⽤ Responses API，并⽀持⼯具调⽤与多模态；Anthropic 官⽅⽂档强调了⼯具调⽤、strict schema 和 client/server tool 的边界；阿⾥云百炼、DeepSeek 和智谱⽂档都提供 OpenAI 兼容接⼝、⼯具调 ⽤、结构化输出或知识库/联⽹能⼒，因此最稳妥的⼯程做法是做⼀层 provider adapter，把“⾼质量创意/总 结、多模态⽣成、国内替代、成本分层、合规分层”统到⼀个模型编排层⾥。 3
+下⾯两份研究计划，都是按“可直接交给 Codex 或 Claude 拆成任务、⽬录、API 合约与 PR 序列”的⽅式编 写。
+
+⽂档
+前端⽹⻚端与 AIGC 场景体验 系统
+后台⾃动化抓 取与分析系统
+
+主要⽬标
+把“看内容”变成“能理 解、能预订、能认养、能 复访”
+把“运营感受”变成“⽇ 更数据、⽇报表、明⽇建 议”
+
+MVP 重点
+四境⻔⼾、路线⽣成、院落 预约、票务、认养、反馈、 账⼾⽀付
+数据源登记、抓取调度、 ETL、⽇报表、建议引擎、 监控告警
+
+关键成功指标
+到访转化率、预约完成 率、认养转化率、反馈闭 环率
+D+ 报表准点率、抓取成 功率、数据质量通过率、 建议采纳率
+
+在线参考界⾯可以直接点击⽂中的阿那亚官⽹、阿那亚全维运营、阿那亚⽣活与拈花湾在线预订引⽤链接查 看。 4
+
+1
+
+前端⽹⻚端与AIGC场景体验系统研究计划
+执⾏摘要
+这套系统的⽬标不是先做成⼀个“内容很多但不好⽤”的景区官⽹，⽽是做⼀个能把⾛⻢村四境、院落、⻔ 票、认养、天⽓、路线、反馈和⽀付串成完整转化闭环的 Web/PWA 平台。它应当借鉴阿那亚的“⽬的地 + 运 营 + 内容 + 社群”结构，但必须遵守⾛⻢村当前的现实约束：村庄不是封闭度假地产，常住⽼龄化明显，运营 ⼒量有限，空间资源分散，且材料已经明确提出“先轻量化，再场景化，最后平台化”。因此，前台系统的正 确顺序不是“先做 App”，⽽是“先做 Web/PWA ⻔⼾与交易能⼒，再做四境的云端体验与个性化 AI 导览，再 决定是否原⽣化”。ﬁleciteturn ﬁle  5
+⽬标与范围
+这份计划的⽬标⽤⼾以国内中⽂⽤⼾为主，但系统必须在架构上预留多语⾔能⼒。原因很简单：阿那亚官⽅站 点已经把简中、English、⽇语并列为可切换语⾔；Next.js ⽂档也把 internationalization 和 PWA 放在同⼀体 系⾥。因此，⾛⻢村第⼀阶段可只上线 zh-CN，但数据表、内容模型、URL 结构、SEO 元数据和天⽓/地图展⽰ 都应⽀持未来补⻬英⽂版。 6
+范围上，建议把前台系统分成六个业务域：四境内容域、游线和天⽓域、预约和票务域、认养和养护域、账⼾ 和⽀付域、反馈和增⻓域。四境内容域服务品牌认知与云端体验；游线和天⽓域服务“出⾏决策”；预约和票 务域服务当次成交；认养和养护域服务复购与年周期关系；账⼾和⽀付域服务⾝份与结算；反馈和增⻓域服务 运营迭代。这个划分既贴合你当前⽅案⾥的四境结构，也符合阿那亚“⽬的地―运营―⽣活”的平台分层。 ﬁleciteturn ﬁle  ﬁleciteturn ﬁle  7
+建议把前台系统的⽬标指标定义为四类。其⼀是认知类指标，包括四境内容⻚停留时⻓、路线⽣成使⽤率和云 端体验完播率。其⼆是交易类指标，包括院落预约完成率、⻔票预购转化率和⽀付成功率。其三是关系类指 标，包括荔枝树认养转化率、消息触达率、季节性复访率。其四是运营类指标，包括反馈闭环时效、投诉率、 ⼈⼯客服转接率与内容更新时效。这些指标都应该从⼀开始就进⼊后台⽇表，⽽不是等上线后再补。 ﬁleciteturn ﬁle 
+⽤⼾画像与关键旅程
+⾛⻢村的前台产品不应该只有“游客”这⼀个模糊⻆⾊。材料已经显⽰，这⾥同时⾯对近郊休闲客、亲⼦家 庭、研学团、村⺠和未来的运营⽅/房东，⽽且村内资源分散、道路狭窄、⾼差明显，因此路线与预约必须按⼈ 群定制。ﬁleciteturn ﬁle 
+
+⽤⼾画像 近郊周末游 客
+亲⼦家庭
+研学/团建组 织者
+院落住客
+认养⽤⼾
+
+主要诉求
+半⽇/⼀⽇微度假、轻 松出⽚、快速预约
+⻝育、认养、采摘、 低⻛险路线
+成套线路、讲解、课 程、团体预约
+住⼀晚、看⻛景、体 验村宴与晨间农事
+⻓周期陪伴、养护参 与、收获权益
+
+典型⼊⼝
+⾸⻚、活动海 报、地图⼊⼝
+荔⽥共⽣境、课 程⻚、天⽓⻚
+韧⾕研学境、古 道叙事境
+岭上共居境、套 餐⻚
+荔⽥共⽣境、认 养⻚
+
+成功动作
+路线⽣成、购票、 院落轻量预约
+报名课程、认养 树、购买伴⼿礼
+发起团体咨询、锁 定档期、⽀付定⾦
+预约院落、加购活 动、评价
+认养下单、查看树 档案、参与养护
+
+产品注意点
+⻚⾯要快、信息要 直观
+明⽰时⻓、体⼒难 度、⾬天备⽤⽅案
+需要报价单、⼈数 梯度、联系⼈
+强调⼊住须知、停 ⻋与步⾏提⽰
+要有成⻓记录与仪 式感
+
+2
+
+⽤⼾画像
+村⺠/房东/ 运营协作者
+
+主要诉求
+发布活动、管理房 源、处理反馈
+
+典型⼊⼝ 运营后台
+
+成功动作
+更新库存、上传养 护记录、关闭⼯单
+
+产品注意点
+后台必须⼿机可 ⽤、步骤简单
+
+建议明确四条关键⽤⼾旅程。第⼀条是“内容浏览―路线决策―院落/⻔票成交―现场导览―反馈复访”。第⼆ 条是“荔枝树认养―成⻓追踪―养护参与―收获兑现―再传播”。第三条是“研学或活动咨询―档期确认―套 餐下单―到场执⾏―⼝碑沉淀”。第四条是“村⺠/房东服务接单―内容更新―库存处理―反馈闭环―收益结 算”。只要这四条旅程闭环，系统就不会沦为静态展⽰⻚。ﬁleciteturn ﬁle 
+
+详细功能清单与优先级
+鉴于你⾃⼰的材料已经明确提出“先轻量化，再场景化，最后平台化”，MVP 必须压缩在“能成交、能导览、 能积累数据”的范围⾥，不建议⼀开始就上 AR、数字⼈、复杂 3D 漫游。ﬁleciteturn ﬁle 
+
+在技术能⼒上，Web/PWA 先⾏是合理的，因为 Next.js ⽂档把 App Router、Route Handlers、 Authentication、Internationalization 与 PWA 指南都纳⼊了同⼀套框架能⼒，⽽ NestJS 官⽅强调其适合构建 ⾼效、可扩展的 Node.js 服务端应⽤。 8
+
+功能模块
+
+MVP
+
+后续阶段 说明
+
+四境⻔⼾⾸⻚
+
+是
+
+持续迭代 四境卡⽚、品牌故事、今⽇天⽓、推荐玩法
+
+古道叙事境内容⻚
+
+是
+
+持续迭代 图⽂ + ⾳频导览 + AI 讲解摘要
+
+荔⽥共⽣境内容⻚
+
+是
+
+持续迭代 认养⼊⼝、采摘活动、伴⼿礼⼊⼝
+
+韧⾕研学境内容⻚
+
+是
+
+后续增强 ⽔系/研学课程、天⽓与安全提⽰
+
+岭上共居境内容⻚
+
+是
+
+持续迭代 院落列表、⼊住标签、套餐推荐
+
+AIGC 路线⽣成
+
+是
+
+持续增强 按时⻓、体⼒、天⽓、是否带娃⽣成路线
+
+天⽓预测联动
+
+是
+
+持续增强 ⾬天/⾼温路线降级提⽰
+
+院落预约
+
+是
+
+持续增强 ⽇历、库存、预订须知、定⾦/全款
+
+⻔票预购
+
+是
+
+持续增强 景点票、活动票、套餐票
+
+⽤⼾账⼾
+
+是
+
+持续增强 ⼿机号登录、订单中⼼、隐私中⼼
+
+⽀付
+
+是
+
+持续增强 微信⽀付/⽀付宝，⽀持⽀付回调与退款流程
+
+意⻅反馈
+
+是
+
+持续增强 分类反馈、满意度、⼯单状态
+
+荔枝树认养
+
+是
+
+持续增强 树档案、认养协议、成⻓记录
+
+参与养护
+
+基础版
+
+强化版
+
+MVP 先⽀持养护⽇志和活动报名，后续做任务化
+
+多语⾔
+
+架构预留 实装
+
+先做 zh-CN，内容模型⽀持 en/ja
+
+云端四场景体验
+
+基础版
+
+强化版
+
+MVP 为“叙事⻚ + ⾳频 + 交互卡⽚”，后续再上 3D/AR
+
+AI 数字⼈ / 沉浸视频 否
+
+后续
+
+在内容与交易闭环跑通后再做
+
+会员等级/积分
+
+否
+
+后续
+
+适合复购期再引⼊
+
+社区话题/UGC
+
+否
+
+后续
+
+先做轻反馈，不做重社区
+
+3
+
+云端四场景体验建议分三层实施。第⼀层是“云上导览⻚”，包含叙事⽂案、图⽚、短⾳频、推荐路线与 CTA。第⼆层是“可问答的场景卡”，⽤⼾可以围绕古道、荔枝、⽔系和院落发问，但回答只允许来⾃审核过的 知识⽚段。第三层才是“沉浸视频、3D/AR、数字⼈讲解”。OpenAI 图像能⼒⽀持从⽂本⽣成和编辑图⽚；阿 ⾥云百炼模型中⼼已列出图像、视频、3D、语⾳、多模态与向量模型；智谱⽂档也展⽰了图像、视频、⼯具调 ⽤和结构化输出能⼒，因此四境云体验不缺技术路径，真正的优先级问题是运营与维护成本。 9
+技术⽅案与架构图
+前台技术栈建议采⽤“Web/PWA + BFF + 业务服务 + 模型编排层”的结构。前端建议使⽤ Next.js + TypeScript 组织 Web/PWA、服务端渲染、SEO 与移动端适配；后端建议使⽤ NestJS 承载账⼾、预约、票务、认养、反馈 和运营接⼝；数据库建议使⽤ PostgreSQL + PostGIS 处理订单、内容、地理点位与路线模板；Redis 负责缓 存、会话、幂等锁和任务状态；对象存储负责图⽚、视频、⾳频、数字证书与导览资料。PostgreSQL ⽂档覆盖 ⻆⾊、备份、HA、监控与本地化；Redis ⽂档则明确⾯向缓存、实时上下⽂、向量和流式场景。 10
+地图与天⽓不建议混⽤⼀个供应商。⾼德开放平台提供 JS API、路径规划、天⽓查询和微信⼩程序插件，特别 适合中国本地地图、路径规划与未来⼩程序能⼒；和⻛天⽓⽂档同时提供分钟级、逐⼩时、逐天预报、灾害预 警、GeoAPI、多语⾔与缓存建议，更适合做“出⾏前预判 + ⾬天降级 + ⽂案本地化”。 11
+模型层建议做统⼀编排，不建议直接把前端绑到某⼀家模型服务。OpenAI 官⽅建议新项⽬优先使⽤ Responses API，且⽀持 built-in tools、多模态与⼯具链；Anthropic ⽂档说明了严格 schema 和⼯具执⾏边 界；阿⾥云百炼明确提供 OpenAI 兼容接⼝，并⽀持千问、DeepSeek、GLM 等第三⽅模型；DeepSeek API 直 接展⽰了基于 OpenAI SDK 的调⽤⽅式；智谱⽂档展⽰了⼯具调⽤、联⽹搜索、结构化输出与知识库能⼒。因 此⼯程上应抽象为 ModelProviderAdapter ，把“导览摘要、路线⽂案、翻译、视觉物料、反馈总结”分配给 不同模型。 12
+
+游客 / 认养用户 / 村民协作者 / 运营人员
+
+Web / PWA 运营后台 / CMS
+
+Next.js BFF / API Gateway
+
+高德地图
+
+和风天气
+
+支付编排服务
+路线与天气服务 账户与权限服务
+四境内容服务
+
+微信支付 支付宝
+模型编排层
+
+OpenAI Responses / GPT Image
+百炼 / Qwen / DeepSeek / GLM
+Anthropic Claude
+
+荔枝认养与养护服务 院落预约与票务服务
+
+PostgreSQL / PostGIS
+
+反馈与工单服务
+
+Redis
+
+对象存储
+
+建议的代码仓结构如下，⾜以直接交给 Codex 或 Claude 开始拆包：
+
+4
+
+apps/ web/ admin/
+services/ api/
+packages/ ui/ contracts/ prompts/ utils/
+infra/ docker/ terraform/
+docs/ product/ api/ mermaid/
+
+数据模型与 API 设计
+前台的数据模型必须从“资源是分散的、关系是⻓周期的”这个前提出发，⽽不是只围绕⼀次性⻔票订单设 计。认养、养护、院落、路线、反馈和天⽓之间都有复⽤关系，因此建议从⼀开始就把实体分开。 ﬁleciteturn ﬁle 
+以下实体设计基于前述业务边界与官⽅技术能⼒形成，适合直接转成数据库 migration 与 OpenAPI 合约。 13
+
+实体
+
+关键字段
+
+user
+
+id, mobile, nickname, role, locale, status
+
+user_proﬁle
+
+user_id, age_group, travel_pref, mobility_level, child_ﬂag
+
+courtyard
+
+id, name, scene_realm, capacity, inventory_type, price_rule, status
+
+courtyard_booking
+
+id, user_id, courtyard_id, date_range, guest_count, order_status
+
+ticket_product
+
+id, type, valid_date_rule, price, stock_mode
+
+ticket_order
+
+id, user_id, product_id, use_date, qty, pay_status
+
+orchard_tree
+
+id, orchard_id, tree_code, species, age, health_status, hidden_geo
+
+tree_adoption
+
+id, user_id, tree_id, plan_type, rights_json, start_at, end_at
+
+tree_care_log
+
+id, tree_id, operator_id, action_type, media_url, note, happened_at
+
+route_template
+
+id, scene_mix, duration, mobility_tag, rain_plan_ﬂag
+
+说明 ⽤⼾主表 路线个性化所需画像
+院落/⺠宿单元
+院落预约 ⻔票/活动票/套餐票 票务订单 树的数字⾝份，坐标 建议脱敏 认养关系
+养护记录 路线模板
+
+5
+
+实体 route_plan weather_snapshot feedback_ticket
+payment_order consent_record locale_text media_asset
+
+关键字段
+id, user_id, inputs_json, output_json, weather_snapshot_id
+id, area_code, forecast_type, value_json, valid_until
+id, user_id, category, severity, content, order_ref, status
+id, biz_type, biz_ref_id, channel, amount, status, callback_payload
+id, user_id, consent_type, version, granted_at
+key, locale, value, version
+id, owner_type, owner_id, media_type, storage_key, source, reviewed
+
+说明 AI ⽣成路线结果 路线与预警缓存 意⻅反馈/⼯单
+统⼀⽀付单 隐私与授权记录 多语⾔⽂案表 媒资与审核
+
+建议的前台 API 如下。若交给 Claude/Codex，可直接先产出 OpenAPI . ⽂档和 mock server。
+
+Method API
+
+POST
+
+/api/v1/auth/login-sms
+
+GET
+
+/api/v1/scenes
+
+GET
+
+/api/v1/scenes/{slug}
+
+POST
+
+/api/v1/routes/generate
+
+GET
+
+/api/v1/weather/summary
+
+GET
+
+/api/v1/courtyards
+
+POST
+
+/api/v1/courtyard-bookings
+
+GET
+
+/api/v1/tickets/products
+
+POST
+
+/api/v1/ticket-orders
+
+GET
+
+/api/v1/trees
+
+POST
+
+/api/v1/tree-adoptions
+
+POST
+
+/api/v1/tree-care-events/{id}/join
+
+POST
+
+/api/v1/payments/prepare
+
+POST
+
+/api/v1/payments/callback/{channel}
+
+POST
+
+/api/v1/feedback
+
+GET
+
+/api/v1/me/orders
+
+GET
+
+/api/v1/me/adoptions
+
+GET
+
+/api/v1/privacy/consents
+
+⽤途
+
+鉴权
+
+⼿机号验证码登录
+
+否
+
+获取四境⼊⼝与卡⽚
+
+否
+
+获取单个场景⻚
+
+否
+
+⽣成游览路线
+
+可匿名，登录更佳
+
+获取今⽇/明⽇天⽓与预警 否
+
+获取院落列表与库存
+
+否
+
+发起院落预约
+
+是
+
+获取票务产品
+
+否
+
+创建⻔票订单
+
+是
+
+获取可认养树列表
+
+否
+
+发起认养
+
+是
+
+报名参与养护活动
+
+是
+
+⽣成⽀付参数
+
+是
+
+⽀付回调
+
+否，签名校验
+
+提交意⻅反馈
+
+是
+
+订单中⼼
+
+是
+
+我的认养
+
+是
+
+查看授权记录
+
+是
+
+6
+
+Method API
+
+POST
+
+/api/v1/privacy/consents
+
+⽤途 提交或撤回授权
+
+鉴权 是
+
+UI 与 UX 要点与交互流程
+UI/UX 上最重要的不是“做得像阿那亚”，⽽是把“看内容、做决策、下订单、现场⾏动、回来复购”设计成 ⼀条顺路的体验。阿那亚官⽅平台把⽂旅、运营、⽂化和⽣活统⼀组织；你⾃⼰的材料则明确四境不是四个景 点，⽽是四种可运营的乡村体验。因此⾸⻚应当是“四境⻔⼾ + 今⽇天⽓ + 今⽇推荐玩法 + 最近可订院落/活 动”的信息架构，⽽不应是堆满⻓图⽂的宣传⾸⻚。 7 ﬁleciteturn ﬁle 
+
+这⾥需要特别强调三个设计原则。第⼀，路线⽣成必须可解释。因为⾛⻢村地形⾼差明显、道路局部狭窄，系 统不能只给⼀张地图，应同时显⽰总时⻓、步⾏强度、是否适合⽼⼈/⼉童、⾬天备选⽅案和需要提前预约的节 点。第⼆，认养⻚⾯必须有“仪式感 + 信任感”，要展⽰树档案、成⻓时间线、养护记录、权益说明和收获兑 现⽅式。第三，后台与村⺠协作端必须尽量“低培训成本”，因为材料已经指出实际居住⼈⼝有限、⽼龄化较 明显、运营主体不⾜。ﬁleciteturn ﬁle 
+
+建议的交互主流程如下：
+
+首页 / 四境门户
+
+用户要做什么
+
+看四境内容 AI 导览摘要 / 音频 / 云体验
+
+生成游览路线 输入时长 / 人群 / 天气偏好
+高德路线 + 天气校验 + 模板匹配
+输出路线卡 + 推荐预约
+
+预约院落 日历库存 + 入住须知
+
+购买门票 / 活动 日期与数量选择
+
+认养荔枝树 树档案 + 认养协议 +
+权益说明
+
+创建订单
+
+支付 订单中心 / 电子票 / 入住码 /
+认养证书 现场导览 / 反馈 / 分享 /
+二次购买
+
+权限、安全、测试、⾥程碑与成本
+权限应当使⽤ RBAC，⽽不是“运营后台⼀个超级管理员管全部”。推荐⾄少分为游客、注册⽤⼾、认养⽤⼾、 房东/院落协作者、内容编辑、客服运营、财务/订单管理员、系统管理员⼋类⻆⾊。⽀付回调、树档案修改、价 格变更、退款操作和删除⽤⼾数据都要进⼊审计⽇志。ﬁleciteturn ﬁle 
+
+7
+
+隐私合规上，这⾥要⾮常谨慎。OpenAI ⽂档说明，API 默认会⽣成最⻓ 30 天的 abuse monitoring logs； Responses API 还可能存在应⽤状态保留， store=false 并不等于零保留。与此同时，⾯向中国境内公众提供 ⽣成式 AI 服务时，需要同时考虑《⽣成式⼈⼯智能服务管理暂⾏办法》《个⼈信息保护法》《⽹络安全法》的 边界。因此，前台 AI 导览、反馈总结、翻译、路线解释等场景，建议优先发送脱敏后的结构化⽚段，不把⼿机 号、精确地理位置、未脱敏订单⽂本直接送到境外模型；如果⾛公开⽤⼾问答，最好优先采⽤国内模型⽹关或 最⼩化数据出境⽅案。以下只构成产品设计建议，不替代专项法律意⻅。 14
+测试与验收建议如下：
+
+验收域
+
+基本标准
+
+四境内容 所有场景⻚均有结构化内容、更新时间、封⾯图、CTA
+
+路线⽣成 3 秒内返回⾸屏结果；能区分⽼⼈/亲⼦/⾬天路线
+
+天⽓联动 遇预警或降⾬⾃动切换为低⻛险路线或弹窗提⽰
+
+院落预约 不超卖；库存锁定与⽀付超时释放可复现
+
+票务下单 下单、⽀付、退款、核销全流程可测
+
+认养功能 树档案、认养关系、⽇志上传、证书⽣成闭环可跑通
+
+反馈⼯单 提交、分类、分派、关闭、评价状态完整
+
+权限安全 关键后台菜单按⻆⾊隔离；⽀付回调与退款操作可审计
+
+多语⾔
+
+⾄少做到键值级国际化，不出现混合 hardcode
+
+性能
+
+⾸⻚ LCP、移动端⾸屏、弱⽹体验达到可接受上线线
+
+内容可信 历史/⽂化类 AI 输出必须带来源与更新时间，不允许⽆依据发挥
+
+建议时间线如下。为了符合你提出的“⼩型团队 3‒5 ⼈、6 个⽉”和“中型团队 8‒12 ⼈、4 个⽉”两种条件， 这⾥给出两套可执⾏排期。
+
+小型团队
+
+范围冻结与原型
+
+设计系统与内容模型
+
+核心底座与账号体系
+
+范围冻结与原型 中型团队
+
+设计系统并行开发 核心底座与账号体系
+
+四境内容与路线引擎 预约票务与认养支付
+
+07-01
+
+08-01
+
+前端网页端与AIGC场景体验系统时间线
+
+四境内容与路线引擎
+
+预约票务与认养支付
+
+后台联调与试运营 09-01
+
+验收上线
+
+10-01
+
+运营后台与联调 11-01
+
+测试试运营与上线 12-01
+
+若前台系统单独实施，建议⼈⼒和成本粗估如下。这⾥是“单系统视⻆”的增量成本，不包含与后台系统共享 后的协同节省。
+
+实施规 模
+
+平均配置
+
+⼩型团 产品/需求 0.5、设计 0.5、全栈 2、测
+
+队
+
+试 0.5、运维 0.2
+
+开发周 ⼈⼒成本估
+
+期
+
+算
+
+6 个⽉
+
+28‒55 万 RMB
+
+云与 API 估算
+4‒12 万 RMB
+
+⼩计
+32‒67 万 RMB
+
+8
+
+实施规 模
+
+平均配置
+
+中型团 产品 1、设计 1、前端 2、后端 1.5、测
+
+队
+
+试 1、运维 0.5
+
+开发周 ⼈⼒成本估
+
+期
+
+算
+
+4 个⽉
+
+55‒95 万 RMB
+
+云与 API 估算
+6‒18 万 RMB
+
+⼩计
+61‒113 万 RMB
+
+前台上线后的⽉度运营成本，建议按“基础云资源 + 短信 + 地图 + 天⽓ + ⽀付通道 + AI 调⽤”单独监控。若需 要给 AI 成本设置上限，可参考 OpenAI 官⽅价格：GPT- . mini 为 $0.75/1M 输⼊、$4.50/1M 输出，Web Search 为 $10/1k 次调⽤；这意味着⾼频路线⽣成和反馈总结应尽量使⽤ mini 或国产模型、并避免每个⽤⼾请 求都触发联⽹搜索。 15
+
+交付给 Codex 或 Claude 的任务拆解
+下⾯这张表可以直接作为 Epic/PR 规划基线使⽤。
+
+Epic
+前台底座
+国际化与 SEO 四境内容 系统
+路线⽣成
+院落预约
+⻔票与套 餐 认养与养 护
+⽀付编排
+反馈⼯单
+隐私与权 限 试运营与 埋点
+
+建议⽬录
+apps/web , packages/ui , packages/contracts
+apps/web/i18n , packages/ contracts
+apps/web/scenes , services/ api/content
+services/api/route , packages/prompts
+services/api/booking , apps/web/booking
+services/api/ticket , apps/ web/tickets
+services/api/tree , apps/ web/trees
+services/api/payment
+services/api/feedback , apps/admin
+services/api/auth , services/api/privacy
+apps/web , apps/admin
+
+⾸个 PR 内容 初始化 Monorepo、设计令牌、 路由⻣架、环境变量
+locale 机制、元信息、slug 规则
+场景⻚ schema、CMS 接⼝、内 容渲染 路线输⼊模型、模板匹配、天⽓ 校验
+院落列表、库存模型、预订流程
+票务产品、订单流、核销码
+树档案、认养关系、⽇志上传
+统⼀⽀付单、回调验签、幂等处 理
+反馈表单、分类、状态流转
+RBAC、隐私中⼼、授权记录
+核⼼事件埋点、灰度开关、⽇志 脱敏
+
+完成定义
+本地可跑、CI 通过、 基础⻚⾯可访问
+zh-CN 可⽤，其他语 ⾔可占位
+四境⻚⾯可由后台配 置
+⽣成三类样例路线并 可回放
+⽇历、库存、锁单、 取消可⽤
+下单到订单中⼼闭环 完成
+⼀棵树可完整⾛通认 养与记录
+微信/⽀付宝⾄少接 通⼀条沙箱流程
+⽤⼾可提交，后台可 处理和关闭
+⻆⾊隔离和审计⽇志 可验证
+可观察⾸⻚、路线、 下单、反馈漏⽃
+
+后续演进建议是：先把 Web/PWA 做成真正可转化的⼊⼝，再决定是否扩成⼩程序或原⽣ App；先把四境云体 验做成可维护的内容能⼒，再逐步增加沉浸式媒体和数字⼈；先把认养与复访关系经营起来，再引⼊会员、积 分和更强的社交传播机制。这样才能避免“系统很复杂，但村庄没有真正因为它⽽更好运营”的常⻅失败路 径。ﬁleciteturn ﬁle 
+
+9
+
+后台⾃动化抓取与分析系统研究计划
+执⾏摘要
+后台系统的⽬标不是“每天抓⼀点⽹⻚然后⽣成⼀份漂亮 PPT”，⽽是建⽴⼀个可持续的数据运营底座：每天 ⾃动采集⾃有站点、预约票务、认养记录、农产品销售、游客反馈、天⽓和关键运营事件，做 ETL、出⽇报、 给出明⽇优化建议，并在异常时主动告警。项⽬材料⾥已经明确指出，AIGC 云脑应连通资源建档、游客体验、 ⽣态感知和经营复盘；同时也强调⾛⻢村不适合⼀开始做“重系统”。因此，后台系统的 MVP 应该优先聚 焦“⾃有数据闭环 + 半⾃动建议 + ⼈⼯审核发布”，⽽不是上来就尝试全⾃动化运营决策。 ﬁleciteturn ﬁle  ﬁleciteturn ﬁle 
+⽬标与范围
+后台系统的⽬标可以概括为五件事。第⼀，把分散源头统⼀登记。第⼆，把原始数据可靠⼊库。第三，把原始 数据转成可运营的指标表。第四，把指标表转成“明⽇优化建议”。第五，把异常和失败即时告警。只有这五 件事都成型，前台功能才会越⽤越聪明。ﬁleciteturn ﬁle 
+在数据范围上，建议分成“必须抓、⾃有优先、审批后抓”三层。必须抓的是⾃有⽹⻚、院落和票务订单、认 养与养护⽇志、反馈⼯单、天⽓、活动排期与基础埋点；⾃有优先的是农产品销售、物流回传、课程报名、村 ⺠协作记录；审批后抓的是外部公开⽹⻚，如经确认可抓的活动⻚、媒体⻚、评价⻚和标杆案例⻚。这⾥的关 键判断是：农产品销售和游客体验，优先接⾃有订单系统、⽀付回调、⼆维码问卷、运营台账，不要把“屏幕 抓取第三⽅⻚⾯”当成主数据源。这样既准确，也更容易合规。ﬁleciteturn ﬁle 
+建议把后台输出固定为三类。⼀类是⽇业务表，例如昨⽇访客、院落⼊住、票务预售、认养新增、投诉与表 扬、农产品销量。第⼆类是专题运营表，例如四境热度、活动转化、内容表现、⽓象影响。第三类是“明⽇优 化建议”，必须采⽤“指标证据 + 建议动作 + 责任⼈ + 预期影响 + 审核状态”的格式，⽽不是⼀段⼤⽽空的 AI 总结。这样最好接⼯单或待办系统，不让建议停留在⽇报⾥。ﬁleciteturn ﬁle 
+详细功能清单与优先级
+后台⾃动化系统建议采⽤“Bronze / Silver / Gold”三层思路：原始层保留抓取和导⼊证据，清洗层统⼀格式和 主键，指标层⽣成经营主题数据集。这个思路与 Airﬂow 的调度模型、dbt 的数据转换模型天然兼容。Airﬂow 官⽅⽂档提供 scheduler、webserver、CLI、官⽅ Docker image、Helm Chart 和⼤量 provider；dbt 则明确 ⽤于把 raw warehouse data 转为 trusted data products，并提供 lineage、tests、contracts 和 governance。 16
+
+功能模块
+
+MVP
+
+数据源登记台
+
+是
+
+调度器与任务编排
+
+是
+
+⾃有⽹⻚与 CMS 抓取 是
+
+订单与⽀付导⼊
+
+是
+
+反馈与问卷导⼊
+
+是
+
+天⽓数据接⼊
+
+是
+
+ETL 与业务模型
+
+是
+
+⽇报表与导出
+
+是
+
+后续阶段 说明 持续增强 记录来源、负责⼈、频率、鉴权、字段映射 持续增强 每⽇抓取、导⼊、清洗、建模、出报表 持续增强 ⻚⾯快照、变更识别、内容更新⽇志 持续增强 ⻔票、院落、认养、农产品订单 持续增强 QR 问卷、后台⼯单、满意度 持续增强 预报、预警、天⽓⻛险标签 持续增强 指标表、主题宽表、维表 持续增强 Excel/CSV/API/看板
+
+10
+
+功能模块 明⽇优化建议引擎 监控与告警 数据质量测试 外部公开⽹⻚抓取 模型调⽤观测 实时流式分析 ⾃动执⾏动作 IoT ⽣态感知接⼊ 实验与策略评估
+
+MVP
+
+后续阶段 说明
+
+是
+
+持续增强 规则引擎 + LLM 总结 + ⼈⼯审核
+
+是
+
+持续增强 调度失败、数据缺失、指标异常告警
+
+是
+
+持续增强 唯⼀性、⾮空、范围、对账
+
+基础版 强化版
+
+⽩名单、robots、节流、审批制
+
+基础版 强化版
+
+调⽤量、成功率、成本监控
+
+否
+
+后续
+
+初期⽇更够⽤
+
+否
+
+后续
+
+先建议，不⾃动下发⽣产操作
+
+否
+
+后续
+
+⽔位、⽔质、果园传感器
+
+否
+
+后续
+
+⽐较不同建议的效果
+
+建议把“明⽇优化建议”先做成半⾃动流程，不直接⾃动下发。Anthropic ⼯具⽂档强调 strict schema 和⼯具 边界；智谱⽂档提供结构化输出与⼯具调⽤；OpenAI Responses API 和国产⽹关都⽀持结构化/⼯具式流程。 因此，在⼯程上最好让模型只负责⽣成结构化建议 JSON，再由运营负责⼈审核通过，最后进⼊⽇报或⼯单。
+17
+
+技术⽅案与架构图
+推荐的技术路线是“Airﬂow 编排 + 抓取器/导⼊器 + 原始数据区 + dbt 业务建模 + 指标服务 + 建议引擎 + 监控告 警”。Airﬂow 官⽅具备 Docker 与 Helm 部署路径，适合⼩中型团队快速落地；dbt 把 SQL 转换、测试、⾎ 缘、契约与治理放到⼀起，很适合 D+ 报表和可审计数据模型；Prometheus 把指标存成带标签的时间序列， Grafana 负责 dashboard 与 alerting。换句话说，这是⼀套⾏业⾥被⼴泛证明过的“可持续维护”的后台组 合，⽽不是⼀套过度定制、难以交接的脚本堆。 18
+数据库建议分两层。交易与配置仍放 PostgreSQL；原始抓取⽂件、HTML、JSON、截图和导出⽂件进对象存 储。若前期⽇数据量不⼤，业务宽表也可先放 PostgreSQL；等到⾏为埋点、订单、⽇志达到更⾼规模时，再增 量引⼊ ClickHouse ⼀类分析库。这样能降低⾸期复杂度，同时保留扩展性。PostgreSQL ⽂档中已经覆盖⻆ ⾊、备份、HA、监控和本地化章节，⾜够⽀持初中期的主数据库能⼒。 19
+模型调⽤侧建议延续前台的 provider adapter。原因有三。其⼀，百炼提供 OpenAI 兼容接⼝，并⽀持模型监 控；其⼆，DeepSeek API 直接兼容 OpenAI SDK 形态；其三，智谱提供⼯具调⽤、联⽹搜索、结构化输出与知 识库服务。这样后台的建议引擎、⽇报摘要和反馈聚类就能在“⾼质量模型、低成本模型、国产模型、离线模 型”之间弹性切换。 20
+
+数据源登记台
+
+Airflow 调度器
+
+自有网页/CMS 抓取 订单/支付/票务导入
+反馈/问卷导入 天气/地图数据接入 认养/养护日志导入
+
+Raw Zone / 对象存储
+
+清洗标准化
+
+dbt 业务建模
+
+KPI 数据集 / 主题宽表
+
+规则引擎 / 异常检测 Grafana/运营看板
+
+LLM 建议生成
+
+人工审核
+
+日报表 / Excel / CSV / API 工单/待办
+Prometheus 指标
+
+告警
+
+建议的代码仓结构如下：
+
+11
+
+apps/ crawler/ orchestrator/ reporting-api/ ops-console/
+dags/ dbt/
+models/ tests/ packages/ contracts/ prompts/ data-quality/ infra/ docker/ helm/ terraform/
+
+数据模型与 API 设计
+后台的数据模型⼀定要把“原始证据”和“业务指标”分开。否则⼀旦清洗逻辑改掉，就很难回放历史、核对 异常、审计建议来源。ﬁleciteturn ﬁle 
+
+实体 source_conﬁg
+crawl_job
+raw_snapshot
+import_batch fact_visit_daily fact_order_daily fact_tree_daily
+fact_feedback_daily dim_scene dim_product dim_user_segment weather_daily
+
+关键字段
+
+说明
+
+id, source_type, owner, cadence, auth_mode, enabled
+
+数据源登记台
+
+id, source_id, scheduled_at, started_at, ended_at, status
+
+调度任务
+
+id, source_id, content_type, storage_key, checksum, 原始快照
+fetched_at
+
+id, source_name, batch_date, row_count, status
+
+订单/CSV/ERP 导 ⼊批次
+
+date, uv, session_cnt, route_gen_cnt, booking_uv
+
+每⽇访问事实表
+
+date, order_type, amount, qty, paid_cnt, refund_cnt 每⽇订单事实表
+
+date, new_adoptions, care_logs, event_signup, harvest_claim
+
+认养事实表
+
+date, complaint_cnt, praise_cnt, avg_score, unresolved_cnt
+
+反馈事实表
+
+scene_id, realm, label, diﬃculty, weather_risk_rule 场景维表
+
+product_id, category, channel, price_band
+
+产品维表
+
+segment_id, label, family_ﬂag, mobility_tag
+
+⽤⼾群组维表
+
+date, area_code, rain_prob, alert_level, temp_range 天⽓快照
+
+12
+
+实体
+
+关键字段
+
+recommendation_run id, biz_date, model_provider, prompt_ver, status
+
+id, run_id, type, target, evidence_json, action_json, recommendation_item
+reviewer
+
+alert_rule
+
+id, metric_name, threshold, channel, severity
+
+alert_event
+
+id, rule_id, triggered_at, payload, ack_by
+
+audit_log
+
+id, actor, action, target_type, target_id, before_after_json
+
+说明 建议⽣成批次 单条建议 告警规则 告警事件 审计⽇志
+
+后台 API 与内部服务建议如下：
+
+Method API
+
+GET
+
+/api/v1/sources
+
+POST
+
+/api/v1/sources
+
+POST
+
+/api/v1/jobs/run
+
+GET
+
+/api/v1/jobs/{id}
+
+GET
+
+/api/v1/reports/daily
+
+POST
+
+/api/v1/reports/export
+
+GET
+
+/api/v1/recommendations/{date}
+
+POST
+
+/api/v1/recommendations/{id}/approve
+
+POST
+
+/api/v1/recommendations/{id}/reject
+
+GET
+
+/api/v1/alerts
+
+POST
+
+/api/v1/alerts/{id}/ack
+
+POST
+
+/api/v1/import/orders
+
+POST
+
+/api/v1/import/feedback
+
+GET
+
+/api/v1/marts/scene-heat
+
+GET
+
+/api/v1/marts/tree-adoption
+
+GET
+
+/api/v1/marts/content-performance
+
+⽤途
+
+鉴权
+
+查看数据源清单
+
+管理员
+
+创建数据源配置
+
+管理员
+
+⼿动触发任务
+
+管理员
+
+查看任务状态与⽇志 管理员
+
+获取⽇报数据
+
+运营/分析
+
+导出 Excel/CSV
+
+运营/分析
+
+获取某⽇建议
+
+运营/分析
+
+审核通过建议
+
+运营负责⼈
+
+驳回建议
+
+运营负责⼈
+
+查看告警
+
+运维/管理员
+
+确认告警
+
+运维/管理员
+
+导⼊订单批次
+
+财务/运营
+
+导⼊问卷或评价
+
+运营
+
+获取四境热度数据
+
+运营/前台
+
+获取认养业务数据
+
+运营
+
+获取内容表现数据
+
+内容运营
+
+建议把“明⽇优化建议”的数据结构固定下来，避免模型输出不可执⾏的⾃然语⾔⼤段落。建议格式如下：
+
+字段
+
+类型
+
+biz_date
+
+date
+
+recommendation_type enum
+
+target_object
+
+string
+
+说明 建议对应业务⽇ 内容、票务、院落、路线、天⽓预案、客服、认养 作⽤对象，例如某场景、某产品、某活动
+
+13
+
+字段 evidence_metrics message action_steps owner_role expected_impact conﬁdence review_status
+
+类型
+
+说明
+
+json
+
+⽀撑建议的指标证据
+
+text
+
+⼈可读建议
+
+json
+
+可执⾏动作列表
+
+string
+
+责任岗位
+
+string
+
+预期改善点
+
+number 模型信⼼分
+
+enum
+
+draft / approved / rejected / done
+
+权限、安全、监控、测试、⾥程碑与成本
+后台安全的关键不是“把库放私⽹”这么简单，⽽是把个⼈信息、交易数据、公共内容、建议引擎和抓取证据 分层管理。建议⾄少做到四点。第⼀，PII 与经营宽表分表存储。第⼆，字段级脱敏与最⼩权限。第三，所有 LLM 输⼊都经过清洗，去掉⼿机号、⽀付标识、精确地址、⾃由⽂本中的敏感信息。第四，外部⽹⻚抓取实施 ⽩名单、robots 检查、频率限制与审批制。 21
+
+监控⽅⾯，Prometheus ⽂档明确说明其以带标签的 time series 存储 metrics，Grafana 提供 dashboard、 query、visualization 和 alerting。对于⾛⻢村这种中⼩规模项⽬，最低限度应监控以下四类指标：任务成功 率、数据新鲜度、数据质量、模型调⽤成本；如果这四类看不到，后台很快会“表⾯上线，实际失真”。同 时，百炼⽂档还提供调⽤量、Token 消耗、成功率等模型监控路径，适合作为国产模型调⽤的补充观测⾯板。
+22
+
+后台测试与验收建议如下：
+
+验收域
+
+基本标准
+
+数据源登记 每个源都有 owner、频率、鉴权⽅式、字段说明
+
+抓取调度
+
+核⼼⽇任务成功率达到上线标准，失败可重跑
+
+原始快照
+
+同⼀来源可追溯、可核验、可回放
+
+ETL 转换
+
+关键事实表和维表有测试与⾎缘说明
+
+数据质量
+
+关键主键唯⼀、⾦额对账、⽇期完整、异常值可识别
+
+⽇报表
+
+每天固定时间前⽣成并可导出
+
+明⽇建议
+
+结构化输出，能绑定证据和责任⼈，⽀持⼈⼯审核
+
+告警系统
+
+任务失败、数据延迟、库存异常、投诉飙升可触发告警
+
+权限与审计 审核、驳回、导⼊、删除均可审计
+
+合规控制
+
+PII 脱敏有效，抓取源具备审批记录
+
+建议时间线如下：
+
+14
+
+数据域梳理与源登记 小型团队
+
+调度底座与抓取框架
+
+数据域梳理与源登记
+
+调度与抓取并行开发
+
+中型团队
+
+订单反馈天气接入
+
+07-01
+
+订单反馈天气接入
+
+ETL与业务模型
+
+日报表与建议引擎
+
+08-01
+
+后台自动化抓取与分析系统时间线
+
+ETL与业务模型
+
+日报表与导出
+
+监控告警与联调 09-01
+
+试运行与上线 10-01
+
+建议引擎与审核流 11-01
+
+监控告警与试运行 12-01
+
+若后台系统单独实施，建议的⼈⼒与成本粗估如下：
+
+实施 规模
+⼩型 团队
+中型 团队
+
+平均配置
+产品/数据分析 0.5、后端/数据⼯程 2、 测试 0.5、运维 0.3 产品 1、后端 1.5、数据⼯程 2、爬⾍⼯ 程 1、测试 1、运维 0.5
+
+开发 ⼈⼒成本估
+
+周期
+
+算
+
+6 个⽉
+
+25‒50 万 RMB
+
+4 个⽉
+
+50‒100 万 RMB
+
+云与 API 估算
+5‒15 万 RMB
+8‒22 万 RMB
+
+⼩计
+30‒65 万 RMB
+58‒122 万 RMB
+
+交付给 Codex 或 Claude 的任务拆解
+
+Epic
+数据源登 记台
+
+建议⽬录
+apps/ops-console , packages/contracts
+
+调度底座 apps/orchestrator , dags/
+
+⽹⻚抓取 器
+业务导⼊ 器
+原始与清 洗层
+
+apps/crawler
+apps/orchestrator , packages/contracts packages/data-quality , dbt/staging
+
+业务模型 dbt/models/marts
+
+⽇报与导 出
+建议引擎
+监控与告 警 审计与脱 敏
+
+apps/reporting-api
+packages/prompts , apps/ reporting-api
+infra/ , apps/orchestrator
+packages/contracts , apps/ reporting-api
+
+⾸个 PR 内容
+
+完成定义
+
+source_conﬁg schema、表 单、权限
+
+可配置并查看全部数 据源
+
+Airﬂow 初始化、基础 DAG、任 每⽇空跑任务可成功
+
+务⽇志
+
+执⾏
+
+⾃有站点抓取、快照持久化、 节流
+
+可抓取并⽣成版本化 快照
+
+订单/反馈/天⽓导⼊管道
+
+⾄少三类数据可落库
+
+bronze/silver 分层、数据契约
+访问、订单、认养、反馈主题 表
+
+原始证据可回放，清 洗层稳定
+可⽣成⽇报核⼼指标
+
+/reports/daily 与导出接⼝ ⽇报可查、可下载
+
+规则引擎、结构化建议、审核 API
+Prometheus 指标、Grafana ⾯板、告警规则
+审计⽇志、字段脱敏、可⻅性 控制
+
+⼀条建议可从 draft 到 approved 任务失败可⾃动告警
+关键操作均可追踪
+
+15
+
+Epic 模型编排
+
+建议⽬录
+packages/prompts , packages/contracts
+
+⾸个 PR 内容
+provider adapter、成本记 录、fallback 策略
+
+完成定义
+可切换⾄少两类模型 提供商
+
+后台的后续演进建议是：第⼀阶段把“每天看懂昨天”做稳，第⼆阶段把“能提前判断明天”做准，第三阶段 再考虑“半⾃动触发动作”。材料中提到的⽔位、⽔质、⾬洪过程和果园养护节点，⾮常适合作为第⼆阶段的 IoT 数据接⼊⽅向；但在没有稳定运营团队之前，不建议过早建设复杂数字孪⽣。ﬁleciteturn ﬁle 
+
+团队、⼈⼒与成本对照
+如果把前台与后台作为⼀个完整项⽬并⾏推进，⻆⾊会出现⼤量共享，因此总成本会明显低于两套系统简单相 加。最典型的共享岗位包括产品经理、解决⽅案架构、设计、测试、运维、模型编排⼯程和 API 合约治理。换 句话说，你要求的“⼩型 3‒5 ⼈、6 个⽉”和“中型 8‒12 ⼈、4 个⽉”是可⾏的，但前提是采⽤“阶段性聚焦 + 共享底座 + 严格范围控制”的打法，⽽不是同时做完所有想象中的功能。ﬁleciteturn ﬁle 
+
+总体⽅ 案
+⼩型团 队⽅案
+中型团 队⽅案
+
+平均 FTE
+3‒5 ⼈
+8‒12 ⼈
+
+总⼈⽉ 适合情况
+24‒30 优先验证“内容―路线―预 ⼈⽉ 约―认养―⽇报”闭环
+38‒48 需要压缩排期，并⾏开发前 ⼈⽉ 台、后台和运营后台
+
+总⼈⼒成 本估算
+65‒117 万 RMB
+138‒253 万 RMB
+
+云与 API 估算
+6‒18 万 RMB
+8‒30 万 RMB
+
+项⽬合计
+71‒135 万 RMB
+146‒283 万 RMB
+
+上线后的持续运营预算，建议单独看待。⼩型版本可按 1‒2 个运维/数据运营岗位 + 云与 API 费⽤准备，粗估为 2.5‒8 万 RMB/⽉；中型版本若继续做内容增⻓、AI 物料、活动运营和数据分析，粗估为 6‒18 万 RMB/⽉。这 ⾥真正容易失控的通常不是基础云开销，⽽是“⽆缓存的⾼频模型调⽤、图像/视频⽣成、以及没有治理的内容 运营流程”。OpenAI 官⽅价格显⽰，mini 模型的 token 成本相对可控，但 Web Search、图像和更⾼阶⽣成能 ⼒会明显放⼤单次成本；和⻛天⽓⽂档也专⻔给出了缓存建议，因此后台应当把天⽓、路线模板、常⻅导览问 答都做缓存与复⽤。 23
+
+建议的总体⼈员构成如下：
+
+⻆⾊
+
+⼩型团队 中型团队
+
+产品经理 / 需求负责⼈
+
+1
+
+1
+
+解决⽅案架构 / Tech Lead 0.5‒1
+
+1
+
+前端⼯程师
+
+1
+
+2
+
+后端⼯程师
+
+1
+
+2
+
+数据⼯程 / ETL
+
+0.5‒1
+
+1‒2
+
+AI 编排 / 应⽤⼯程
+
+0.5
+
+1
+
+设计师
+
+0.5
+
+1
+
+测试⼯程师
+
+0.5
+
+1‒2
+
+运维 / SRE
+
+0.2‒0.5 0.5‒1
+
+16
+
+⻆⾊ 内容运营 / 数据运营
+
+⼩型团队 中型团队
+
+可兼职
+
+1
+
+⻛险、缓解与后续演进建议
+⾛⻢村项⽬最⼤的⻛险，不是模型够不够先进，⽽是把真实村落做成⼀套昂贵、难维护、村⺠难参与的“数字 景区外壳”。你提供的材料和案例分析反复强调三条底线：不做重景区复制、不让技术喧宾夺主、不让村⺠被 边缘化。阿那亚的启发在于平台结构，⾛⻢村的策略则必须回到近郊乡村、⽼龄化常住⼈⼝、分散空间资源与 荔枝产业升级这⼏个现实条件。ﬁleciteturn ﬁle  ﬁleciteturn ﬁle  7
+
+⻛险 过度景区化 范围失控
+
+具体表现
+为了“像阿那亚”⽽做重资产、 封闭⻔票逻辑
+同时做 App、AR、数字⼈、商 城、会员、IoT
+
+历史内容幻觉
+
+AI 对古道、驿站、村史⾃由发挥
+
+预约与库存错配 院落、⻔票、活动超卖
+
+认养关系空⼼化 认养后没有实际互动与兑现
+
+抓取不合规或不 可持续
+模型成本失控
+
+随意爬第三⽅⽹⻚、字段不稳定
+每次请求都调⽤⾼阶模型或联⽹ 搜索
+
+隐私与跨境⻛险 ⽤⼾数据直接进⼊外部模型
+
+运营能⼒不⾜ 数据质量差
+
+系统能做很多，但没有⼈持续维 护
+⽇报看起来完整，实际上⽆法决 策
+
+缓解策略 只借鉴信息架构，不复制商业模式；坚持轻平台 与共益规则
+先锁定 MVP，只保留能形成转化闭环的功能
+⽂化类回答只允许来⾃审核过的知识⽚段，并显 ⽰来源与更新时间 做库存锁、⽀付超时释放、幂等回调 强制树档案、成⻓⽇志、养护活动、收获权益与 物流回传
+⽩名单数据源、robots 检查、优先接⼊⾃有系统
+模型分层、缓存、模板化、调⽤观测、限额策略
+脱敏、最⼩化传输、必要时使⽤国产⽹关或专有 部署 后台做成⼿机可⽤、流程少、责任清、建议可审 核
+建⽴数据契约、对账测试、异常回放、审计⽇志
+
+后续演进建议可分三个阶段看。第⼀个阶段，是把“⾸访转化”和“认养复访”跑通，让系统真正变成经营⼯ 具。第⼆个阶段，是引⼊更强的云端四境体验，包括 360 内容、轻 AR、数字讲解员、研学互动脚本和更完整的 多语⾔内容体系。第三个阶段，才是把⽣态感知、数字孪⽣、动态定价、果园传感器和更复杂的策略推荐纳⼊ 后台系统。技术上，百炼模型中⼼已经覆盖图像、视频、3D、语⾳和嵌⼊，多模态演进路线是存在的；但产品 上必须遵守你⾃⼰的材料所强调的次序：先把真实资源组织好，再把数字能⼒叠上去。 24 ﬁleciteturn ﬁle  ﬁleciteturn ﬁle 
+
+最后给出⼀句总判断：这个项⽬最优解不是“做⼀个乡村版阿那亚 App”，⽽是“做⼀个以⾛⻢村真实资源为 核⼼、以轻平台和 AIGC 运营为⼿段、能把四境内容、预约交易、认养关系和⽇常复盘连成闭环的乡村操作系 统”。只要坚持这个判断，后续⽆论交给 Codex 还是 Claude，任务都能清晰拆成产品、数据、模型、前端、 后端和运维六条主线，且每⼀条线都能对应到明确的实体、接⼝、验收标准和 PR 顺序。 ﬁleciteturn ﬁle  ﬁleciteturn ﬁle 
+
+17
+
+1 4 5 6 7 https://www.aranya.cc/
+https://www.aranya.cc/
+2 https://www.nianhuawan.com/
+https://www.nianhuawan.com/
+3 12 https://platform.openai.com/docs/guides/responses-vs-chat-completions
+https://platform.openai.com/docs/guides/responses-vs-chat-completions
+8 10 https://nextjs.org/docs
+https://nextjs.org/docs
+9 https://platform.openai.com/docs/guides/image-generation
+https://platform.openai.com/docs/guides/image-generation
+11 13 https://lbs.amap.com/api/javascript-api/summary
+https://lbs.amap.com/api/javascript-api/summary
+14 21 https://platform.openai.com/docs/guides/your-data
+https://platform.openai.com/docs/guides/your-data
+15 23 https://openai.com/api/pricing/
+https://openai.com/api/pricing/
+16 18 https://airﬂow.apache.org/docs/
+https://airﬂow.apache.org/docs/
+17 https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview
+https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview
+19 https://www.postgresql.org/docs/current/index.html
+https://www.postgresql.org/docs/current/index.html
+20 24 https://help.aliyun.com/zh/model-studio/
+https://help.aliyun.com/zh/model-studio/
+22 https://prometheus.io/docs/introduction/overview/
+https://prometheus.io/docs/introduction/overview/
+18
+
+
