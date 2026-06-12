@@ -15,6 +15,22 @@
     "feedback": {
       "title": "走马村反馈｜意见提交与工单跟进",
       "description": "提交走马村内容、服务、设施、支付和其他反馈，并生成可跟进的反馈工单。"
+    },
+    "trees": {
+      "title": "走马村荔枝树认养｜树档案与成长记录",
+      "description": "查看可认养荔枝树、模糊位置、权益说明、认养协议和成长记录时间线。"
+    },
+    "tickets": {
+      "title": "走马村门票预购｜活动与体验名额",
+      "description": "查看走马村门票、活动和研学产品预购占位。"
+    },
+    "me": {
+      "title": "走马村个人中心｜订单占位",
+      "description": "查看走马村预约、认养和票务订单列表占位。"
+    },
+    "privacy": {
+      "title": "走马村隐私中心｜授权管理占位",
+      "description": "查看隐私政策、数据采集和 AI 处理授权项占位。"
     }
   },
   "common": {
@@ -310,6 +326,99 @@
       "status": "当前状态"
     }
   },
+  "trees": {
+    "nav": { "backHome": "返回首页", "phase": "荔枝树认养阶段" },
+    "hero": {
+      "eyebrow": "Tree Adoption",
+      "title": "认养不是一次购买，而是一棵树的长期关系",
+      "body": "本阶段展示可认养树列表、树档案、认养协议、权益说明和成长记录。支付只保留待接入入口，不发生真实扣款。"
+    },
+    "guardrail": {
+      "locationTitle": "只展示模糊位置",
+      "locationBody": "树档案不公开精确 GPS，只展示果园片区和相对方位，保护果园经营安全与用户隐私。",
+      "paymentTitle": "支付入口待接入",
+      "paymentBody": "当前仅生成待支付认养确认。后续接入支付时必须走统一支付单、幂等键和沙箱模式。"
+    },
+    "list": {
+      "eyebrow": "可认养树",
+      "title": "选择一棵有档案和记录的荔枝树",
+      "body": "树档案先用本地结构化数据，后续可迁移到 /api/v1/trees，并与养护日志和证书服务连接。",
+      "species": "树种",
+      "age": "树龄",
+      "ageValue": "{count} 年",
+      "health": "健康状态",
+      "select": "选择认养",
+      "selected": "已选择"
+    },
+    "availability": { "available": "可认养", "limited": "名额紧张", "maintenance": "养护观察中" },
+    "health": { "excellent": "优良", "good": "良好", "fair": "观察中", "poor": "需养护" },
+    "profile": { "eyebrow": "树档案", "planTitle": "认养方案" },
+    "plans": {
+      "seasonal": { "label": "一季认养", "body": "适合首次体验，包含阶段性成长记录和一次收获权益。" },
+      "annual": { "label": "全年认养", "body": "适合长期陪伴，覆盖节气提醒、养护更新、活动和证书。" }
+    },
+    "rights": {
+      "title": "权益说明",
+      "harvestBox": "季节收获礼盒或等值农产品权益",
+      "careUpdates": "节气养护记录和照片更新",
+      "certificate": "电子认养证书",
+      "farmEvent": "优先参与采摘或养护活动",
+      "familyClass": "亲子食育课堂优先名额"
+    },
+    "timeline": {
+      "title": "成长记录",
+      "spring": { "date": "2026 年 3 月", "title": "春梢观察", "body": "新梢抽发稳定，叶色均匀，进入春季巡护记录。" },
+      "pruning": { "date": "2026 年 4 月", "title": "轻修剪", "body": "完成通风枝整理，保留树冠形态，不做过度修剪。" },
+      "photo": { "date": "2026 年 6 月", "title": "档案照片更新", "body": "补充树冠、树干和果园片区照片，用于后续认养证书。" },
+      "flower": { "date": "2026 年 4 月", "title": "花期观察", "body": "花序状态良好，适合亲子课堂讲解荔枝生长节律。" },
+      "care": { "date": "2026 年 5 月", "title": "养护观察", "body": "进入养护观察期，暂缓开放认养确认。" },
+      "note": { "date": "2026 年 6 月", "title": "维护备注", "body": "建议完成下一次专业复核后再开放认养。" }
+    },
+    "agreement": { "title": "认养协议确认", "body": "我已了解认养权益、养护更新频率、收获兑现方式和支付待接入状态。" },
+    "messages": { "unavailable": "当前树木暂不开放确认认养，可选择其他可认养树。", "needAgreement": "请先确认认养协议，再生成认养订单。" },
+    "form": { "confirm": "确认认养" },
+    "order": {
+      "title": "认养已生成",
+      "body": "认养订单已进入待支付状态。当前支付入口尚未接入，不会发生真实扣款。",
+      "status": "订单状态：待支付",
+      "paymentStatus": "支付状态：待接入支付",
+      "paymentEntry": "支付入口待接入"
+    },
+    "trees": {
+      "lz018": { "name": "云荔 018 号", "species": "妃子笑荔枝", "summary": "树势稳定、结果记录完整，适合作为首批认养样板树。", "location": "荔田共生境北侧果园片区，靠近村道但不展示精确坐标。", "imageAlt": "云荔 018 号荔枝树和果园环境", "prices": { "seasonal": "¥399", "annual": "¥999" } },
+      "lz026": { "name": "云荔 026 号", "species": "桂味荔枝", "summary": "适合亲子认养和食育课堂联动，名额较少。", "location": "荔田共生境中部果园片区，靠近食育课堂动线。", "imageAlt": "云荔 026 号荔枝树和田园肌理", "prices": { "seasonal": "¥359", "annual": "¥899" } },
+      "lz041": { "name": "云荔 041 号", "species": "老树荔枝", "summary": "树龄较高，当前以养护观察和记录展示为主。", "location": "荔田共生境南侧老树片区，坐标仅作内部养护使用。", "imageAlt": "云荔 041 号老荔枝树", "prices": { "seasonal": "待定", "annual": "待定" } }
+    }
+  },
+  "tickets": {
+    "nav": { "backHome": "返回首页", "phase": "门票预购 MVP" },
+    "hero": { "eyebrow": "Tickets", "title": "门票和活动先做可预购的产品占位", "body": "本阶段不接真实支付，先展示门票、食育课和研学工坊的产品结构，后续接入票务库存与统一支付单。" },
+    "card": { "price": "预购价格", "stock": "名额状态", "pendingPayment": "支付入口待接入" },
+    "notice": { "title": "预购说明", "body": "当前仅展示产品和待支付入口，不生成真实票务核销码。后续接入 /api/v1/tickets/products 与 /api/v1/ticket-orders。" },
+    "products": {
+      "ancientRoad": { "scene": "古道叙事境", "name": "古道声音导览票", "summary": "包含古道节点讲解、茶歇预留和轻量导览设备占位。", "price": "¥39 起", "stock": "每日 40 个名额" },
+      "lycheeClass": { "scene": "荔田共生境", "name": "亲子荔枝食育课", "summary": "围绕果树档案、采摘知识和小型加工体验组织。", "price": "¥98 起", "stock": "周末余量紧张" },
+      "resilienceWorkshop": { "scene": "韧谷研学境", "name": "雨洪韧性工坊", "summary": "面向研学团队的水安全和生态修复课程。", "price": "¥128 起", "stock": "团队预约制" }
+    }
+  },
+  "me": {
+    "nav": { "backHome": "返回首页", "phase": "个人中心 MVP" },
+    "hero": { "eyebrow": "Member Center", "title": "个人中心先展示订单列表占位", "body": "这里聚合院落预约、树木认养和票务活动订单。登录、实名和支付记录将在后续后端阶段接入。" },
+    "orders": {
+      "booking": { "type": "院落预约", "title": "岭上共居院 · 待支付", "status": "待接入支付", "date": "2026 年 6 月 20 日" },
+      "tree": { "type": "树木认养", "title": "云荔 018 号 · 一季认养", "status": "待支付", "date": "2026 年 6 月 12 日" },
+      "ticket": { "type": "活动票务", "title": "雨洪韧性工坊 · 预购占位", "status": "未核销", "date": "待确认" }
+    }
+  },
+  "privacy": {
+    "nav": { "backHome": "返回首页", "phase": "隐私中心 MVP" },
+    "hero": { "eyebrow": "Privacy", "title": "隐私中心先展示授权项占位", "body": "当前用于展示隐私政策、数据采集和 AI 处理授权结构。后续接入 consent_record 后可支持授权和撤回。" },
+    "items": {
+      "policy": { "title": "隐私政策", "body": "展示当前隐私政策版本和用户确认状态。", "status": "已确认" },
+      "data": { "title": "数据采集", "body": "说明行程偏好、预约信息和反馈内容的采集范围。", "status": "可管理" },
+      "ai": { "title": "AI 处理", "body": "路线生成和反馈总结前必须完成脱敏处理。", "status": "默认关闭" }
+    }
+  },
   "routes": {
     "nav": {
       "backHome": "返回首页",
@@ -342,8 +451,10 @@
         "rainy": "雨天",
         "hot": "高温"
       },
-      "ruleTitle": "当前为规则模拟",
-      "ruleBody": "本阶段不向任何外部模型发送数据；后续接入 AI 时，必须先经过后端 ModelProviderAdapter 和 PII 脱敏。"
+      "ruleTitle": "通过后端模型适配层生成",
+      "ruleBody": "前端只提交时长、人群和天气标签到 /api/v1/routes/generate；后端通过 ModelProviderAdapter 调用模型，缺少密钥时返回配置提示。",
+      "generate": "生成路线",
+      "generating": "正在生成"
     },
     "map": {
       "eyebrow": "地图底图",
@@ -362,7 +473,8 @@
       "reservationNodes": "需提前预约",
       "fallback": "雨天备选",
       "notice": "出行提示",
-      "bookingCta": "查看可预约节点"
+      "bookingCta": "查看可预约节点",
+      "provider": "生成来源：{provider}"
     },
     "waypoints": {
       "visitorCenter": "游客中心",

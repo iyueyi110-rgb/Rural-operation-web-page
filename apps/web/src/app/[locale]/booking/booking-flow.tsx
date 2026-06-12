@@ -13,6 +13,7 @@ import {
   type PaymentMode,
   type CourtyardOption,
 } from "@web/lib/courtyards-data"
+import { MasterDetailLayout } from "@ui/index"
 
 type InventoryStatus = CourtyardOption["inventoryStatus"] | (typeof bookingDateOptions)[number]["status"]
 
@@ -70,8 +71,9 @@ export function BookingFlow() {
   }
 
   return (
-    <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.62fr)]">
-      <section className="min-w-0">
+    <MasterDetailLayout
+      master={
+        <>
         <div className="flex items-center gap-2 text-sm font-bold text-water">
           <BedDouble aria-hidden="true" className="h-4 w-4" />
           {t("list.eyebrow")}
@@ -154,9 +156,10 @@ export function BookingFlow() {
             )
           })}
         </div>
-      </section>
-
-      <aside className="min-w-0 rounded-lg border border-stone bg-white p-5 shadow-soft lg:sticky lg:top-20 lg:self-start">
+        </>
+      }
+      detail={
+        <>
         <div className="flex items-center gap-2 text-sm font-bold text-lychee">
           <CalendarDays aria-hidden="true" className="h-4 w-4" />
           {t("form.eyebrow")}
@@ -303,7 +306,8 @@ export function BookingFlow() {
             </button>
           </div>
         ) : null}
-      </aside>
-    </div>
+        </>
+      }
+    />
   )
 }

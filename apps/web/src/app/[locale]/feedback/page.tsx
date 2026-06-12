@@ -1,12 +1,11 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { ArrowLeft, MessageSquareText, ShieldCheck } from "lucide-react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { FeedbackForm } from "./feedback-form"
 import type { Locale } from "@web/i18n/routing"
 import { getSiteUrl } from "@web/lib/site-url"
-import { Section } from "@ui/index"
+import { PageHeader, Section } from "@ui/index"
 
 export async function generateMetadata({
   params,
@@ -33,15 +32,12 @@ export default async function FeedbackPage({ params }: { params: { locale: Local
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-rice pb-16 text-ink">
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/80 text-white backdrop-blur-xl">
-        <Section className="flex h-16 items-center justify-between gap-4">
-          <Link className="flex shrink-0 items-center gap-2 text-sm font-semibold text-white/86" href={`/${params.locale}`}>
-            <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-            {t("nav.backHome")}
-          </Link>
-          <div className="min-w-0 truncate text-right text-sm font-semibold text-white/72">{t("nav.phase")}</div>
-        </Section>
-      </header>
+      <PageHeader
+        backHref={`/${params.locale}`}
+        backLabel={t("nav.backHome")}
+        icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
+        rightLabel={t("nav.phase")}
+      />
 
       <Section className="pt-12">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(280px,0.38fr)] lg:items-end">

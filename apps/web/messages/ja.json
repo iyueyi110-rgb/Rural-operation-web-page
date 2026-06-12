@@ -15,6 +15,80 @@
     "feedback": {
       "title": "走馬村フィードバック",
       "description": "内容、サービス、施設、支払いなどのフィードバックを送信し、追跡可能なチケットを作成します。"
+    },
+    "trees": {
+      "title": "走馬村ライチ樹里親",
+      "description": "里親可能なライチ樹、曖昧位置、権益、成長記録を表示します。"
+    },
+    "tickets": {
+      "title": "走馬村チケット",
+      "description": "チケットと活動の予約商品を表示します。"
+    },
+    "me": {
+      "title": "走馬村マイページ",
+      "description": "予約、里親、チケット注文の占位一覧を表示します。"
+    },
+    "privacy": {
+      "title": "走馬村プライバシー",
+      "description": "同意とプライバシー管理項目を表示します。"
+    }
+  },
+  "trees": {
+    "nav": { "backHome": "ホームへ戻る", "phase": "果樹里親段階" },
+    "hero": { "eyebrow": "Tree Adoption", "title": "里親は一度の購入ではなく長い関係です", "body": "里親可能な樹、樹プロフィール、権益、同意、成長記録を表示します。支払いは占位です。" },
+    "guardrail": { "locationTitle": "曖昧位置のみ", "locationBody": "精確な GPS は公開しません。", "paymentTitle": "支払い未接続", "paymentBody": "現在は支払い待ち確認のみ表示します。" },
+    "list": { "eyebrow": "里親可能な樹", "title": "記録のあるライチ樹を選択", "body": "樹データはローカル構造化データです。", "species": "品種", "age": "樹齢", "ageValue": "{count} 年", "health": "健康", "select": "選択", "selected": "選択済み" },
+    "availability": { "available": "里親可", "limited": "残り少ない", "maintenance": "養護観察中" },
+    "health": { "excellent": "優良", "good": "良好", "fair": "観察中", "poor": "要養護" },
+    "profile": { "eyebrow": "樹プロフィール", "planTitle": "里親プラン" },
+    "plans": { "seasonal": { "label": "一季", "body": "初回体験向けの成長記録付きプラン。" }, "annual": { "label": "年間", "body": "長期記録、活動、証書を含むプラン。" } },
+    "rights": { "title": "権益", "harvestBox": "季節の収穫ギフト", "careUpdates": "養護記録と写真", "certificate": "電子証書", "farmEvent": "農園活動優先", "familyClass": "親子教室優先" },
+    "timeline": {
+      "title": "成長記録",
+      "spring": { "date": "2026年3月", "title": "春芽観察", "body": "新芽は安定しています。" },
+      "pruning": { "date": "2026年4月", "title": "軽剪定", "body": "通風枝を整理しました。" },
+      "photo": { "date": "2026年6月", "title": "写真更新", "body": "プロフィール写真を更新しました。" },
+      "flower": { "date": "2026年4月", "title": "花期観察", "body": "花序は良好です。" },
+      "care": { "date": "2026年5月", "title": "養護観察", "body": "里親確認を一時停止しています。" },
+      "note": { "date": "2026年6月", "title": "維持メモ", "body": "次回確認後に再開します。" }
+    },
+    "agreement": { "title": "同意確認", "body": "権益、更新頻度、収穫方法、支払い未接続状態を理解しました。" },
+    "messages": { "unavailable": "この樹は現在確認できません。", "needAgreement": "同意後に確認してください。" },
+    "form": { "confirm": "里親確認" },
+    "order": { "title": "里親注文を作成しました", "body": "注文は支払い待ちです。", "status": "注文状態：支払い待ち", "paymentStatus": "支払い：未接続", "paymentEntry": "支払い未接続" },
+    "trees": {
+      "lz018": { "name": "雲荔 018", "species": "妃子笑ライチ", "summary": "状態が安定し記録が揃っています。", "location": "北側果樹園、精確座標は非公開。", "imageAlt": "雲荔 018 ライチ樹", "prices": { "seasonal": "¥399", "annual": "¥999" } },
+      "lz026": { "name": "雲荔 026", "species": "桂味ライチ", "summary": "親子里親と食育に適しています。", "location": "中央果樹園、教室動線付近。", "imageAlt": "雲荔 026 ライチ樹", "prices": { "seasonal": "¥359", "annual": "¥899" } },
+      "lz041": { "name": "雲荔 041", "species": "老樹ライチ", "summary": "老樹のため観察中です。", "location": "南側老樹区、座標は内部利用のみ。", "imageAlt": "雲荔 041 老樹", "prices": { "seasonal": "未定", "annual": "未定" } }
+    }
+  },
+  "tickets": {
+    "nav": { "backHome": "ホームへ戻る", "phase": "チケット MVP" },
+    "hero": { "eyebrow": "Tickets", "title": "チケットと活動の予約占位", "body": "実決済と核销接続前の商品構造を表示します。" },
+    "card": { "price": "価格", "stock": "在庫", "pendingPayment": "支払い未接続" },
+    "notice": { "title": "予約説明", "body": "現在は実際のチケットコードを発行しません。" },
+    "products": {
+      "ancientRoad": { "scene": "古道", "name": "音声ガイド券", "summary": "ガイド機器と茶休憩の占位。", "price": "¥39 から", "stock": "毎日40枠" },
+      "lycheeClass": { "scene": "荔田", "name": "親子ライチ食育", "summary": "樹プロフィールと加工体験。", "price": "¥98 から", "stock": "週末残り少ない" },
+      "resilienceWorkshop": { "scene": "韧谷", "name": "雨洪工坊", "summary": "水安全と生態修復课程。", "price": "¥128 から", "stock": "団体予約" }
+    }
+  },
+  "me": {
+    "nav": { "backHome": "ホームへ戻る", "phase": "マイページ MVP" },
+    "hero": { "eyebrow": "Member Center", "title": "注文一覧占位", "body": "予約、果樹里親、チケット注文を集約します。" },
+    "orders": {
+      "booking": { "type": "中庭予約", "title": "岭上共居院 · 支払い待ち", "status": "支払い未接続", "date": "2026年6月20日" },
+      "tree": { "type": "果樹里親", "title": "雲荔 018 · 一季", "status": "支払い待ち", "date": "2026年6月12日" },
+      "ticket": { "type": "チケット", "title": "雨洪工坊 · 占位", "status": "未使用", "date": "未定" }
+    }
+  },
+  "privacy": {
+    "nav": { "backHome": "ホームへ戻る", "phase": "プライバシー MVP" },
+    "hero": { "eyebrow": "Privacy", "title": "同意項目占位", "body": "プライバシー、データ収集、AI 処理同意を表示します。" },
+    "items": {
+      "policy": { "title": "プライバシー方針", "body": "方針バージョンと確認状態を表示します。", "status": "確認済み" },
+      "data": { "title": "データ収集", "body": "行程、予約、フィードバックデータ範囲を説明します。", "status": "管理可" },
+      "ai": { "title": "AI 処理", "body": "AI 入力は先に匿名化します。", "status": "既定オフ" }
     }
   },
   "common": {
@@ -342,8 +416,10 @@
         "rainy": "雨天",
         "hot": "高温"
       },
-      "ruleTitle": "現在はルールシミュレーション",
-      "ruleBody": "この段階では外部モデルへデータを送信しません。後で AI を接続する場合は、必ずバックエンドの ModelProviderAdapter と PII 脱敏を経由します。"
+      "ruleTitle": "バックエンド適配層で生成",
+      "ruleBody": "フロントは滞在時間、来訪者、天気タグのみを /api/v1/routes/generate に送信し、バックエンドが ModelProviderAdapter を使います。",
+      "generate": "ルート生成",
+      "generating": "生成中"
     },
     "map": {
       "eyebrow": "地図ベース",
@@ -362,7 +438,8 @@
       "reservationNodes": "事前予約",
       "fallback": "雨天代替",
       "notice": "移動メモ",
-      "bookingCta": "予約可能ノードを見る"
+      "bookingCta": "予約可能ノードを見る",
+      "provider": "生成元：{provider}"
     },
     "waypoints": {
       "visitorCenter": "ビジターセンター",

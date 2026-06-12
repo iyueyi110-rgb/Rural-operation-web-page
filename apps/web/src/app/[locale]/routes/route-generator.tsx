@@ -4,10 +4,11 @@ import Image from "next/image"
 import Link from "next/link"
 import { AlertTriangle, Clock3, MapPinned, MoveRight, Route, Umbrella } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 
 import {
   selectRouteOption,
+  type RouteOption,
   type RouteAudience,
   type RouteDuration,
   type RouteWeather,
@@ -20,11 +21,41 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
   const [audience, setAudience] = useState<RouteAudience>("family")
   const [weather, setWeather] = useState<RouteWeather>("sunny")
   const [mapMode, setMapMode] = useState<"scope" | "satellite">("scope")
+  const [selectedRoute, setSelectedRoute] = useState<RouteOption>(() => selectRouteOption({ duration, audience, weather }))
+  const [provider, setProvider] = useState("ModelProviderAdapter")
+  const [isGenerating, setIsGenerating] = useState(false)
 
-  const selectedRoute = useMemo(
-    () => selectRouteOption({ duration, audience, weather }),
-    [audience, duration, weather],
-  )
+  async function generateRoute() {
+    setIsGenerating(true)
+
+    try {
+      const response = await fetch("/api/v1/routes/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ duration, audience, weather }),
+      })
+
+      if (!response.ok) {
+        throw new Error("route generation failed")
+      }
+
+      const result = (await response.json()) as {
+        data: {
+          route: RouteOption
+          provider: string
+        }
+      }
+      setSelectedRoute(result.data.route)
+      setProvider(result.data.provider)
+    } catch {
+      setSelectedRoute(selectRouteOption({ duration, audience, weather }))
+      setProvider("configuration-required")
+    } finally {
+      setIsGenerating(false)
+    }
+  }
 
   return (
     <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
@@ -85,6 +116,14 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
           <p className="mt-2 break-words text-sm leading-6 text-white/68 [overflow-wrap:anywhere]">
             {t("form.ruleBody")}
           </p>
+          <button
+            className="mt-4 h-11 rounded-full bg-white px-5 text-sm font-bold text-ink transition hover:bg-rice"
+            disabled={isGenerating}
+            onClick={generateRoute}
+            type="button"
+          >
+            {isGenerating ? t("form.generating") : t("form.generate")}
+          </button>
         </div>
       </section>
 
@@ -143,6 +182,9 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
             </div>
             <h2 className="mt-3 break-all text-3xl font-extrabold">{t(selectedRoute.titleKey)}</h2>
             <p className="mt-3 break-all text-sm leading-7 text-ink/68">{t(selectedRoute.summaryKey)}</p>
+            <div className="mt-4 inline-flex rounded-full border border-stone px-3 py-1 text-xs font-bold text-ink/58">
+              {t("result.provider", { provider })}
+            </div>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               <div className="min-w-0 rounded-md bg-rice p-4">
                 <Clock3 aria-hidden="true" className="h-5 w-5 text-water" />

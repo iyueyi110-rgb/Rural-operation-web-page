@@ -6,8 +6,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { featuredPlayCards, homeScenes, previewStats } from "@web/lib/home-data"
 import { getSiteUrl } from "@web/lib/site-url"
+import { getWeatherSummary } from "@web/lib/weather"
 import { Section, StatusBadge } from "@ui/index"
 import type { Locale } from "@web/i18n/routing"
+
+export const dynamic = "force-dynamic"
 
 const iconMap = {
   CalendarDays,
@@ -38,6 +41,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
   setRequestLocale(params.locale)
   const t = await getTranslations("home")
   const common = await getTranslations("common")
+  const weather = await getWeatherSummary()
 
   return (
     <main className="overflow-hidden pb-16 text-ink">
@@ -148,8 +152,8 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
               <CloudSun aria-hidden="true" className="h-4 w-4" />
               {t("weather.eyebrow")}
             </div>
-            <div className="mt-4 text-3xl font-extrabold">{t("weather.temperature")}</div>
-            <p className="mt-2 text-sm leading-6 text-white/75">{t("weather.summary")}</p>
+            <div className="mt-4 text-3xl font-extrabold">{weather.temperature}</div>
+            <p className="mt-2 text-sm leading-6 text-white/75">{weather.summary}</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             {featuredPlayCards.map((card) => {
