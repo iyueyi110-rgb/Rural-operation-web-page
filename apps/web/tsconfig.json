@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@web/*": ["src/*"],
+      "@admin/*": ["../admin/src/*"],
+      "@api/*": ["../../services/api/src/*"],
+      "@ui/*": ["../../packages/ui/src/*"],
+      "@contracts/*": ["../../packages/contracts/src/*"],
+      "@prompts/*": ["../../packages/prompts/*"],
+      "@utils/*": ["../../packages/utils/src/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

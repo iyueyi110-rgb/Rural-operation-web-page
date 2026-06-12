@@ -1,0 +1,128 @@
+{
+  "metadata": {
+    "home": {
+      "title": "走馬村ポータル",
+      "description": "走馬村 Web/PWA の日本語プレースホルダー。"
+    }
+  },
+  "common": {
+    "loading": "走馬村の内容を準備しています",
+    "errorTitle": "ページを読み込めませんでした",
+    "errorBody": "しばらくしてからもう一度お試しください。",
+    "retry": "再読み込み",
+    "updatedAt": "{date} 更新"
+  },
+  "home": {
+    "nav": {
+      "homeAria": "上部へ戻る",
+      "aria": "ホームナビゲーション",
+      "mark": "走",
+      "brand": "走馬村",
+      "realms": "四境",
+      "weather": "天気",
+      "booking": "中庭",
+      "adoption": "里親",
+      "start": "開始"
+    },
+    "hero": {
+      "badge": "AIGC を活用した山村更新モデル",
+      "title": "雲脈寿嶺、荔水走馬",
+      "subtitle": "物語、ルート、中庭、果樹里親をつなぐ軽量ポータル。",
+      "primaryCta": "四境を見る",
+      "secondaryCta": "今日の提案",
+      "imageAlt": "走馬村の鳥瞰"
+    },
+    "stats": {
+      "area": {
+        "value": "約 1.8 km²",
+        "label": "計画範囲"
+      },
+      "forest": {
+        "value": "3107 畝",
+        "label": "山林"
+      },
+      "fields": {
+        "value": "2383 畝",
+        "label": "畑と果樹園"
+      }
+    },
+    "weather": {
+      "eyebrow": "天気と来訪メモ",
+      "temperature": "19.7℃",
+      "summary": "天気連携は次の段階で追加します。"
+    },
+    "playCards": {
+      "route": {
+        "title": "半日ルート",
+        "body": "初回来訪向けの軽量ルート。"
+      },
+      "courtyard": {
+        "title": "中庭プレビュー",
+        "body": "在庫連携は後続段階で追加します。"
+      },
+      "tree": {
+        "title": "果樹里親",
+        "body": "樹木記録を中心にした年間関係。"
+      }
+    },
+    "guardrails": {
+      "title": "軽量プラットフォーム優先",
+      "body": "実資源を整理し、過度な景区化を避けます。"
+    },
+    "realms": {
+      "eyebrow": "Four Realms",
+      "title": "運営可能な四つの農村体験",
+      "description": "各場面は内容、ルート、予約、里親制度につながります。",
+      "ancientRoad": {
+        "title": "古道叙事境",
+        "summary": "古道と地域記憶の徒歩体験。",
+        "cta": "詳細は次段階",
+        "titleImageAlt": "山道の風景"
+      },
+      "lycheeField": {
+        "title": "荔田共生境",
+        "summary": "一本の木から一卓の食へ。",
+        "cta": "里親プレビュー",
+        "titleImageAlt": "果樹園と田園"
+      },
+      "resilienceValley": {
+        "title": "韧谷研学境",
+        "summary": "水環境と学習体験。",
+        "cta": "天気を見る",
+        "titleImageAlt": "水辺の谷"
+      },
+      "ridgeDwelling": {
+        "title": "岭上共居境",
+        "summary": "滞在、工房、共創生活の中庭。",
+        "cta": "中庭プレビュー",
+        "titleImageAlt": "中庭の風景"
+      }
+    },
+    "booking": {
+      "eyebrow": "Courtyard Preview",
+      "title": "中庭予約の入口",
+      "body": "カレンダーと在庫は後続段階で追加します。",
+      "status": "予約フローは後続段階で公開",
+      "imageAlt": "伝統的な石造りの中庭"
+    },
+    "adoption": {
+      "eyebrow": "Tree Adoption Preview",
+      "title": "果樹里親には儀式感と信頼感が必要",
+      "body": "樹木記録と管理ログを中心とした長期関係。",
+      "steps": {
+        "1": {
+          "title": "樹木記録",
+          "body": "品種、樹齢、健康状態、曖昧位置。"
+        },
+        "2": {
+          "title": "成長記録",
+          "body": "管理イベントと季節写真。"
+        },
+        "3": {
+          "title": "権益",
+          "body": "活動、収穫、証明書。"
+        }
+      }
+    }
+  }
+}

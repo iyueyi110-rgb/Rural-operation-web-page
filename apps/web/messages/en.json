@@ -1,0 +1,128 @@
+{
+  "metadata": {
+    "home": {
+      "title": "Zouma Village Portal",
+      "description": "A placeholder English experience for the Zouma Village Web/PWA."
+    }
+  },
+  "common": {
+    "loading": "Preparing today's Zouma Village content",
+    "errorTitle": "The page could not load",
+    "errorBody": "Please try again later.",
+    "retry": "Retry",
+    "updatedAt": "Updated {date}"
+  },
+  "home": {
+    "nav": {
+      "homeAria": "Back to top",
+      "aria": "Home navigation",
+      "mark": "Z",
+      "brand": "Zouma Village",
+      "realms": "Realms",
+      "weather": "Weather",
+      "booking": "Courtyards",
+      "adoption": "Adoption",
+      "start": "Start"
+    },
+    "hero": {
+      "badge": "AIGC-enabled resilient mountain village",
+      "title": "Cloud Veins, Lychee Waters, Zouma",
+      "subtitle": "A lightweight village portal connecting stories, routes, courtyards, tree adoption and repeat visits.",
+      "primaryCta": "View realms",
+      "secondaryCta": "Today",
+      "imageAlt": "Aerial view of Zouma Village"
+    },
+    "stats": {
+      "area": {
+        "value": "About 1.8 km²",
+        "label": "Concept area"
+      },
+      "forest": {
+        "value": "3107 mu",
+        "label": "Forest base"
+      },
+      "fields": {
+        "value": "2383 mu",
+        "label": "Fields and orchards"
+      }
+    },
+    "weather": {
+      "eyebrow": "Weather and trip note",
+      "temperature": "19.7℃",
+      "summary": "Weather integration is reserved for a later step."
+    },
+    "playCards": {
+      "route": {
+        "title": "Half-day route",
+        "body": "A lightweight first-visit route placeholder."
+      },
+      "courtyard": {
+        "title": "Courtyard preview",
+        "body": "Inventory will be connected in a later step."
+      },
+      "tree": {
+        "title": "Tree adoption",
+        "body": "A yearly relationship built around tree records."
+      }
+    },
+    "guardrails": {
+      "title": "Light platform first",
+      "body": "The first screen organizes real resources without overbuilding."
+    },
+    "realms": {
+      "eyebrow": "Four Realms",
+      "title": "Four operational rural experiences",
+      "description": "Each realm connects content, route, booking or adoption.",
+      "ancientRoad": {
+        "title": "Ancient Road",
+        "summary": "A walking story line for road heritage and local memory.",
+        "cta": "Details next",
+        "titleImageAlt": "Mountain road scene"
+      },
+      "lycheeField": {
+        "title": "Lychee Field",
+        "summary": "From one tree to one table.",
+        "cta": "Adoption preview",
+        "titleImageAlt": "Field and orchard view"
+      },
+      "resilienceValley": {
+        "title": "Resilience Valley",
+        "summary": "Water ecology and study experience.",
+        "cta": "Weather note",
+        "titleImageAlt": "Waterfront valley scene"
+      },
+      "ridgeDwelling": {
+        "title": "Ridge Dwelling",
+        "summary": "Courtyards for stays, workshops and shared life.",
+        "cta": "Courtyard preview",
+        "titleImageAlt": "Courtyard scene"
+      }
+    },
+    "booking": {
+      "eyebrow": "Courtyard Preview",
+      "title": "Courtyard booking starts with a clear stay entry",
+      "body": "Calendar and inventory will be added later.",
+      "status": "Booking flow opens in a later step",
+      "imageAlt": "Traditional stone courtyard"
+    },
+    "adoption": {
+      "eyebrow": "Tree Adoption Preview",
+      "title": "Tree adoption needs ceremony and trust",
+      "body": "A long-term relationship around tree files and care logs.",
+      "steps": {
+        "1": {
+          "title": "Tree file",
+          "body": "Species, age, health and blurred location."
+        },
+        "2": {
+          "title": "Growth logs",
+          "body": "Care events and seasonal photos."
+        },
+        "3": {
+          "title": "Rights",
+          "body": "Events, harvest and certificate."
+        }
+      }
+    }
+  }
+}
