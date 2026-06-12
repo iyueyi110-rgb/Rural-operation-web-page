@@ -3,6 +3,14 @@
     "home": {
       "title": "云脉寿岭，荔水走马｜走马村前台系统",
       "description": "走马村四境门户、天气推荐、院落预约与荔枝树认养的 Web/PWA 前台。"
+    },
+    "routes": {
+      "title": "走马村路线生成｜可解释游线",
+      "description": "按时长、人群和天气生成走马村四境游线，展示范围图、卫星图和预约节点。"
+    },
+    "booking": {
+      "title": "走马村院落预约｜日历库存与订单确认",
+      "description": "查看走马村院落库存、日期、人数和预订须知，完成待支付状态的预约确认。"
     }
   },
   "common": {
@@ -20,6 +28,7 @@
       "brand": "走马村",
       "realms": "四境",
       "weather": "天气",
+      "routes": "路线",
       "booking": "院落",
       "adoption": "认养",
       "login": "登录",
@@ -55,15 +64,18 @@
     "playCards": {
       "route": {
         "title": "半日轻游",
-        "body": "云驿报到、古道漫行、荔田停留和水岸休憩，适合首次到访。"
+        "body": "云驿报到、古道漫行、荔田停留和水岸休憩，适合首次到访。",
+        "link": "生成路线"
       },
       "courtyard": {
         "title": "最近可订院落",
-        "body": "优先展示岭上共居院和低碳民宿院，后续接入日历库存。"
+        "body": "优先展示岭上共居院和低碳民宿院，后续接入日历库存。",
+        "link": "查看院落"
       },
       "tree": {
         "title": "荔枝树认养",
-        "body": "从树档案、成长记录到收获权益，建立全年复访关系。"
+        "body": "从树档案、成长记录到收获权益，建立全年复访关系。",
+        "link": "查看认养"
       }
     },
     "guardrails": {
@@ -123,6 +135,254 @@
           "title": "权益兑现",
           "body": "明确活动参与、收获领取和认养证书。"
         }
+      }
+    }
+  },
+  "booking": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "院落预约阶段"
+    },
+    "hero": {
+      "eyebrow": "Courtyard Booking",
+      "title": "院落预约先把可订、可住、待支付说清楚",
+      "body": "本阶段使用本地结构化库存，不接真实支付。用户可以选择院落、日期、人数和支付方式，生成待支付订单确认。"
+    },
+    "guardrail": {
+      "title": "支付入口待接入",
+      "body": "当前只展示预约确认和待支付状态，不模拟真实扣款；后续接入支付时必须走统一支付单、幂等键和沙箱模式。"
+    },
+    "list": {
+      "eyebrow": "院落列表",
+      "title": "选择一个本次可预约的院落",
+      "body": "院落先按岭上共居、荔田食育和古道驿站三类资源组织，后续再迁移到 /api/v1/courtyards。",
+      "capacity": "可接待人数",
+      "price": "价格提示",
+      "minNights": "最少晚数",
+      "select": "选择院落",
+      "selected": "已选择"
+    },
+    "form": {
+      "eyebrow": "预约信息",
+      "title": "确认日期、人数和支付方式",
+      "dateLabel": "入住或使用日期",
+      "guestsLabel": "到访人数",
+      "guestsValue": "{count} 人",
+      "paymentModeLabel": "支付方式",
+      "confirm": "确认预约"
+    },
+    "dates": {
+      "jun20": "2026 年 6 月 20 日",
+      "jun21": "2026 年 6 月 21 日",
+      "jun27": "2026 年 6 月 27 日",
+      "jun28": "2026 年 6 月 28 日"
+    },
+    "inventory": {
+      "available": "可订",
+      "limited": "余量紧张",
+      "booked": "已订满",
+      "maintenance": "维护中"
+    },
+    "paymentModes": {
+      "deposit": "定金",
+      "full": "全款"
+    },
+    "summary": {
+      "title": "订单摘要",
+      "courtyard": "院落",
+      "date": "日期",
+      "guests": "人数",
+      "paymentMode": "支付方式"
+    },
+    "notice": {
+      "title": "预订须知"
+    },
+    "messages": {
+      "capacityExceeded": "当前人数超过该院落接待上限，请减少人数或选择更大院落。"
+    },
+    "order": {
+      "title": "预约已生成",
+      "body": "订单已进入待支付状态。当前支付入口尚未接入，不会发生真实扣款。",
+      "status": "订单状态：待支付",
+      "paymentStatus": "支付状态：待接入支付",
+      "paymentEntry": "支付入口待接入"
+    },
+    "courtyards": {
+      "ridgeShared": {
+        "name": "岭上共居院",
+        "summary": "适合小团队住一晚或做半日共创活动，连接村宴、晨间农事和岭上慢行。",
+        "location": "岭上共居境 · 靠近程家湾与涂家湾",
+        "price": "¥680 起",
+        "notice": "建议提前一天确认到达时间；夜宿需携带有效证件，停车后以短程接驳或步行为主。",
+        "imageAlt": "岭上共居院的院落空间"
+      },
+      "lycheeFood": {
+        "name": "荔下共享院",
+        "summary": "面向亲子家庭和食育小组，适合采摘、食育课堂、村宴前置准备和短暂停留。",
+        "location": "荔田共生境 · 靠近荔枝与桂圆果园",
+        "price": "¥298 起",
+        "notice": "食育课程需提前确认物料；雨天保留室内课堂，取消泥地采摘段。",
+        "imageAlt": "荔下共享院和石屋院落"
+      },
+      "ancientStation": {
+        "name": "古道驿站院",
+        "summary": "服务古道轻游、声音导览和茶歇补给，当前处于维护准备状态。",
+        "location": "古道叙事境 · 靠近走马岭古道节点",
+        "price": "待定",
+        "notice": "该院落正在维护准备，暂不开放确认预约；可先选择其他院落。",
+        "imageAlt": "古道驿站院和传统庭院"
+      }
+    },
+    "amenities": {
+      "sharedKitchen": "共享厨房",
+      "courtyardTea": "院落茶歇",
+      "lowCarbonRoom": "低碳客房",
+      "parkingTransfer": "停车接驳",
+      "foodClassroom": "食育课堂",
+      "harvestTable": "采摘餐桌",
+      "familyFriendly": "亲子友好",
+      "rainShelter": "雨天转场",
+      "audioGuide": "声音导览",
+      "teaBreak": "茶歇补给",
+      "lightWalk": "轻体力慢行",
+      "historyWall": "古道故事墙"
+    }
+  },
+  "routes": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "路线生成阶段"
+    },
+    "hero": {
+      "eyebrow": "Route Generator",
+      "title": "按时长、人群和天气生成可解释游线",
+      "body": "第一版采用规则模拟，不调用真实 AI 或地图 API。路线结果会说明总时长、步行强度、天气策略、预约节点和雨天备选。"
+    },
+    "form": {
+      "eyebrow": "输入条件",
+      "title": "告诉系统这次怎么走",
+      "body": "结合你提供的规划范围图和卫星地图，先用模板规则生成适合 MVP 的路线卡。",
+      "durationLabel": "游览时长",
+      "durationOptions": {
+        "halfDay": "半日",
+        "oneDay": "一日",
+        "twoDays": "两日"
+      },
+      "audienceLabel": "人群类型",
+      "audienceOptions": {
+        "senior": "老人友好",
+        "family": "亲子家庭",
+        "regular": "普通游客"
+      },
+      "weatherLabel": "天气偏好",
+      "weatherOptions": {
+        "sunny": "晴天",
+        "rainy": "雨天",
+        "hot": "高温"
+      },
+      "ruleTitle": "当前为规则模拟",
+      "ruleBody": "本阶段不向任何外部模型发送数据；后续接入 AI 时，必须先经过后端 ModelProviderAdapter 和 PII 脱敏。"
+    },
+    "map": {
+      "eyebrow": "地图底图",
+      "title": "范围图与卫星图对照",
+      "scope": "范围图",
+      "satellite": "卫星图",
+      "scopeAlt": "走马村规划范围、现状道路、新建道路和停车设施示意图",
+      "satelliteAlt": "走马村周边卫星地图"
+    },
+    "result": {
+      "eyebrow": "推荐结果",
+      "totalTime": "总时长",
+      "mobility": "步行强度",
+      "weather": "天气策略",
+      "waypoints": "路线节点",
+      "reservationNodes": "需提前预约",
+      "fallback": "雨天备选",
+      "notice": "出行提示",
+      "bookingCta": "查看可预约节点"
+    },
+    "waypoints": {
+      "visitorCenter": "游客中心",
+      "taojiawan": "陶家湾停车点",
+      "ancientRoad": "走马岭古道",
+      "lycheeGarden": "荔枝与桂圆果园",
+      "waterfrontRest": "龙溪水岸休憩点",
+      "foodClassroom": "荔下共享院食育课堂",
+      "treeAdoption": "数字果树认养点",
+      "resilienceWorkshop": "龙溪韧性工坊",
+      "ridgeCourtyard": "岭上共居院",
+      "indoorStory": "室内古道故事点",
+      "shadedAncientRoad": "树荫古道短线",
+      "villageMeal": "村宴与农产品展销点",
+      "morningFarm": "晨间农事体验点"
+    },
+    "reservationNodes": {
+      "audioGuide": "声音导览设备",
+      "shuttle": "接驳或短程代步",
+      "foodClass": "亲子食育课程",
+      "treeAdoption": "荔枝树认养名额",
+      "villageMeal": "村宴席位",
+      "courtyardTea": "院落茶歇",
+      "indoorWorkshop": "室内研学工坊",
+      "rainGear": "雨具与防滑提示",
+      "coolRest": "避暑休息点",
+      "courtyardStay": "岭上院落住宿"
+    },
+    "plans": {
+      "gentleAncientRoad": {
+        "title": "老人友好古道轻游",
+        "summary": "从游客中心进入，控制坡度和步行距离，重点体验古道叙事、陶家湾节点和水岸休憩。",
+        "totalTime": "2.5 小时",
+        "mobility": "低强度",
+        "weather": "晴天优先",
+        "rainFallback": "如遇降雨，缩短古道段，转入室内故事点和院落茶歇。",
+        "notice": "建议避开正午时段，优先选择陶家湾或游客中心附近停车点。"
+      },
+      "familyLycheeClass": {
+        "title": "亲子荔田食育线",
+        "summary": "围绕荔枝果园、食育课堂和认养入口组织，减少长距离爬坡，适合带娃家庭。",
+        "totalTime": "3 小时",
+        "mobility": "低到中",
+        "weather": "晴天友好",
+        "rainFallback": "雨天保留食育课堂和树档案讲解，取消泥地采摘段。",
+        "notice": "建议提前预约食育课程和认养讲解，儿童需避开水岸边界。"
+      },
+      "regularFourRealms": {
+        "title": "四境一日串联线",
+        "summary": "从古道、荔田、水岸到岭上院落完整串联，适合普通游客第一次系统理解走马村。",
+        "totalTime": "6 小时",
+        "mobility": "中强度",
+        "weather": "晴天最佳",
+        "rainFallback": "雨天改为古道短线、食育课堂、韧性工坊和院落停留。",
+        "notice": "一日线跨越节点较多，建议预留午餐和院落休息时间。"
+      },
+      "rainStudyRoute": {
+        "title": "雨天韧谷研学线",
+        "summary": "以韧性工坊、食育课堂和室内古道故事为主，降低湿滑路段风险。",
+        "totalTime": "2.5 小时",
+        "mobility": "低强度",
+        "weather": "雨天降级",
+        "rainFallback": "若出现强降雨或预警，仅保留游客中心和室内工坊。",
+        "notice": "雨天不建议进入临水边界和未铺装坡道，优先使用停车点接驳。"
+      },
+      "hotLowRiskRoute": {
+        "title": "高温低风险短线",
+        "summary": "选择树荫、院落和水岸休息点，压缩暴晒路段，适合老人或体力较弱游客。",
+        "totalTime": "2 小时",
+        "mobility": "低强度",
+        "weather": "高温避晒",
+        "rainFallback": "如高温后遇阵雨，转入院落茶歇和室内讲解。",
+        "notice": "高温时段建议上午或傍晚出行，补水点和休息点优先。"
+      },
+      "twoDayCourtyard": {
+        "title": "两日岭上共居线",
+        "summary": "第一天完成四境主线和村宴，夜宿岭上院落；第二天做晨间农事和韧谷研学。",
+        "totalTime": "2 天",
+        "mobility": "中强度",
+        "weather": "晴天最佳",
+        "rainFallback": "雨天保留院落、村宴、工坊和室内课程，取消长距离山地慢行。",
+        "notice": "需提前锁定院落住宿、村宴和第二天研学课程名额。"
       }
     }
   },

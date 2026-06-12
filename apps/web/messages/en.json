@@ -3,6 +3,14 @@
     "home": {
       "title": "Zouma Village Portal",
       "description": "A placeholder English experience for the Zouma Village Web/PWA."
+    },
+    "routes": {
+      "title": "Zouma Route Generator",
+      "description": "Generate explainable routes by duration, audience and weather."
+    },
+    "booking": {
+      "title": "Zouma Courtyard Booking",
+      "description": "Review courtyard inventory, dates, guests, booking notices and pending payment confirmation."
     }
   },
   "common": {
@@ -20,6 +28,7 @@
       "brand": "Zouma Village",
       "realms": "Realms",
       "weather": "Weather",
+      "routes": "Routes",
       "booking": "Courtyards",
       "adoption": "Adoption",
       "login": "Login",
@@ -55,15 +64,18 @@
     "playCards": {
       "route": {
         "title": "Half-day route",
-        "body": "A lightweight first-visit route placeholder."
+        "body": "A lightweight first-visit route placeholder.",
+        "link": "Generate route"
       },
       "courtyard": {
         "title": "Courtyard preview",
-        "body": "Inventory will be connected in a later step."
+        "body": "Inventory will be connected in a later step.",
+        "link": "View courtyards"
       },
       "tree": {
         "title": "Tree adoption",
-        "body": "A yearly relationship built around tree records."
+        "body": "A yearly relationship built around tree records.",
+        "link": "View adoption"
       }
     },
     "guardrails": {
@@ -123,6 +135,239 @@
           "title": "Rights",
           "body": "Events, harvest and certificate."
         }
+      }
+    }
+  },
+  "booking": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Courtyard booking phase"
+    },
+    "hero": {
+      "eyebrow": "Courtyard Booking",
+      "title": "Make availability, stay rules and pending payment clear",
+      "body": "This phase uses local structured inventory and does not connect real payment. Visitors can choose courtyard, date, guests and payment mode, then create a pending-payment confirmation."
+    },
+    "guardrail": {
+      "title": "Payment entry pending",
+      "body": "The page only shows booking confirmation and pending payment. Real payment must later use a unified payment order, idempotency key and sandbox mode."
+    },
+    "list": {
+      "eyebrow": "Courtyard list",
+      "title": "Choose a courtyard for this booking",
+      "body": "Courtyards are organized as ridge stay, lychee food class and ancient road station resources before moving to /api/v1/courtyards.",
+      "capacity": "Capacity",
+      "price": "Price note",
+      "minNights": "Min nights",
+      "select": "Select",
+      "selected": "Selected"
+    },
+    "form": {
+      "eyebrow": "Booking info",
+      "title": "Confirm date, guests and payment mode",
+      "dateLabel": "Stay or use date",
+      "guestsLabel": "Guests",
+      "guestsValue": "{count} guests",
+      "paymentModeLabel": "Payment mode",
+      "confirm": "Confirm booking"
+    },
+    "dates": {
+      "jun20": "June 20, 2026",
+      "jun21": "June 21, 2026",
+      "jun27": "June 27, 2026",
+      "jun28": "June 28, 2026"
+    },
+    "inventory": {
+      "available": "Available",
+      "limited": "Limited",
+      "booked": "Booked",
+      "maintenance": "Maintenance"
+    },
+    "paymentModes": {
+      "deposit": "Deposit",
+      "full": "Full payment"
+    },
+    "summary": {
+      "title": "Order summary",
+      "courtyard": "Courtyard",
+      "date": "Date",
+      "guests": "Guests",
+      "paymentMode": "Payment mode"
+    },
+    "notice": {
+      "title": "Booking notice"
+    },
+    "messages": {
+      "capacityExceeded": "The guest count exceeds this courtyard capacity. Reduce guests or choose a larger courtyard."
+    },
+    "order": {
+      "title": "Booking created",
+      "body": "The order is now pending payment. The payment entry is not connected yet, so no real charge occurs.",
+      "status": "Order status: pending payment",
+      "paymentStatus": "Payment status: payment pending integration",
+      "paymentEntry": "Payment entry pending"
+    },
+    "courtyards": {
+      "ridgeShared": {
+        "name": "Ridge Shared Courtyard",
+        "summary": "A stay and co-creation courtyard for small teams, connected to village meals, morning farm activity and ridge walks.",
+        "location": "Ridge Dwelling Realm · Near Chengjiawan and Tujiawan",
+        "price": "From ¥680",
+        "notice": "Confirm arrival one day ahead. Overnight stays require valid ID, with parking followed by shuttle or short walk.",
+        "imageAlt": "Ridge shared courtyard space"
+      },
+      "lycheeFood": {
+        "name": "Lychee Shared Courtyard",
+        "summary": "For family food education groups, picking, class prep, village meals and short stays.",
+        "location": "Lychee Field Realm · Near lychee and longan orchards",
+        "price": "From ¥298",
+        "notice": "Food class materials should be confirmed ahead. Rain keeps indoor class and cancels muddy picking.",
+        "imageAlt": "Lychee shared courtyard and stone house"
+      },
+      "ancientStation": {
+        "name": "Ancient Road Station Courtyard",
+        "summary": "Supports light ancient road walks, audio guides and tea breaks. It is currently under preparation.",
+        "location": "Ancient Road Realm · Near Zouma Ridge road node",
+        "price": "TBD",
+        "notice": "This courtyard is under maintenance and cannot be confirmed yet. Please choose another courtyard.",
+        "imageAlt": "Ancient road station courtyard"
+      }
+    },
+    "amenities": {
+      "sharedKitchen": "Shared kitchen",
+      "courtyardTea": "Courtyard tea",
+      "lowCarbonRoom": "Low-carbon room",
+      "parkingTransfer": "Parking transfer",
+      "foodClassroom": "Food classroom",
+      "harvestTable": "Harvest table",
+      "familyFriendly": "Family friendly",
+      "rainShelter": "Rain fallback",
+      "audioGuide": "Audio guide",
+      "teaBreak": "Tea break",
+      "lightWalk": "Light walk",
+      "historyWall": "Story wall"
+    }
+  },
+  "routes": {
+    "nav": { "backHome": "Back home", "phase": "Route generation phase" },
+    "hero": {
+      "eyebrow": "Route Generator",
+      "title": "Generate explainable routes by duration, audience and weather",
+      "body": "The first version uses rule-based templates and does not call AI or map APIs."
+    },
+    "form": {
+      "eyebrow": "Inputs",
+      "title": "Tell the system how to walk",
+      "body": "Use the provided planning scope and satellite map to produce an MVP route card.",
+      "durationLabel": "Duration",
+      "durationOptions": { "halfDay": "Half day", "oneDay": "One day", "twoDays": "Two days" },
+      "audienceLabel": "Audience",
+      "audienceOptions": { "senior": "Senior friendly", "family": "Family", "regular": "Regular visitor" },
+      "weatherLabel": "Weather",
+      "weatherOptions": { "sunny": "Sunny", "rainy": "Rainy", "hot": "Hot" },
+      "ruleTitle": "Rule simulation",
+      "ruleBody": "No data is sent to external models in this phase. Future AI calls must use ModelProviderAdapter and PII sanitization."
+    },
+    "map": {
+      "eyebrow": "Map base",
+      "title": "Scope and satellite comparison",
+      "scope": "Scope",
+      "satellite": "Satellite",
+      "scopeAlt": "Zouma planning scope map",
+      "satelliteAlt": "Zouma satellite map"
+    },
+    "result": {
+      "eyebrow": "Recommended result",
+      "totalTime": "Total time",
+      "mobility": "Mobility",
+      "weather": "Weather strategy",
+      "waypoints": "Waypoints",
+      "reservationNodes": "Reserve ahead",
+      "fallback": "Rain fallback",
+      "notice": "Trip notice",
+      "bookingCta": "View reservable nodes"
+    },
+    "waypoints": {
+      "visitorCenter": "Visitor Center",
+      "taojiawan": "Taojiawan parking",
+      "ancientRoad": "Zouma Ridge ancient road",
+      "lycheeGarden": "Lychee and longan orchard",
+      "waterfrontRest": "Longxi waterfront rest",
+      "foodClassroom": "Lychee food classroom",
+      "treeAdoption": "Digital tree adoption node",
+      "resilienceWorkshop": "Longxi resilience workshop",
+      "ridgeCourtyard": "Ridge courtyard",
+      "indoorStory": "Indoor ancient road story",
+      "shadedAncientRoad": "Shaded short ancient road",
+      "villageMeal": "Village meal and product display",
+      "morningFarm": "Morning farm activity"
+    },
+    "reservationNodes": {
+      "audioGuide": "Audio guide device",
+      "shuttle": "Shuttle or short transfer",
+      "foodClass": "Family food class",
+      "treeAdoption": "Tree adoption quota",
+      "villageMeal": "Village meal seats",
+      "courtyardTea": "Courtyard tea break",
+      "indoorWorkshop": "Indoor study workshop",
+      "rainGear": "Rain gear and anti-slip notice",
+      "coolRest": "Cooling rest point",
+      "courtyardStay": "Ridge courtyard stay"
+    },
+    "plans": {
+      "gentleAncientRoad": {
+        "title": "Senior-friendly ancient road light route",
+        "summary": "A gentle route through visitor center, Taojiawan, ancient road story and waterfront rest.",
+        "totalTime": "2.5 hours",
+        "mobility": "Low",
+        "weather": "Sunny first",
+        "rainFallback": "Shorten the ancient road section and move to indoor story and courtyard tea.",
+        "notice": "Avoid noon and prefer nearby parking."
+      },
+      "familyLycheeClass": {
+        "title": "Family lychee food route",
+        "summary": "Orchard, food classroom and adoption entry with reduced climbing.",
+        "totalTime": "3 hours",
+        "mobility": "Low-mid",
+        "weather": "Sunny friendly",
+        "rainFallback": "Keep food class and tree profile, cancel muddy picking.",
+        "notice": "Reserve food class and keep children away from waterfront edges."
+      },
+      "regularFourRealms": {
+        "title": "One-day four-realms route",
+        "summary": "A full first-visit route connecting ancient road, orchard, water and ridge courtyard.",
+        "totalTime": "6 hours",
+        "mobility": "Medium",
+        "weather": "Best sunny",
+        "rainFallback": "Switch to short road, food class, workshop and courtyard stay.",
+        "notice": "Reserve lunch and rest time."
+      },
+      "rainStudyRoute": {
+        "title": "Rainy resilience study route",
+        "summary": "A lower-risk indoor and workshop route for rainy days.",
+        "totalTime": "2.5 hours",
+        "mobility": "Low",
+        "weather": "Rain fallback",
+        "rainFallback": "If warning is active, keep only visitor center and indoor workshop.",
+        "notice": "Avoid waterfront and unpaved slopes."
+      },
+      "hotLowRiskRoute": {
+        "title": "Hot-weather low-risk route",
+        "summary": "Shade, courtyard and waterfront rest with reduced exposed walking.",
+        "totalTime": "2 hours",
+        "mobility": "Low",
+        "weather": "Heat shade",
+        "rainFallback": "Move to courtyard tea and indoor narration after showers.",
+        "notice": "Travel in morning or evening and prioritize hydration."
+      },
+      "twoDayCourtyard": {
+        "title": "Two-day ridge courtyard route",
+        "summary": "Four realms and village meal on day one, morning farm and workshop on day two.",
+        "totalTime": "2 days",
+        "mobility": "Medium",
+        "weather": "Best sunny",
+        "rainFallback": "Keep courtyard, meal, workshop and indoor classes.",
+        "notice": "Reserve stay, meal and study quota."
       }
     }
   },

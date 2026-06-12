@@ -55,7 +55,10 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
             <Link className="transition hover:text-white" href="#weather">
               {t("nav.weather")}
             </Link>
-            <Link className="transition hover:text-white" href="#booking-preview">
+            <Link className="transition hover:text-white" href={`/${params.locale}/routes`}>
+              {t("nav.routes")}
+            </Link>
+            <Link className="transition hover:text-white" href={`/${params.locale}/booking`}>
               {t("nav.booking")}
             </Link>
             <Link className="transition hover:text-white" href="#adoption-preview">
@@ -155,6 +158,15 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
                   <Icon aria-hidden="true" className="h-5 w-5 text-water" />
                   <h2 className="mt-4 text-base font-bold">{t(card.titleKey)}</h2>
                   <p className="mt-2 text-sm leading-6 text-ink/68">{t(card.bodyKey)}</p>
+                  {card.href ? (
+                    <Link
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-water"
+                      href={`/${params.locale}${card.href}`}
+                    >
+                      {t(card.linkKey)}
+                      <MoveRight aria-hidden="true" className="h-4 w-4" />
+                    </Link>
+                  ) : null}
                 </article>
               )
             })}

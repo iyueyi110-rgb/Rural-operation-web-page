@@ -56,16 +56,22 @@ export const featuredPlayCards = [
     icon: "Map",
     titleKey: "playCards.route.title",
     bodyKey: "playCards.route.body",
+    linkKey: "playCards.route.link",
+    href: "/routes",
   },
   {
     icon: "CalendarDays",
     titleKey: "playCards.courtyard.title",
     bodyKey: "playCards.courtyard.body",
+    linkKey: "playCards.courtyard.link",
+    href: "/booking",
   },
   {
     icon: "Sprout",
     titleKey: "playCards.tree.title",
     bodyKey: "playCards.tree.body",
+    linkKey: "playCards.tree.link",
+    href: "/trees",
   },
 ] as const
 
