@@ -252,7 +252,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
                 <p className="mt-3 text-sm leading-7 text-ink/68">{t(scene.summaryKey)}</p>
                 <Link
                   className="mt-5 inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-moss"
-                  href={scene.cta.href}
+                  href={`/${params.locale}${scene.cta.href}`}
                 >
                   {t(scene.cta.labelKey)}
                   <MoveRight aria-hidden="true" className="h-4 w-4" />

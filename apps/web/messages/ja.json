@@ -125,5 +125,114 @@
         }
       }
     }
+  },
+  "scenes": {
+    "detail": {
+      "backHome": "ホームへ戻る",
+      "ruleTitle": "内容の境界",
+      "ruleBody": "このページは整理済み資料のみを使います。今後の AI 解説には出典、更新時刻、信頼度が必要です。",
+      "nextTitle": "次の体験",
+      "nextBody": "四境ページはまず構造化内容と入口を用意し、後続でルート、予約、里親、フィードバックにつなぎます。"
+    },
+    "ancientRoad": {
+      "eyebrow": "古道・駅站・長寿文化",
+      "title": "古道叙事境",
+      "summary": "走馬嶺古道の記憶を歩ける文化ルートにします。",
+      "imageAlt": "山地古道の風景",
+      "tags": {
+        "heritage": "遺産保護",
+        "walk": "徒歩ルート",
+        "audio": "音声ガイド"
+      },
+      "metrics": {
+        "length": { "value": "約 670m", "label": "現存古道" },
+        "nodes": { "value": "3 種", "label": "古道、泉、駅站" },
+        "audience": { "value": "軽体力", "label": "初回来訪向け" }
+      },
+      "blocks": {
+        "story": { "title": "歴史を歩ける空間へ", "body": "古道、駅站、碑、泉、地域記憶をわかりやすい順序に整理します。" },
+        "experience": { "title": "展示板だけにしない", "body": "今後、音声ガイド、AI 要約、研学カード、予約ノードにつなぎます。" },
+        "operation": { "title": "低介入を優先", "body": "境界保護、小修繕、安全提示、村の日常を重視します。" }
+      },
+      "ctas": {
+        "route": "古道ルート生成",
+        "booking": "近くの中庭を見る"
+      }
+    },
+    "lycheeField": {
+      "eyebrow": "荔枝・食育・里親",
+      "title": "荔田共生境",
+      "summary": "荔枝を里親、収穫、加工、食育、再訪につなげます。",
+      "imageAlt": "荔枝畑と田園",
+      "tags": {
+        "adoption": "樹木記録",
+        "food": "食育工房",
+        "festival": "季節活動"
+      },
+      "metrics": {
+        "tree": { "value": "一本の木", "label": "関係の起点" },
+        "season": { "value": "四季", "label": "農事リズム" },
+        "family": { "value": "親子向け", "label": "収穫と食育" }
+      },
+      "blocks": {
+        "tree": { "title": "一本の木から長期関係へ", "body": "今後、樹木記録、健康状態、曖昧位置、管理ログ、証明書を表示します。" },
+        "table": { "title": "一本の木から一卓へ", "body": "収穫、加工、飲品、土産、村宴、親子课程を体験鏈にします。" },
+        "trust": { "title": "権益を明確にする", "body": "活動参加、収穫受取、配送、更新頻度を明示します。" }
+      },
+      "ctas": {
+        "adoption": "里親プレビュー",
+        "route": "親子ルート生成"
+      }
+    },
+    "resilienceValley": {
+      "eyebrow": "龍溪水脈・雨洪・研学",
+      "title": "韧谷研学境",
+      "summary": "水系治理を生態回廊、親水体験、自然教室へ変換します。",
+      "imageAlt": "水辺の谷と生態工房",
+      "tags": {
+        "water": "水系修復",
+        "study": "自然観察",
+        "weather": "雨天代替"
+      },
+      "metrics": {
+        "system": { "value": "6 種", "label": "屋根、院坝、田坎、塘体、湿地、河岸" },
+        "safety": { "value": "警報優先", "label": "雨天と高温提示" },
+        "course": { "value": "研学向け", "label": "水安全课程" }
+      },
+      "blocks": {
+        "water": { "title": "生態が基盤", "body": "雨水庭園、生態溝、池浄化、湿地緩衝で維持可能な水系を作ります。" },
+        "learning": { "title": "治理を课程へ", "body": "水位、水質、雨洪路径、水電記憶を学習内容にします。" },
+        "weather": { "title": "ルートは天気に応答", "body": "後続のルート生成では雨、高温、警報に応じてリスクを下げます。" }
+      },
+      "ctas": {
+        "route": "雨天ルート生成",
+        "feedback": "現地反馈"
+      }
+    },
+    "ridgeDwelling": {
+      "eyebrow": "岭上院落・民宿・共創生活",
+      "title": "岭上共居境",
+      "summary": "闲置院落を生活、滞在、創業、低炭素運営に再利用します。",
+      "imageAlt": "岭上院落の風景",
+      "tags": {
+        "stay": "中庭滞在",
+        "lowCarbon": "绿色改造",
+        "shared": "村民共享"
+      },
+      "metrics": {
+        "courtyard": { "value": "多院", "label": "分散型運営単位" },
+        "stay": { "value": "半日から二日", "label": "滞在产品" },
+        "community": { "value": "共益", "label": "将来の收益规则" }
+      },
+      "blocks": {
+        "renovation": { "title": "低介入改修", "body": "屋根、石基、灰瓦、院坝、田坎を保ち、安全と快適性を高めます。" },
+        "life": { "title": "院落は背景ではない", "body": "民宿、工坊、共享厨房、活動室、農产品展示を真实生活に接続します。" },
+        "operation": { "title": "予約から再訪へ", "body": "後続で日历库存、入住须知、订单确认、支付入口を追加します。" }
+      },
+      "ctas": {
+        "booking": "院落予約を見る",
+        "route": "二日ルート生成"
+      }
+    }
   }
 }

@@ -10,7 +10,7 @@ export const homeScenes: Scene[] = [
     updatedAt: "2026-06-12",
     cta: {
       labelKey: "realms.ancientRoad.cta",
-      href: "#realms",
+      href: "/scenes/ancient-road",
     },
   },
   {
@@ -22,7 +22,7 @@ export const homeScenes: Scene[] = [
     updatedAt: "2026-06-12",
     cta: {
       labelKey: "realms.lycheeField.cta",
-      href: "#adoption-preview",
+      href: "/scenes/lychee-field",
     },
   },
   {
@@ -34,7 +34,7 @@ export const homeScenes: Scene[] = [
     updatedAt: "2026-06-12",
     cta: {
       labelKey: "realms.resilienceValley.cta",
-      href: "#weather",
+      href: "/scenes/resilience-valley",
     },
   },
   {
@@ -46,7 +46,7 @@ export const homeScenes: Scene[] = [
     updatedAt: "2026-06-12",
     cta: {
       labelKey: "realms.ridgeDwelling.cta",
-      href: "#booking-preview",
+      href: "/scenes/ridge-dwelling",
     },
   },
 ]

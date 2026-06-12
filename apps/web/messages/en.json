@@ -125,5 +125,114 @@
         }
       }
     }
+  },
+  "scenes": {
+    "detail": {
+      "backHome": "Back home",
+      "ruleTitle": "Content boundary",
+      "ruleBody": "This page uses prepared project material only. Later AI narration must include source, update time and confidence.",
+      "nextTitle": "Next experience",
+      "nextBody": "The realm pages first provide structured content and action entries. Routes, booking, adoption and feedback will be connected later."
+    },
+    "ancientRoad": {
+      "eyebrow": "Ancient road, relay station and longevity culture",
+      "title": "Ancient Road Realm",
+      "summary": "A walkable and narratable heritage route based on Zouma Ridge road memory.",
+      "imageAlt": "Ancient mountain road scene",
+      "tags": {
+        "heritage": "Heritage",
+        "walk": "Walking route",
+        "audio": "Audio guide"
+      },
+      "metrics": {
+        "length": { "value": "About 670m", "label": "Existing road clue" },
+        "nodes": { "value": "3 types", "label": "Road, spring and station" },
+        "audience": { "value": "Light effort", "label": "First-visit friendly" }
+      },
+      "blocks": {
+        "story": { "title": "Make history walkable", "body": "Organize road, station, signpost, spring and local memory into a clear visitor sequence." },
+        "experience": { "title": "Beyond static panels", "body": "Future steps connect audio guides, AI summaries, study cards and booking nodes." },
+        "operation": { "title": "Low-intervention first", "body": "Protect boundaries, repair lightly and keep village life present." }
+      },
+      "ctas": {
+        "route": "Generate road route",
+        "booking": "View nearby courtyards"
+      }
+    },
+    "lycheeField": {
+      "eyebrow": "Lychee, food education and adoption",
+      "title": "Lychee Field Realm",
+      "summary": "Turn lychee from a single crop into adoption, picking, processing, food education and repeat visits.",
+      "imageAlt": "Lychee field and rural landscape",
+      "tags": {
+        "adoption": "Tree file",
+        "food": "Food workshop",
+        "festival": "Seasonal event"
+      },
+      "metrics": {
+        "tree": { "value": "One tree", "label": "Relationship start" },
+        "season": { "value": "Four seasons", "label": "Farm rhythm" },
+        "family": { "value": "Family", "label": "Picking and food education" }
+      },
+      "blocks": {
+        "tree": { "title": "A long-term tree relationship", "body": "Future adoption pages show tree profile, health, blurred location, care logs and certificate rights." },
+        "table": { "title": "From tree to table", "body": "Picking, processing, drinks, gifts, meals and family courses form a complete experience chain." },
+        "trust": { "title": "Rights must be clear", "body": "Events, harvest pickup, delivery feedback and care update frequency should be explicit." }
+      },
+      "ctas": {
+        "adoption": "Open adoption preview",
+        "route": "Generate family route"
+      }
+    },
+    "resilienceValley": {
+      "eyebrow": "Longxi water, rain flood and study",
+      "title": "Resilience Valley Realm",
+      "summary": "Turn water management into a resilient corridor, waterfront experience and nature classroom.",
+      "imageAlt": "Water valley and ecological workshop",
+      "tags": {
+        "water": "Water repair",
+        "study": "Nature study",
+        "weather": "Weather fallback"
+      },
+      "metrics": {
+        "system": { "value": "6 types", "label": "Roof, yard, terrace, pond, wetland and riverbank" },
+        "safety": { "value": "Alert first", "label": "Rain and heat notice" },
+        "course": { "value": "Study ready", "label": "Water safety course" }
+      },
+      "blocks": {
+        "water": { "title": "Ecology as foundation", "body": "Rain gardens, ecological ditches, pond purification and wetland buffers form a maintainable water system." },
+        "learning": { "title": "Governance becomes courseware", "body": "Water level, quality, flood paths and hydropower memory can become study content." },
+        "weather": { "title": "Routes respond to weather", "body": "Later route generation will reduce risk for rain, heat and warnings." }
+      },
+      "ctas": {
+        "route": "Generate rainy route",
+        "feedback": "Submit feedback"
+      }
+    },
+    "ridgeDwelling": {
+      "eyebrow": "Ridge courtyards, stays and shared life",
+      "title": "Ridge Dwelling Realm",
+      "summary": "Reuse courtyards for village life, visitor stays, youth creation and low-carbon operations.",
+      "imageAlt": "Ridge courtyard scene",
+      "tags": {
+        "stay": "Courtyard stay",
+        "lowCarbon": "Green retrofit",
+        "shared": "Shared village life"
+      },
+      "metrics": {
+        "courtyard": { "value": "Many yards", "label": "Distributed units" },
+        "stay": { "value": "Half day to two days", "label": "Stay products" },
+        "community": { "value": "Shared benefit", "label": "Future revenue rules" }
+      },
+      "blocks": {
+        "renovation": { "title": "Low-intervention retrofit", "body": "Keep roofs, stone bases, courtyards and terraces while improving safety and comfort." },
+        "life": { "title": "Courtyards are not backdrops", "body": "Stays, workshops, shared kitchens and product display should support real life." },
+        "operation": { "title": "From bookable to revisitable", "body": "Future booking adds calendar inventory, notices, order confirmation and payment entry." }
+      },
+      "ctas": {
+        "booking": "View booking",
+        "route": "Generate two-day route"
+      }
+    }
   }
 }
