@@ -11,6 +11,10 @@
     "booking": {
       "title": "Zouma Courtyard Booking",
       "description": "Review courtyard inventory, dates, guests, booking notices and pending payment confirmation."
+    },
+    "trees": {
+      "title": "Zouma Lychee Tree Adoption",
+      "description": "View adoptable lychee trees, blurred locations, rights, agreement and growth timeline."
     }
   },
   "common": {
@@ -246,6 +250,71 @@
       "teaBreak": "Tea break",
       "lightWalk": "Light walk",
       "historyWall": "Story wall"
+    }
+  },
+  "trees": {
+    "nav": { "backHome": "Back home", "phase": "Tree adoption phase" },
+    "hero": {
+      "eyebrow": "Tree Adoption",
+      "title": "Adoption is a long-term relationship with one tree",
+      "body": "This phase shows adoptable trees, tree profiles, agreement, rights and growth records. Payment remains pending and no real charge occurs."
+    },
+    "guardrail": {
+      "locationTitle": "Blurred location only",
+      "locationBody": "Tree profiles do not expose precise GPS. They show orchard area and relative location only.",
+      "paymentTitle": "Payment entry pending",
+      "paymentBody": "Only a pending adoption confirmation is created. Future payment must use unified orders, idempotency keys and sandbox mode."
+    },
+    "list": {
+      "eyebrow": "Adoptable trees",
+      "title": "Choose a lychee tree with profile and records",
+      "body": "Tree profiles use local structured data first, then can migrate to /api/v1/trees with care logs and certificate service.",
+      "species": "Species",
+      "age": "Age",
+      "ageValue": "{count} years",
+      "health": "Health",
+      "select": "Select tree",
+      "selected": "Selected"
+    },
+    "availability": { "available": "Available", "limited": "Limited", "maintenance": "Under care" },
+    "health": { "excellent": "Excellent", "good": "Good", "fair": "Observed", "poor": "Needs care" },
+    "profile": { "eyebrow": "Tree profile", "planTitle": "Adoption plan" },
+    "plans": {
+      "seasonal": { "label": "Seasonal adoption", "body": "For first-time adoption, with growth updates and one harvest right." },
+      "annual": { "label": "Annual adoption", "body": "For long-term care, with seasonal reminders, care updates, events and certificate." }
+    },
+    "rights": {
+      "title": "Rights",
+      "harvestBox": "Seasonal harvest box or equivalent farm product",
+      "careUpdates": "Seasonal care records and photo updates",
+      "certificate": "Digital adoption certificate",
+      "farmEvent": "Priority access to picking or care events",
+      "familyClass": "Priority seats for family food class"
+    },
+    "timeline": {
+      "title": "Growth timeline",
+      "spring": { "date": "March 2026", "title": "Spring shoot check", "body": "New shoots are stable and leaf color is even." },
+      "pruning": { "date": "April 2026", "title": "Light pruning", "body": "Ventilation branches were arranged while keeping the crown shape." },
+      "photo": { "date": "June 2026", "title": "Profile photo update", "body": "Crown, trunk and orchard area photos were updated." },
+      "flower": { "date": "April 2026", "title": "Flowering observation", "body": "Flower condition is suitable for family education content." },
+      "old": { "title": "Old tree patrol", "body": "Trunk condition and drainage were prioritized." },
+      "care": { "date": "May 2026", "title": "Care observation", "body": "The tree is under observation and adoption confirmation is paused." },
+      "note": { "date": "June 2026", "title": "Maintenance note", "body": "A professional review is recommended before reopening adoption." }
+    },
+    "agreement": { "title": "Adoption agreement", "body": "I understand the rights, update frequency, harvest fulfillment and pending payment status." },
+    "messages": { "unavailable": "This tree is not open for confirmed adoption. Choose another available tree.", "needAgreement": "Please confirm the adoption agreement before creating an adoption order." },
+    "form": { "confirm": "Confirm adoption" },
+    "order": {
+      "title": "Adoption created",
+      "body": "The adoption order is pending payment. The payment entry is not connected, so no real charge occurs.",
+      "status": "Order status: pending payment",
+      "paymentStatus": "Payment status: payment pending integration",
+      "paymentEntry": "Payment entry pending"
+    },
+    "trees": {
+      "lz018": { "name": "Cloud Lychee 018", "species": "Feizixiao lychee", "summary": "A stable, well-recorded sample tree for first-batch adoption.", "location": "North orchard area of Lychee Field Realm, near village road without precise coordinates.", "imageAlt": "Cloud Lychee 018 tree and orchard", "prices": { "seasonal": "¥399", "annual": "¥999" } },
+      "lz026": { "name": "Cloud Lychee 026", "species": "Guiwei lychee", "summary": "Suitable for family adoption and food education, with limited quota.", "location": "Central orchard area of Lychee Field Realm, near the food classroom route.", "imageAlt": "Cloud Lychee 026 tree and fields", "prices": { "seasonal": "¥359", "annual": "¥899" } },
+      "lz041": { "name": "Cloud Lychee 041", "species": "Old lychee tree", "summary": "An older tree currently shown for care observation and records.", "location": "South old-tree area of Lychee Field Realm. Coordinates are internal only.", "imageAlt": "Cloud Lychee 041 old tree", "prices": { "seasonal": "TBD", "annual": "TBD" } }
     }
   },
   "routes": {

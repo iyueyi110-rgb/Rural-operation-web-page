@@ -11,6 +11,10 @@
     "booking": {
       "title": "走馬村中庭予約",
       "description": "中庭の在庫、日付、人数、予約注意事項、支払い待ち確認を表示します。"
+    },
+    "trees": {
+      "title": "走馬村ライチ樹里親",
+      "description": "里親可能なライチ樹、曖昧位置、権益、协议、成長記録を表示します。"
     }
   },
   "common": {
@@ -246,6 +250,71 @@
       "teaBreak": "茶歇補給",
       "lightWalk": "軽い散策",
       "historyWall": "古道物語壁"
+    }
+  },
+  "trees": {
+    "nav": { "backHome": "ホームへ戻る", "phase": "果樹里親段階" },
+    "hero": {
+      "eyebrow": "Tree Adoption",
+      "title": "里親は一回の購入ではなく一本の木との長期関係",
+      "body": "この段階では里親可能な木、樹木記録、协议、権益、成長記録を表示します。支払いは未接続で、実際の請求は発生しません。"
+    },
+    "guardrail": {
+      "locationTitle": "曖昧位置のみ表示",
+      "locationBody": "樹木記録は精確 GPS を公開せず、果園片区と相対位置だけを表示します。",
+      "paymentTitle": "支払い入口は未接続",
+      "paymentBody": "現在は支払い待ちの里親確認のみ作成します。後続の支払いは統一注文、冪等キー、サンドボックスを経由します。"
+    },
+    "list": {
+      "eyebrow": "里親可能な木",
+      "title": "記録のあるライチ樹を選択",
+      "body": "樹木記録はまずローカル構造化データを使い、後で /api/v1/trees、養護ログ、証書サービスへ移行できます。",
+      "species": "樹種",
+      "age": "樹齢",
+      "ageValue": "{count} 年",
+      "health": "健康状態",
+      "select": "選択",
+      "selected": "選択済み"
+    },
+    "availability": { "available": "里親可", "limited": "残り少ない", "maintenance": "養護観察中" },
+    "health": { "excellent": "優良", "good": "良好", "fair": "観察中", "poor": "養護必要" },
+    "profile": { "eyebrow": "樹木記録", "planTitle": "里親プラン" },
+    "plans": {
+      "seasonal": { "label": "一季里親", "body": "初回体験向けで、成長記録と一回の収穫権益を含みます。" },
+      "annual": { "label": "年間里親", "body": "長期関係向けで、節気提醒、養護更新、活動、証書を含みます。" }
+    },
+    "rights": {
+      "title": "権益説明",
+      "harvestBox": "季節収穫ボックスまたは同等農産品",
+      "careUpdates": "節気養護記録と写真更新",
+      "certificate": "電子里親証書",
+      "farmEvent": "収穫または養護活動の優先参加",
+      "familyClass": "親子食育講座の優先枠"
+    },
+    "timeline": {
+      "title": "成長記録",
+      "spring": { "date": "2026年3月", "title": "春芽観察", "body": "新芽は安定し、葉色も均一です。" },
+      "pruning": { "date": "2026年4月", "title": "軽剪定", "body": "通風枝を整理し、樹冠形態を保ちました。" },
+      "photo": { "date": "2026年6月", "title": "記録写真更新", "body": "樹冠、幹、果園片区の写真を更新しました。" },
+      "flower": { "date": "2026年4月", "title": "花期観察", "body": "花序状態は良く、親子講座に適しています。" },
+      "old": { "title": "老木巡護", "body": "幹の状態と周辺排水を優先して記録しました。" },
+      "care": { "date": "2026年5月", "title": "養護観察", "body": "養護観察期間に入り、里親確認は一時停止しています。" },
+      "note": { "date": "2026年6月", "title": "維持メモ", "body": "専門確認後に里親を再開することを推奨します。" }
+    },
+    "agreement": { "title": "里親协议確認", "body": "権益、養護更新頻度、収穫兑现方式、支払い未接続状態を理解しました。" },
+    "messages": { "unavailable": "この木は現在、里親確認を開放していません。他の木を選択してください。", "needAgreement": "里親协议を確認してから注文を作成してください。" },
+    "form": { "confirm": "里親を確認" },
+    "order": {
+      "title": "里親注文を作成しました",
+      "body": "里親注文は支払い待ちです。支払い入口は未接続のため、実際の請求は発生しません。",
+      "status": "注文状態：支払い待ち",
+      "paymentStatus": "支払い状態：支払い接続待ち",
+      "paymentEntry": "支払い入口は未接続"
+    },
+    "trees": {
+      "lz018": { "name": "雲荔 018 号", "species": "妃子笑ライチ", "summary": "樹勢が安定し、記録が整った初回里親向けのモデル木です。", "location": "荔田共生境北側果園片区。村道に近いが精確座標は表示しません。", "imageAlt": "雲荔 018 号ライチ樹と果園", "prices": { "seasonal": "¥399", "annual": "¥999" } },
+      "lz026": { "name": "雲荔 026 号", "species": "桂味ライチ", "summary": "親子里親と食育講座に適し、枠が少ない木です。", "location": "荔田共生境中部果園片区。食育教室動線に近いです。", "imageAlt": "雲荔 026 号ライチ樹と田園", "prices": { "seasonal": "¥359", "annual": "¥899" } },
+      "lz041": { "name": "雲荔 041 号", "species": "老木ライチ", "summary": "樹齢が高く、現在は養護観察と記録展示が中心です。", "location": "荔田共生境南側老木片区。座標は内部養護のみに使用します。", "imageAlt": "雲荔 041 号老ライチ樹", "prices": { "seasonal": "未定", "annual": "未定" } }
     }
   },
   "routes": {
