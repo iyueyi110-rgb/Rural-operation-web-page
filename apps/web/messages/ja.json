@@ -3,6 +3,14 @@
     "home": {
       "title": "走馬村ポータル",
       "description": "走馬村 Web/PWA の日本語プレースホルダー。"
+    },
+    "routes": {
+      "title": "走馬村ルート生成｜説明可能な行程",
+      "description": "滞在時間、来訪者、天気に合わせて走馬村の四境ルートを生成します。"
+    },
+    "booking": {
+      "title": "走馬村中庭予約",
+      "description": "中庭の在庫、日付、人数、予約注意事項、支払い待ち確認を表示します。"
     }
   },
   "common": {
@@ -20,6 +28,7 @@
       "brand": "走馬村",
       "realms": "四境",
       "weather": "天気",
+      "routes": "ルート",
       "booking": "中庭",
       "adoption": "里親",
       "login": "ログイン",
@@ -55,15 +64,18 @@
     "playCards": {
       "route": {
         "title": "半日ルート",
-        "body": "初回来訪向けの軽量ルート。"
+        "body": "初回来訪向けの軽量ルート。",
+        "link": "ルート生成"
       },
       "courtyard": {
         "title": "中庭プレビュー",
-        "body": "在庫連携は後続段階で追加します。"
+        "body": "在庫連携は後続段階で追加します。",
+        "link": "中庭を見る"
       },
       "tree": {
         "title": "果樹里親",
-        "body": "樹木記録を中心にした年間関係。"
+        "body": "樹木記録を中心にした年間関係。",
+        "link": "里親を見る"
       }
     },
     "guardrails": {
@@ -123,6 +135,254 @@
           "title": "権益",
           "body": "活動、収穫、証明書。"
         }
+      }
+    }
+  },
+  "booking": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "中庭予約段階"
+    },
+    "hero": {
+      "eyebrow": "Courtyard Booking",
+      "title": "予約可否、滞在条件、支払い待ちを明確にする",
+      "body": "この段階はローカル構造化在庫を使い、実際の支払いには接続しません。中庭、日付、人数、支払い方式を選び、支払い待ちの予約確認を作成します。"
+    },
+    "guardrail": {
+      "title": "支払い入口は未接続",
+      "body": "現在は予約確認と支払い待ち状態のみ表示します。実支払いは後続で統一支払い注文、冪等キー、サンドボックスを経由します。"
+    },
+    "list": {
+      "eyebrow": "中庭リスト",
+      "title": "今回予約する中庭を選択",
+      "body": "中庭はまず岭上滞在、ライチ食育、古道駅站の三類資源として整理し、後で /api/v1/courtyards へ移行します。",
+      "capacity": "受入人数",
+      "price": "価格メモ",
+      "minNights": "最少泊数",
+      "select": "選択",
+      "selected": "選択済み"
+    },
+    "form": {
+      "eyebrow": "予約情報",
+      "title": "日付、人数、支払い方式を確認",
+      "dateLabel": "宿泊または利用日",
+      "guestsLabel": "人数",
+      "guestsValue": "{count} 人",
+      "paymentModeLabel": "支払い方式",
+      "confirm": "予約を確認"
+    },
+    "dates": {
+      "jun20": "2026年6月20日",
+      "jun21": "2026年6月21日",
+      "jun27": "2026年6月27日",
+      "jun28": "2026年6月28日"
+    },
+    "inventory": {
+      "available": "予約可",
+      "limited": "残り少ない",
+      "booked": "満室",
+      "maintenance": "整備中"
+    },
+    "paymentModes": {
+      "deposit": "予約金",
+      "full": "全額"
+    },
+    "summary": {
+      "title": "注文概要",
+      "courtyard": "中庭",
+      "date": "日付",
+      "guests": "人数",
+      "paymentMode": "支払い方式"
+    },
+    "notice": {
+      "title": "予約注意事項"
+    },
+    "messages": {
+      "capacityExceeded": "人数がこの中庭の上限を超えています。人数を減らすか大きい中庭を選択してください。"
+    },
+    "order": {
+      "title": "予約を作成しました",
+      "body": "注文は支払い待ち状態です。支払い入口はまだ接続されていないため、実際の請求は発生しません。",
+      "status": "注文状態：支払い待ち",
+      "paymentStatus": "支払い状態：支払い接続待ち",
+      "paymentEntry": "支払い入口は未接続"
+    },
+    "courtyards": {
+      "ridgeShared": {
+        "name": "岭上共居院",
+        "summary": "小チームの宿泊や半日共創活動に向き、村宴、朝の農事、岭上散策につながります。",
+        "location": "岭上共居境・程家湾と涂家湾付近",
+        "price": "¥680 から",
+        "notice": "到着時間は前日確認を推奨します。宿泊には有効な身分証が必要で、駐車後は短距離送迎または徒歩が中心です。",
+        "imageAlt": "岭上共居院の中庭空間"
+      },
+      "lycheeFood": {
+        "name": "荔下共有院",
+        "summary": "親子家族と食育グループ向けで、収穫、食育講座、村宴準備、短時間滞在に適しています。",
+        "location": "荔田共生境・ライチとリュウガン果園付近",
+        "price": "¥298 から",
+        "notice": "食育講座の材料は事前確認が必要です。雨天は屋内講座を残し、ぬかるむ収穫区間を取り消します。",
+        "imageAlt": "荔下共有院と石造りの家"
+      },
+      "ancientStation": {
+        "name": "古道駅站院",
+        "summary": "古道軽遊、音声ガイド、茶歇補給に対応しますが、現在は整備準備中です。",
+        "location": "古道叙事境・走馬嶺古道ノード付近",
+        "price": "未定",
+        "notice": "この中庭は整備中のため予約確認できません。他の中庭を選択してください。",
+        "imageAlt": "古道駅站院と伝統的な庭"
+      }
+    },
+    "amenities": {
+      "sharedKitchen": "共有キッチン",
+      "courtyardTea": "中庭茶歇",
+      "lowCarbonRoom": "低炭素客室",
+      "parkingTransfer": "駐車送迎",
+      "foodClassroom": "食育教室",
+      "harvestTable": "収穫テーブル",
+      "familyFriendly": "親子向け",
+      "rainShelter": "雨天転換",
+      "audioGuide": "音声ガイド",
+      "teaBreak": "茶歇補給",
+      "lightWalk": "軽い散策",
+      "historyWall": "古道物語壁"
+    }
+  },
+  "routes": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "ルート生成段階"
+    },
+    "hero": {
+      "eyebrow": "Route Generator",
+      "title": "時間、来訪者、天気で説明可能な行程を生成",
+      "body": "初版はルールベースのシミュレーションで、実際の AI や地図 API は呼び出しません。結果には総時間、歩行強度、天気対応、予約ノード、雨天代替を表示します。"
+    },
+    "form": {
+      "eyebrow": "入力条件",
+      "title": "今回の歩き方を指定",
+      "body": "提供された範囲図と衛星図を参照し、MVP に適したテンプレートルールでルートカードを生成します。",
+      "durationLabel": "滞在時間",
+      "durationOptions": {
+        "halfDay": "半日",
+        "oneDay": "一日",
+        "twoDays": "二日"
+      },
+      "audienceLabel": "来訪者タイプ",
+      "audienceOptions": {
+        "senior": "シニア向け",
+        "family": "親子家族",
+        "regular": "一般来訪者"
+      },
+      "weatherLabel": "天気条件",
+      "weatherOptions": {
+        "sunny": "晴天",
+        "rainy": "雨天",
+        "hot": "高温"
+      },
+      "ruleTitle": "現在はルールシミュレーション",
+      "ruleBody": "この段階では外部モデルへデータを送信しません。後で AI を接続する場合は、必ずバックエンドの ModelProviderAdapter と PII 脱敏を経由します。"
+    },
+    "map": {
+      "eyebrow": "地図ベース",
+      "title": "範囲図と衛星図の比較",
+      "scope": "範囲図",
+      "satellite": "衛星図",
+      "scopeAlt": "走馬村の計画範囲、既存道路、新設道路、駐車施設の図",
+      "satelliteAlt": "走馬村周辺の衛星地図"
+    },
+    "result": {
+      "eyebrow": "おすすめ結果",
+      "totalTime": "総時間",
+      "mobility": "歩行強度",
+      "weather": "天気対応",
+      "waypoints": "ルートノード",
+      "reservationNodes": "事前予約",
+      "fallback": "雨天代替",
+      "notice": "移動メモ",
+      "bookingCta": "予約可能ノードを見る"
+    },
+    "waypoints": {
+      "visitorCenter": "ビジターセンター",
+      "taojiawan": "陶家湾駐車ポイント",
+      "ancientRoad": "走馬嶺古道",
+      "lycheeGarden": "ライチとリュウガン果園",
+      "waterfrontRest": "龍溪水辺休憩点",
+      "foodClassroom": "荔下共有院の食育教室",
+      "treeAdoption": "デジタル果樹里親ポイント",
+      "resilienceWorkshop": "龍溪レジリエンス工房",
+      "ridgeCourtyard": "岭上共居院",
+      "indoorStory": "屋内古道ストーリー点",
+      "shadedAncientRoad": "木陰の古道短線",
+      "villageMeal": "村宴と農産品展示販売点",
+      "morningFarm": "朝の農事体験点"
+    },
+    "reservationNodes": {
+      "audioGuide": "音声ガイド機器",
+      "shuttle": "送迎または短距離移動補助",
+      "foodClass": "親子食育講座",
+      "treeAdoption": "ライチ樹里親枠",
+      "villageMeal": "村宴席",
+      "courtyardTea": "中庭ティーブレイク",
+      "indoorWorkshop": "屋内研学工房",
+      "rainGear": "雨具と防滑案内",
+      "coolRest": "避暑休憩点",
+      "courtyardStay": "岭上中庭宿泊"
+    },
+    "plans": {
+      "gentleAncientRoad": {
+        "title": "シニア向け古道ライトルート",
+        "summary": "ビジターセンターから入り、傾斜と歩行距離を抑えながら古道叙事、陶家湾、水辺休憩を体験します。",
+        "totalTime": "2.5 時間",
+        "mobility": "低強度",
+        "weather": "晴天優先",
+        "rainFallback": "雨天時は古道区間を短縮し、屋内ストーリー点と中庭茶歇へ切り替えます。",
+        "notice": "正午を避け、陶家湾またはビジターセンター付近の駐車点を優先します。"
+      },
+      "familyLycheeClass": {
+        "title": "親子ライチ食育ルート",
+        "summary": "ライチ果園、食育教室、里親入口を中心に組み、長距離の登りを減らします。",
+        "totalTime": "3 時間",
+        "mobility": "低から中",
+        "weather": "晴天向け",
+        "rainFallback": "雨天は食育教室と樹木記録説明を残し、ぬかるむ採摘区間を外します。",
+        "notice": "食育講座と里親説明は事前予約を推奨し、子どもは水辺境界に近づきすぎないようにします。"
+      },
+      "regularFourRealms": {
+        "title": "四境一日連結ルート",
+        "summary": "古道、荔田、水辺、岭上院落を一日でつなぎ、走馬村を体系的に理解します。",
+        "totalTime": "6 時間",
+        "mobility": "中強度",
+        "weather": "晴天最適",
+        "rainFallback": "雨天は古道短線、食育教室、韧性工房、中庭滞在へ変更します。",
+        "notice": "一日ルートはノードが多いため、昼食と中庭休憩の時間を確保してください。"
+      },
+      "rainStudyRoute": {
+        "title": "雨天韧谷研学ルート",
+        "summary": "韧性工房、食育教室、屋内古道ストーリーを中心にし、滑りやすい区間を減らします。",
+        "totalTime": "2.5 時間",
+        "mobility": "低強度",
+        "weather": "雨天縮小",
+        "rainFallback": "強い雨や警報時は、ビジターセンターと屋内工房だけを残します。",
+        "notice": "雨天は水辺境界と未舗装の坂道を避け、駐車点からの移動補助を優先します。"
+      },
+      "hotLowRiskRoute": {
+        "title": "高温低リスク短線",
+        "summary": "木陰、中庭、水辺休憩点を選び、直射日光の区間を短くします。",
+        "totalTime": "2 時間",
+        "mobility": "低強度",
+        "weather": "高温避暑",
+        "rainFallback": "高温後に雨が来た場合は、中庭茶歇と屋内説明へ切り替えます。",
+        "notice": "高温日は午前または夕方の出行を推奨し、補水点と休憩点を優先します。"
+      },
+      "twoDayCourtyard": {
+        "title": "二日岭上共居ルート",
+        "summary": "一日目に四境主線と村宴、夜は岭上院落に宿泊し、二日目に朝の農事と韧谷研学を行います。",
+        "totalTime": "2 日",
+        "mobility": "中強度",
+        "weather": "晴天最適",
+        "rainFallback": "雨天は中庭、村宴、工房、屋内講座を残し、長距離の山地歩行を外します。",
+        "notice": "中庭宿泊、村宴、翌日の研学講座は事前に枠を確保する必要があります。"
       }
     }
   },
