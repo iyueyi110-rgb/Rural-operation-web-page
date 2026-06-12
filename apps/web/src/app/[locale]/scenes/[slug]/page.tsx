@@ -6,6 +6,7 @@ import { ArrowLeft, CalendarDays, Map, MoveRight, ShieldCheck } from "lucide-rea
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { getSceneDetail, sceneDetails } from "@web/lib/scenes-data"
+import { getSiteUrl } from "@web/lib/site-url"
 import type { Locale } from "@web/i18n/routing"
 import { Section, StatusBadge } from "@ui/index"
 
@@ -26,7 +27,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale: params.locale, namespace: "scenes" })
 
   return {
-    metadataBase: new URL("http://localhost:3000"),
+    metadataBase: getSiteUrl(),
     title: t(`${scene.titleKey}`),
     description: t(`${scene.summaryKey}`),
     openGraph: {

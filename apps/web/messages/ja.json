@@ -11,6 +11,10 @@
     "booking": {
       "title": "走馬村中庭予約",
       "description": "中庭の在庫、日付、人数、予約注意事項、支払い待ち確認を表示します。"
+    },
+    "feedback": {
+      "title": "走馬村フィードバック",
+      "description": "内容、サービス、施設、支払いなどのフィードバックを送信し、追跡可能なチケットを作成します。"
     }
   },
   "common": {
@@ -246,6 +250,64 @@
       "teaBreak": "茶歇補給",
       "lightWalk": "軽い散策",
       "historyWall": "古道物語壁"
+    }
+  },
+  "feedback": {
+    "nav": { "backHome": "ホームへ戻る", "phase": "フィードバックと管理段階" },
+    "hero": {
+      "eyebrow": "Feedback",
+      "title": "現地の声を追跡できる運営チケットへ",
+      "body": "この段階では、分類、緊急度、満足度、本文を含むフィードバック入口を開放します。送信後はチケット番号が作成され、管理画面に表示されます。"
+    },
+    "guardrail": {
+      "title": "内容は先に匿名化します",
+      "body": "電話番号や精確な座標はチケット化前にマスクされます。将来 AI 要約を使う場合も、匿名化とバックエンドのモデルアダプターを通します。"
+    },
+    "form": {
+      "eyebrow": "送信",
+      "title": "対応が必要な体験を教えてください",
+      "body": "場所、時間、状況をできるだけ具体的に記入してください。内容は公開されず、保留中チケットとして登録されます。",
+      "categoryLabel": "分類",
+      "severityLabel": "緊急度",
+      "ratingLabel": "満足度",
+      "ratingAria": "{count} 点の満足度",
+      "contentLabel": "内容",
+      "contentPlaceholder": "例：ビジターセンターから陶家湾駐車場への案内表示が少し分かりにくいです。",
+      "remaining": "残り {count} 文字",
+      "submit": "送信",
+      "submitting": "送信中"
+    },
+    "categories": {
+      "content": "内容説明",
+      "service": "サービス",
+      "facility": "施設案内",
+      "payment": "支払い",
+      "other": "その他"
+    },
+    "severities": {
+      "low": "記録",
+      "medium": "要対応",
+      "high": "体験に影響",
+      "urgent": "現地緊急"
+    },
+    "statuses": {
+      "submitted": "送信済み",
+      "assigned": "割当済み",
+      "processing": "対応中",
+      "resolved": "解決済み",
+      "closed": "終了"
+    },
+    "messages": {
+      "contentRequired": "8 文字以上入力してください。",
+      "submitFailed": "送信できませんでした。しばらくしてから再試行してください。"
+    },
+    "result": {
+      "title": "送信結果",
+      "body": "送信後、チケット番号と現在の状態がここに表示されます。管理画面で対応記録を更新できます。",
+      "empty": "フォームを送信すると追跡可能なチケットが作成されます。",
+      "success": "送信しました",
+      "ticketId": "チケット番号",
+      "status": "現在の状態"
     }
   },
   "routes": {

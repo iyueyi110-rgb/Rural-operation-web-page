@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowLeft, ShieldCheck } from "lucide-react"
+import { ArrowLeft, MessageSquareText, ShieldCheck } from "lucide-react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
-import { BookingFlow } from "./booking-flow"
-import { getSiteUrl } from "@web/lib/site-url"
+import { FeedbackForm } from "./feedback-form"
 import type { Locale } from "@web/i18n/routing"
+import { getSiteUrl } from "@web/lib/site-url"
 import { Section } from "@ui/index"
 
 export async function generateMetadata({
@@ -13,7 +13,7 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale }
 }): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: "metadata.booking" })
+  const t = await getTranslations({ locale: params.locale, namespace: "metadata.feedback" })
 
   return {
     metadataBase: getSiteUrl(),
@@ -22,23 +22,20 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      images: ["/images/home/courtyard-booking-generated.webp"],
+      images: ["/images/home/resilience-valley.webp"],
     },
   }
 }
 
-export default async function BookingPage({ params }: { params: { locale: Locale } }) {
+export default async function FeedbackPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale)
-  const t = await getTranslations("booking")
+  const t = await getTranslations("feedback")
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-rice pb-16 text-ink">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/80 text-white backdrop-blur-xl">
         <Section className="flex h-16 items-center justify-between gap-4">
-          <Link
-            className="flex shrink-0 items-center gap-2 text-sm font-semibold text-white/86"
-            href={`/${params.locale}`}
-          >
+          <Link className="flex shrink-0 items-center gap-2 text-sm font-semibold text-white/86" href={`/${params.locale}`}>
             <ArrowLeft aria-hidden="true" className="h-4 w-4" />
             {t("nav.backHome")}
           </Link>
@@ -47,9 +44,12 @@ export default async function BookingPage({ params }: { params: { locale: Locale
       </header>
 
       <Section className="pt-12">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.78fr)_minmax(280px,0.42fr)] lg:items-end">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(280px,0.38fr)] lg:items-end">
           <div className="max-w-3xl min-w-0">
-            <p className="text-sm font-bold uppercase tracking-[0.18em] text-lychee">{t("hero.eyebrow")}</p>
+            <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-water">
+              <MessageSquareText aria-hidden="true" className="h-4 w-4" />
+              {t("hero.eyebrow")}
+            </p>
             <h1 className="mt-3 break-all text-3xl font-extrabold leading-tight tracking-normal sm:text-5xl">
               {t("hero.title")}
             </h1>
@@ -66,7 +66,7 @@ export default async function BookingPage({ params }: { params: { locale: Locale
       </Section>
 
       <Section className="pt-9">
-        <BookingFlow />
+        <FeedbackForm />
       </Section>
     </main>
   )

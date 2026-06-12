@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { RouteGenerator } from "./route-generator"
+import { getSiteUrl } from "@web/lib/site-url"
 import type { Locale } from "@web/i18n/routing"
 import { Section } from "@ui/index"
 
@@ -15,7 +16,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale: params.locale, namespace: "metadata.routes" })
 
   return {
-    metadataBase: new URL("http://localhost:3000"),
+    metadataBase: getSiteUrl(),
     title: t("title"),
     description: t("description"),
     openGraph: {

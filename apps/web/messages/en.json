@@ -11,6 +11,10 @@
     "booking": {
       "title": "Zouma Courtyard Booking",
       "description": "Review courtyard inventory, dates, guests, booking notices and pending payment confirmation."
+    },
+    "feedback": {
+      "title": "Zouma Feedback",
+      "description": "Submit content, service, facility, payment or other feedback and create a trackable ticket."
     }
   },
   "common": {
@@ -246,6 +250,64 @@
       "teaBreak": "Tea break",
       "lightWalk": "Light walk",
       "historyWall": "Story wall"
+    }
+  },
+  "feedback": {
+    "nav": { "backHome": "Back home", "phase": "Feedback and admin phase" },
+    "hero": {
+      "eyebrow": "Feedback",
+      "title": "Turn field feedback into trackable operation tickets",
+      "body": "This phase opens the visitor feedback entry with category, severity, rating and written notes. A ticket id is created after submission and appears in the admin feedback list."
+    },
+    "guardrail": {
+      "title": "Feedback is sanitized first",
+      "body": "Phone numbers and precise coordinates are masked before entering the ticket flow. Future AI summaries must also pass sanitization and the backend model adapter."
+    },
+    "form": {
+      "eyebrow": "Submit feedback",
+      "title": "Tell us what needs follow-up",
+      "body": "Describe the location, time and issue as clearly as possible. The system creates a pending ticket and does not publish your feedback.",
+      "categoryLabel": "Category",
+      "severityLabel": "Severity",
+      "ratingLabel": "Rating",
+      "ratingAria": "{count} star rating",
+      "contentLabel": "Feedback",
+      "contentPlaceholder": "Example: The sign from the visitor center to Taojiawan parking point is not clear enough.",
+      "remaining": "{count} characters left",
+      "submit": "Submit feedback",
+      "submitting": "Submitting"
+    },
+    "categories": {
+      "content": "Content",
+      "service": "Service",
+      "facility": "Facility",
+      "payment": "Payment",
+      "other": "Other"
+    },
+    "severities": {
+      "low": "Record",
+      "medium": "Follow-up",
+      "high": "Experience impact",
+      "urgent": "On-site urgent"
+    },
+    "statuses": {
+      "submitted": "Submitted",
+      "assigned": "Assigned",
+      "processing": "Processing",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "messages": {
+      "contentRequired": "Please enter at least 8 characters.",
+      "submitFailed": "Feedback could not be submitted. Please try again later."
+    },
+    "result": {
+      "title": "Submission result",
+      "body": "After success, the ticket id and current status are shown here. Admin can update handling records.",
+      "empty": "Submit the form to create a trackable ticket.",
+      "success": "Feedback submitted",
+      "ticketId": "Ticket id",
+      "status": "Current status"
     }
   },
   "routes": {

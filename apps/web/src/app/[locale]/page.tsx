@@ -5,6 +5,7 @@ import { CalendarDays, CloudSun, Map, MoveRight, ShieldCheck, Sprout, UserRound 
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { featuredPlayCards, homeScenes, previewStats } from "@web/lib/home-data"
+import { getSiteUrl } from "@web/lib/site-url"
 import { Section, StatusBadge } from "@ui/index"
 import type { Locale } from "@web/i18n/routing"
 
@@ -22,7 +23,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale: params.locale, namespace: "metadata.home" })
 
   return {
-    metadataBase: new URL("http://localhost:3000"),
+    metadataBase: getSiteUrl(),
     title: t("title"),
     description: t("description"),
     openGraph: {

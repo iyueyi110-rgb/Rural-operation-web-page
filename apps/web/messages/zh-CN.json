@@ -11,6 +11,10 @@
     "booking": {
       "title": "走马村院落预约｜日历库存与订单确认",
       "description": "查看走马村院落库存、日期、人数和预订须知，完成待支付状态的预约确认。"
+    },
+    "feedback": {
+      "title": "走马村反馈｜意见提交与工单跟进",
+      "description": "提交走马村内容、服务、设施、支付和其他反馈，并生成可跟进的反馈工单。"
     }
   },
   "common": {
@@ -246,6 +250,64 @@
       "teaBreak": "茶歇补给",
       "lightWalk": "轻体力慢行",
       "historyWall": "古道故事墙"
+    }
+  },
+  "feedback": {
+    "nav": { "backHome": "返回首页", "phase": "反馈和后台阶段" },
+    "hero": {
+      "eyebrow": "Feedback",
+      "title": "把现场反馈变成可跟进的运营工单",
+      "body": "本阶段开放前台反馈提交入口，支持分类、紧急程度、满意度和文字说明。提交后会生成工单编号，并进入后台反馈管理列表。"
+    },
+    "guardrail": {
+      "title": "反馈内容会先脱敏",
+      "body": "手机号和精确坐标等敏感信息会在进入工单前做基础遮盖。后续若接入 AI 总结，也必须先通过脱敏与后端模型适配层。"
+    },
+    "form": {
+      "eyebrow": "提交反馈",
+      "title": "告诉我们这次体验哪里需要跟进",
+      "body": "请尽量描述发生的位置、时间和现象。系统会先生成待处理工单，不会公开展示你的反馈内容。",
+      "categoryLabel": "反馈分类",
+      "severityLabel": "紧急程度",
+      "ratingLabel": "满意度",
+      "ratingAria": "{count} 分满意度",
+      "contentLabel": "反馈内容",
+      "contentPlaceholder": "例如：游客中心到陶家湾停车点的导视不够明显，老人找路时需要工作人员二次说明。",
+      "remaining": "还可输入 {count} 字",
+      "submit": "提交反馈",
+      "submitting": "正在提交"
+    },
+    "categories": {
+      "content": "内容讲解",
+      "service": "服务接待",
+      "facility": "设施导视",
+      "payment": "支付订单",
+      "other": "其他问题"
+    },
+    "severities": {
+      "low": "普通记录",
+      "medium": "需要跟进",
+      "high": "影响体验",
+      "urgent": "现场紧急"
+    },
+    "statuses": {
+      "submitted": "已提交",
+      "assigned": "已分派",
+      "processing": "处理中",
+      "resolved": "已解决",
+      "closed": "已关闭"
+    },
+    "messages": {
+      "contentRequired": "请至少输入 8 个字的反馈内容。",
+      "submitFailed": "反馈暂时没有提交成功，请稍后重试。"
+    },
+    "result": {
+      "title": "提交结果",
+      "body": "提交成功后，这里会显示工单编号和当前状态；后台可继续更新处理记录。",
+      "empty": "填写并提交反馈后，系统会生成一个可跟进的工单。",
+      "success": "反馈已提交",
+      "ticketId": "工单编号",
+      "status": "当前状态"
     }
   },
   "routes": {
