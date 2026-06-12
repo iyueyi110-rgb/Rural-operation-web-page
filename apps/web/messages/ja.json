@@ -15,6 +15,10 @@
     "trees": {
       "title": "走馬村ライチ樹里親",
       "description": "里親可能なライチ樹、曖昧位置、権益、协议、成長記録を表示します。"
+    },
+    "feedback": {
+      "title": "走馬村フィードバック",
+      "description": "内容、サービス、施設、支払いなどのフィードバックを送信し、追跡可能なチケットを作成します。"
     }
   },
   "common": {
@@ -315,6 +319,64 @@
       "lz018": { "name": "雲荔 018 号", "species": "妃子笑ライチ", "summary": "樹勢が安定し、記録が整った初回里親向けのモデル木です。", "location": "荔田共生境北側果園片区。村道に近いが精確座標は表示しません。", "imageAlt": "雲荔 018 号ライチ樹と果園", "prices": { "seasonal": "¥399", "annual": "¥999" } },
       "lz026": { "name": "雲荔 026 号", "species": "桂味ライチ", "summary": "親子里親と食育講座に適し、枠が少ない木です。", "location": "荔田共生境中部果園片区。食育教室動線に近いです。", "imageAlt": "雲荔 026 号ライチ樹と田園", "prices": { "seasonal": "¥359", "annual": "¥899" } },
       "lz041": { "name": "雲荔 041 号", "species": "老木ライチ", "summary": "樹齢が高く、現在は養護観察と記録展示が中心です。", "location": "荔田共生境南側老木片区。座標は内部養護のみに使用します。", "imageAlt": "雲荔 041 号老ライチ樹", "prices": { "seasonal": "未定", "annual": "未定" } }
+    }
+  },
+  "feedback": {
+    "nav": { "backHome": "ホームへ戻る", "phase": "フィードバックと管理段階" },
+    "hero": {
+      "eyebrow": "Feedback",
+      "title": "現地の声を追跡できる運営チケットへ",
+      "body": "この段階では、分類、緊急度、満足度、本文を含むフィードバック入口を開放します。送信後はチケット番号が作成され、管理画面に表示されます。"
+    },
+    "guardrail": {
+      "title": "内容は先に匿名化します",
+      "body": "電話番号や精確な座標はチケット化前にマスクされます。将来 AI 要約を使う場合も、匿名化とバックエンドのモデルアダプターを通します。"
+    },
+    "form": {
+      "eyebrow": "送信",
+      "title": "対応が必要な体験を教えてください",
+      "body": "場所、時間、状況をできるだけ具体的に記入してください。内容は公開されず、保留中チケットとして登録されます。",
+      "categoryLabel": "分類",
+      "severityLabel": "緊急度",
+      "ratingLabel": "満足度",
+      "ratingAria": "{count} 点の満足度",
+      "contentLabel": "内容",
+      "contentPlaceholder": "例：ビジターセンターから陶家湾駐車場への案内表示が少し分かりにくいです。",
+      "remaining": "残り {count} 文字",
+      "submit": "送信",
+      "submitting": "送信中"
+    },
+    "categories": {
+      "content": "内容説明",
+      "service": "サービス",
+      "facility": "施設案内",
+      "payment": "支払い",
+      "other": "その他"
+    },
+    "severities": {
+      "low": "記録",
+      "medium": "要対応",
+      "high": "体験に影響",
+      "urgent": "現地緊急"
+    },
+    "statuses": {
+      "submitted": "送信済み",
+      "assigned": "割当済み",
+      "processing": "対応中",
+      "resolved": "解決済み",
+      "closed": "終了"
+    },
+    "messages": {
+      "contentRequired": "8 文字以上入力してください。",
+      "submitFailed": "送信できませんでした。しばらくしてから再試行してください。"
+    },
+    "result": {
+      "title": "送信結果",
+      "body": "送信後、チケット番号と現在の状態がここに表示されます。管理画面で対応記録を更新できます。",
+      "empty": "フォームを送信すると追跡可能なチケットが作成されます。",
+      "success": "送信しました",
+      "ticketId": "チケット番号",
+      "status": "現在の状態"
     }
   },
   "routes": {
