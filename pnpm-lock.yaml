@@ -32,6 +32,15 @@ importers:
       '@zouma/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@zouma/database':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@zouma/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@zouma/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       lucide-react:
         specifier: ^0.468.0
         version: 0.468.0(react@18.3.1)

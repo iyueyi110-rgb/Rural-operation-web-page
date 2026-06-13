@@ -23,3 +23,9 @@
  GET /api/v1/weather 200 in 422ms
  GET /api/v1/feedback 200 in 18ms
  GET /api/v1/feedback 200 in 18ms
+ ✓ Compiled /[locale]/tickets in 314ms (732 modules)
+ GET /zh-CN/tickets 200 in 581ms
+ ✓ Compiled /[locale] in 47ms (430 modules)
+ GET /favicon.ico 404 in 187ms
+ ✓ Compiled /api/v1/weather in 74ms (458 modules)
+ GET /api/v1/weather 200 in 385ms
