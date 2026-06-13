@@ -50,7 +50,10 @@
       "weather": "天气",
       "routes": "路线",
       "booking": "院落",
+      "tickets": "门票",
       "adoption": "认养",
+      "me": "个人中心",
+      "privacy": "隐私中心",
       "login": "登录",
       "start": "开始浏览"
     },
@@ -61,6 +64,11 @@
       "primaryCta": "查看四境",
       "secondaryCta": "今日推荐",
       "imageAlt": "走马村山岭、溪河、村落和田园的整体鸟瞰图"
+    },
+    "quickActions": {
+      "tickets": "门票预购",
+      "me": "个人中心",
+      "privacy": "隐私中心"
     },
     "stats": {
       "area": {

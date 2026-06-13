@@ -108,7 +108,10 @@
       "weather": "天気",
       "routes": "ルート",
       "booking": "中庭",
+      "tickets": "チケット",
       "adoption": "里親",
+      "me": "マイページ",
+      "privacy": "プライバシー",
       "login": "ログイン",
       "start": "開始"
     },
@@ -119,6 +122,11 @@
       "primaryCta": "四境を見る",
       "secondaryCta": "今日の提案",
       "imageAlt": "走馬村の鳥瞰"
+    },
+    "quickActions": {
+      "tickets": "チケット予約",
+      "me": "マイページ",
+      "privacy": "プライバシー"
     },
     "stats": {
       "area": {

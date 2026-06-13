@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { CalendarDays, CloudSun, Map, MoveRight, ShieldCheck, Sprout, UserRound } from "lucide-react"
+import { CalendarDays, CloudSun, Map, MoveRight, ShieldCheck, Sprout, Ticket, UserRound } from "lucide-react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { featuredPlayCards, homeScenes, previewStats } from "@web/lib/home-data"
@@ -47,13 +47,24 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
     <main className="overflow-hidden pb-16 text-ink">
       <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-ink/75 text-white backdrop-blur-xl">
         <Section className="flex h-16 items-center justify-between gap-4">
-          <Link aria-label={t("nav.homeAria")} className="flex items-center gap-3" href="#top">
-            <span className="grid h-9 w-9 place-items-center rounded-md bg-lychee text-sm font-extrabold">
-              {t("nav.mark")}
-            </span>
-            <span className="text-sm font-semibold tracking-normal">{t("nav.brand")}</span>
-          </Link>
-          <nav aria-label={t("nav.aria")} className="hidden items-center gap-6 text-sm text-white/78 md:flex">
+          <div className="flex min-w-0 items-center gap-4">
+            <Link aria-label={t("nav.homeAria")} className="flex shrink-0 items-center gap-3" href="#top">
+              <span className="grid h-9 w-9 place-items-center rounded-md bg-lychee text-sm font-extrabold">
+                {t("nav.mark")}
+              </span>
+              <span className="text-sm font-semibold tracking-normal">{t("nav.brand")}</span>
+            </Link>
+            <div className="hidden items-center gap-3 text-xs font-semibold text-white/62 md:flex">
+              <Link className="transition hover:text-white" href={`/${params.locale}/me`}>
+                {t("quickActions.me")}
+              </Link>
+              <span aria-hidden="true" className="h-3 w-px bg-white/18" />
+              <Link className="transition hover:text-white" href={`/${params.locale}/privacy`}>
+                {t("quickActions.privacy")}
+              </Link>
+            </div>
+          </div>
+          <nav aria-label={t("nav.aria")} className="hidden items-center gap-5 text-sm text-white/78 md:flex">
             <Link className="transition hover:text-white" href="#realms">
               {t("nav.realms")}
             </Link>
@@ -66,7 +77,14 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
             <Link className="transition hover:text-white" href={`/${params.locale}/booking`}>
               {t("nav.booking")}
             </Link>
-            <Link className="transition hover:text-white" href="#adoption-preview">
+            <Link
+              className="inline-flex h-8 items-center gap-1.5 rounded-full bg-lychee px-3 text-xs font-bold text-white shadow-soft transition hover:bg-[#a8312f]"
+              href={`/${params.locale}/tickets`}
+            >
+              <Ticket aria-hidden="true" className="h-3.5 w-3.5" />
+              {t("quickActions.tickets")}
+            </Link>
+            <Link className="transition hover:text-white" href={`/${params.locale}/trees`}>
               {t("nav.adoption")}
             </Link>
           </nav>

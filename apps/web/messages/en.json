@@ -108,7 +108,10 @@
       "weather": "Weather",
       "routes": "Routes",
       "booking": "Courtyards",
+      "tickets": "Tickets",
       "adoption": "Adoption",
+      "me": "Me",
+      "privacy": "Privacy",
       "login": "Login",
       "start": "Start"
     },
@@ -119,6 +122,11 @@
       "primaryCta": "View realms",
       "secondaryCta": "Today",
       "imageAlt": "Aerial view of Zouma Village"
+    },
+    "quickActions": {
+      "tickets": "Ticket preorder",
+      "me": "Member center",
+      "privacy": "Privacy center"
     },
     "stats": {
       "area": {
