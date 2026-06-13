@@ -126,19 +126,11 @@ export function FeedbackContent() {
 
   return (
     <div className="min-w-0">
-      <header className="flex flex-wrap items-center justify-between gap-3">
+      <header>
         <div>
           <p className="text-sm font-bold text-water">{adminCopy.shell.activeModule}</p>
           <h1 className="mt-1 text-2xl font-extrabold tracking-normal sm:text-3xl">{adminCopy.table.title}</h1>
         </div>
-        <button
-          className="flex h-10 items-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold text-ink transition hover:border-ink"
-          onClick={loadRecords}
-          type="button"
-        >
-          <RefreshCw aria-hidden="true" className="h-4 w-4" />
-          {adminCopy.shell.refresh}
-        </button>
       </header>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-4">

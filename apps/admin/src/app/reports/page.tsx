@@ -45,7 +45,7 @@ export default function ReportsPage() {
     setError("")
 
     try {
-      const response = await fetch(`${adminApiBase}/reports/generate`, {
+      const response = await fetch(`${adminApiBase}/reports`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date }),
