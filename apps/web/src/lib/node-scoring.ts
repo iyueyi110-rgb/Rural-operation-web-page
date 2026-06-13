@@ -4,10 +4,12 @@ import { prisma } from "@zouma/database"
 import { computeScores } from "@zouma/utils"
 
 import { getChinaDayRange } from "@web/lib/aigc-api"
+import { getWeatherCondition } from "@web/lib/weather"
 
 export async function computeNodeDailyScores(date: string): Promise<void> {
   const nodes = await prisma.spaceNode.findMany()
   const { start, end } = getChinaDayRange(date)
+  const weatherCondition = await getWeatherCondition(date)
 
   for (const node of nodes) {
     const logs = await prisma.presenceLog.findMany({
@@ -27,7 +29,6 @@ export async function computeNodeDailyScores(date: string): Promise<void> {
           logsWithDwell.length
         : 0
     const revisitIndex = logs.length > 1 ? 0.3 : 0
-    const weatherCondition = "sunny"
 
     const scores = computeScores({
       totalVisitors,
