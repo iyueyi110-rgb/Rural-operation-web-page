@@ -4,6 +4,8 @@ node_modules/
 dist/
 coverage/
 *.tsbuildinfo
+*.out.log
+*.err.log
 .env
 .env.*
 !.env.example
