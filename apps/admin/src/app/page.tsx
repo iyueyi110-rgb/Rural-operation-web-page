@@ -1,5 +1,5 @@
-import { FeedbackAdmin } from "./feedback-admin"
+import { redirect } from "next/navigation"
 
 export default function AdminHome() {
-  return <FeedbackAdmin />
+  redirect("/dashboard")
 }

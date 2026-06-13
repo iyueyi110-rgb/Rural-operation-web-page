@@ -4,6 +4,7 @@ import { Noto_Sans_SC } from "next/font/google"
 
 import "./globals.css"
 import { adminCopy } from "@admin/lib/admin-copy"
+import { AdminShell } from "./admin-shell"
 
 const notoSansSc = Noto_Sans_SC({
   subsets: ["latin"],
@@ -19,7 +20,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="zh-CN" className={notoSansSc.className}>
-      <body>{children}</body>
+      <body>
+        <AdminShell>{children}</AdminShell>
+      </body>
     </html>
   )
 }

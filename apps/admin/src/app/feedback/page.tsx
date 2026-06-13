@@ -1,5 +1,5 @@
-import { FeedbackAdmin } from "../feedback-admin"
+import { FeedbackContent } from "../feedback-admin"
 
 export default function FeedbackPage() {
-  return <FeedbackAdmin />
+  return <FeedbackContent />
 }
