@@ -35,6 +35,7 @@ const sensorMeta = {
 } as const
 
 const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? "dev-admin-token"
+const sensorToken = process.env.NEXT_PUBLIC_SENSOR_API_KEY ?? "dev-sensor-key"
 
 export default function InfrastructurePage() {
   const [sensors, setSensors] = useState<SensorReading[]>([])
@@ -42,6 +43,13 @@ export default function InfrastructurePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isDeciding, setIsDeciding] = useState(false)
   const [message, setMessage] = useState("")
+  const [manualReading, setManualReading] = useState({
+    sensorId: "manual-soil-01",
+    type: "soil_moisture",
+    value: "28",
+    unit: "%",
+    nodeId: "",
+  })
 
   const loadData = useCallback(async () => {
     setIsLoading(true)
@@ -76,6 +84,18 @@ export default function InfrastructurePage() {
       body: JSON.stringify({ id, status }),
     })
     setMessage(response.ok ? "控制指令状态已更新。" : "控制指令状态更新失败。")
+    if (response.ok) await loadData()
+  }
+
+  async function submitManualReading() {
+    const response = await fetch(`${adminApiBase}/infrastructure/sensors`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-API-Key": sensorToken },
+      body: JSON.stringify({
+        readings: [{ ...manualReading, value: Number(manualReading.value), source: "manual" }],
+      }),
+    })
+    setMessage(response.ok ? "手动读数已录入。" : "手动读数录入失败。")
     if (response.ok) await loadData()
   }
 
@@ -115,6 +135,23 @@ export default function InfrastructurePage() {
           })}
         </div>
         {sensors.length === 0 ? <p className="mt-4 text-sm font-semibold leading-6 text-ink/56">{adminCopy.infrastructure.noSensorData}</p> : null}
+      </section>
+
+      <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
+        <h2 className="text-lg font-extrabold">手动录入读数</h2>
+        <div className="mt-4 grid gap-3 md:grid-cols-5">
+          <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setManualReading({ ...manualReading, sensorId: event.target.value })} placeholder="传感器 ID" value={manualReading.sensorId} />
+          <select className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setManualReading({ ...manualReading, type: event.target.value })} value={manualReading.type}>
+            <option value="rainfall">降雨量</option>
+            <option value="soil_moisture">土壤湿度</option>
+            <option value="water_level">水位</option>
+            <option value="temperature">温度</option>
+            <option value="humidity">湿度</option>
+          </select>
+          <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setManualReading({ ...manualReading, value: event.target.value })} placeholder="数值" value={manualReading.value} />
+          <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setManualReading({ ...manualReading, unit: event.target.value })} placeholder="单位" value={manualReading.unit} />
+          <button className="h-10 rounded-full bg-ink px-4 text-sm font-bold text-white" onClick={submitManualReading} type="button">录入</button>
+        </div>
       </section>
 
       <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">

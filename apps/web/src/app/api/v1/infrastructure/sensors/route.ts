@@ -28,6 +28,7 @@ export async function POST(request: Request) {
       value: Number(reading.value),
       unit: typeof reading.unit === "string" ? reading.unit.trim() : "",
       nodeId: typeof reading.nodeId === "string" && reading.nodeId.trim() ? reading.nodeId.trim() : null,
+      source: typeof reading.source === "string" && reading.source.trim() ? reading.source.trim() : "iot_gateway",
     }))
     .filter((reading) => reading.sensorId && reading.type && Number.isFinite(reading.value) && reading.unit)
 

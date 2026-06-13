@@ -133,6 +133,7 @@ model SensorReading {
   value     Float
   unit      String
   nodeId    String?
+  source    String   @default("iot_gateway")
   createdAt DateTime @default(now()) @map("created_at")
 
   @@index([sensorId, createdAt])

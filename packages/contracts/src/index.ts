@@ -267,6 +267,7 @@ export interface SensorReadingData {
   value: number
   unit: string
   nodeId?: string
+  source?: string
   createdAt: string
 }
 

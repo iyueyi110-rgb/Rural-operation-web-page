@@ -54,6 +54,7 @@ export function mapSensorReading(record: {
   value: number
   unit: string
   nodeId: string | null
+  source?: string
   createdAt: Date
 }): SensorReadingData {
   return {
@@ -63,6 +64,7 @@ export function mapSensorReading(record: {
     value: record.value,
     unit: record.unit,
     nodeId: record.nodeId ?? undefined,
+    source: record.source,
     createdAt: record.createdAt.toISOString(),
   }
 }
