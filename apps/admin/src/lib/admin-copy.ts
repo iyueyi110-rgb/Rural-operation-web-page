@@ -115,6 +115,7 @@ export const adminCopy = {
   },
   nodes: {
     title: "空间节点",
+    detail: "节点详情",
     attractiveness: "吸引力分",
     safetyRisk: "安全风险分",
     visitors: "今日客流",

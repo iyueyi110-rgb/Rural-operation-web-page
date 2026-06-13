@@ -105,7 +105,7 @@ export default function NodesPage() {
         <aside className="rounded-lg border border-stone bg-white p-5 shadow-soft">
           {selected ? (
             <div>
-              <p className="text-sm font-bold text-water">{adminCopy.common.noSelection}</p>
+              <p className="text-sm font-bold text-water">{adminCopy.nodes.detail}</p>
               <h2 className="mt-1 text-xl font-extrabold">{nodeDisplayName(selected.slug, selected.nameKey)}</h2>
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <AdminStatCard label={adminCopy.nodes.attractiveness} value={currentScore?.attractiveness ?? "—"} />
