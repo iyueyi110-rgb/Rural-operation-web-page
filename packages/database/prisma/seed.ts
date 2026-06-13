@@ -1,4 +1,5 @@
 import { prisma } from "../src/index"
+import { seedNodes } from "./seed-nodes"
 
 const seedTickets = [
   {
@@ -50,7 +51,7 @@ const seedTickets = [
   },
 ]
 
-async function main() {
+async function seedFeedbackTickets() {
   await prisma.feedbackHandlingRecord.deleteMany({
     where: {
       ticketId: {
@@ -84,6 +85,11 @@ async function main() {
       },
     })
   }
+}
+
+async function main() {
+  await seedFeedbackTickets()
+  await seedNodes()
 }
 
 main()
