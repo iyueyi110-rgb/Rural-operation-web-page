@@ -11,7 +11,7 @@ export function getCorsHeaders(request: Request) {
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "GET,POST,PATCH,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, X-Admin-Token, X-API-Key",
     Vary: "Origin",
   }
 }

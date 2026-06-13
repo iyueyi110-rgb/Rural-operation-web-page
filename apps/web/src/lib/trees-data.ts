@@ -91,3 +91,14 @@ export const orchardTreeOptions: OrchardTreeOption[] = [
     ],
   },
 ]
+
+export async function fetchTreeProfiles(apiBase = "") {
+  try {
+    const response = await fetch(`${apiBase}/api/v1/trees`, { cache: "no-store" })
+    if (!response.ok) return orchardTreeOptions
+    const payload = (await response.json()) as { data?: OrchardTreeOption[] }
+    return payload.data && payload.data.length > 0 ? payload.data : orchardTreeOptions
+  } catch {
+    return orchardTreeOptions
+  }
+}

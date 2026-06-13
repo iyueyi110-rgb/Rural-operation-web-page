@@ -1,8 +1,9 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { BadgeCheck, CalendarDays, CheckCircle2, CreditCard, FileText, Leaf, MapPin, ShieldCheck, Sprout } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { useMemo, useState } from "react"
 
 import {
@@ -28,6 +29,7 @@ interface TreeAdoptionOrder {
 
 export function AdoptionFlow() {
   const t = useTranslations("trees")
+  const locale = useLocale()
   const [selectedTreeId, setSelectedTreeId] = useState(orchardTreeOptions[0].id)
   const [selectedPlan, setSelectedPlan] = useState<AdoptionPlan>("seasonal")
   const [agreementAccepted, setAgreementAccepted] = useState(false)
@@ -150,6 +152,12 @@ export function AdoptionFlow() {
                     >
                       {active ? t("list.selected") : t("list.select")}
                     </button>
+                    <Link
+                      className="ml-2 inline-flex h-10 items-center rounded-full border border-stone px-5 text-sm font-bold text-ink transition hover:border-ink"
+                      href={`/${locale}/trees/${tree.id}`}
+                    >
+                      {t("profile.eyebrow")}
+                    </Link>
                   </div>
                 </article>
               )

@@ -11,6 +11,8 @@ import {
   RefreshCw,
   Settings,
   ShoppingCart,
+  Sprout,
+  Trees,
 } from "lucide-react"
 import type { ComponentType } from "react"
 
@@ -21,6 +23,8 @@ const menuIcons: Record<string, ComponentType<{ className?: string }>> = {
   feedback: ClipboardList,
   nodes: MapPin,
   orders: ShoppingCart,
+  trees: Trees,
+  harvest: Sprout,
   reports: FileText,
   infrastructure: Cpu,
   settings: Settings,
@@ -31,6 +35,8 @@ const menuHrefs: Record<string, string> = {
   feedback: "/feedback",
   nodes: "/nodes",
   orders: "/orders",
+  trees: "/trees",
+  harvest: "/harvest",
   reports: "/reports",
   infrastructure: "/infrastructure",
   settings: "/settings",

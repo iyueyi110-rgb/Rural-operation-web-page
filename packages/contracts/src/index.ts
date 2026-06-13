@@ -81,7 +81,7 @@ export interface FeedbackRecord extends Feedback {
 
 export type SpaceNodeType = "entrance" | "viewpoint" | "activity" | "rest" | "shop" | "waterside"
 export type PresenceSource = "wifi_probe" | "camera" | "infrared" | "manual"
-export type OrderType = "courtyard_booking" | "tree_adoption" | "ticket_order"
+export type OrderType = "courtyard_booking" | "tree_adoption" | "ticket_order" | "activity_booking"
 
 export interface SpaceNodeData {
   id: string
@@ -132,7 +132,7 @@ export interface UnifiedOrderData {
 }
 
 export interface ReportSectionData {
-  type: "visitor_flow" | "consumption" | "alerts" | "feedback" | "weather"
+  type: "visitor_flow" | "consumption" | "alerts" | "feedback" | "weather" | "infrastructure"
   title: string
   content: string
 }
@@ -163,4 +163,95 @@ export interface DailyReportData {
   actionItems: ActionItemData[]
   status: string
   generatedAt: string
+}
+
+// ==== P1 新增 ====
+
+export type TreeCareLogType = "watering" | "pruning" | "fertilizing" | "pest_control" | "photo" | "harvest"
+export type ActivityType = "village_feast" | "food_class" | "study" | "workshop" | "exhibition" | "co_living"
+export type AlertType = "night_linger" | "crowd" | "waterside" | "reverse_path" | "fire_risk" | "flood_risk"
+
+export interface OrchardTreeData {
+  id: string
+  treeCode: string
+  species: string
+  age: number
+  healthStatus: string
+  blurredLocation: string
+  lat?: number
+  lng?: number
+  fireMemory?: string
+  newShootsRecord?: string
+  growthPhotos: string[]
+  adoptStatus: string
+  adoptPrice?: number
+  harvestSeason?: string
+  fruitVariety?: string
+}
+
+export interface TreeCareLogData {
+  id: string
+  treeId: string
+  logType: TreeCareLogType
+  content: string
+  imageUrl?: string
+  operator: string
+  createdAt: string
+}
+
+export interface TreeAdoptionData {
+  id: string
+  treeId: string
+  plan: string
+  adopterName?: string
+  adopterPhone?: string
+  status: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface HarvestBookingData {
+  id: string
+  treeId: string
+  scheduledDate: string
+  timeSlot: string
+  guestCount: number
+  guestName?: string
+  guestPhone?: string
+  status: string
+  createdAt: string
+}
+
+export interface AlertData {
+  id: string
+  alertType: AlertType
+  nodeId?: string
+  severity: "high" | "medium" | "low"
+  message: string
+  status: "active" | "acknowledged" | "resolved"
+  createdAt: string
+  resolvedAt?: string
+}
+
+export interface CourtyardActivityData {
+  id: string
+  courtyardId: string
+  activityType: ActivityType
+  title: string
+  description: string
+  maxCapacity: number
+  price?: number
+  scheduledDate: string
+  scheduledTime: string
+  status: string
+}
+
+export interface ActivityBookingData {
+  id: string
+  activityId: string
+  guestName: string
+  guestPhone: string
+  guestCount: number
+  status: string
+  createdAt: string
 }

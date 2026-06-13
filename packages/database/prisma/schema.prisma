@@ -138,3 +138,135 @@ model SensorReading {
   @@index([sensorId, createdAt])
   @@map("sensor_reading")
 }
+
+// ==== P1 树木与养护 ====
+
+model OrchardTree {
+  id              String         @id @default(cuid())
+  treeCode        String         @unique
+  species         String
+  age             Int
+  healthStatus    String         @default("good")
+  blurredLocation String
+  lat             Float?
+  lng             Float?
+  fireMemory      String?        @db.Text
+  newShootsRecord String?        @db.Text
+  growthPhotos    Json           @default("[]")
+  adoptStatus     String         @default("available")
+  adoptPrice      Float?
+  harvestSeason   String?
+  fruitVariety     String?
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  careLogs        TreeCareLog[]
+  adoptions       TreeAdoption[]
+  harvestBookings HarvestBooking[]
+
+  @@map("orchard_tree")
+}
+
+model TreeCareLog {
+  id        String      @id @default(cuid())
+  treeId    String
+  logType   String
+  content   String      @db.Text
+  imageUrl  String?
+  operator  String
+  createdAt DateTime    @default(now()) @map("created_at")
+  tree      OrchardTree @relation(fields: [treeId], references: [id])
+
+  @@index([treeId, createdAt])
+  @@map("tree_care_log")
+}
+
+model TreeAdoption {
+  id           String      @id @default(cuid())
+  treeId       String
+  plan         String
+  adopterName  String?
+  adopterPhone String?
+  status       String      @default("pending_payment")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  tree         OrchardTree @relation(fields: [treeId], references: [id])
+
+  @@index([adopterPhone, createdAt])
+  @@map("tree_adoption")
+}
+
+model HarvestBooking {
+  id            String      @id @default(cuid())
+  treeId        String
+  scheduledDate String
+  timeSlot      String
+  guestCount    Int
+  guestName     String?
+  guestPhone    String?
+  status        String      @default("pending")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  tree          OrchardTree @relation(fields: [treeId], references: [id])
+
+  @@index([treeId, scheduledDate])
+  @@map("harvest_booking")
+}
+
+model RouteGenerationLog {
+  id        String   @id @default(cuid())
+  routeId   String
+  duration  String
+  audience  String
+  weather   String
+  provider  String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("route_generation_log")
+}
+
+model Alert {
+  id         String    @id @default(cuid())
+  alertType  String
+  nodeId     String?
+  severity   String
+  message    String    @db.Text
+  status     String    @default("active")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  resolvedAt DateTime?
+
+  @@index([alertType, createdAt])
+  @@map("alert")
+}
+
+model CourtyardActivity {
+  id            String            @id @default(cuid())
+  courtyardId   String
+  activityType  String
+  title         String
+  description   String            @db.Text
+  maxCapacity   Int
+  price         Float?
+  scheduledDate String
+  scheduledTime String
+  status        String            @default("open")
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+  bookings      ActivityBooking[]
+
+  @@index([courtyardId, scheduledDate])
+  @@map("courtyard_activity")
+}
+
+model ActivityBooking {
+  id         String            @id @default(cuid())
+  activityId String
+  guestName  String
+  guestPhone String
+  guestCount Int
+  status     String            @default("confirmed")
+  createdAt  DateTime          @default(now()) @map("created_at")
+  updatedAt  DateTime          @updatedAt @map("updated_at")
+  activity   CourtyardActivity @relation(fields: [activityId], references: [id])
+
+  @@map("activity_booking")
+}

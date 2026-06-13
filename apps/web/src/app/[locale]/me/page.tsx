@@ -6,6 +6,7 @@ import type { Locale } from "@web/i18n/routing"
 import { getSiteUrl } from "@web/lib/site-url"
 import { memberOrders } from "@web/lib/me-data"
 import { PageHeader, Section } from "@ui/index"
+import { AdoptionLookup } from "./adoption-lookup"
 
 export async function generateMetadata({ params }: { params: { locale: Locale } }): Promise<Metadata> {
   const t = await getTranslations({ locale: params.locale, namespace: "metadata.me" })
@@ -47,6 +48,7 @@ export default async function MePage({ params }: { params: { locale: Locale } })
             </article>
           ))}
         </div>
+        <AdoptionLookup />
       </Section>
     </main>
   )
