@@ -11,3 +11,9 @@
  GET / 200 in 194ms
  GET /feedback 200 in 12ms
  GET /feedback 200 in 13ms
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3001
+
+ ✓ Starting...
+ ✓ Ready in 1450ms
+[?25h

@@ -29,3 +29,4 @@
  GET /favicon.ico 404 in 187ms
  ✓ Compiled /api/v1/weather in 74ms (458 modules)
  GET /api/v1/weather 200 in 385ms
+[?25h

@@ -76,3 +76,91 @@ export interface FeedbackRecord extends Feedback {
   updatedAt: string
   handlingRecords: FeedbackHandlingRecord[]
 }
+
+// ==== AIGC 云脑新增 ====
+
+export type SpaceNodeType = "entrance" | "viewpoint" | "activity" | "rest" | "shop" | "waterside"
+export type PresenceSource = "wifi_probe" | "camera" | "infrared" | "manual"
+export type OrderType = "courtyard_booking" | "tree_adoption" | "ticket_order"
+
+export interface SpaceNodeData {
+  id: string
+  slug: string
+  nameKey: string
+  realm: SceneRealm
+  nodeType: SpaceNodeType
+  lat?: number
+  lng?: number
+  capacity: number
+  terrainRisk: number
+  watersideRisk: number
+}
+
+export interface PresenceLogData {
+  id: string
+  nodeId: string
+  timestamp: string
+  peopleCount: number
+  dwellAvgMin?: number
+  source: PresenceSource
+}
+
+export interface NodeDailyScoreData {
+  id: string
+  nodeId: string
+  date: string
+  totalVisitors: number
+  peakPeopleCount: number
+  avgDwellMin: number
+  attractiveness: number
+  safetyRisk: number
+  weatherCondition?: string
+}
+
+export interface UnifiedOrderData {
+  id: string
+  orderType: OrderType
+  productId: string
+  productName: string
+  quantity: number
+  totalAmount: number
+  status: string
+  nodeId?: string
+  metadata?: Record<string, unknown>
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ReportSectionData {
+  type: "visitor_flow" | "consumption" | "alerts" | "feedback" | "weather"
+  title: string
+  content: string
+}
+
+export interface ReportMetricsData {
+  totalVisitors: number
+  totalRevenue: number
+  totalOrders: number
+  alertCount: number
+  feedbackCount: number
+  avgSatisfaction: number
+}
+
+export interface ActionItemData {
+  priority: "high" | "medium" | "low"
+  category: "safety" | "operation" | "service" | "facility"
+  action: string
+  deadline?: string
+}
+
+export interface DailyReportData {
+  id: string
+  date: string
+  title: string
+  summary: string
+  sections: ReportSectionData[]
+  metrics: ReportMetricsData
+  actionItems: ActionItemData[]
+  status: string
+  generatedAt: string
+}

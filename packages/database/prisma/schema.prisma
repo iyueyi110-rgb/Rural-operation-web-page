@@ -35,3 +35,106 @@ model FeedbackHandlingRecord {
 
   @@map("feedback_handling_record")
 }
+
+// ==== AIGC 云脑模型 ====
+
+model SpaceNode {
+  id            String           @id @default(cuid())
+  slug          String           @unique
+  nameKey       String
+  realm         String
+  nodeType      String
+  lat           Float?
+  lng           Float?
+  capacity      Int              @default(50)
+  terrainRisk   Float            @default(0)
+  watersideRisk Float            @default(0)
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+
+  presenceLogs PresenceLog[]
+  dailyScores  NodeDailyScore[]
+  orders       UnifiedOrder[]
+
+  @@map("space_node")
+}
+
+model PresenceLog {
+  id          String   @id @default(cuid())
+  nodeId      String
+  timestamp   DateTime @default(now())
+  peopleCount Int
+  dwellAvgMin Float?
+  source      String   @default("wifi_probe")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  node SpaceNode @relation(fields: [nodeId], references: [id])
+
+  @@index([nodeId, timestamp])
+  @@map("presence_log")
+}
+
+model NodeDailyScore {
+  id               String   @id @default(cuid())
+  nodeId           String
+  date             String
+  totalVisitors    Int      @default(0)
+  peakPeopleCount  Int      @default(0)
+  avgDwellMin      Float    @default(0)
+  attractiveness   Float    @default(0)
+  safetyRisk       Float    @default(0)
+  weatherCondition String?
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  node SpaceNode @relation(fields: [nodeId], references: [id])
+
+  @@unique([nodeId, date])
+  @@map("node_daily_score")
+}
+
+model UnifiedOrder {
+  id          String   @id @default(cuid())
+  orderType   String
+  productId   String
+  productName String
+  quantity    Int      @default(1)
+  totalAmount Float    @default(0)
+  status      String   @default("pending_payment")
+  nodeId      String?
+  metadata    Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  node SpaceNode? @relation(fields: [nodeId], references: [id])
+
+  @@index([nodeId, createdAt])
+  @@map("unified_order")
+}
+
+model DailyReport {
+  id          String   @id @default(cuid())
+  date        String   @unique
+  title       String
+  summary     String   @db.Text
+  sections    Json
+  metrics     Json
+  actionItems Json
+  status      String   @default("published")
+  generatedAt DateTime @default(now())
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("daily_report")
+}
+
+model SensorReading {
+  id        String   @id @default(cuid())
+  sensorId  String
+  type      String
+  value     Float
+  unit      String
+  nodeId    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([sensorId, createdAt])
+  @@map("sensor_reading")
+}
