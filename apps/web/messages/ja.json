@@ -133,11 +133,11 @@
     "messages": {
       "unavailable": "この樹は現在確認できません。",
       "needAgreement": "同意後に確認してください。",
-      "submitFailed": "?????????????????????????????"
+      "submitFailed": "里親注文の送信に失敗しました。後でもう一度お試しください。"
     },
     "form": {
       "confirm": "里親確認",
-      "confirming": "????????"
+      "confirming": "里親注文を作成中"
     },
     "order": {
       "title": "里親注文を作成しました",
@@ -145,8 +145,8 @@
       "status": "注文状態：支払い待ち",
       "paymentStatus": "支払い：未接続",
       "paymentEntry": "支払い未接続",
-      "idLabel": "??????",
-      "createdAtLabel": "????"
+      "idLabel": "里親注文番号",
+      "createdAtLabel": "作成時刻"
     },
     "trees": {
       "lz018": {
@@ -340,7 +340,11 @@
     "weather": {
       "eyebrow": "天気と来訪メモ",
       "temperature": "19.7℃",
-      "summary": "天気連携は次の段階で追加します。"
+      "summary": "天気連携は次の段階で追加します。",
+      "realtime": "重慶市長寿区走馬村",
+      "pending": "未設定",
+      "configureHint": "QWEATHER_API_KEY を設定するとリアルタイム天気へ自動切替します",
+      "configureLink": "ルート提案を見る"
     },
     "playCards": {
       "route": {
@@ -451,7 +455,7 @@
       "guestsValue": "{count} 人",
       "paymentModeLabel": "支払い方式",
       "confirm": "予約を確認",
-      "confirming": "??????"
+      "confirming": "予約を作成中"
     },
     "dates": {
       "jun20": "2026年6月20日",
@@ -481,7 +485,7 @@
     },
     "messages": {
       "capacityExceeded": "人数がこの中庭の上限を超えています。人数を減らすか大きい中庭を選択してください。",
-      "submitFailed": "???????????????????????????"
+      "submitFailed": "予約の送信に失敗しました。後でもう一度お試しください。"
     },
     "order": {
       "title": "予約を作成しました",
@@ -489,8 +493,8 @@
       "status": "注文状態：支払い待ち",
       "paymentStatus": "支払い状態：支払い接続待ち",
       "paymentEntry": "支払い入口は未接続",
-      "idLabel": "????",
-      "createdAtLabel": "????"
+      "idLabel": "注文番号",
+      "createdAtLabel": "作成時刻"
     },
     "courtyards": {
       "ridgeShared": {
@@ -649,7 +653,9 @@
       "fallback": "雨天代替",
       "notice": "移動メモ",
       "bookingCta": "予約可能ノードを見る",
-      "provider": "生成元：{provider}"
+      "provider": "生成元：{provider}",
+      "providerFallback": "AI サービス未設定のため、現在はローカル推薦ルートです",
+      "providerOnline": "AI 推薦 · {provider}"
     },
     "waypoints": {
       "visitorCenter": "ビジターセンター",

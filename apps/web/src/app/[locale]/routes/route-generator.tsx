@@ -22,7 +22,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
   const [weather, setWeather] = useState<RouteWeather>("sunny")
   const [mapMode, setMapMode] = useState<"scope" | "satellite">("scope")
   const [selectedRoute, setSelectedRoute] = useState<RouteOption>(() => selectRouteOption({ duration, audience, weather }))
-  const [provider, setProvider] = useState("ModelProviderAdapter")
+  const [provider, setProvider] = useState("configuration-required")
   const [isGenerating, setIsGenerating] = useState(false)
 
   async function generateRoute() {
@@ -183,9 +183,16 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
             </div>
             <h2 className="mt-3 break-all text-3xl font-extrabold">{t(selectedRoute.titleKey)}</h2>
             <p className="mt-3 break-all text-sm leading-7 text-ink/68">{t(selectedRoute.summaryKey)}</p>
-            <div className="mt-4 inline-flex rounded-full border border-stone px-3 py-1 text-xs font-bold text-ink/58">
-              {t("result.provider", { provider })}
-            </div>
+            {provider === "configuration-required" ? (
+              <div className="mt-4 inline-flex rounded-full border border-[#d8bd73] bg-[#fff7d6] px-3 py-1 text-xs font-bold text-[#7a5b12]">
+                {t("result.providerFallback")}
+              </div>
+            ) : (
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-moss/20 bg-moss/10 px-3 py-1 text-xs font-bold text-moss">
+                <span aria-hidden="true" className="h-2 w-2 rounded-full bg-moss" />
+                {t("result.providerOnline", { provider })}
+              </div>
+            )}
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               <div className="min-w-0 rounded-md bg-rice p-4">
                 <Clock3 aria-hidden="true" className="h-5 w-5 text-water" />

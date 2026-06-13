@@ -87,7 +87,11 @@
     "weather": {
       "eyebrow": "今日天气与出行提示",
       "temperature": "19.7℃",
-      "summary": "以温和天气作为首页默认示例；后续阶段接入天气服务后，将根据降雨、高温和预警自动调整路线建议。"
+      "summary": "以温和天气作为首页默认示例；后续阶段接入天气服务后，将根据降雨、高温和预警自动调整路线建议。",
+      "realtime": "重庆市长寿区走马村",
+      "pending": "待配置",
+      "configureHint": "配置 QWEATHER_API_KEY 后自动切换为实时天气",
+      "configureLink": "查看路线建议"
     },
     "playCards": {
       "route": {
@@ -198,7 +202,7 @@
       "guestsValue": "{count} 人",
       "paymentModeLabel": "支付方式",
       "confirm": "确认预约",
-      "confirming": "??????"
+      "confirming": "正在生成预约"
     },
     "dates": {
       "jun20": "2026 年 6 月 20 日",
@@ -228,7 +232,7 @@
     },
     "messages": {
       "capacityExceeded": "当前人数超过该院落接待上限，请减少人数或选择更大院落。",
-      "submitFailed": "?????????????"
+      "submitFailed": "预约提交失败，请稍后重试。"
     },
     "order": {
       "title": "预约已生成",
@@ -236,8 +240,8 @@
       "status": "订单状态：待支付",
       "paymentStatus": "支付状态：待接入支付",
       "paymentEntry": "支付入口待接入",
-      "idLabel": "???",
-      "createdAtLabel": "????"
+      "idLabel": "订单号",
+      "createdAtLabel": "创建时间"
     },
     "courtyards": {
       "ridgeShared": {
@@ -441,11 +445,11 @@
     "messages": {
       "unavailable": "当前树木暂不开放确认认养，可选择其他可认养树。",
       "needAgreement": "请先确认认养协议，再生成认养订单。",
-      "submitFailed": "?????????????"
+      "submitFailed": "认养提交失败，请稍后重试。"
     },
     "form": {
       "confirm": "确认认养",
-      "confirming": "???????"
+      "confirming": "正在生成认养单"
     },
     "order": {
       "title": "认养已生成",
@@ -453,8 +457,8 @@
       "status": "订单状态：待支付",
       "paymentStatus": "支付状态：待接入支付",
       "paymentEntry": "支付入口待接入",
-      "idLabel": "????",
-      "createdAtLabel": "????"
+      "idLabel": "认养单号",
+      "createdAtLabel": "创建时间"
     },
     "trees": {
       "lz018": {
@@ -649,7 +653,9 @@
       "fallback": "雨天备选",
       "notice": "出行提示",
       "bookingCta": "查看可预约节点",
-      "provider": "生成来源：{provider}"
+      "provider": "生成来源：{provider}",
+      "providerFallback": "AI 服务未配置，当前为本地推荐路线",
+      "providerOnline": "AI 推荐 · {provider}"
     },
     "waypoints": {
       "visitorCenter": "游客中心",

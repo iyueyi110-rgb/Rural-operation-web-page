@@ -39,6 +39,12 @@ function parseRouteId(content: string) {
   }
 }
 
+function formatRouteTags() {
+  return routeOptions
+    .map((route) => `- ${route.id} (${route.duration}, ${route.audience}, ${route.weather})`)
+    .join("\n")
+}
+
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null)
 
@@ -53,14 +59,17 @@ export async function POST(request: Request) {
   })
 
   const prompt = [
-    "Select the best Zouma Village route option for the visitor.",
-    `Input: duration=${body.duration}, audience=${body.audience}, weather=${body.weather}.`,
-    `Available route ids: ${routeOptions.map((route) => route.id).join(", ")}.`,
-    "Return JSON only: {\"routeId\":\"one-id-from-list\",\"reason\":\"short reason\"}.",
+    "请从给定路线中为游客选择最合适的一条走马村路线。",
+    `输入条件：duration=${body.duration}, audience=${body.audience}, weather=${body.weather}。`,
+    "可选路线：",
+    formatRouteTags(),
+    "只返回 JSON：{\"routeId\":\"one-id-from-list\",\"reason\":\"short reason\"}。",
   ].join("\n")
 
   try {
-    const completion = await ModelProviderAdapter.complete(prompt)
+    const completion = await ModelProviderAdapter.complete(prompt, {
+      systemPrompt: "你是走马村四境游线规划助手。根据游客的时长、人群、天气，从给定路线中推荐最合适的一条。只返回 JSON。",
+    })
     const routeId = parseRouteId(completion.content)
     const route = routeOptions.find((option) => option.id === routeId) ?? fallbackRoute
 

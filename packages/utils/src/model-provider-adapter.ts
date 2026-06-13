@@ -1,6 +1,7 @@
 import "server-only"
 
 export interface ModelProviderAdapterOptions {
+  systemPrompt?: string
   temperature?: number
 }
 
@@ -32,7 +33,9 @@ export class ModelProviderAdapter {
         messages: [
           {
             role: "system",
-            content: "You are a route planning adapter. Return compact JSON only.",
+            content:
+              options.systemPrompt ??
+              "你是走马村四境游线规划助手。根据游客的时长、人群、天气，从给定路线中推荐最合适的一条。只返回 JSON。",
           },
           {
             role: "user",

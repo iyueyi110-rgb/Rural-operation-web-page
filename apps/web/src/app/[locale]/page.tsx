@@ -43,6 +43,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
   const t = await getTranslations("home")
   const common = await getTranslations("common")
   const weather = await getWeatherSummary()
+  const weatherIsLive = weather.source === "qweather"
 
   return (
     <main className="overflow-hidden pb-16 text-ink">
@@ -171,8 +172,27 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
               <CloudSun aria-hidden="true" className="h-4 w-4" />
               {t("weather.eyebrow")}
             </div>
-            <div className="mt-4 text-3xl font-extrabold">{weather.temperature}</div>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <div className="text-3xl font-extrabold">{weather.temperature}</div>
+              <span
+                className={
+                  weatherIsLive
+                    ? "rounded-full bg-moss px-3 py-1 text-xs font-bold text-white"
+                    : "rounded-full bg-white/14 px-3 py-1 text-xs font-bold text-white/72"
+                }
+              >
+                {weatherIsLive ? t("weather.realtime") : t("weather.pending")}
+              </span>
+            </div>
             <p className="mt-2 text-sm leading-6 text-white/75">{weather.summary}</p>
+            {!weatherIsLive ? (
+              <p className="mt-3 text-xs leading-5 text-white/58">
+                {t("weather.configureHint")}
+                <Link className="ml-2 font-bold text-white underline underline-offset-4" href={`/${params.locale}/routes`}>
+                  {t("weather.configureLink")}
+                </Link>
+              </p>
+            ) : null}
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             {featuredPlayCards.map((card) => {

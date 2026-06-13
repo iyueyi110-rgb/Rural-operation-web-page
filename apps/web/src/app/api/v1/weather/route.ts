@@ -26,7 +26,8 @@ export async function GET() {
     const response = await fetch(url, { next: { revalidate: 600 } })
 
     if (!response.ok) {
-      return NextResponse.json(fallbackWeather, { status: 502 })
+      console.error("QWeather request failed:", response.status)
+      return NextResponse.json(fallbackWeather)
     }
 
     const payload = (await response.json()) as {
@@ -42,7 +43,8 @@ export async function GET() {
         updatedAt: payload.now?.obsTime ?? payload.updateTime ?? new Date().toISOString(),
       },
     })
-  } catch {
-    return NextResponse.json(fallbackWeather, { status: 502 })
+  } catch (caughtError) {
+    console.error("QWeather request failed:", caughtError)
+    return NextResponse.json(fallbackWeather)
   }
 }

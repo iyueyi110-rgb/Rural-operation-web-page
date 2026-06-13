@@ -340,7 +340,11 @@
     "weather": {
       "eyebrow": "Weather and trip note",
       "temperature": "19.7℃",
-      "summary": "Weather integration is reserved for a later step."
+      "summary": "Weather integration is reserved for a later step.",
+      "realtime": "Zouma Village, Changshou",
+      "pending": "Pending config",
+      "configureHint": "Configure QWEATHER_API_KEY to switch to live weather automatically",
+      "configureLink": "View route advice"
     },
     "playCards": {
       "route": {
@@ -649,7 +653,9 @@
       "fallback": "Rain fallback",
       "notice": "Trip notice",
       "bookingCta": "View reservable nodes",
-      "provider": "Source: {provider}"
+      "provider": "Source: {provider}",
+      "providerFallback": "AI service is not configured. Showing local route recommendation.",
+      "providerOnline": "AI recommendation ? {provider}"
     },
     "waypoints": {
       "visitorCenter": "Visitor Center",
