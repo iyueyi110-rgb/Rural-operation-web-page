@@ -1,0 +1,8 @@
+{
+  "name": "@zouma/prompts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./daily-report.ts",
+  "types": "./daily-report.ts"
+}

@@ -12,6 +12,7 @@
   "dependencies": {
     "@zouma/contracts": "workspace:*",
     "@zouma/database": "workspace:*",
+    "@zouma/prompts": "workspace:*",
     "@zouma/ui": "workspace:*",
     "@zouma/utils": "workspace:*",
     "lucide-react": "^0.468.0",
