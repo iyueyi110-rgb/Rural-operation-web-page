@@ -270,3 +270,19 @@ model ActivityBooking {
 
   @@map("activity_booking")
 }
+
+model ControlCommand {
+  id          String   @id @default(cuid())
+  commandType String
+  targetNodeId String?
+  priority    String
+  reason      String   @db.Text
+  payload     Json?
+  status      String   @default("pending")
+  triggeredBy String   @default("rule_engine")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@map("control_command")
+}

@@ -7,6 +7,7 @@ import { prisma } from "@zouma/database"
 import { getChinaDateString, getChinaDayRange, isPlainObject } from "@web/lib/aigc-api"
 import { getWeatherSummary } from "@web/lib/weather"
 import { computeNodeDailyScores } from "@web/lib/node-scoring"
+import { generateControlCommands } from "@web/lib/infrastructure-control"
 
 interface GeneratedReportPayload {
   title: string
@@ -158,6 +159,27 @@ export async function generateDailyReport(date = getChinaDateString()) {
     temperature: 0.2,
   })
   const parsed = normalizeReportPayload(extractJsonContent(result.content))
+  const infrastructureCommands = await generateControlCommands()
+  const infrastructureSection =
+    infrastructureCommands.length > 0
+      ? {
+          type: "infrastructure",
+          title: "设施调度",
+          content: infrastructureCommands.map((command) => command.reason).join("；"),
+        }
+      : {
+          type: "infrastructure",
+          title: "设施调度",
+          content: "暂无传感器数据，设施调度建议待生成。",
+        }
+  const actionItems = [
+    ...parsed.actionItems,
+    ...infrastructureCommands.map((command) => ({
+      priority: command.priority === "critical" ? "high" : command.priority,
+      category: "facility",
+      action: command.reason,
+    })),
+  ].filter((item, index, items) => items.findIndex((candidate) => candidate.action === item.action) === index)
 
   return prisma.dailyReport.upsert({
     where: { date },
@@ -165,18 +187,18 @@ export async function generateDailyReport(date = getChinaDateString()) {
       date,
       title: parsed.title,
       summary: parsed.summary,
-      sections: parsed.sections,
+      sections: [...parsed.sections.filter((section) => section.type !== "infrastructure"), infrastructureSection],
       metrics: parsed.metrics,
-      actionItems: parsed.actionItems,
+      actionItems,
       status: "published",
       generatedAt: new Date(),
     },
     update: {
       title: parsed.title,
       summary: parsed.summary,
-      sections: parsed.sections,
+      sections: [...parsed.sections.filter((section) => section.type !== "infrastructure"), infrastructureSection],
       metrics: parsed.metrics,
-      actionItems: parsed.actionItems,
+      actionItems,
       status: "published",
       generatedAt: new Date(),
     },

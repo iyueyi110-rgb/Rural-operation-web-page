@@ -255,3 +255,33 @@ export interface ActivityBookingData {
   status: string
   createdAt: string
 }
+
+export type SensorReadingType = "rainfall" | "soil_moisture" | "water_level" | "temperature" | "humidity"
+export type ControlCommandType = "irrigation" | "flood_alert" | "fire_alert" | "rain_delay"
+export type ControlCommandStatus = "pending" | "approved" | "executed" | "rejected"
+
+export interface SensorReadingData {
+  id: string
+  sensorId: string
+  type: SensorReadingType | string
+  value: number
+  unit: string
+  nodeId?: string
+  createdAt: string
+}
+
+export interface ControlSuggestionData {
+  type: ControlCommandType
+  priority: "critical" | "high" | "medium" | "low"
+  reason: string
+  targetNodeId?: string
+  payload?: Record<string, unknown>
+  triggeredBy: "ai" | "rule_engine"
+}
+
+export interface ControlCommandData extends ControlSuggestionData {
+  id: string
+  status: ControlCommandStatus
+  createdAt: string
+  updatedAt: string
+}
