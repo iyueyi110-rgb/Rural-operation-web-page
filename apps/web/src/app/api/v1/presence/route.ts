@@ -7,6 +7,7 @@ import {
   optionsResponse,
 } from "@web/lib/aigc-api"
 import { computeNodeDailyScores } from "@web/lib/node-scoring"
+import { runAlertChecks } from "@web/lib/alert-engine"
 
 const presenceSources = ["wifi_probe", "camera", "infrared", "manual"] as const
 
@@ -116,6 +117,9 @@ export async function POST(request: Request) {
 
   computeNodeDailyScores(getChinaDateString(timestamp)).catch((error) => {
     console.error("Node scoring failed after presence ingest:", error)
+  })
+  runAlertChecks(getChinaDateString(timestamp)).catch((error) => {
+    console.error("Alert checks failed after presence ingest:", error)
   })
 
   return jsonResponse(request, { data }, { status: 201 })

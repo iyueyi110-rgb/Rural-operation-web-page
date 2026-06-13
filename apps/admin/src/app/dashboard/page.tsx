@@ -31,11 +31,19 @@ interface DailyReport {
   actionItems: Array<{ priority: string; action: string }>
 }
 
+interface AlertRow {
+  id: string
+  alertType: keyof typeof adminCopy.alerts.types
+  severity: string
+  message: string
+}
+
 export default function DashboardPage() {
   const [orders, setOrders] = useState<OrderResponse["meta"] | null>(null)
   const [visitorCount, setVisitorCount] = useState(0)
   const [avgRating, setAvgRating] = useState("0.0")
   const [scores, setScores] = useState<ScoreItem[]>([])
+  const [alerts, setAlerts] = useState<AlertRow[]>([])
   const [latestReport, setLatestReport] = useState<DailyReport | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -46,12 +54,13 @@ export default function DashboardPage() {
     setError("")
 
     try {
-      const [ordersResult, presenceResult, feedbackResult, scoresResult, reportResult] = await Promise.allSettled([
+      const [ordersResult, presenceResult, feedbackResult, scoresResult, reportResult, alertsResult] = await Promise.allSettled([
         fetch(`${adminApiBase}/orders?date=${today()}`).then((res) => res.json()) as Promise<OrderResponse>,
         fetch(`${adminApiBase}/presence?latest=true`).then((res) => res.json()) as Promise<{ data: LatestPresenceItem[] }>,
         fetch(`${adminApiBase}/feedback`).then((res) => res.json()) as Promise<{ data: FeedbackRecord[] }>,
         fetch(`${adminApiBase}/nodes/scores?date=${today()}`).then((res) => res.json()) as Promise<{ data: ScoreItem[] }>,
         fetch(`${adminApiBase}/reports/latest`).then((res) => res.json()) as Promise<{ data: DailyReport | null }>,
+        fetch(`${adminApiBase}/alerts?status=active&run=true`).then((res) => res.json()) as Promise<{ data: AlertRow[] }>,
       ])
 
       if (ordersResult.status === "fulfilled") setOrders(ordersResult.value.meta)
@@ -69,6 +78,7 @@ export default function DashboardPage() {
       }
       if (scoresResult.status === "fulfilled") setScores(scoresResult.value.data)
       if (reportResult.status === "fulfilled") setLatestReport(reportResult.value.data)
+      if (alertsResult.status === "fulfilled") setAlerts(alertsResult.value.data)
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : adminCopy.common.error)
     } finally {
@@ -101,7 +111,6 @@ export default function DashboardPage() {
   }, [])
 
   const topScores = scores.slice(0, 5)
-  const alerts = scores.filter((score) => score.safetyRisk > 70)
 
   return (
     <div className="grid gap-5">
@@ -152,10 +161,10 @@ export default function DashboardPage() {
         <div className="rounded-lg border border-stone bg-white p-5 shadow-soft">
           <h2 className="text-lg font-extrabold">{adminCopy.dashboard.activeAlerts}</h2>
           <div className="mt-4 grid gap-3">
-            {alerts.length ? alerts.map((score) => (
-              <div className="rounded-md border border-lychee/20 bg-lychee/5 p-3" key={score.node.slug}>
-                <div className="text-sm font-extrabold text-lychee">{nodeDisplayName(score.node.slug, score.node.nameKey)}</div>
-                <div className="mt-1 text-xs font-semibold text-ink/58">风险分 {score.safetyRisk} / 建议现场复核承载与近水风险</div>
+            {alerts.length ? alerts.map((alert) => (
+              <div className="rounded-md border border-lychee/20 bg-lychee/5 p-3" key={alert.id}>
+                <div className="text-sm font-extrabold text-lychee">{adminCopy.alerts.types[alert.alertType] ?? alert.alertType}</div>
+                <div className="mt-1 text-xs font-semibold text-ink/58">{alert.severity} / {alert.message}</div>
               </div>
             )) : <p className="text-sm font-semibold text-ink/54">暂无活跃告警。</p>}
           </div>
