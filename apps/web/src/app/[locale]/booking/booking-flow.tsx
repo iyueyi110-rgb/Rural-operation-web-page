@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { BedDouble, CalendarDays, CheckCircle2, CircleAlert, CreditCard, UsersRound } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import {
   bookingDateOptions,
@@ -21,6 +21,17 @@ interface BookingOrder {
   id: string
   status: "pending_payment"
   createdAt: string
+}
+
+interface CourtyardActivity {
+  id: string
+  activityType: string
+  title: string
+  scheduledDate: string
+  scheduledTime: string
+  status: string
+  bookedCount: number
+  maxCapacity: number
 }
 
 const statusTone: Record<InventoryStatus, string> = {
@@ -55,6 +66,7 @@ export function BookingFlow() {
   const [order, setOrder] = useState<BookingOrder | null>(null)
   const [submitError, setSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [activities, setActivities] = useState<CourtyardActivity[]>([])
 
   const selectedCourtyard = useMemo(
     () => courtyardOptions.find((courtyard) => courtyard.id === selectedCourtyardId) ?? courtyardOptions[0],
@@ -66,6 +78,16 @@ export function BookingFlow() {
   const capacityExceeded = guestCount > selectedCourtyard.capacity
   const canConfirm =
     !capacityExceeded && (selectedStatus === "available" || selectedStatus === "limited")
+
+  useEffect(() => {
+    fetch(`/api/v1/activities?courtyardId=${selectedCourtyard.id}`)
+      .then((response) => response.json())
+      .then((payload: { data?: CourtyardActivity[] }) => setActivities(payload.data ?? []))
+      .catch((error) => {
+        console.error("Courtyard activities failed:", error)
+        setActivities([])
+      })
+  }, [selectedCourtyard.id])
 
   function handleCourtyardSelect(courtyardId: string) {
     setSelectedCourtyardId(courtyardId)
@@ -306,6 +328,23 @@ export function BookingFlow() {
             {t("notice.title")}
           </div>
           <p className="mt-2 break-all text-sm leading-6 text-ink/66">{t(selectedCourtyard.bookingNotice)}</p>
+        </div>
+
+        <div className="mt-5 rounded-md border border-stone p-4">
+          <div className="text-sm font-bold">近期活动</div>
+          <div className="mt-3 grid gap-2">
+            {activities.length > 0 ? (
+              activities.slice(0, 3).map((activity) => (
+                <div className="rounded-md bg-rice p-3 text-sm" key={activity.id}>
+                  <div className="font-extrabold">{activity.title}</div>
+                  <div className="mt-1 text-ink/58">{activity.scheduledDate} {activity.scheduledTime}</div>
+                  <div className="mt-1 text-ink/58">{activity.bookedCount}/{activity.maxCapacity} · {activity.status}</div>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm font-semibold text-ink/58">暂无该院落近期活动。</p>
+            )}
+          </div>
         </div>
 
         {capacityExceeded ? (

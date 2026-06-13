@@ -19,6 +19,7 @@ export const adminCopy = {
     { key: "orders", label: "消费订单", status: "active" },
     { key: "trees", label: "树木管理", status: "active" },
     { key: "harvest", label: "采摘管理", status: "active" },
+    { key: "activities", label: "活动管理", status: "active" },
     { key: "alerts", label: "告警中心", status: "active" },
     { key: "analytics", label: "交叉分析", status: "active" },
     { key: "reports", label: "运营日报", status: "active" },
@@ -144,6 +145,7 @@ export const adminCopy = {
       courtyard_booking: "院落预约",
       tree_adoption: "树木认养",
       ticket_order: "票务活动",
+      activity_booking: "活动预约",
     },
   },
   reports: {
@@ -170,6 +172,12 @@ export const adminCopy = {
     timeSlot: "时间段",
     guestCount: "人数",
     status: "状态",
+  },
+  activities: {
+    title: "活动管理",
+    noData: "暂无活动。",
+    create: "创建活动",
+    bookings: "预约列表",
   },
   alerts: {
     title: "告警中心",
