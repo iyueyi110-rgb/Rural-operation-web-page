@@ -225,6 +225,43 @@
         "price": "¥128 から",
         "stock": "団体予約"
       }
+    },
+    "list": {
+      "eyebrow": "予約可能商品",
+      "title": "チケットまたは活動を選択",
+      "body": "現在は商品占位です。後続で実在庫と核销コードに接続します。",
+      "select": "予約を選択",
+      "selected": "選択済み"
+    },
+    "form": {
+      "eyebrow": "予約情報",
+      "title": "日付と枚数を選択",
+      "dateLabel": "日付",
+      "quantityLabel": "枚数",
+      "quantityValue": "{count} 枚",
+      "confirm": "予約を確認",
+      "confirming": "予約注文を作成中"
+    },
+    "summary": {
+      "title": "注文概要",
+      "product": "商品",
+      "date": "日付",
+      "quantity": "枚数"
+    },
+    "order": {
+      "title": "予約を作成しました",
+      "body": "チケット予約注文は支払い待ちです。現在支払いは未接続です。",
+      "status": "注文状態：支払い待ち",
+      "paymentEntry": "支払い入口は未接続",
+      "idLabel": "注文番号"
+    },
+    "messages": {
+      "submitFailed": "予約送信に失敗しました。もう一度お試しください。"
+    },
+    "dates": {
+      "jun21": "2026年6月21日",
+      "jun28": "2026年6月28日",
+      "jul05": "2026年7月5日"
     }
   },
   "me": {

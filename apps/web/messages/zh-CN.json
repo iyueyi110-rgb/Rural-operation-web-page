@@ -537,6 +537,43 @@
         "price": "¥128 起",
         "stock": "团队预约制"
       }
+    },
+    "list": {
+      "eyebrow": "可预购产品",
+      "title": "选择门票或活动",
+      "body": "当前为产品占位，后续接入真实库存与核销码。",
+      "select": "选择预购",
+      "selected": "已选择"
+    },
+    "form": {
+      "eyebrow": "预购信息",
+      "title": "选择日期和数量",
+      "dateLabel": "日期",
+      "quantityLabel": "数量",
+      "quantityValue": "{count} 张",
+      "confirm": "确认预购",
+      "confirming": "正在生成预购单"
+    },
+    "summary": {
+      "title": "订单摘要",
+      "product": "产品",
+      "date": "日期",
+      "quantity": "数量"
+    },
+    "order": {
+      "title": "预购已生成",
+      "body": "门票预购订单已进入待支付状态。当前支付尚未接入。",
+      "status": "订单状态：待支付",
+      "paymentEntry": "支付入口待接入",
+      "idLabel": "订单编号"
+    },
+    "messages": {
+      "submitFailed": "预购提交失败，请重试"
+    },
+    "dates": {
+      "jun21": "2026 年 6 月 21 日",
+      "jun28": "2026 年 6 月 28 日",
+      "jul05": "2026 年 7 月 5 日"
     }
   },
   "me": {

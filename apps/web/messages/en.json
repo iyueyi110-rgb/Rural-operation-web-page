@@ -225,6 +225,43 @@
         "price": "From ¥128",
         "stock": "Team booking"
       }
+    },
+    "list": {
+      "eyebrow": "Preorder products",
+      "title": "Choose a ticket or activity",
+      "body": "These are product placeholders before real inventory and ticket codes are connected.",
+      "select": "Select preorder",
+      "selected": "Selected"
+    },
+    "form": {
+      "eyebrow": "Preorder info",
+      "title": "Choose date and quantity",
+      "dateLabel": "Date",
+      "quantityLabel": "Quantity",
+      "quantityValue": "{count} tickets",
+      "confirm": "Confirm preorder",
+      "confirming": "Creating preorder"
+    },
+    "summary": {
+      "title": "Order summary",
+      "product": "Product",
+      "date": "Date",
+      "quantity": "Quantity"
+    },
+    "order": {
+      "title": "Preorder created",
+      "body": "The ticket preorder is now pending payment. Payment is not connected yet.",
+      "status": "Order status: pending payment",
+      "paymentEntry": "Payment entry pending",
+      "idLabel": "Order ID"
+    },
+    "messages": {
+      "submitFailed": "Preorder submission failed. Please try again."
+    },
+    "dates": {
+      "jun21": "June 21, 2026",
+      "jun28": "June 28, 2026",
+      "jul05": "July 5, 2026"
     }
   },
   "me": {

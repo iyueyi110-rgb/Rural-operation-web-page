@@ -24,3 +24,11 @@ export const ticketProducts = [
     stockKey: "products.resilienceWorkshop.stock",
   },
 ] as const
+
+export const ticketDateOptions = [
+  { value: "2026-06-21", labelKey: "dates.jun21" },
+  { value: "2026-06-28", labelKey: "dates.jun28" },
+  { value: "2026-07-05", labelKey: "dates.jul05" },
+] as const
+
+export const quantityOptions = [1, 2, 3, 4, 5, 6, 8, 10] as const
