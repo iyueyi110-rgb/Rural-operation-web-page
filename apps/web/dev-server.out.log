@@ -4,3 +4,22 @@
 
  ✓ Starting...
  ✓ Ready in 1314ms
+ ✓ Compiled /api/v1/feedback in 351ms (76 modules)
+ GET /api/v1/feedback 200 in 436ms
+ POST /api/v1/feedback 201 in 19ms
+ PATCH /api/v1/feedback 200 in 14ms
+ GET /api/v1/feedback 200 in 6ms
+ GET /api/v1/feedback 200 in 7ms
+ POST /api/v1/feedback 201 in 10ms
+ PATCH /api/v1/feedback 200 in 11ms
+ GET /api/v1/feedback 200 in 5ms
+ GET /api/v1/feedback 200 in 6ms
+ GET /api/v1/feedback 200 in 15ms
+ GET /api/v1/feedback 200 in 17ms
+ ✓ Compiled /src/middleware in 198ms (103 modules)
+ ○ Compiling /[locale] ...
+ ✓ Compiled /[locale] in 3.2s (776 modules)
+ ✓ Compiled /api/v1/weather in 48ms (451 modules)
+ GET /api/v1/weather 200 in 422ms
+ GET /api/v1/feedback 200 in 18ms
+ GET /api/v1/feedback 200 in 18ms
