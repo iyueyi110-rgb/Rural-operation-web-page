@@ -20,12 +20,20 @@ const availabilityTone: Record<TreeAvailability, string> = {
   maintenance: "bg-water/10 text-water border-water/20",
 }
 
+interface TreeAdoptionOrder {
+  id: string
+  status: "pending_payment"
+  createdAt: string
+}
+
 export function AdoptionFlow() {
   const t = useTranslations("trees")
   const [selectedTreeId, setSelectedTreeId] = useState(orchardTreeOptions[0].id)
   const [selectedPlan, setSelectedPlan] = useState<AdoptionPlan>("seasonal")
   const [agreementAccepted, setAgreementAccepted] = useState(false)
-  const [confirmed, setConfirmed] = useState(false)
+  const [order, setOrder] = useState<TreeAdoptionOrder | null>(null)
+  const [submitError, setSubmitError] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const selectedTree = useMemo(
     () => orchardTreeOptions.find((tree) => tree.id === selectedTreeId) ?? orchardTreeOptions[0],
@@ -36,7 +44,43 @@ export function AdoptionFlow() {
   function selectTree(tree: OrchardTreeOption) {
     setSelectedTreeId(tree.id)
     setAgreementAccepted(false)
-    setConfirmed(false)
+    setOrder(null)
+    setSubmitError(false)
+  }
+
+  async function handleConfirm() {
+    if (!canConfirm || isSubmitting) {
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitError(false)
+
+    try {
+      const response = await fetch("/api/v1/tree-adoptions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          treeId: selectedTree.id,
+          plan: selectedPlan,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("tree adoption request failed")
+      }
+
+      const result = (await response.json()) as { data: TreeAdoptionOrder }
+      setOrder(result.data)
+    } catch (caughtError) {
+      console.error("Tree adoption failed:", caughtError)
+      setOrder(null)
+      setSubmitError(true)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -136,7 +180,8 @@ export function AdoptionFlow() {
                   key={plan.value}
                   onClick={() => {
                     setSelectedPlan(plan.value)
-                    setConfirmed(false)
+                    setOrder(null)
+                    setSubmitError(false)
                   }}
                   type="button"
                 >
@@ -187,7 +232,8 @@ export function AdoptionFlow() {
               className="mt-1 h-4 w-4 shrink-0 accent-[#b93835]"
               onChange={(event) => {
                 setAgreementAccepted(event.target.checked)
-                setConfirmed(false)
+                setOrder(null)
+                setSubmitError(false)
               }}
               type="checkbox"
             />
@@ -206,18 +252,21 @@ export function AdoptionFlow() {
           {!agreementAccepted ? (
             <p className="mt-4 rounded-md bg-rice p-3 text-sm font-semibold text-ink/68">{t("messages.needAgreement")}</p>
           ) : null}
+          {submitError ? (
+            <p className="mt-4 rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">{t("messages.submitFailed")}</p>
+          ) : null}
 
           <button
-            className={canConfirm ? "mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white transition hover:bg-moss" : "mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink/20 px-5 text-sm font-bold text-ink/46"}
-            disabled={!canConfirm}
-            onClick={() => setConfirmed(true)}
+            className={canConfirm && !isSubmitting ? "mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white transition hover:bg-moss" : "mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink/20 px-5 text-sm font-bold text-ink/46"}
+            disabled={!canConfirm || isSubmitting}
+            onClick={handleConfirm}
             type="button"
           >
             <ShieldCheck aria-hidden="true" className="h-4 w-4" />
-            {t("form.confirm")}
+            {isSubmitting ? t("form.confirming") : t("form.confirm")}
           </button>
 
-          {confirmed ? (
+          {order ? (
             <div className="mt-5 rounded-lg border border-moss/20 bg-moss/10 p-4">
               <div className="flex items-center gap-2 text-sm font-extrabold text-moss">
                 <CheckCircle2 aria-hidden="true" className="h-4 w-4" />
@@ -227,6 +276,8 @@ export function AdoptionFlow() {
               <div className="mt-4 rounded-md bg-white p-3 text-sm">
                 <div className="font-bold">{t("order.status")}</div>
                 <div className="mt-1 text-ink/62">{t("order.paymentStatus")}</div>
+                <div className="mt-2 font-semibold">{t("order.idLabel")}: {order.id}</div>
+                <div className="mt-1 text-ink/62">{t("order.createdAtLabel")}: {new Date(order.createdAt).toLocaleString()}</div>
               </div>
               <button className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold text-ink/70" disabled type="button">
                 <CreditCard aria-hidden="true" className="h-4 w-4" />

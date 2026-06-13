@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import type { Locale } from "@web/i18n/routing"
 import { getSiteUrl } from "@web/lib/site-url"
-import { consentItems } from "@web/lib/tickets-data"
+import { consentItems } from "@web/lib/privacy-data"
 import { PageHeader, Section } from "@ui/index"
 
 export async function generateMetadata({ params }: { params: { locale: Locale } }): Promise<Metadata> {

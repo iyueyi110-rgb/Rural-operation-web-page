@@ -49,7 +49,8 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
       }
       setSelectedRoute(result.data.route)
       setProvider(result.data.provider)
-    } catch {
+    } catch (caughtError) {
+      console.error("Route generation failed:", caughtError)
       setSelectedRoute(selectRouteOption({ duration, audience, weather }))
       setProvider("configuration-required")
     } finally {

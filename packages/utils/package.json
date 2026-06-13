@@ -11,6 +11,10 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
+    "@types/node": "^22.19.21",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "server-only": "^0.0.1"
   }
 }

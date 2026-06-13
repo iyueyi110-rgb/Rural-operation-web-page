@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { CalendarDays, CloudSun, Map, MoveRight, ShieldCheck, Sprout, Ticket, UserRound } from "lucide-react"
+import type { ComponentType } from "react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { featuredPlayCards, homeScenes, previewStats } from "@web/lib/home-data"
@@ -12,7 +13,7 @@ import type { Locale } from "@web/i18n/routing"
 
 export const dynamic = "force-dynamic"
 
-const iconMap = {
+const iconMap: Record<(typeof featuredPlayCards)[number]["icon"], ComponentType<{ className?: string }>> = {
   CalendarDays,
   Map,
   Sprout,
@@ -178,7 +179,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
               const Icon = iconMap[card.icon]
               return (
                 <article className="rounded-md bg-rice p-5" key={card.titleKey}>
-                  <Icon aria-hidden="true" className="h-5 w-5 text-water" />
+                  <Icon className="h-5 w-5 text-water" />
                   <h2 className="mt-4 text-base font-bold">{t(card.titleKey)}</h2>
                   <p className="mt-2 text-sm leading-6 text-ink/68">{t(card.bodyKey)}</p>
                   {card.href ? (

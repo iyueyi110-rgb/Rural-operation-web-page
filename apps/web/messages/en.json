@@ -34,61 +34,256 @@
     }
   },
   "trees": {
-    "nav": { "backHome": "Back home", "phase": "Tree adoption phase" },
-    "hero": { "eyebrow": "Tree Adoption", "title": "Adoption is a long-term relationship with a tree", "body": "This phase shows adoptable trees, profiles, rights, agreement and growth records. Payment remains a reserved entry." },
-    "guardrail": { "locationTitle": "Blurred locations only", "locationBody": "Precise GPS is not shown publicly.", "paymentTitle": "Payment pending", "paymentBody": "Only pending payment confirmation is shown in this phase." },
-    "list": { "eyebrow": "Adoptable trees", "title": "Choose a documented lychee tree", "body": "Tree data is local and can later migrate to /api/v1/trees.", "species": "Species", "age": "Age", "ageValue": "{count} years", "health": "Health", "select": "Select", "selected": "Selected" },
-    "availability": { "available": "Available", "limited": "Limited", "maintenance": "Under care" },
-    "health": { "excellent": "Excellent", "good": "Good", "fair": "Observed", "poor": "Needs care" },
-    "profile": { "eyebrow": "Tree profile", "planTitle": "Plan" },
-    "plans": { "seasonal": { "label": "Seasonal", "body": "For first-time adoption with staged updates." }, "annual": { "label": "Annual", "body": "For long-term care records, activities and certificate." } },
-    "rights": { "title": "Rights", "harvestBox": "Seasonal harvest box", "careUpdates": "Care updates and photos", "certificate": "Digital certificate", "farmEvent": "Priority farm event access", "familyClass": "Family class priority" },
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Tree adoption phase"
+    },
+    "hero": {
+      "eyebrow": "Tree Adoption",
+      "title": "Adoption is a long-term relationship with a tree",
+      "body": "This phase shows adoptable trees, profiles, rights, agreement and growth records. Payment remains a reserved entry."
+    },
+    "guardrail": {
+      "locationTitle": "Blurred locations only",
+      "locationBody": "Precise GPS is not shown publicly.",
+      "paymentTitle": "Payment pending",
+      "paymentBody": "Only pending payment confirmation is shown in this phase."
+    },
+    "list": {
+      "eyebrow": "Adoptable trees",
+      "title": "Choose a documented lychee tree",
+      "body": "Tree data is local and can later migrate to /api/v1/trees.",
+      "species": "Species",
+      "age": "Age",
+      "ageValue": "{count} years",
+      "health": "Health",
+      "select": "Select",
+      "selected": "Selected"
+    },
+    "availability": {
+      "available": "Available",
+      "limited": "Limited",
+      "maintenance": "Under care"
+    },
+    "health": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "fair": "Observed",
+      "poor": "Needs care"
+    },
+    "profile": {
+      "eyebrow": "Tree profile",
+      "planTitle": "Plan"
+    },
+    "plans": {
+      "seasonal": {
+        "label": "Seasonal",
+        "body": "For first-time adoption with staged updates."
+      },
+      "annual": {
+        "label": "Annual",
+        "body": "For long-term care records, activities and certificate."
+      }
+    },
+    "rights": {
+      "title": "Rights",
+      "harvestBox": "Seasonal harvest box",
+      "careUpdates": "Care updates and photos",
+      "certificate": "Digital certificate",
+      "farmEvent": "Priority farm event access",
+      "familyClass": "Family class priority"
+    },
     "timeline": {
       "title": "Growth records",
-      "spring": { "date": "Mar 2026", "title": "Spring shoot", "body": "New shoots are stable." },
-      "pruning": { "date": "Apr 2026", "title": "Light pruning", "body": "Ventilation branches were adjusted." },
-      "photo": { "date": "Jun 2026", "title": "Photo update", "body": "Profile photos were updated." },
-      "flower": { "date": "Apr 2026", "title": "Flowering", "body": "Good flowering condition." },
-      "care": { "date": "May 2026", "title": "Care observation", "body": "Adoption confirmation is paused." },
-      "note": { "date": "Jun 2026", "title": "Maintenance note", "body": "Reopen after the next review." }
+      "spring": {
+        "date": "Mar 2026",
+        "title": "Spring shoot",
+        "body": "New shoots are stable."
+      },
+      "pruning": {
+        "date": "Apr 2026",
+        "title": "Light pruning",
+        "body": "Ventilation branches were adjusted."
+      },
+      "photo": {
+        "date": "Jun 2026",
+        "title": "Photo update",
+        "body": "Profile photos were updated."
+      },
+      "flower": {
+        "date": "Apr 2026",
+        "title": "Flowering",
+        "body": "Good flowering condition."
+      },
+      "care": {
+        "date": "May 2026",
+        "title": "Care observation",
+        "body": "Adoption confirmation is paused."
+      },
+      "note": {
+        "date": "Jun 2026",
+        "title": "Maintenance note",
+        "body": "Reopen after the next review."
+      }
     },
-    "agreement": { "title": "Agreement", "body": "I understand the rights, update rhythm, harvest method and pending payment state." },
-    "messages": { "unavailable": "This tree is not open for confirmation.", "needAgreement": "Accept the agreement before confirming." },
-    "form": { "confirm": "Confirm adoption" },
-    "order": { "title": "Adoption created", "body": "The adoption order is pending payment.", "status": "Order status: pending payment", "paymentStatus": "Payment status: not connected", "paymentEntry": "Payment pending" },
+    "agreement": {
+      "title": "Agreement",
+      "body": "I understand the rights, update rhythm, harvest method and pending payment state."
+    },
+    "messages": {
+      "unavailable": "This tree is not open for confirmation.",
+      "needAgreement": "Accept the agreement before confirming.",
+      "submitFailed": "Adoption submission failed. Please try again later."
+    },
+    "form": {
+      "confirm": "Confirm adoption",
+      "confirming": "Creating adoption"
+    },
+    "order": {
+      "title": "Adoption created",
+      "body": "The adoption order is pending payment.",
+      "status": "Order status: pending payment",
+      "paymentStatus": "Payment status: not connected",
+      "paymentEntry": "Payment pending",
+      "idLabel": "Adoption ID",
+      "createdAtLabel": "Created at"
+    },
     "trees": {
-      "lz018": { "name": "Yunli 018", "species": "Feizixiao lychee", "summary": "Stable and well documented.", "location": "North lychee orchard area, precise coordinates hidden.", "imageAlt": "Yunli 018 lychee tree", "prices": { "seasonal": "¥399", "annual": "¥999" } },
-      "lz026": { "name": "Yunli 026", "species": "Guiwei lychee", "summary": "Good for family adoption and classes.", "location": "Central orchard area near class route.", "imageAlt": "Yunli 026 lychee tree", "prices": { "seasonal": "¥359", "annual": "¥899" } },
-      "lz041": { "name": "Yunli 041", "species": "Old lychee tree", "summary": "Older tree under observation.", "location": "Southern old-tree area, coordinates internal only.", "imageAlt": "Yunli 041 old lychee tree", "prices": { "seasonal": "TBD", "annual": "TBD" } }
+      "lz018": {
+        "name": "Yunli 018",
+        "species": "Feizixiao lychee",
+        "summary": "Stable and well documented.",
+        "location": "North lychee orchard area, precise coordinates hidden.",
+        "imageAlt": "Yunli 018 lychee tree",
+        "prices": {
+          "seasonal": "¥399",
+          "annual": "¥999"
+        }
+      },
+      "lz026": {
+        "name": "Yunli 026",
+        "species": "Guiwei lychee",
+        "summary": "Good for family adoption and classes.",
+        "location": "Central orchard area near class route.",
+        "imageAlt": "Yunli 026 lychee tree",
+        "prices": {
+          "seasonal": "¥359",
+          "annual": "¥899"
+        }
+      },
+      "lz041": {
+        "name": "Yunli 041",
+        "species": "Old lychee tree",
+        "summary": "Older tree under observation.",
+        "location": "Southern old-tree area, coordinates internal only.",
+        "imageAlt": "Yunli 041 old lychee tree",
+        "prices": {
+          "seasonal": "TBD",
+          "annual": "TBD"
+        }
+      }
     }
   },
   "tickets": {
-    "nav": { "backHome": "Back home", "phase": "Tickets MVP" },
-    "hero": { "eyebrow": "Tickets", "title": "Preorder placeholders for tickets and activities", "body": "This phase shows product structure before real payment and verification are connected." },
-    "card": { "price": "Price", "stock": "Stock", "pendingPayment": "Payment pending" },
-    "notice": { "title": "Preorder note", "body": "No real ticket code is generated yet." },
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Tickets MVP"
+    },
+    "hero": {
+      "eyebrow": "Tickets",
+      "title": "Preorder placeholders for tickets and activities",
+      "body": "This phase shows product structure before real payment and verification are connected."
+    },
+    "card": {
+      "price": "Price",
+      "stock": "Stock",
+      "pendingPayment": "Payment pending"
+    },
+    "notice": {
+      "title": "Preorder note",
+      "body": "No real ticket code is generated yet."
+    },
     "products": {
-      "ancientRoad": { "scene": "Ancient road", "name": "Audio guide pass", "summary": "Guide device and tea break placeholder.", "price": "From ¥39", "stock": "40 daily slots" },
-      "lycheeClass": { "scene": "Lychee field", "name": "Family lychee class", "summary": "Tree profile, picking knowledge and processing activity.", "price": "From ¥98", "stock": "Limited weekends" },
-      "resilienceWorkshop": { "scene": "Resilience valley", "name": "Rainwater workshop", "summary": "Water safety and ecological restoration course.", "price": "From ¥128", "stock": "Team booking" }
+      "ancientRoad": {
+        "scene": "Ancient road",
+        "name": "Audio guide pass",
+        "summary": "Guide device and tea break placeholder.",
+        "price": "From ¥39",
+        "stock": "40 daily slots"
+      },
+      "lycheeClass": {
+        "scene": "Lychee field",
+        "name": "Family lychee class",
+        "summary": "Tree profile, picking knowledge and processing activity.",
+        "price": "From ¥98",
+        "stock": "Limited weekends"
+      },
+      "resilienceWorkshop": {
+        "scene": "Resilience valley",
+        "name": "Rainwater workshop",
+        "summary": "Water safety and ecological restoration course.",
+        "price": "From ¥128",
+        "stock": "Team booking"
+      }
     }
   },
   "me": {
-    "nav": { "backHome": "Back home", "phase": "Member MVP" },
-    "hero": { "eyebrow": "Member Center", "title": "Order list placeholder", "body": "Bookings, tree adoption and ticket orders are grouped here." },
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Member MVP"
+    },
+    "hero": {
+      "eyebrow": "Member Center",
+      "title": "Order list placeholder",
+      "body": "Bookings, tree adoption and ticket orders are grouped here."
+    },
     "orders": {
-      "booking": { "type": "Booking", "title": "Ridge courtyard · pending", "status": "Payment pending", "date": "Jun 20, 2026" },
-      "tree": { "type": "Tree", "title": "Yunli 018 · seasonal", "status": "Pending", "date": "Jun 12, 2026" },
-      "ticket": { "type": "Ticket", "title": "Rainwater workshop · placeholder", "status": "Unused", "date": "TBD" }
+      "booking": {
+        "type": "Booking",
+        "title": "Ridge courtyard · pending",
+        "status": "Payment pending",
+        "date": "Jun 20, 2026"
+      },
+      "tree": {
+        "type": "Tree",
+        "title": "Yunli 018 · seasonal",
+        "status": "Pending",
+        "date": "Jun 12, 2026"
+      },
+      "ticket": {
+        "type": "Ticket",
+        "title": "Rainwater workshop · placeholder",
+        "status": "Unused",
+        "date": "TBD"
+      }
     }
   },
   "privacy": {
-    "nav": { "backHome": "Back home", "phase": "Privacy MVP" },
-    "hero": { "eyebrow": "Privacy", "title": "Consent placeholders", "body": "Privacy policy, data collection and AI processing consent are reserved here." },
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Privacy MVP"
+    },
+    "hero": {
+      "eyebrow": "Privacy",
+      "title": "Consent placeholders",
+      "body": "Privacy policy, data collection and AI processing consent are reserved here."
+    },
     "items": {
-      "policy": { "title": "Privacy policy", "body": "Shows policy version and confirmation status.", "status": "Confirmed" },
-      "data": { "title": "Data collection", "body": "Explains trip, booking and feedback data scope.", "status": "Manageable" },
-      "ai": { "title": "AI processing", "body": "AI inputs must be sanitized first.", "status": "Off by default" }
+      "policy": {
+        "title": "Privacy policy",
+        "body": "Shows policy version and confirmation status.",
+        "status": "Confirmed"
+      },
+      "data": {
+        "title": "Data collection",
+        "body": "Explains trip, booking and feedback data scope.",
+        "status": "Manageable"
+      },
+      "ai": {
+        "title": "AI processing",
+        "body": "AI inputs must be sanitized first.",
+        "status": "Off by default"
+      }
     }
   },
   "common": {
@@ -255,7 +450,8 @@
       "guestsLabel": "Guests",
       "guestsValue": "{count} guests",
       "paymentModeLabel": "Payment mode",
-      "confirm": "Confirm booking"
+      "confirm": "Confirm booking",
+      "confirming": "Creating booking"
     },
     "dates": {
       "jun20": "June 20, 2026",
@@ -284,14 +480,17 @@
       "title": "Booking notice"
     },
     "messages": {
-      "capacityExceeded": "The guest count exceeds this courtyard capacity. Reduce guests or choose a larger courtyard."
+      "capacityExceeded": "The guest count exceeds this courtyard capacity. Reduce guests or choose a larger courtyard.",
+      "submitFailed": "Booking submission failed. Please try again later."
     },
     "order": {
       "title": "Booking created",
       "body": "The order is now pending payment. The payment entry is not connected yet, so no real charge occurs.",
       "status": "Order status: pending payment",
       "paymentStatus": "Payment status: payment pending integration",
-      "paymentEntry": "Payment entry pending"
+      "paymentEntry": "Payment entry pending",
+      "idLabel": "Order ID",
+      "createdAtLabel": "Created at"
     },
     "courtyards": {
       "ridgeShared": {
@@ -335,7 +534,10 @@
     }
   },
   "feedback": {
-    "nav": { "backHome": "Back home", "phase": "Feedback and admin phase" },
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Feedback and admin phase"
+    },
     "hero": {
       "eyebrow": "Feedback",
       "title": "Turn field feedback into trackable operation tickets",
@@ -393,7 +595,10 @@
     }
   },
   "routes": {
-    "nav": { "backHome": "Back home", "phase": "Route generation phase" },
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Route generation phase"
+    },
     "hero": {
       "eyebrow": "Route Generator",
       "title": "Generate explainable routes by duration, audience and weather",
@@ -404,11 +609,23 @@
       "title": "Tell the system how to walk",
       "body": "Use the provided planning scope and satellite map to produce an MVP route card.",
       "durationLabel": "Duration",
-      "durationOptions": { "halfDay": "Half day", "oneDay": "One day", "twoDays": "Two days" },
+      "durationOptions": {
+        "halfDay": "Half day",
+        "oneDay": "One day",
+        "twoDays": "Two days"
+      },
       "audienceLabel": "Audience",
-      "audienceOptions": { "senior": "Senior friendly", "family": "Family", "regular": "Regular visitor" },
+      "audienceOptions": {
+        "senior": "Senior friendly",
+        "family": "Family",
+        "regular": "Regular visitor"
+      },
       "weatherLabel": "Weather",
-      "weatherOptions": { "sunny": "Sunny", "rainy": "Rainy", "hot": "Hot" },
+      "weatherOptions": {
+        "sunny": "Sunny",
+        "rainy": "Rainy",
+        "hot": "Hot"
+      },
       "ruleTitle": "Generated through backend adapter",
       "ruleBody": "The frontend sends duration, audience and weather tags to /api/v1/routes/generate. The backend calls ModelProviderAdapter when a key is configured.",
       "generate": "Generate route",
@@ -537,14 +754,32 @@
         "audio": "Audio guide"
       },
       "metrics": {
-        "length": { "value": "About 670m", "label": "Existing road clue" },
-        "nodes": { "value": "3 types", "label": "Road, spring and station" },
-        "audience": { "value": "Light effort", "label": "First-visit friendly" }
+        "length": {
+          "value": "About 670m",
+          "label": "Existing road clue"
+        },
+        "nodes": {
+          "value": "3 types",
+          "label": "Road, spring and station"
+        },
+        "audience": {
+          "value": "Light effort",
+          "label": "First-visit friendly"
+        }
       },
       "blocks": {
-        "story": { "title": "Make history walkable", "body": "Organize road, station, signpost, spring and local memory into a clear visitor sequence." },
-        "experience": { "title": "Beyond static panels", "body": "Future steps connect audio guides, AI summaries, study cards and booking nodes." },
-        "operation": { "title": "Low-intervention first", "body": "Protect boundaries, repair lightly and keep village life present." }
+        "story": {
+          "title": "Make history walkable",
+          "body": "Organize road, station, signpost, spring and local memory into a clear visitor sequence."
+        },
+        "experience": {
+          "title": "Beyond static panels",
+          "body": "Future steps connect audio guides, AI summaries, study cards and booking nodes."
+        },
+        "operation": {
+          "title": "Low-intervention first",
+          "body": "Protect boundaries, repair lightly and keep village life present."
+        }
       },
       "ctas": {
         "route": "Generate road route",
@@ -562,14 +797,32 @@
         "festival": "Seasonal event"
       },
       "metrics": {
-        "tree": { "value": "One tree", "label": "Relationship start" },
-        "season": { "value": "Four seasons", "label": "Farm rhythm" },
-        "family": { "value": "Family", "label": "Picking and food education" }
+        "tree": {
+          "value": "One tree",
+          "label": "Relationship start"
+        },
+        "season": {
+          "value": "Four seasons",
+          "label": "Farm rhythm"
+        },
+        "family": {
+          "value": "Family",
+          "label": "Picking and food education"
+        }
       },
       "blocks": {
-        "tree": { "title": "A long-term tree relationship", "body": "Future adoption pages show tree profile, health, blurred location, care logs and certificate rights." },
-        "table": { "title": "From tree to table", "body": "Picking, processing, drinks, gifts, meals and family courses form a complete experience chain." },
-        "trust": { "title": "Rights must be clear", "body": "Events, harvest pickup, delivery feedback and care update frequency should be explicit." }
+        "tree": {
+          "title": "A long-term tree relationship",
+          "body": "Future adoption pages show tree profile, health, blurred location, care logs and certificate rights."
+        },
+        "table": {
+          "title": "From tree to table",
+          "body": "Picking, processing, drinks, gifts, meals and family courses form a complete experience chain."
+        },
+        "trust": {
+          "title": "Rights must be clear",
+          "body": "Events, harvest pickup, delivery feedback and care update frequency should be explicit."
+        }
       },
       "ctas": {
         "adoption": "Open adoption preview",
@@ -587,14 +840,32 @@
         "weather": "Weather fallback"
       },
       "metrics": {
-        "system": { "value": "6 types", "label": "Roof, yard, terrace, pond, wetland and riverbank" },
-        "safety": { "value": "Alert first", "label": "Rain and heat notice" },
-        "course": { "value": "Study ready", "label": "Water safety course" }
+        "system": {
+          "value": "6 types",
+          "label": "Roof, yard, terrace, pond, wetland and riverbank"
+        },
+        "safety": {
+          "value": "Alert first",
+          "label": "Rain and heat notice"
+        },
+        "course": {
+          "value": "Study ready",
+          "label": "Water safety course"
+        }
       },
       "blocks": {
-        "water": { "title": "Ecology as foundation", "body": "Rain gardens, ecological ditches, pond purification and wetland buffers form a maintainable water system." },
-        "learning": { "title": "Governance becomes courseware", "body": "Water level, quality, flood paths and hydropower memory can become study content." },
-        "weather": { "title": "Routes respond to weather", "body": "Later route generation will reduce risk for rain, heat and warnings." }
+        "water": {
+          "title": "Ecology as foundation",
+          "body": "Rain gardens, ecological ditches, pond purification and wetland buffers form a maintainable water system."
+        },
+        "learning": {
+          "title": "Governance becomes courseware",
+          "body": "Water level, quality, flood paths and hydropower memory can become study content."
+        },
+        "weather": {
+          "title": "Routes respond to weather",
+          "body": "Later route generation will reduce risk for rain, heat and warnings."
+        }
       },
       "ctas": {
         "route": "Generate rainy route",
@@ -612,14 +883,32 @@
         "shared": "Shared village life"
       },
       "metrics": {
-        "courtyard": { "value": "Many yards", "label": "Distributed units" },
-        "stay": { "value": "Half day to two days", "label": "Stay products" },
-        "community": { "value": "Shared benefit", "label": "Future revenue rules" }
+        "courtyard": {
+          "value": "Many yards",
+          "label": "Distributed units"
+        },
+        "stay": {
+          "value": "Half day to two days",
+          "label": "Stay products"
+        },
+        "community": {
+          "value": "Shared benefit",
+          "label": "Future revenue rules"
+        }
       },
       "blocks": {
-        "renovation": { "title": "Low-intervention retrofit", "body": "Keep roofs, stone bases, courtyards and terraces while improving safety and comfort." },
-        "life": { "title": "Courtyards are not backdrops", "body": "Stays, workshops, shared kitchens and product display should support real life." },
-        "operation": { "title": "From bookable to revisitable", "body": "Future booking adds calendar inventory, notices, order confirmation and payment entry." }
+        "renovation": {
+          "title": "Low-intervention retrofit",
+          "body": "Keep roofs, stone bases, courtyards and terraces while improving safety and comfort."
+        },
+        "life": {
+          "title": "Courtyards are not backdrops",
+          "body": "Stays, workshops, shared kitchens and product display should support real life."
+        },
+        "operation": {
+          "title": "From bookable to revisitable",
+          "body": "Future booking adds calendar inventory, notices, order confirmation and payment entry."
+        }
       },
       "ctas": {
         "booking": "View booking",

@@ -1,9 +1,7 @@
+import "server-only"
+
 export interface ModelProviderAdapterOptions {
   temperature?: number
-}
-
-declare const process: {
-  env: Record<string, string | undefined>
 }
 
 export interface ModelProviderAdapterResult {

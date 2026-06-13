@@ -17,6 +17,12 @@ import { MasterDetailLayout } from "@ui/index"
 
 type InventoryStatus = CourtyardOption["inventoryStatus"] | (typeof bookingDateOptions)[number]["status"]
 
+interface BookingOrder {
+  id: string
+  status: "pending_payment"
+  createdAt: string
+}
+
 const statusTone: Record<InventoryStatus, string> = {
   available: "bg-moss/12 text-moss border-moss/20",
   limited: "bg-lychee/10 text-lychee border-lychee/20",
@@ -46,7 +52,9 @@ export function BookingFlow() {
   const [selectedDate, setSelectedDate] = useState<string>(bookingDateOptions[0].value)
   const [guestCount, setGuestCount] = useState(4)
   const [paymentMode, setPaymentMode] = useState<PaymentMode>("deposit")
-  const [confirmed, setConfirmed] = useState(false)
+  const [order, setOrder] = useState<BookingOrder | null>(null)
+  const [submitError, setSubmitError] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const selectedCourtyard = useMemo(
     () => courtyardOptions.find((courtyard) => courtyard.id === selectedCourtyardId) ?? courtyardOptions[0],
@@ -61,12 +69,44 @@ export function BookingFlow() {
 
   function handleCourtyardSelect(courtyardId: string) {
     setSelectedCourtyardId(courtyardId)
-    setConfirmed(false)
+    setOrder(null)
+    setSubmitError(false)
   }
 
-  function handleConfirm() {
-    if (canConfirm) {
-      setConfirmed(true)
+  async function handleConfirm() {
+    if (!canConfirm || isSubmitting) {
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitError(false)
+
+    try {
+      const response = await fetch("/api/v1/courtyard-bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courtyardId: selectedCourtyard.id,
+          date: selectedDate,
+          guestCount,
+          paymentMode,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("courtyard booking request failed")
+      }
+
+      const result = (await response.json()) as { data: BookingOrder }
+      setOrder(result.data)
+    } catch (caughtError) {
+      console.error("Courtyard booking failed:", caughtError)
+      setOrder(null)
+      setSubmitError(true)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -173,7 +213,8 @@ export function BookingFlow() {
               className="h-12 w-full rounded-md border border-stone bg-rice px-3 text-sm outline-none transition focus:border-water"
               onChange={(event) => {
                 setSelectedDate(event.target.value)
-                setConfirmed(false)
+                setOrder(null)
+                setSubmitError(false)
               }}
               value={selectedDate}
             >
@@ -191,7 +232,8 @@ export function BookingFlow() {
               className="h-12 w-full rounded-md border border-stone bg-rice px-3 text-sm outline-none transition focus:border-water"
               onChange={(event) => {
                 setGuestCount(Number(event.target.value))
-                setConfirmed(false)
+                setOrder(null)
+                setSubmitError(false)
               }}
               value={guestCount}
             >
@@ -217,7 +259,8 @@ export function BookingFlow() {
                   key={option.value}
                   onClick={() => {
                     setPaymentMode(option.value)
-                    setConfirmed(false)
+                    setOrder(null)
+                    setSubmitError(false)
                   }}
                   type="button"
                 >
@@ -270,22 +313,27 @@ export function BookingFlow() {
             {t("messages.capacityExceeded")}
           </p>
         ) : null}
+        {submitError ? (
+          <p className="mt-4 rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">
+            {t("messages.submitFailed")}
+          </p>
+        ) : null}
 
         <button
           className={
-            canConfirm
+            canConfirm && !isSubmitting
               ? "mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white transition hover:bg-moss"
               : "mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink/20 px-5 text-sm font-bold text-ink/46"
           }
-          disabled={!canConfirm}
+          disabled={!canConfirm || isSubmitting}
           onClick={handleConfirm}
           type="button"
         >
           <UsersRound aria-hidden="true" className="h-4 w-4" />
-          {t("form.confirm")}
+          {isSubmitting ? t("form.confirming") : t("form.confirm")}
         </button>
 
-        {confirmed ? (
+        {order ? (
           <div className="mt-5 rounded-lg border border-moss/20 bg-moss/10 p-4">
             <div className="flex items-center gap-2 text-sm font-extrabold text-moss">
               <CheckCircle2 aria-hidden="true" className="h-4 w-4" />
@@ -295,6 +343,8 @@ export function BookingFlow() {
             <div className="mt-4 rounded-md bg-white p-3 text-sm">
               <div className="font-bold">{t("order.status")}</div>
               <div className="mt-1 text-ink/62">{t("order.paymentStatus")}</div>
+              <div className="mt-2 font-semibold">{t("order.idLabel")}: {order.id}</div>
+              <div className="mt-1 text-ink/62">{t("order.createdAtLabel")}: {new Date(order.createdAt).toLocaleString()}</div>
             </div>
             <button
               className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold text-ink/70"
