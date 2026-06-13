@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FeedbackTicket {
+  id              String                   @id
+  source          String
+  category        String
+  severity        String
+  content         String                   @db.Text
+  rating          Int
+  status          String                   @default("submitted")
+  assignee        String?
+  resolution      String?                  @db.Text
+  createdAt       DateTime                 @default(now()) @map("created_at")
+  updatedAt       DateTime                 @updatedAt @map("updated_at")
+  handlingRecords FeedbackHandlingRecord[]
+
+  @@map("feedback_ticket")
+}
+
+model FeedbackHandlingRecord {
+  id        String         @id
+  ticket    FeedbackTicket @relation(fields: [ticketId], references: [id])
+  ticketId  String         @map("ticket_id")
+  status    String
+  note      String         @db.Text
+  operator  String
+  createdAt DateTime       @default(now()) @map("created_at")
+
+  @@map("feedback_handling_record")
+}
