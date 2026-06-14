@@ -19,6 +19,7 @@ import {
   Store,
   Sprout,
   Trees,
+  Users,
 } from "lucide-react"
 import type { ComponentType } from "react"
 
@@ -35,6 +36,7 @@ const menuIcons: Record<string, ComponentType<{ className?: string }>> = {
   activities: CalendarDays,
   alerts: Bell,
   analytics: BarChart3,
+  villagers: Users,
   devices: RadioTower,
   products: Store,
   reports: FileText,
@@ -53,6 +55,7 @@ const menuHrefs: Record<string, string> = {
   activities: "/activities",
   alerts: "/alerts",
   analytics: "/analytics",
+  villagers: "/villagers",
   devices: "/devices",
   products: "/products",
   reports: "/reports",

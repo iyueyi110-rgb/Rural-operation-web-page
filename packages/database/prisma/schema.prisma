@@ -57,8 +57,24 @@ model SpaceNode {
   orders       UnifiedOrder[]
   devices      Device[]
   products     Product[]
+  villagers    Villager[]
 
   @@map("space_node")
+}
+
+model Villager {
+  id        String    @id @default(cuid())
+  name      String
+  phone     String
+  skills    Json      @default("[]")
+  nodeId    String?
+  status    String    @default("active")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  node      SpaceNode? @relation(fields: [nodeId], references: [id])
+
+  @@index([status, nodeId])
+  @@map("villager")
 }
 
 model PresenceLog {

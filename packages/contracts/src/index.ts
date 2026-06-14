@@ -215,6 +215,19 @@ export interface ProductData {
   updatedAt: string
 }
 
+export type VillagerSkill = "cooking" | "farming" | "guiding" | "handicraft" | "logistics"
+export type VillagerStatus = "active" | "inactive"
+
+export interface VillagerData {
+  id: string
+  name: string
+  phone: string
+  skills: VillagerSkill[]
+  nodeId?: string
+  status: VillagerStatus
+  createdAt: string
+}
+
 // ==== P1 新增 ====
 
 export type TreeCareLogType = "watering" | "pruning" | "fertilizing" | "pest_control" | "photo" | "harvest"
