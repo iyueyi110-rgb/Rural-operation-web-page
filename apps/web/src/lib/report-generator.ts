@@ -12,6 +12,7 @@ import { generateControlCommands } from "@web/lib/infrastructure-control"
 import { generateCareAdvice } from "@web/lib/care-advisor"
 import { predictTomorrowTraffic } from "@web/lib/traffic-forecast"
 import { runAnomalyDetection } from "@web/lib/alert-engine"
+import { predictDeviceIssues } from "@web/lib/device-predictor"
 
 interface GeneratedReportPayload {
   title: string
@@ -188,9 +189,10 @@ export async function generateDailyReport(date = getChinaDateString()) {
     temperature: 0.2,
   })
   const parsed = normalizeReportPayload(extractJsonContent(result.content))
-  const [infrastructureCommands, careAdvice] = await Promise.all([
+  const [infrastructureCommands, careAdvice, devicePredictions] = await Promise.all([
     generateControlCommands(),
     generateCareAdvice(),
+    predictDeviceIssues(),
   ])
   const infrastructureSection =
     infrastructureCommands.length > 0
@@ -218,6 +220,12 @@ export async function generateDailyReport(date = getChinaDateString()) {
       action: `设备 ${device.name}（${device.deviceId}）超过 30 分钟未上报，请巡检供电、网络与安装位置。`,
       status: "active",
     })),
+    ...devicePredictions.map((prediction) => ({
+      priority: prediction.priority,
+      category: "facility",
+      action: prediction.message,
+      status: "active",
+    })),
   ].filter((item, index, items) => items.findIndex((candidate) => candidate.action === item.action) === index)
   const productSection =
     productRanking.length > 0
@@ -239,6 +247,14 @@ export async function generateDailyReport(date = getChinaDateString()) {
     title: "AI 客流预测",
     content: `预计明日客流 ${trafficForecastData.low}-${trafficForecastData.high} 人，置信度 ${formatConfidence(trafficForecastData.confidence)}。`,
   }
+  const devicePredictionSection =
+    devicePredictions.length > 0
+      ? {
+          type: "infrastructure",
+          title: "AI 设备健康预测",
+          content: devicePredictions.map((prediction) => prediction.message).join("；"),
+        }
+      : null
   const villagerSection = {
     type: "feedback",
     title: "村民任务协作",
@@ -249,6 +265,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     ...(productSection ? [productSection] : []),
     careAdviceSection,
     trafficForecastSection,
+    ...(devicePredictionSection ? [devicePredictionSection] : []),
     villagerSection,
     infrastructureSection,
   ]
