@@ -22,6 +22,7 @@ import {
   Sunrise,
   Trees,
   Users,
+  WandSparkles,
 } from "lucide-react"
 import type { ComponentType } from "react"
 
@@ -41,6 +42,7 @@ const menuIcons: Record<string, ComponentType<{ className?: string }>> = {
   villagers: Users,
   farming: Sunrise,
   tasks: ListChecks,
+  contentFactory: WandSparkles,
   devices: RadioTower,
   products: Store,
   reports: FileText,
@@ -62,6 +64,7 @@ const menuHrefs: Record<string, string> = {
   villagers: "/villagers",
   farming: "/farming",
   tasks: "/tasks",
+  contentFactory: "/content-factory",
   devices: "/devices",
   products: "/products",
   reports: "/reports",

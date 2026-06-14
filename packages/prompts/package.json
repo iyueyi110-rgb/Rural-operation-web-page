@@ -4,5 +4,10 @@
   "private": true,
   "type": "module",
   "main": "./daily-report.ts",
-  "types": "./daily-report.ts"
+  "types": "./daily-report.ts",
+  "exports": {
+    ".": "./daily-report.ts",
+    "./daily-report": "./daily-report.ts",
+    "./content-factory": "./content-factory.ts"
+  }
 }
