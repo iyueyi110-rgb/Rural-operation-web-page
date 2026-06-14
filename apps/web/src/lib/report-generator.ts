@@ -8,6 +8,7 @@ import { getChinaDateString, getChinaDayRange, isPlainObject } from "@web/lib/ai
 import { getWeatherSummary } from "@web/lib/weather"
 import { computeNodeDailyScores } from "@web/lib/node-scoring"
 import { generateControlCommands } from "@web/lib/infrastructure-control"
+import { generateCareAdvice } from "@web/lib/care-advisor"
 
 interface GeneratedReportPayload {
   title: string
@@ -202,7 +203,10 @@ export async function generateDailyReport(date = getChinaDateString()) {
     temperature: 0.2,
   })
   const parsed = normalizeReportPayload(extractJsonContent(result.content))
-  const infrastructureCommands = await generateControlCommands()
+  const [infrastructureCommands, careAdvice] = await Promise.all([
+    generateControlCommands(),
+    generateCareAdvice(),
+  ])
   const infrastructureSection =
     infrastructureCommands.length > 0
       ? {
@@ -240,6 +244,11 @@ export async function generateDailyReport(date = getChinaDateString()) {
             .join("；"),
         }
       : null
+  const careAdviceSection = {
+    type: "feedback",
+    title: "AI 养护建议",
+    content: careAdvice,
+  }
   const villagerSection = {
     type: "feedback",
     title: "村民任务协作",
@@ -248,6 +257,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
   const sections = [
     ...parsed.sections.filter((section) => section.type !== "infrastructure"),
     ...(productSection ? [productSection] : []),
+    careAdviceSection,
     villagerSection,
     infrastructureSection,
   ]
