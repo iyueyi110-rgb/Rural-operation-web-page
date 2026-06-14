@@ -19,6 +19,7 @@ interface GeneratedReportPayload {
     category: string
     action: string
     deadline?: string
+    status?: string
   }>
 }
 
@@ -85,6 +86,7 @@ function normalizeReportPayload(value: unknown): GeneratedReportPayload {
       category: typeof item.category === "string" ? item.category : "operation",
       action: typeof item.action === "string" ? item.action : "补充运营数据后复核。",
       deadline: typeof item.deadline === "string" ? item.deadline : undefined,
+      status: typeof item.status === "string" ? item.status : "active",
     })),
   }
 }
@@ -219,11 +221,13 @@ export async function generateDailyReport(date = getChinaDateString()) {
       priority: command.priority === "critical" ? "high" : command.priority,
       category: "facility",
       action: command.reason,
+      status: "active",
     })),
     ...offlineDevices.map((device) => ({
       priority: "medium",
       category: "facility",
       action: `设备 ${device.name}（${device.deviceId}）超过 30 分钟未上报，请巡检供电、网络与安装位置。`,
+      status: "active",
     })),
   ].filter((item, index, items) => items.findIndex((candidate) => candidate.action === item.action) === index)
   const productSection =
