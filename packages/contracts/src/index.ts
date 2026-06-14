@@ -217,6 +217,14 @@ export interface ProductData {
 
 export type VillagerSkill = "cooking" | "farming" | "guiding" | "handicraft" | "logistics"
 export type VillagerStatus = "active" | "inactive"
+export type TaskType = "farming" | "guiding" | "logistics" | "maintenance" | "service"
+export type TaskStatus = "pending" | "accepted" | "in_progress" | "completed" | "cancelled"
+
+export interface VillagerTaskSummary {
+  totalTasks: number
+  completedTasks: number
+  totalEarnings: number
+}
 
 export interface VillagerData {
   id: string
@@ -226,6 +234,21 @@ export interface VillagerData {
   nodeId?: string
   status: VillagerStatus
   createdAt: string
+  taskSummary?: VillagerTaskSummary
+}
+
+export interface TaskData {
+  id: string
+  title: string
+  description?: string
+  taskType: TaskType
+  status: TaskStatus
+  villagerId?: string
+  nodeId?: string
+  scheduledDate?: string
+  earnings: number
+  createdAt: string
+  updatedAt: string
 }
 
 export type SolarTerm =

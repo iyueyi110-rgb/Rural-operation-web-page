@@ -16,6 +16,11 @@ interface VillagerRow extends Record<string, unknown> {
   nodeId?: string
   status: "active" | "inactive"
   node?: { slug: string; nameKey: string } | null
+  taskSummary?: {
+    totalTasks: number
+    completedTasks: number
+    totalEarnings: number
+  }
   createdAt: string
 }
 
@@ -114,6 +119,7 @@ export default function VillagersPage() {
   )
 
   const activeCount = villagers.filter((villager) => villager.status === "active").length
+  const selectedSummary = selected?.taskSummary ?? { totalTasks: 0, completedTasks: 0, totalEarnings: 0 }
 
   return (
     <div className="grid gap-5">
@@ -186,10 +192,12 @@ export default function VillagersPage() {
           <div className="mt-5 rounded-md bg-rice p-4">
             <div className="text-sm font-extrabold">{adminCopy.villagers.earnings}</div>
             <div className="mt-3 grid grid-cols-2 gap-3">
-              <AdminStatCard label={adminCopy.villagers.completedTasks} value="0" />
-              <AdminStatCard label={adminCopy.villagers.totalEarnings} value="¥0" />
+              <AdminStatCard label={adminCopy.villagers.completedTasks} value={selectedSummary.completedTasks} />
+              <AdminStatCard label={adminCopy.villagers.totalEarnings} value={`¥${selectedSummary.totalEarnings.toFixed(0)}`} />
             </div>
-            <p className="mt-3 text-xs font-semibold text-ink/52">{selected ? adminCopy.villagers.noSelection : adminCopy.villagers.noSelection}</p>
+            <p className="mt-3 text-xs font-semibold text-ink/52">
+              {selected ? `${selectedSummary.totalTasks} 个任务记录` : adminCopy.villagers.noSelection}
+            </p>
           </div>
         </section>
       </div>

@@ -1,6 +1,7 @@
 import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { summarizeTasks } from "@web/lib/task-records"
 import { isAdminRequest } from "@web/lib/tree-records"
 
 const skillOptions = ["cooking", "farming", "guiding", "handicraft", "logistics"] as const
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
       ...(isVillagerStatus(status) ? { status } : {}),
       ...(nodeId ? { nodeId } : {}),
     },
-    include: { node: true },
+    include: { node: true, tasks: true },
     orderBy: [{ status: "asc" }, { createdAt: "desc" }],
   })
 
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
 
   const data = await prisma.villager.create({
     data: { name, phone, skills, nodeId, status },
-    include: { node: true },
+    include: { node: true, tasks: true },
   })
 
   return jsonResponse(request, { data: mapVillager(data) }, { status: 201 })
@@ -95,7 +96,7 @@ export async function PATCH(request: Request) {
       ...(typeof body.nodeId === "string" ? { nodeId } : {}),
       ...(isVillagerStatus(body.status) ? { status: body.status } : {}),
     },
-    include: { node: true },
+    include: { node: true, tasks: true },
   })
 
   return jsonResponse(request, { data: mapVillager(data) })
@@ -124,6 +125,7 @@ function mapVillager(villager: {
   createdAt: Date
   updatedAt: Date
   node?: { id: string; slug: string; nameKey: string } | null
+  tasks?: Array<{ status: string; earnings: number }>
 }) {
   return {
     ...villager,
@@ -131,5 +133,6 @@ function mapVillager(villager: {
     skills: readSkills(villager.skills),
     createdAt: villager.createdAt.toISOString(),
     updatedAt: villager.updatedAt.toISOString(),
+    taskSummary: summarizeTasks(villager.tasks ?? []),
   }
 }

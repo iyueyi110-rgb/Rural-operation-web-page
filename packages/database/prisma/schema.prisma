@@ -58,6 +58,7 @@ model SpaceNode {
   devices      Device[]
   products     Product[]
   villagers    Villager[]
+  tasks        Task[]
 
   @@map("space_node")
 }
@@ -72,9 +73,30 @@ model Villager {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   node      SpaceNode? @relation(fields: [nodeId], references: [id])
+  tasks     Task[]
 
   @@index([status, nodeId])
   @@map("villager")
+}
+
+model Task {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?   @db.Text
+  taskType      String
+  status        String    @default("pending")
+  villagerId    String?
+  nodeId        String?
+  scheduledDate String?
+  earnings      Float     @default(0)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  villager      Villager?  @relation(fields: [villagerId], references: [id])
+  node          SpaceNode? @relation(fields: [nodeId], references: [id])
+
+  @@index([status, taskType])
+  @@index([villagerId, createdAt])
+  @@map("task")
 }
 
 model FarmingCalendar {
