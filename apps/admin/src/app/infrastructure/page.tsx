@@ -35,7 +35,6 @@ const sensorMeta = {
 } as const
 
 const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? "dev-admin-token"
-const sensorToken = process.env.NEXT_PUBLIC_SENSOR_API_KEY ?? "dev-sensor-key"
 
 export default function InfrastructurePage() {
   const [sensors, setSensors] = useState<SensorReading[]>([])
@@ -90,7 +89,7 @@ export default function InfrastructurePage() {
   async function submitManualReading() {
     const response = await fetch(`${adminApiBase}/infrastructure/sensors`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-API-Key": sensorToken },
+      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
       body: JSON.stringify({
         readings: [{ ...manualReading, value: Number(manualReading.value), source: "manual" }],
       }),

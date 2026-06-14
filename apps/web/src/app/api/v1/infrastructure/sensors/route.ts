@@ -2,9 +2,11 @@ import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { mapSensorReading } from "@web/lib/infrastructure-control"
+import { isAdminRequest } from "@web/lib/tree-records"
 
 function isSensorRequestAuthorized(request: Request) {
-  const expected = process.env.SENSOR_API_KEY ?? "dev-sensor-key"
+  const expected = process.env.SENSOR_API_KEY
+  if (!expected) return false
   return request.headers.get("x-api-key") === expected
 }
 
@@ -13,7 +15,7 @@ export async function OPTIONS(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!isSensorRequestAuthorized(request)) {
+  if (!isSensorRequestAuthorized(request) && !isAdminRequest(request)) {
     return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
   }
 

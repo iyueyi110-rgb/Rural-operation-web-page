@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { prisma } from "@zouma/database"
 import { ModelProviderAdapter } from "@zouma/utils"
 
 import {
@@ -73,6 +74,16 @@ export async function POST(request: Request) {
     const routeId = parseRouteId(completion.content)
     const route = routeOptions.find((option) => option.id === routeId) ?? fallbackRoute
 
+    prisma.routeGenerationLog.create({
+      data: {
+        routeId: route.id,
+        duration: body.duration,
+        audience: body.audience,
+        weather: body.weather,
+        provider: completion.provider,
+      },
+    }).catch((error) => console.error("Route generation log failed:", error))
+
     return NextResponse.json({
       data: {
         route,
@@ -82,6 +93,16 @@ export async function POST(request: Request) {
       },
     })
   } catch (error) {
+    prisma.routeGenerationLog.create({
+      data: {
+        routeId: fallbackRoute.id,
+        duration: body.duration,
+        audience: body.audience,
+        weather: body.weather,
+        provider: "configuration-required",
+      },
+    }).catch((logError) => console.error("Route generation log failed:", logError))
+
     return NextResponse.json({
       data: {
         route: fallbackRoute,

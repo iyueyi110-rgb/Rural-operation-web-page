@@ -123,6 +123,10 @@ export async function runAlertChecks(date: string): Promise<AlertData[]> {
     }
   }
 
+  // reverse_path 检测暂不实现：
+  // PresenceLog 无 visitor 标识，无法区分不同游客的路径。
+  // 实现条件：Visitor 模型 + CheckInEvent 关联 visitorId（P2）。
+  // 当前 reverse_path 告警类型保留在 AlertType 联合类型中作为占位。
   return created.map(mapAlert)
 }
 
