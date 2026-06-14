@@ -5,6 +5,8 @@ import type { AlertData, AlertType } from "@zouma/contracts"
 
 import { getChinaDayRange } from "@web/lib/aigc-api"
 import { getWeatherCondition } from "@web/lib/weather"
+import { fetchWeatherAlerts } from "@web/lib/weather-alerts"
+import { routeOptions } from "@web/lib/routes-data"
 
 function mapAlert(record: {
   id: string
@@ -65,13 +67,14 @@ async function createAlertIfAbsent({
 
 export async function runAlertChecks(date: string): Promise<AlertData[]> {
   const { start, end } = getChinaDayRange(date)
-  const [logs, nodes, weather] = await Promise.all([
+  const [logs, nodes, weather, weatherAlerts] = await Promise.all([
     prisma.presenceLog.findMany({
       where: { timestamp: { gte: start, lte: end } },
       orderBy: { timestamp: "asc" },
     }),
     prisma.spaceNode.findMany(),
     getWeatherCondition(date),
+    fetchWeatherAlerts(),
   ])
   const nodeMap = new Map(nodes.map((node) => [node.id, node]))
   const created = []
@@ -123,10 +126,58 @@ export async function runAlertChecks(date: string): Promise<AlertData[]> {
     }
   }
 
-  // reverse_path 检测暂不实现：
-  // PresenceLog 无 visitor 标识，无法区分不同游客的路径。
-  // 实现条件：Visitor 模型 + CheckInEvent 关联 visitorId（P2）。
-  // 当前 reverse_path 告警类型保留在 AlertType 联合类型中作为占位。
+  const routeOrders = routeOptions.map((route) => ({
+    routeId: route.id,
+    order: new Map(route.waypoints.map((waypoint, index) => [waypoint, index])),
+  }))
+  const logsByVisitor = new Map<string, typeof logs>()
+
+  for (const log of logs) {
+    if (!log.visitorId) continue
+    const current = logsByVisitor.get(log.visitorId) ?? []
+    current.push(log)
+    logsByVisitor.set(log.visitorId, current)
+  }
+
+  for (const visitorLogs of logsByVisitor.values()) {
+    const orderedLogs = visitorLogs.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
+
+    for (let index = 1; index < orderedLogs.length; index += 1) {
+      const previousNode = nodeMap.get(orderedLogs[index - 1].nodeId)
+      const currentNode = nodeMap.get(orderedLogs[index].nodeId)
+      if (!previousNode || !currentNode) continue
+
+      const matchedRoute = routeOrders.find((route) => {
+        const previousOrder = route.order.get(previousNode.nameKey)
+        const currentOrder = route.order.get(currentNode.nameKey)
+        return previousOrder !== undefined && currentOrder !== undefined && previousOrder - currentOrder > 3
+      })
+
+      if (!matchedRoute) continue
+
+      created.push(
+        await createAlertIfAbsent({
+          alertType: "reverse_path",
+          nodeId: currentNode.id,
+          severity: "medium",
+          message: `${currentNode.slug} 检测到疑似逆向穿行，关联路线 ${matchedRoute.routeId}，建议现场引导回到顺行游线。`,
+          dayStart: start,
+        }),
+      )
+    }
+  }
+
+  for (const warning of weatherAlerts) {
+    created.push(
+      await createAlertIfAbsent({
+        alertType: warning.type,
+        severity: warning.severity,
+        message: `${warning.title}：${warning.text}`,
+        dayStart: start,
+      }),
+    )
+  }
+
   return created.map(mapAlert)
 }
 

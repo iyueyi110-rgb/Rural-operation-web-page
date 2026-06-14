@@ -1,4 +1,5 @@
 import { prisma } from "@zouma/database"
+import { createHash } from "node:crypto"
 
 import {
   getChinaDateString,
@@ -79,6 +80,7 @@ export async function POST(request: Request) {
     body?.dwellAvgMin == null || body.dwellAvgMin === "" ? null : Number(body.dwellAvgMin)
   const timestamp =
     typeof body?.timestamp === "string" && body.timestamp ? new Date(body.timestamp) : new Date()
+  const visitorIdentity = getVisitorIdentity(request, body)
 
   if (
     !nodeId ||
@@ -104,9 +106,22 @@ export async function POST(request: Request) {
     )
   }
 
+  const visitor = visitorIdentity
+    ? await prisma.visitor.upsert({
+        where: { fingerprint: visitorIdentity.fingerprint },
+        create: visitorIdentity,
+        update: {
+          userAgent: visitorIdentity.userAgent,
+          screenSize: visitorIdentity.screenSize,
+          timezone: visitorIdentity.timezone,
+        },
+      })
+    : null
+
   const data = await prisma.presenceLog.create({
     data: {
       nodeId,
+      visitorId: visitor?.id,
       timestamp,
       peopleCount,
       dwellAvgMin,
@@ -123,4 +138,28 @@ export async function POST(request: Request) {
   })
 
   return jsonResponse(request, { data }, { status: 201 })
+}
+
+function getVisitorIdentity(request: Request, body: unknown) {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null
+
+  const record = body as Record<string, unknown>
+  const visitor =
+    record.visitor && typeof record.visitor === "object" && !Array.isArray(record.visitor)
+      ? (record.visitor as Record<string, unknown>)
+      : record
+
+  const screenSize = typeof visitor.screenSize === "string" ? visitor.screenSize.trim() : ""
+  const timezone = typeof visitor.timezone === "string" ? visitor.timezone.trim() : ""
+  if (!screenSize || !timezone) return null
+
+  const userAgent = request.headers.get("user-agent") ?? "unknown"
+  const fingerprint = createHash("sha256").update(`${userAgent}|${screenSize}|${timezone}`).digest("hex")
+
+  return {
+    fingerprint,
+    userAgent,
+    screenSize,
+    timezone,
+  }
 }

@@ -82,6 +82,7 @@ export interface FeedbackRecord extends Feedback {
 export type SpaceNodeType = "entrance" | "viewpoint" | "activity" | "rest" | "shop" | "waterside"
 export type PresenceSource = "wifi_probe" | "camera" | "infrared" | "manual"
 export type OrderType = "courtyard_booking" | "tree_adoption" | "ticket_order" | "activity_booking"
+export type WeatherAlertType = "rainstorm" | "snowstorm" | "heat" | "wind" | "typhoon" | "other"
 
 export interface SpaceNodeData {
   id: string
@@ -99,10 +100,21 @@ export interface SpaceNodeData {
 export interface PresenceLogData {
   id: string
   nodeId: string
+  visitorId?: string
   timestamp: string
   peopleCount: number
   dwellAvgMin?: number
   source: PresenceSource
+}
+
+export interface VisitorData {
+  id: string
+  fingerprint: string
+  userAgent?: string
+  screenSize?: string
+  timezone?: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface NodeDailyScoreData {
@@ -169,7 +181,14 @@ export interface DailyReportData {
 
 export type TreeCareLogType = "watering" | "pruning" | "fertilizing" | "pest_control" | "photo" | "harvest"
 export type ActivityType = "village_feast" | "food_class" | "study" | "workshop" | "exhibition" | "co_living"
-export type AlertType = "night_linger" | "crowd" | "waterside" | "reverse_path" | "fire_risk" | "flood_risk"
+export type AlertType =
+  | "night_linger"
+  | "crowd"
+  | "waterside"
+  | "reverse_path"
+  | "fire_risk"
+  | "flood_risk"
+  | WeatherAlertType
 
 export interface OrchardTreeData {
   id: string
@@ -231,6 +250,18 @@ export interface AlertData {
   status: "active" | "acknowledged" | "resolved"
   createdAt: string
   resolvedAt?: string
+}
+
+export interface WeatherAlertData {
+  id: string
+  type: WeatherAlertType
+  severity: "high" | "medium" | "low"
+  title: string
+  text: string
+  startTime?: string
+  endTime?: string
+  createdAt: string
+  source: "qweather"
 }
 
 export interface CourtyardActivityData {

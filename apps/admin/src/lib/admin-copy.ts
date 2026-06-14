@@ -214,6 +214,12 @@ export const adminCopy = {
       reverse_path: "逆向穿行",
       fire_risk: "火险",
       flood_risk: "雨洪风险",
+      rainstorm: "暴雨预警",
+      snowstorm: "雨雪预警",
+      heat: "高温预警",
+      wind: "大风预警",
+      typhoon: "台风预警",
+      other: "其他天气预警",
     },
   },
   analytics: {

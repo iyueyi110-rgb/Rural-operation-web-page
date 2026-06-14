@@ -11,7 +11,7 @@ const fallbackWeather = {
 
 export async function GET() {
   const key = process.env.QWEATHER_API_KEY
-  const location = process.env.QWEATHER_LOCATION_ID ?? "101041000"
+  const location = process.env.QWEATHER_LOCATION_ID ?? "101040100"
   const host = process.env.QWEATHER_API_HOST ?? "https://devapi.qweather.com"
 
   if (!key) {

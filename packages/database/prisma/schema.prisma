@@ -62,6 +62,7 @@ model SpaceNode {
 model PresenceLog {
   id          String   @id @default(cuid())
   nodeId      String
+  visitorId   String?
   timestamp   DateTime @default(now())
   peopleCount Int
   dwellAvgMin Float?
@@ -69,9 +70,24 @@ model PresenceLog {
   createdAt   DateTime @default(now()) @map("created_at")
 
   node SpaceNode @relation(fields: [nodeId], references: [id])
+  visitor Visitor? @relation(fields: [visitorId], references: [id])
 
   @@index([nodeId, timestamp])
+  @@index([visitorId, timestamp])
   @@map("presence_log")
+}
+
+model Visitor {
+  id          String        @id @default(cuid())
+  fingerprint String       @unique
+  userAgent   String?
+  screenSize  String?
+  timezone    String?
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  presenceLogs PresenceLog[]
+
+  @@map("visitor")
 }
 
 model NodeDailyScore {
