@@ -79,6 +79,9 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
             <Link className="transition hover:text-white" href={`/${params.locale}/booking`}>
               {t("nav.booking")}
             </Link>
+            <Link className="transition hover:text-white" href={`/${params.locale}/calendar`}>
+              {t("nav.calendar")}
+            </Link>
             <Link
               className="inline-flex h-8 items-center gap-1.5 rounded-full bg-lychee px-3 text-xs font-bold text-white shadow-soft transition hover:bg-[#a8312f]"
               href={`/${params.locale}/tickets`}

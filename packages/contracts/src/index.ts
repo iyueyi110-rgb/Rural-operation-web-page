@@ -228,6 +228,27 @@ export interface VillagerData {
   createdAt: string
 }
 
+export type SolarTerm =
+  | "立春" | "雨水" | "惊蛰" | "春分" | "清明" | "谷雨"
+  | "立夏" | "小满" | "芒种" | "夏至" | "小暑" | "大暑"
+  | "立秋" | "处暑" | "白露" | "秋分" | "寒露" | "霜降"
+  | "立冬" | "小雪" | "大雪" | "冬至" | "小寒" | "大寒"
+
+export type FarmingActivityType = "planting" | "pruning" | "fertilizing" | "harvesting" | "processing" | "festival"
+export type FarmingCalendarStatus = "upcoming" | "active" | "completed"
+
+export interface FarmingCalendarData {
+  id: string
+  solarTerm: SolarTerm
+  title: string
+  description: string
+  activityType: FarmingActivityType
+  startDate: string
+  endDate?: string
+  treeSpecies?: string
+  status: FarmingCalendarStatus
+}
+
 // ==== P1 新增 ====
 
 export type TreeCareLogType = "watering" | "pruning" | "fertilizing" | "pest_control" | "photo" | "harvest"

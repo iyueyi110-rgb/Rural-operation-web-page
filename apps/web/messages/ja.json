@@ -35,6 +35,10 @@
     "products": {
       "title": "走馬村プロダクト予約｜オフライン確認注文",
       "description": "走馬村の商品、ギフト、村の食事サービスを閲覧し、オフライン確認注文を送信します。"
+    },
+    "calendar": {
+      "title": "Zouma Farming Calendar",
+      "description": "View Zouma Village farming activities by solar term and season."
     }
   },
   "trees": {
@@ -350,7 +354,8 @@
       "privacy": "プライバシー",
       "login": "ログイン",
       "start": "開始",
-      "products": "商品"
+      "products": "商品",
+      "calendar": "Calendar"
     },
     "hero": {
       "badge": "AIGC を活用した山村更新モデル",
@@ -1022,6 +1027,48 @@
       "loadFailed": "商品を利用できません",
       "contactRequired": "連絡先名と電話番号を入力してください",
       "submitFailed": "注文送信に失敗しました。もう一度お試しください。"
+    }
+  },
+  "calendar": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Farming Calendar MVP"
+    },
+    "hero": {
+      "eyebrow": "Farming Calendar",
+      "title": "Zouma Village seasonal farming calendar",
+      "body": "A timeline for pruning, fertilizing, harvest, processing and village events."
+    },
+    "filters": {
+      "title": "Filters",
+      "all": "All",
+      "activityType": "Activity type",
+      "status": "Status",
+      "treeSpecies": "Tree species"
+    },
+    "timeline": {
+      "title": "Solar term timeline"
+    },
+    "activityTypes": {
+      "planting": "Planting",
+      "pruning": "Pruning",
+      "fertilizing": "Fertilizing",
+      "harvesting": "Harvesting",
+      "processing": "Processing",
+      "festival": "Festival"
+    },
+    "statuses": {
+      "upcoming": "Upcoming",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "species": {
+      "lychee": "Lychee",
+      "longan": "Longan"
+    },
+    "messages": {
+      "loading": "Loading farming calendar",
+      "empty": "No farming calendar items match the filters"
     }
   }
 }

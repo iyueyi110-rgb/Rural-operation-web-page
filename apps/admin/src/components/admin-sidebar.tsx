@@ -18,6 +18,7 @@ import {
   ShoppingCart,
   Store,
   Sprout,
+  Sunrise,
   Trees,
   Users,
 } from "lucide-react"
@@ -37,6 +38,7 @@ const menuIcons: Record<string, ComponentType<{ className?: string }>> = {
   alerts: Bell,
   analytics: BarChart3,
   villagers: Users,
+  farming: Sunrise,
   devices: RadioTower,
   products: Store,
   reports: FileText,
@@ -56,6 +58,7 @@ const menuHrefs: Record<string, string> = {
   alerts: "/alerts",
   analytics: "/analytics",
   villagers: "/villagers",
+  farming: "/farming",
   devices: "/devices",
   products: "/products",
   reports: "/reports",

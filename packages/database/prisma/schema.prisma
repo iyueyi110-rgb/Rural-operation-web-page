@@ -77,6 +77,23 @@ model Villager {
   @@map("villager")
 }
 
+model FarmingCalendar {
+  id           String   @id @default(cuid())
+  solarTerm    String
+  title        String
+  description  String   @db.Text
+  activityType String
+  startDate    String
+  endDate      String?
+  treeSpecies  String?
+  status       String   @default("upcoming")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([startDate])
+  @@map("farming_calendar")
+}
+
 model PresenceLog {
   id          String   @id @default(cuid())
   nodeId      String

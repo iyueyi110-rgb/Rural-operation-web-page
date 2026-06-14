@@ -35,6 +35,10 @@
     "products": {
       "title": "走马村农产品预订｜线下确认订单",
       "description": "浏览走马村农产品、伴手礼和村宴服务，提交线下确认订单。"
+    },
+    "calendar": {
+      "title": "走马村农事日历｜节气与农事时间线",
+      "description": "按节气查看走马村的荔枝、龙眼、采摘、加工和节庆农事安排。"
     }
   },
   "common": {
@@ -60,7 +64,8 @@
       "privacy": "隐私中心",
       "login": "登录",
       "start": "开始浏览",
-      "products": "农产"
+      "products": "农产",
+      "calendar": "农事"
     },
     "hero": {
       "badge": "长寿区山地乡村 AIGC 韧性更新样板",
@@ -1022,6 +1027,48 @@
       "loadFailed": "产品暂时不可用",
       "contactRequired": "请填写联系人和联系电话",
       "submitFailed": "订单提交失败，请重试"
+    }
+  },
+  "calendar": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "农事日历 MVP"
+    },
+    "hero": {
+      "eyebrow": "Farming Calendar",
+      "title": "按节气看见走马村的农事节奏",
+      "body": "从修剪、施肥、采摘到加工和节庆，把荔枝果园和村庄活动放进一条可查看的时间线。"
+    },
+    "filters": {
+      "title": "筛选",
+      "all": "全部",
+      "activityType": "农事类型",
+      "status": "状态",
+      "treeSpecies": "树种"
+    },
+    "timeline": {
+      "title": "节气时间线"
+    },
+    "activityTypes": {
+      "planting": "栽种",
+      "pruning": "修剪",
+      "fertilizing": "施肥",
+      "harvesting": "采摘",
+      "processing": "加工",
+      "festival": "节庆"
+    },
+    "statuses": {
+      "upcoming": "未开始",
+      "active": "进行中",
+      "completed": "已完成"
+    },
+    "species": {
+      "lychee": "荔枝",
+      "longan": "龙眼"
+    },
+    "messages": {
+      "loading": "正在加载农事日历",
+      "empty": "暂无符合条件的农事条目"
     }
   }
 }
