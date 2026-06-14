@@ -256,8 +256,11 @@ export const adminCopy = {
     noData: "暂无村民数据",
     noSelection: "选择左侧村民查看收益与任务概览。",
     earnings: "收益统计",
+    earningsRanking: "收益排行",
     completedTasks: "完成任务",
     totalEarnings: "累计收益",
+    monthlyTasks: "本月任务",
+    monthlyEarnings: "本月收益",
     skillOptions: {
       cooking: "村宴烹饪",
       farming: "农事养护",

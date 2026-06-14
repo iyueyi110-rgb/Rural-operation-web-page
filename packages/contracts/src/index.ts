@@ -156,6 +156,11 @@ export interface ReportMetricsData {
   alertCount: number
   feedbackCount: number
   avgSatisfaction: number
+  villagerStats?: {
+    completedTaskCount: number
+    totalEarnings: number
+    participantCount: number
+  }
 }
 
 export interface ActionItemData {
@@ -235,6 +240,7 @@ export interface VillagerData {
   status: VillagerStatus
   createdAt: string
   taskSummary?: VillagerTaskSummary
+  monthlyTaskSummary?: VillagerTaskSummary
 }
 
 export interface TaskData {

@@ -125,14 +125,27 @@ function mapVillager(villager: {
   createdAt: Date
   updatedAt: Date
   node?: { id: string; slug: string; nameKey: string } | null
-  tasks?: Array<{ status: string; earnings: number }>
+  tasks?: Array<{ status: string; earnings: number; updatedAt: Date }>
 }) {
+  const monthStart = getCurrentMonthStart()
+  const tasks = villager.tasks ?? []
+
   return {
-    ...villager,
+    id: villager.id,
+    name: villager.name,
+    phone: villager.phone,
     nodeId: villager.nodeId ?? undefined,
+    status: villager.status,
+    node: villager.node,
     skills: readSkills(villager.skills),
     createdAt: villager.createdAt.toISOString(),
     updatedAt: villager.updatedAt.toISOString(),
-    taskSummary: summarizeTasks(villager.tasks ?? []),
+    taskSummary: summarizeTasks(tasks),
+    monthlyTaskSummary: summarizeTasks(tasks.filter((task) => task.updatedAt >= monthStart)),
   }
+}
+
+function getCurrentMonthStart() {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth(), 1)
 }

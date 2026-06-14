@@ -95,7 +95,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
   await computeNodeDailyScores(date)
 
   const offlineThreshold = new Date(Date.now() - 30 * 60 * 1000)
-  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices, productRanking] = await Promise.all([
+  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices, productRanking, completedTasks] = await Promise.all([
     prisma.presenceLog.aggregate({
       where: { timestamp: { gte: start, lte: end } },
       _sum: { peopleCount: true },
@@ -135,7 +135,17 @@ export async function generateDailyReport(date = getChinaDateString()) {
       orderBy: { _sum: { totalAmount: "desc" } },
       take: 5,
     }),
+    prisma.task.findMany({
+      where: { status: "completed", updatedAt: { gte: start, lte: end } },
+      select: { villagerId: true, earnings: true },
+    }),
   ])
+
+  const villagerStats = {
+    completedTaskCount: completedTasks.length,
+    totalEarnings: completedTasks.reduce((sum, task) => sum + task.earnings, 0),
+    participantCount: new Set(completedTasks.map((task) => task.villagerId).filter(Boolean)).size,
+  }
 
   const metrics = {
     totalVisitors: presenceAgg._sum.peopleCount ?? 0,
@@ -146,6 +156,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     feedbackCount: feedbackAgg._count._all,
     avgSatisfaction: Math.round((feedbackAgg._avg.rating ?? 0) * 10) / 10,
     alertCount: nodeScores.filter((score) => score.safetyRisk > 70).length,
+    villagerStats,
   }
 
   const context = {
@@ -181,6 +192,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
       revenue: item._sum.totalAmount ?? 0,
       orderCount: item._count._all,
     })),
+    villagerStats,
   }
 
   const result = await ModelProviderAdapter.complete(JSON.stringify(context), {
@@ -224,13 +236,20 @@ export async function generateDailyReport(date = getChinaDateString()) {
             .join("；"),
         }
       : null
+  const villagerSection = {
+    type: "villager_tasks",
+    title: "村民任务协作",
+    content: `当日完成任务 ${villagerStats.completedTaskCount} 个，任务收益合计 ¥${villagerStats.totalEarnings}，参与村民 ${villagerStats.participantCount} 人。`,
+  }
   const sections = [
     ...parsed.sections.filter((section) => section.type !== "infrastructure"),
     ...(productSection ? [productSection] : []),
+    villagerSection,
     infrastructureSection,
   ]
   const reportMetrics = {
     ...parsed.metrics,
+    villagerStats,
     productRanking: productRanking.map((item) => ({
       productName: item.productName,
       quantity: item._sum.quantity ?? 0,

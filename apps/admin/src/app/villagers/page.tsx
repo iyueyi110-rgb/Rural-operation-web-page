@@ -21,6 +21,11 @@ interface VillagerRow extends Record<string, unknown> {
     completedTasks: number
     totalEarnings: number
   }
+  monthlyTaskSummary?: {
+    totalTasks: number
+    completedTasks: number
+    totalEarnings: number
+  }
   createdAt: string
 }
 
@@ -120,6 +125,10 @@ export default function VillagersPage() {
 
   const activeCount = villagers.filter((villager) => villager.status === "active").length
   const selectedSummary = selected?.taskSummary ?? { totalTasks: 0, completedTasks: 0, totalEarnings: 0 }
+  const selectedMonthlySummary = selected?.monthlyTaskSummary ?? { totalTasks: 0, completedTasks: 0, totalEarnings: 0 }
+  const earningsRanking = [...villagers]
+    .sort((a, b) => (b.taskSummary?.totalEarnings ?? 0) - (a.taskSummary?.totalEarnings ?? 0))
+    .slice(0, 5)
 
   return (
     <div className="grid gap-5">
@@ -147,6 +156,24 @@ export default function VillagersPage() {
         <AdminStatCard label={adminCopy.villagers.active} value={activeCount} />
         <AdminStatCard label={adminCopy.villagers.inactive} value={villagers.length - activeCount} />
       </div>
+
+      <section className="rounded-lg border border-stone bg-white p-4 shadow-soft">
+        <div className="text-sm font-extrabold">{adminCopy.villagers.earningsRanking}</div>
+        <div className="mt-3 grid gap-2 md:grid-cols-5">
+          {earningsRanking.map((villager, index) => (
+            <button
+              className="rounded-md bg-rice p-3 text-left"
+              key={villager.id}
+              onClick={() => selectVillager(villager)}
+              type="button"
+            >
+              <div className="text-xs font-bold text-water">TOP {index + 1}</div>
+              <div className="mt-1 truncate text-sm font-extrabold">{villager.name}</div>
+              <div className="mt-1 text-xs font-semibold text-ink/58">¥{(villager.taskSummary?.totalEarnings ?? 0).toFixed(0)}</div>
+            </button>
+          ))}
+        </div>
+      </section>
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.85fr)]">
         <AdminDataTable
@@ -194,6 +221,8 @@ export default function VillagersPage() {
             <div className="mt-3 grid grid-cols-2 gap-3">
               <AdminStatCard label={adminCopy.villagers.completedTasks} value={selectedSummary.completedTasks} />
               <AdminStatCard label={adminCopy.villagers.totalEarnings} value={`¥${selectedSummary.totalEarnings.toFixed(0)}`} />
+              <AdminStatCard label={adminCopy.villagers.monthlyTasks} value={selectedMonthlySummary.completedTasks} />
+              <AdminStatCard label={adminCopy.villagers.monthlyEarnings} value={`¥${selectedMonthlySummary.totalEarnings.toFixed(0)}`} />
             </div>
             <p className="mt-3 text-xs font-semibold text-ink/52">
               {selected ? `${selectedSummary.totalTasks} 个任务记录` : adminCopy.villagers.noSelection}
