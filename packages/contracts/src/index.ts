@@ -161,6 +161,11 @@ export interface ReportMetricsData {
     totalEarnings: number
     participantCount: number
   }
+  trafficForecast?: {
+    low: number
+    high: number
+    confidence: "high" | "medium" | "low"
+  }
 }
 
 export interface ActionItemData {

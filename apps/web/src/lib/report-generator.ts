@@ -10,6 +10,7 @@ import { getWeatherSummary } from "@web/lib/weather"
 import { computeNodeDailyScores } from "@web/lib/node-scoring"
 import { generateControlCommands } from "@web/lib/infrastructure-control"
 import { generateCareAdvice } from "@web/lib/care-advisor"
+import { predictTomorrowTraffic } from "@web/lib/traffic-forecast"
 
 interface GeneratedReportPayload {
   title: string
@@ -72,7 +73,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
   await computeNodeDailyScores(date)
 
   const offlineThreshold = new Date(Date.now() - 30 * 60 * 1000)
-  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices, productRanking, completedTasks] = await Promise.all([
+  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices, productRanking, completedTasks, trafficForecast] = await Promise.all([
     prisma.presenceLog.aggregate({
       where: { timestamp: { gte: start, lte: end } },
       _sum: { peopleCount: true },
@@ -116,12 +117,18 @@ export async function generateDailyReport(date = getChinaDateString()) {
       where: { status: "completed", updatedAt: { gte: start, lte: end } },
       select: { villagerId: true, earnings: true },
     }),
+    predictTomorrowTraffic(),
   ])
 
   const villagerStats = {
     completedTaskCount: completedTasks.length,
     totalEarnings: completedTasks.reduce((sum, task) => sum + task.earnings, 0),
     participantCount: new Set(completedTasks.map((task) => task.villagerId).filter(Boolean)).size,
+  }
+  const trafficForecastData = {
+    low: trafficForecast.low,
+    high: trafficForecast.high,
+    confidence: trafficForecast.confidence,
   }
 
   const metrics = {
@@ -134,6 +141,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     avgSatisfaction: Math.round((feedbackAgg._avg.rating ?? 0) * 10) / 10,
     alertCount: nodeScores.filter((score) => score.safetyRisk > 70).length,
     villagerStats,
+    trafficForecast: trafficForecastData,
   }
 
   const context = {
@@ -170,6 +178,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
       orderCount: item._count._all,
     })),
     villagerStats,
+    trafficForecast: trafficForecastData,
   }
 
   const result = await ModelProviderAdapter.complete(JSON.stringify(context), {
@@ -223,6 +232,11 @@ export async function generateDailyReport(date = getChinaDateString()) {
     title: "AI 养护建议",
     content: careAdvice,
   }
+  const trafficForecastSection = {
+    type: "visitor_flow",
+    title: "AI 客流预测",
+    content: `预计明日客流 ${trafficForecastData.low}-${trafficForecastData.high} 人，置信度 ${formatConfidence(trafficForecastData.confidence)}。`,
+  }
   const villagerSection = {
     type: "feedback",
     title: "村民任务协作",
@@ -232,12 +246,14 @@ export async function generateDailyReport(date = getChinaDateString()) {
     ...parsed.sections.filter((section) => section.type !== "infrastructure"),
     ...(productSection ? [productSection] : []),
     careAdviceSection,
+    trafficForecastSection,
     villagerSection,
     infrastructureSection,
   ]
   const reportMetrics = {
     ...parsed.metrics,
     villagerStats,
+    trafficForecast: trafficForecastData,
     productRanking: productRanking.map((item) => ({
       productName: item.productName,
       quantity: item._sum.quantity ?? 0,
@@ -268,4 +284,10 @@ export async function generateDailyReport(date = getChinaDateString()) {
       generatedAt: new Date(),
     },
   })
+}
+
+function formatConfidence(confidence: string) {
+  if (confidence === "high") return "高"
+  if (confidence === "medium") return "中"
+  return "低"
 }
