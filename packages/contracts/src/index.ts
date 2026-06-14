@@ -322,12 +322,14 @@ export interface TreeCareLogData {
 export interface TreeAdoptionData {
   id: string
   treeId: string
+  treeCode?: string
   plan: string
   adopterName?: string
   adopterPhone?: string
   status: string
   createdAt: string
   updatedAt: string
+  harvestBookings?: HarvestBookingData[]
 }
 
 export type HarvestShipmentStatus = "pending" | "picking" | "shipping" | "delivered"

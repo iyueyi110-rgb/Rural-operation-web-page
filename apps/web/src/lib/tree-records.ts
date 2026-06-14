@@ -167,18 +167,30 @@ export async function getTreeProfile(code: string): Promise<TreeProfile | null> 
 export async function listTreeAdoptions(adopterPhone?: string): Promise<TreeAdoptionData[]> {
   const records = await prisma.treeAdoption.findMany({
     where: adopterPhone ? { adopterPhone: maskPhone(adopterPhone) } : undefined,
+    include: {
+      tree: {
+        include: {
+          harvestBookings: {
+            include: { shipment: true },
+            orderBy: { scheduledDate: "desc" },
+          },
+        },
+      },
+    },
     orderBy: { createdAt: "desc" },
   })
 
   return records.map((record) => ({
     id: record.id,
     treeId: record.treeId,
+    treeCode: record.tree.treeCode,
     plan: record.plan,
     adopterName: record.adopterName ?? undefined,
     adopterPhone: record.adopterPhone ?? undefined,
     status: record.status,
     createdAt: record.createdAt.toISOString(),
     updatedAt: record.updatedAt.toISOString(),
+    harvestBookings: record.tree.harvestBookings.map((booking) => mapHarvestBooking(booking)),
   }))
 }
 
