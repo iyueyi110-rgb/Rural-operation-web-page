@@ -2,7 +2,7 @@ import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { summarizeTasks } from "@web/lib/task-records"
-import { isAdminRequest } from "@web/lib/tree-records"
+import { isAdminRequest, maskPhone } from "@web/lib/tree-records"
 
 const skillOptions = ["cooking", "farming", "guiding", "handicraft", "logistics"] as const
 const statusOptions = ["active", "inactive"] as const
@@ -28,8 +28,9 @@ export async function GET(request: Request) {
     orderBy: [{ status: "asc" }, { createdAt: "desc" }],
   })
 
+  const isAdmin = isAdminRequest(request)
   return jsonResponse(request, {
-    data: data.map(mapVillager),
+    data: data.map((villager) => mapVillager(villager, { maskPhone: !isAdmin })),
     meta: { total: data.length },
   })
 }
@@ -126,14 +127,14 @@ function mapVillager(villager: {
   updatedAt: Date
   node?: { id: string; slug: string; nameKey: string } | null
   tasks?: Array<{ status: string; earnings: number; updatedAt: Date }>
-}) {
+}, options: { maskPhone?: boolean } = {}) {
   const monthStart = getCurrentMonthStart()
   const tasks = villager.tasks ?? []
 
   return {
     id: villager.id,
     name: villager.name,
-    phone: villager.phone,
+    phone: options.maskPhone ? (maskPhone(villager.phone) ?? "") : villager.phone,
     nodeId: villager.nodeId ?? undefined,
     status: villager.status,
     node: villager.node,

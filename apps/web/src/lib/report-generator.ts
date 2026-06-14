@@ -237,7 +237,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
         }
       : null
   const villagerSection = {
-    type: "villager_tasks",
+    type: "feedback",
     title: "村民任务协作",
     content: `当日完成任务 ${villagerStats.completedTaskCount} 个，任务收益合计 ¥${villagerStats.totalEarnings}，参与村民 ${villagerStats.participantCount} 人。`,
   }
