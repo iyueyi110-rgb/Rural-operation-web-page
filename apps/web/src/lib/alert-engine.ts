@@ -181,6 +181,90 @@ export async function runAlertChecks(date: string): Promise<AlertData[]> {
   return created.map(mapAlert)
 }
 
+export async function runAnomalyDetection(date: string): Promise<AlertData[]> {
+  const { start, end } = getChinaDayRange(date)
+  const logs = await prisma.presenceLog.findMany({
+    where: { timestamp: { gte: start, lte: end } },
+    include: { node: true },
+  })
+  const hourlyByNode = new Map<string, Map<number, number>>()
+  const created = []
+
+  for (const log of logs) {
+    const hour = getChinaHour(log.timestamp)
+    const hours = hourlyByNode.get(log.nodeId) ?? new Map<number, number>()
+    hours.set(hour, (hours.get(hour) ?? 0) + log.peopleCount)
+    hourlyByNode.set(log.nodeId, hours)
+  }
+
+  for (const [nodeId, hours] of hourlyByNode) {
+    const node = logs.find((log) => log.nodeId === nodeId)?.node
+    if (!node) continue
+
+    for (const [hour, count] of hours) {
+      const historicalAvg = await getHistoricalAvg(nodeId, hour, start)
+      if (historicalAvg > 0 && count > 10 && count > historicalAvg * 3) {
+        created.push(
+          await createAlertIfAbsent({
+            alertType: "crowd",
+            nodeId,
+            severity: "high",
+            message: `AI 异常检测：${node.slug} ${hour}:00 客流 ${count} 人，是同时间段均值 ${Math.round(historicalAvg)} 的 ${(count / historicalAvg).toFixed(1)} 倍。`,
+            dayStart: start,
+          }),
+        )
+      }
+    }
+  }
+
+  return created.map(mapAlert)
+}
+
 export function toAlertData(record: Parameters<typeof mapAlert>[0]) {
   return mapAlert(record)
+}
+
+async function getHistoricalAvg(nodeId: string, hour: number, dateStart: Date) {
+  const historyStart = new Date(dateStart)
+  historyStart.setDate(historyStart.getDate() - 14)
+  const logs = await prisma.presenceLog.findMany({
+    where: {
+      nodeId,
+      timestamp: { gte: historyStart, lt: dateStart },
+    },
+    select: { timestamp: true, peopleCount: true },
+  })
+  const dailyTotals = new Map<string, number>()
+
+  for (let index = 1; index <= 14; index += 1) {
+    const day = new Date(dateStart)
+    day.setDate(day.getDate() - index)
+    dailyTotals.set(formatChinaDate(day), 0)
+  }
+
+  for (const log of logs) {
+    if (getChinaHour(log.timestamp) !== hour) continue
+    const day = formatChinaDate(log.timestamp)
+    dailyTotals.set(day, (dailyTotals.get(day) ?? 0) + log.peopleCount)
+  }
+
+  const totals = [...dailyTotals.values()]
+  return totals.reduce((sum, value) => sum + value, 0) / totals.length
+}
+
+function getChinaHour(date: Date) {
+  return Number(new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Shanghai",
+    hour: "2-digit",
+    hour12: false,
+  }).format(date))
+}
+
+function formatChinaDate(date: Date) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date)
 }

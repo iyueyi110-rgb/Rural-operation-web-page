@@ -11,6 +11,7 @@ import { computeNodeDailyScores } from "@web/lib/node-scoring"
 import { generateControlCommands } from "@web/lib/infrastructure-control"
 import { generateCareAdvice } from "@web/lib/care-advisor"
 import { predictTomorrowTraffic } from "@web/lib/traffic-forecast"
+import { runAnomalyDetection } from "@web/lib/alert-engine"
 
 interface GeneratedReportPayload {
   title: string
@@ -71,6 +72,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
   const { start, end } = getChinaDayRange(date)
 
   await computeNodeDailyScores(date)
+  await runAnomalyDetection(date)
 
   const offlineThreshold = new Date(Date.now() - 30 * 60 * 1000)
   const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices, productRanking, completedTasks, trafficForecast] = await Promise.all([
