@@ -177,6 +177,29 @@ export interface DailyReportData {
   generatedAt: string
 }
 
+export interface DeviceData {
+  id: string
+  deviceId: string
+  name: string
+  type: string
+  status: string
+  nodeId?: string
+  location?: string
+  lastSeenAt?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface DeviceReadingData {
+  id: string
+  deviceId: string
+  type: string
+  value: number
+  unit: string
+  raw?: Record<string, unknown>
+  createdAt: string
+}
+
 // ==== P1 新增 ====
 
 export type TreeCareLogType = "watering" | "pruning" | "fertilizing" | "pest_control" | "photo" | "harvest"

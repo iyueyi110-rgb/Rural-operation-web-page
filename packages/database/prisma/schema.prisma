@@ -55,6 +55,7 @@ model SpaceNode {
   presenceLogs PresenceLog[]
   dailyScores  NodeDailyScore[]
   orders       UnifiedOrder[]
+  devices      Device[]
 
   @@map("space_node")
 }
@@ -154,6 +155,38 @@ model SensorReading {
 
   @@index([sensorId, createdAt])
   @@map("sensor_reading")
+}
+
+model Device {
+  id         String          @id @default(cuid())
+  deviceId   String          @unique
+  name       String
+  type       String
+  status     String          @default("active")
+  nodeId     String?
+  location   String?
+  lastSeenAt DateTime?
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @updatedAt @map("updated_at")
+  node       SpaceNode?      @relation(fields: [nodeId], references: [id])
+  readings   DeviceReading[]
+
+  @@index([status, lastSeenAt])
+  @@map("device")
+}
+
+model DeviceReading {
+  id        String   @id @default(cuid())
+  deviceId  String
+  type      String
+  value     Float
+  unit      String
+  raw       Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  device    Device   @relation(fields: [deviceId], references: [deviceId])
+
+  @@index([deviceId, createdAt])
+  @@map("device_reading")
 }
 
 // ==== P1 树木与养护 ====

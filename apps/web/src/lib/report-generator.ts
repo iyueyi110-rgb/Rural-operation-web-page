@@ -94,7 +94,8 @@ export async function generateDailyReport(date = getChinaDateString()) {
 
   await computeNodeDailyScores(date)
 
-  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather] = await Promise.all([
+  const offlineThreshold = new Date(Date.now() - 30 * 60 * 1000)
+  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices] = await Promise.all([
     prisma.presenceLog.aggregate({
       where: { timestamp: { gte: start, lte: end } },
       _sum: { peopleCount: true },
@@ -118,6 +119,14 @@ export async function generateDailyReport(date = getChinaDateString()) {
       take: 8,
     }),
     getWeatherSummary(),
+    prisma.device.findMany({
+      where: {
+        OR: [{ lastSeenAt: null }, { lastSeenAt: { lt: offlineThreshold } }],
+        status: "active",
+      },
+      orderBy: { lastSeenAt: "asc" },
+      take: 5,
+    }),
   ])
 
   const metrics = {
@@ -152,6 +161,12 @@ export async function generateDailyReport(date = getChinaDateString()) {
         attractiveness: score.attractiveness,
         safetyRisk: score.safetyRisk,
       })),
+    offlineDevices: offlineDevices.map((device) => ({
+      deviceId: device.deviceId,
+      name: device.name,
+      type: device.type,
+      lastSeenAt: device.lastSeenAt?.toISOString() ?? null,
+    })),
   }
 
   const result = await ModelProviderAdapter.complete(JSON.stringify(context), {
@@ -178,6 +193,11 @@ export async function generateDailyReport(date = getChinaDateString()) {
       priority: command.priority === "critical" ? "high" : command.priority,
       category: "facility",
       action: command.reason,
+    })),
+    ...offlineDevices.map((device) => ({
+      priority: "medium",
+      category: "facility",
+      action: `设备 ${device.name}（${device.deviceId}）超过 30 分钟未上报，请巡检供电、网络与安装位置。`,
     })),
   ].filter((item, index, items) => items.findIndex((candidate) => candidate.action === item.action) === index)
 
