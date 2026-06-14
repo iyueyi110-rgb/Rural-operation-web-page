@@ -301,6 +301,23 @@ export interface TreeAdoptionData {
   updatedAt: string
 }
 
+export type HarvestShipmentStatus = "pending" | "picking" | "shipping" | "delivered"
+
+export interface HarvestShipmentData {
+  id: string
+  harvestBookingId: string
+  recipientName: string
+  recipientPhone: string
+  recipientAddress: string
+  courier?: string
+  trackingNumber?: string
+  status: HarvestShipmentStatus
+  shippedAt?: string
+  deliveredAt?: string
+  createdAt: string
+  updatedAt: string
+}
+
 export interface HarvestBookingData {
   id: string
   treeId: string
@@ -313,6 +330,7 @@ export interface HarvestBookingData {
   destinationNote?: string
   status: string
   createdAt: string
+  shipment?: HarvestShipmentData
 }
 
 export interface AlertData {

@@ -10,6 +10,8 @@ import { getSiteUrl } from "@web/lib/site-url"
 import { getTreeProfile } from "@web/lib/tree-records"
 import { PageHeader, Section } from "@ui/index"
 
+import { HarvestShipmentForm } from "./harvest-shipment-form"
+
 export const dynamic = "force-dynamic"
 
 export async function generateMetadata({
@@ -150,6 +152,10 @@ export default async function TreeDetailPage({ params }: { params: { locale: Loc
             )}
           </div>
         </div>
+      </Section>
+
+      <Section className="pt-9">
+        <HarvestShipmentForm treeCode={tree.treeCode} />
       </Section>
 
       <Section className="pt-9">

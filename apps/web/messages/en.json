@@ -190,6 +190,32 @@
           "annual": "TBD"
         }
       }
+    },
+    "shipment": {
+      "title": "Pick and ship",
+      "body": "Submit a picking time and delivery address from the tree profile. Public logistics details are masked.",
+      "enableLabel": "I need picked fruit shipped",
+      "dateLabel": "Picking date",
+      "timeSlotLabel": "Time slot",
+      "guestCountLabel": "Guest count",
+      "recipientNameLabel": "Recipient",
+      "recipientPhoneLabel": "Phone",
+      "recipientAddressLabel": "Delivery address",
+      "submit": "Submit shipment request",
+      "submitting": "Submitting",
+      "success": "Shipment request created. The team will confirm picking and logistics.",
+      "failed": "Submission failed. Please check the form and try again.",
+      "destination": "Pick and ship",
+      "destinationNote": "Visitor chose pick-and-ship from the tree profile.",
+      "statusTitle": "Shipment status",
+      "courier": "Courier",
+      "trackingNumber": "Tracking number",
+      "statuses": {
+        "pending": "Pending",
+        "picking": "Picking",
+        "shipping": "Shipping",
+        "delivered": "Delivered"
+      }
     }
   },
   "tickets": {

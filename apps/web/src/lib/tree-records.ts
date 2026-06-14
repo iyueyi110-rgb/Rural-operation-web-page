@@ -1,7 +1,7 @@
 import "server-only"
 
 import { prisma } from "@zouma/database"
-import type { HarvestBookingData, OrchardTreeData, TreeAdoptionData, TreeCareLogData } from "@zouma/contracts"
+import type { HarvestBookingData, HarvestShipmentData, OrchardTreeData, TreeAdoptionData, TreeCareLogData } from "@zouma/contracts"
 
 import { orchardTreeOptions } from "@web/lib/trees-data"
 
@@ -81,6 +81,7 @@ function enrichTree(tree: {
     destinationNote: string | null
     status: string
     createdAt: Date
+    shipment?: HarvestShipmentRecord | null
   }>
 }): TreeProfile {
   const staticTree =
@@ -120,7 +121,7 @@ function enrichTree(tree: {
         createdAt: log.createdAt.toISOString(),
       })) ?? [],
     harvestBookings:
-      tree.harvestBookings?.map(mapHarvestBooking) ?? [],
+      tree.harvestBookings?.map((booking) => mapHarvestBooking(booking)) ?? [],
   }
 }
 
@@ -129,7 +130,10 @@ export async function listTreeProfiles(): Promise<TreeProfile[]> {
     const trees = await prisma.orchardTree.findMany({
       include: {
         careLogs: { orderBy: { createdAt: "desc" } },
-        harvestBookings: { orderBy: { scheduledDate: "desc" } },
+        harvestBookings: {
+          include: { shipment: true },
+          orderBy: { scheduledDate: "desc" },
+        },
       },
       orderBy: { treeCode: "asc" },
     })
@@ -146,7 +150,10 @@ export async function getTreeProfile(code: string): Promise<TreeProfile | null> 
       where: { OR: [{ treeCode: code }, { treeCode: code.toLowerCase() }, { id: code }] },
       include: {
         careLogs: { orderBy: { createdAt: "desc" } },
-        harvestBookings: { orderBy: { scheduledDate: "desc" } },
+        harvestBookings: {
+          include: { shipment: true },
+          orderBy: { scheduledDate: "desc" },
+        },
       },
     })
     if (tree) return enrichTree(tree)
@@ -180,9 +187,50 @@ export function maskPhone(phone?: string) {
   return phone.replace(/1[3-9]\d{9}/g, (value) => `${value.slice(0, 3)}****${value.slice(-4)}`).trim()
 }
 
+export function maskAddress(address?: string) {
+  if (!address) return undefined
+  const trimmed = address.trim()
+  if (trimmed.length <= 8) return `${trimmed.slice(0, 2)}***`
+  return `${trimmed.slice(0, 6)}***${trimmed.slice(-2)}`
+}
+
 export function isAdminRequest(request: Request) {
   const expected = process.env.ADMIN_API_TOKEN ?? "dev-admin-token"
   return request.headers.get("x-admin-token") === expected
+}
+
+interface HarvestShipmentRecord {
+  id: string
+  harvestBookingId: string
+  recipientName: string
+  recipientPhone: string
+  recipientAddress: string
+  courier: string | null
+  trackingNumber: string | null
+  status: string
+  shippedAt: Date | null
+  deliveredAt: Date | null
+  createdAt: Date
+  updatedAt: Date
+}
+
+export function mapHarvestShipment(record: HarvestShipmentRecord, options: { maskPrivateFields?: boolean } = {}): HarvestShipmentData {
+  const maskPrivateFields = options.maskPrivateFields ?? true
+
+  return {
+    id: record.id,
+    harvestBookingId: record.harvestBookingId,
+    recipientName: record.recipientName,
+    recipientPhone: maskPrivateFields ? (maskPhone(record.recipientPhone) ?? "") : record.recipientPhone,
+    recipientAddress: maskPrivateFields ? (maskAddress(record.recipientAddress) ?? "") : record.recipientAddress,
+    courier: record.courier ?? undefined,
+    trackingNumber: record.trackingNumber ?? undefined,
+    status: record.status as HarvestShipmentData["status"],
+    shippedAt: record.shippedAt?.toISOString(),
+    deliveredAt: record.deliveredAt?.toISOString(),
+    createdAt: record.createdAt.toISOString(),
+    updatedAt: record.updatedAt.toISOString(),
+  }
 }
 
 export function mapHarvestBooking(record: {
@@ -197,7 +245,8 @@ export function mapHarvestBooking(record: {
   destinationNote?: string | null
   status: string
   createdAt: Date
-}): HarvestBookingData {
+  shipment?: HarvestShipmentRecord | null
+}, options: { maskPrivateFields?: boolean } = {}): HarvestBookingData {
   return {
     id: record.id,
     treeId: record.treeId,
@@ -210,5 +259,6 @@ export function mapHarvestBooking(record: {
     destinationNote: record.destinationNote ?? undefined,
     status: record.status,
     createdAt: record.createdAt.toISOString(),
+    shipment: record.shipment ? mapHarvestShipment(record.shipment, options) : undefined,
   }
 }

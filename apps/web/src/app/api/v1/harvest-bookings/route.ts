@@ -10,12 +10,17 @@ export async function OPTIONS(request: Request) {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const treeId = searchParams.get("treeId") ?? undefined
+  const isAdmin = isAdminRequest(request)
   const records = await prisma.harvestBooking.findMany({
     where: treeId ? { treeId } : undefined,
+    include: { shipment: true },
     orderBy: { createdAt: "desc" },
   })
 
-  return jsonResponse(request, { data: records.map(mapHarvestBooking), meta: { total: records.length } })
+  return jsonResponse(request, {
+    data: records.map((record) => mapHarvestBooking(record, { maskPrivateFields: !isAdmin })),
+    meta: { total: records.length },
+  })
 }
 
 export async function POST(request: Request) {
@@ -93,7 +98,8 @@ export async function PATCH(request: Request) {
       fruitDestination: typeof body.fruitDestination === "string" ? body.fruitDestination.trim() : undefined,
       destinationNote: typeof body.destinationNote === "string" ? body.destinationNote.trim() : undefined,
     },
+    include: { shipment: true },
   })
 
-  return jsonResponse(request, { data: mapHarvestBooking(record) })
+  return jsonResponse(request, { data: mapHarvestBooking(record, { maskPrivateFields: false }) })
 }

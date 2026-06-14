@@ -312,9 +312,29 @@ model HarvestBooking {
   createdAt     DateTime    @default(now()) @map("created_at")
   updatedAt     DateTime    @updatedAt @map("updated_at")
   tree          OrchardTree @relation(fields: [treeId], references: [id])
+  shipment      HarvestShipment?
 
   @@index([treeId, scheduledDate])
   @@map("harvest_booking")
+}
+
+model HarvestShipment {
+  id                String         @id @default(cuid())
+  harvestBookingId  String         @unique @map("harvest_booking_id")
+  recipientName     String
+  recipientPhone    String
+  recipientAddress  String         @db.Text
+  courier           String?
+  trackingNumber    String?
+  status            String         @default("pending")
+  shippedAt         DateTime?
+  deliveredAt       DateTime?
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+  harvestBooking    HarvestBooking @relation(fields: [harvestBookingId], references: [id])
+
+  @@index([status, createdAt])
+  @@map("harvest_shipment")
 }
 
 model RouteGenerationLog {
