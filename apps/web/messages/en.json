@@ -31,6 +31,10 @@
     "privacy": {
       "title": "Zouma Privacy Center",
       "description": "Preview consent and privacy management items."
+    },
+    "products": {
+      "title": "Zouma Village Products | Offline confirmation order",
+      "description": "Browse Zouma Village products, gifts, and village meal offers, then submit an offline confirmation order."
     }
   },
   "trees": {
@@ -345,7 +349,8 @@
       "me": "Me",
       "privacy": "Privacy",
       "login": "Login",
-      "start": "Start"
+      "start": "Start",
+      "products": "Products"
     },
     "hero": {
       "badge": "AIGC-enabled resilient mountain village",
@@ -957,6 +962,57 @@
         "booking": "View booking",
         "route": "Generate two-day route"
       }
+    }
+  },
+  "products": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Products MVP"
+    },
+    "hero": {
+      "eyebrow": "Products",
+      "title": "Turn village products into browseable and revisitable orders",
+      "body": "Payments are not connected yet. Visitors can choose a product, leave contact details, and create an offline confirmation order."
+    },
+    "list": {
+      "eyebrow": "Products",
+      "title": "Choose a product or meal service",
+      "body": "Products come from the admin Product table and can be linked to consumption nodes. Empty prices appear as negotiable.",
+      "select": "Select",
+      "selected": "Selected",
+      "negotiable": "Negotiable"
+    },
+    "form": {
+      "eyebrow": "Order info",
+      "title": "Fill offline confirmation details",
+      "nameLabel": "Contact name",
+      "phoneLabel": "Phone",
+      "quantityLabel": "Quantity",
+      "quantityValue": "{count} pcs",
+      "confirm": "Create offline order",
+      "submitting": "Creating"
+    },
+    "summary": {
+      "title": "Order summary",
+      "product": "Product",
+      "quantity": "Quantity",
+      "amount": "Amount"
+    },
+    "notice": {
+      "title": "Notice",
+      "body": "This order is pending offline confirmation and will not charge payment. Operators can continue processing it in admin orders."
+    },
+    "order": {
+      "title": "Order created",
+      "body": "The product order is pending offline confirmation.",
+      "status": "Status: pending offline confirmation",
+      "idLabel": "Order ID"
+    },
+    "messages": {
+      "loading": "Loading products",
+      "loadFailed": "Products are unavailable",
+      "contactRequired": "Please fill contact name and phone",
+      "submitFailed": "Order submission failed. Please retry."
     }
   }
 }

@@ -81,7 +81,7 @@ export interface FeedbackRecord extends Feedback {
 
 export type SpaceNodeType = "entrance" | "viewpoint" | "activity" | "rest" | "shop" | "waterside"
 export type PresenceSource = "wifi_probe" | "camera" | "infrared" | "manual"
-export type OrderType = "courtyard_booking" | "tree_adoption" | "ticket_order" | "activity_booking"
+export type OrderType = "courtyard_booking" | "tree_adoption" | "ticket_order" | "activity_booking" | "product_order"
 export type WeatherAlertType = "rainstorm" | "snowstorm" | "heat" | "wind" | "typhoon" | "other"
 
 export interface SpaceNodeData {
@@ -198,6 +198,21 @@ export interface DeviceReadingData {
   unit: string
   raw?: Record<string, unknown>
   createdAt: string
+}
+
+export interface ProductData {
+  id: string
+  name: string
+  category: string
+  description: string
+  price?: number
+  unit?: string
+  stockStatus: string
+  nodeId?: string
+  imageUrl?: string
+  status: string
+  createdAt: string
+  updatedAt: string
 }
 
 // ==== P1 新增 ====

@@ -16,6 +16,7 @@ import {
   RefreshCw,
   Settings,
   ShoppingCart,
+  Store,
   Sprout,
   Trees,
 } from "lucide-react"
@@ -35,6 +36,7 @@ const menuIcons: Record<string, ComponentType<{ className?: string }>> = {
   alerts: Bell,
   analytics: BarChart3,
   devices: RadioTower,
+  products: Store,
   reports: FileText,
   infrastructure: Cpu,
   settings: Settings,
@@ -52,6 +54,7 @@ const menuHrefs: Record<string, string> = {
   alerts: "/alerts",
   analytics: "/analytics",
   devices: "/devices",
+  products: "/products",
   reports: "/reports",
   infrastructure: "/infrastructure",
   settings: "/settings",

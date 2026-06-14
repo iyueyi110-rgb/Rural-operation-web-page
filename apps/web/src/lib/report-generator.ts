@@ -95,7 +95,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
   await computeNodeDailyScores(date)
 
   const offlineThreshold = new Date(Date.now() - 30 * 60 * 1000)
-  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices] = await Promise.all([
+  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices, productRanking] = await Promise.all([
     prisma.presenceLog.aggregate({
       where: { timestamp: { gte: start, lte: end } },
       _sum: { peopleCount: true },
@@ -125,6 +125,14 @@ export async function generateDailyReport(date = getChinaDateString()) {
         status: "active",
       },
       orderBy: { lastSeenAt: "asc" },
+      take: 5,
+    }),
+    prisma.unifiedOrder.groupBy({
+      by: ["productName"],
+      where: { orderType: "product_order", createdAt: { gte: start, lte: end } },
+      _sum: { quantity: true, totalAmount: true },
+      _count: { _all: true },
+      orderBy: { _sum: { totalAmount: "desc" } },
       take: 5,
     }),
   ])
@@ -167,6 +175,12 @@ export async function generateDailyReport(date = getChinaDateString()) {
       type: device.type,
       lastSeenAt: device.lastSeenAt?.toISOString() ?? null,
     })),
+    productRanking: productRanking.map((item) => ({
+      productName: item.productName,
+      quantity: item._sum.quantity ?? 0,
+      revenue: item._sum.totalAmount ?? 0,
+      orderCount: item._count._all,
+    })),
   }
 
   const result = await ModelProviderAdapter.complete(JSON.stringify(context), {
@@ -200,6 +214,30 @@ export async function generateDailyReport(date = getChinaDateString()) {
       action: `设备 ${device.name}（${device.deviceId}）超过 30 分钟未上报，请巡检供电、网络与安装位置。`,
     })),
   ].filter((item, index, items) => items.findIndex((candidate) => candidate.action === item.action) === index)
+  const productSection =
+    productRanking.length > 0
+      ? {
+          type: "consumption",
+          title: "农产品消费排行",
+          content: productRanking
+            .map((item, index) => `${index + 1}. ${item.productName}：${item._sum.quantity ?? 0} 份，¥${item._sum.totalAmount ?? 0}`)
+            .join("；"),
+        }
+      : null
+  const sections = [
+    ...parsed.sections.filter((section) => section.type !== "infrastructure"),
+    ...(productSection ? [productSection] : []),
+    infrastructureSection,
+  ]
+  const reportMetrics = {
+    ...parsed.metrics,
+    productRanking: productRanking.map((item) => ({
+      productName: item.productName,
+      quantity: item._sum.quantity ?? 0,
+      revenue: item._sum.totalAmount ?? 0,
+      orderCount: item._count._all,
+    })),
+  }
 
   return prisma.dailyReport.upsert({
     where: { date },
@@ -207,8 +245,8 @@ export async function generateDailyReport(date = getChinaDateString()) {
       date,
       title: parsed.title,
       summary: parsed.summary,
-      sections: [...parsed.sections.filter((section) => section.type !== "infrastructure"), infrastructureSection],
-      metrics: parsed.metrics,
+      sections,
+      metrics: reportMetrics,
       actionItems,
       status: "published",
       generatedAt: new Date(),
@@ -216,8 +254,8 @@ export async function generateDailyReport(date = getChinaDateString()) {
     update: {
       title: parsed.title,
       summary: parsed.summary,
-      sections: [...parsed.sections.filter((section) => section.type !== "infrastructure"), infrastructureSection],
-      metrics: parsed.metrics,
+      sections,
+      metrics: reportMetrics,
       actionItems,
       status: "published",
       generatedAt: new Date(),

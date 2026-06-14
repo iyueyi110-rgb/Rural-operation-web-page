@@ -2,7 +2,7 @@ import { prisma } from "@zouma/database"
 
 import { getChinaDayRange, isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 
-const orderTypes = ["courtyard_booking", "tree_adoption", "ticket_order", "activity_booking"] as const
+const orderTypes = ["courtyard_booking", "tree_adoption", "ticket_order", "activity_booking", "product_order"] as const
 
 function isOrderType(value: unknown): value is (typeof orderTypes)[number] {
   return typeof value === "string" && orderTypes.includes(value as (typeof orderTypes)[number])

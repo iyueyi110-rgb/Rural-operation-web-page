@@ -89,6 +89,9 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
             <Link className="transition hover:text-white" href={`/${params.locale}/trees`}>
               {t("nav.adoption")}
             </Link>
+            <Link className="transition hover:text-white" href={`/${params.locale}/products`}>
+              {t("nav.products")}
+            </Link>
           </nav>
           <div className="flex items-center gap-2">
             <Link

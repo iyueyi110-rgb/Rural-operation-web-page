@@ -56,6 +56,7 @@ model SpaceNode {
   dailyScores  NodeDailyScore[]
   orders       UnifiedOrder[]
   devices      Device[]
+  products     Product[]
 
   @@map("space_node")
 }
@@ -187,6 +188,25 @@ model DeviceReading {
 
   @@index([deviceId, createdAt])
   @@map("device_reading")
+}
+
+model Product {
+  id          String    @id @default(cuid())
+  name        String
+  category    String
+  description String    @db.Text
+  price       Float?
+  unit        String?
+  stockStatus String    @default("available")
+  nodeId      String?
+  imageUrl    String?
+  status      String    @default("active")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  node        SpaceNode? @relation(fields: [nodeId], references: [id])
+
+  @@index([category, status])
+  @@map("product")
 }
 
 // ==== P1 树木与养护 ====

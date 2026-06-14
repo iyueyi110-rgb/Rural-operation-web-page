@@ -1,5 +1,6 @@
 import { prisma } from "../src/index"
 import { seedNodes } from "./seed-nodes"
+import { seedProducts } from "./seed-products"
 import { seedTrees } from "./seed-trees"
 
 const seedTickets = [
@@ -92,6 +93,7 @@ async function main() {
   await seedFeedbackTickets()
   await seedNodes()
   await seedTrees()
+  await seedProducts()
 }
 
 main()
