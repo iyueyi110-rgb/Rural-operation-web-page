@@ -17,19 +17,31 @@ interface CrossRow extends Record<string, unknown> {
   note?: string
 }
 
+interface RouteRankingRow extends Record<string, unknown> {
+  routeId: string
+  generationCount: number
+  providers: Record<string, number>
+}
+
 type SortKey = "conversionRate" | "revenue" | "peopleCount"
 
 export default function AnalyticsPage() {
   const [rows, setRows] = useState<CrossRow[]>([])
+  const [routeRows, setRouteRows] = useState<RouteRankingRow[]>([])
   const [date, setDate] = useState(today())
   const [sortKey, setSortKey] = useState<SortKey>("conversionRate")
   const [isLoading, setIsLoading] = useState(true)
 
   const loadRows = useCallback(async () => {
     setIsLoading(true)
-    const response = await fetch(`${adminApiBase}/analytics/cross/flow-vs-spend?date=${date}`)
+    const [response, routeResponse] = await Promise.all([
+      fetch(`${adminApiBase}/analytics/cross/flow-vs-spend?date=${date}`),
+      fetch(`${adminApiBase}/analytics/routes/ranking?days=30`),
+    ])
     const payload = (await response.json()) as { data?: CrossRow[] }
+    const routePayload = (await routeResponse.json()) as { data?: RouteRankingRow[] }
     setRows(payload.data ?? [])
+    setRouteRows(routePayload.data ?? [])
     setIsLoading(false)
   }, [date])
 
@@ -49,6 +61,14 @@ export default function AnalyticsPage() {
     ],
     [],
   )
+  const routeColumns = useMemo<Array<TableColumn<RouteRankingRow>>>(
+    () => [
+      { key: "routeId", label: "路线" },
+      { key: "generationCount", label: "生成次数" },
+      { key: "providers", label: "来源", render: (value) => Object.entries(value as Record<string, number>).map(([provider, count]) => `${provider}:${count}`).join(" / ") || "-" },
+    ],
+    [],
+  )
 
   return (
     <div className="grid gap-5">
@@ -65,6 +85,12 @@ export default function AnalyticsPage() {
         </select>
       </div>
       <AdminDataTable columns={columns} emptyLabel={adminCopy.analytics.noData} isLoading={isLoading} rows={sortedRows} />
+      <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
+        <h2 className="text-lg font-extrabold">路线生成热度排行</h2>
+        <div className="mt-4">
+          <AdminDataTable columns={routeColumns} emptyLabel="暂无路线生成记录。" isLoading={isLoading} rows={routeRows} />
+        </div>
+      </section>
     </div>
   )
 }

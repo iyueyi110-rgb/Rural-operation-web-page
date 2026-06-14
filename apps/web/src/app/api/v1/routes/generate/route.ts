@@ -9,6 +9,7 @@ import {
   type RouteDuration,
   type RouteWeather,
 } from "@web/lib/routes-data"
+import { getChinaDateString } from "@web/lib/aigc-api"
 
 const durations: RouteDuration[] = ["halfDay", "oneDay", "twoDays"]
 const audiences: RouteAudience[] = ["senior", "family", "regular"]
@@ -40,9 +41,13 @@ function parseRouteId(content: string) {
   }
 }
 
-function formatRouteTags() {
+function formatRouteTags(riskWaypointKeys = new Set<string>()) {
   return routeOptions
-    .map((route) => `- ${route.id} (${route.duration}, ${route.audience}, ${route.weather})`)
+    .map((route) => {
+      const riskWaypoints = route.waypoints.filter((waypoint) => riskWaypointKeys.has(waypoint))
+      const riskLabel = riskWaypoints.length ? `, risk=${riskWaypoints.join("|")}` : ""
+      return `- ${route.id} (${route.duration}, ${route.audience}, ${route.weather}${riskLabel})`
+    })
     .join("\n")
 }
 
@@ -58,12 +63,20 @@ export async function POST(request: Request) {
     audience: body.audience,
     weather: body.weather,
   })
+  const highRiskScores = await prisma.nodeDailyScore.findMany({
+    where: { date: getChinaDateString(), safetyRisk: { gt: 70 } },
+    include: { node: true },
+    orderBy: { safetyRisk: "desc" },
+  })
+  const riskWaypointKeys = new Set(highRiskScores.map((score) => score.node.nameKey))
+  const riskSlugs = highRiskScores.map((score) => `${score.node.slug}:${Math.round(score.safetyRisk)}`)
 
   const prompt = [
     "请从给定路线中为游客选择最合适的一条走马村路线。",
     `输入条件：duration=${body.duration}, audience=${body.audience}, weather=${body.weather}。`,
+    riskSlugs.length ? `当天高风险节点（slug:safetyRisk）：${riskSlugs.join(", ")}。推荐时应优先解释或规避这些节点。` : "当天暂无高风险节点。",
     "可选路线：",
-    formatRouteTags(),
+    formatRouteTags(riskWaypointKeys),
     "只返回 JSON：{\"routeId\":\"one-id-from-list\",\"reason\":\"short reason\"}。",
   ].join("\n")
 

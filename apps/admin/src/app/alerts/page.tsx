@@ -8,7 +8,8 @@ import { adminCopy } from "@admin/lib/admin-copy"
 
 interface AlertRow extends Record<string, unknown> {
   id: string
-  alertType: keyof typeof adminCopy.alerts.types
+  alertType: keyof typeof adminCopy.alerts.types | string
+  source: "behavior" | "sensor" | "weather"
   severity: string
   status: string
   message: string
@@ -26,9 +27,40 @@ export default function AlertsPage() {
     setIsLoading(true)
     const params = new URLSearchParams({ status, run: "true" })
     if (type) params.set("type", type)
-    const response = await fetch(`${adminApiBase}/alerts?${params}`)
-    const payload = (await response.json()) as { data?: AlertRow[] }
-    setRows(payload.data ?? [])
+    const [behaviorResult, sensorResult, weatherResult] = await Promise.allSettled([
+      fetch(`${adminApiBase}/alerts?${params}`).then((response) => response.json()) as Promise<{ data?: AlertRow[] }>,
+      fetch(`${adminApiBase}/infrastructure/alerts`).then((response) => response.json()) as Promise<{ data?: Array<{ id: string; sensorId: string; type: string; value: number; unit: string; createdAt: string }> }>,
+      fetch(`${adminApiBase}/weather/alerts`).then((response) => response.json()) as Promise<{ data?: Array<{ id: string; type: string; severity: string; title: string; text: string; createdAt: string }> }>,
+    ])
+    const behaviorRows =
+      behaviorResult.status === "fulfilled"
+        ? (behaviorResult.value.data ?? []).map((row) => ({ ...row, source: "behavior" as const }))
+        : []
+    const sensorRows =
+      sensorResult.status === "fulfilled"
+        ? (sensorResult.value.data ?? []).map((row) => ({
+            id: `sensor-${row.id}`,
+            alertType: row.type,
+            source: "sensor" as const,
+            severity: "high",
+            status: "active",
+            message: `${row.sensorId} ${row.type}=${row.value}${row.unit}`,
+            createdAt: row.createdAt,
+          }))
+        : []
+    const weatherRows =
+      weatherResult.status === "fulfilled"
+        ? (weatherResult.value.data ?? []).map((row) => ({
+            id: `weather-${row.id}`,
+            alertType: row.type,
+            source: "weather" as const,
+            severity: row.severity,
+            status: "active",
+            message: `${row.title}：${row.text}`,
+            createdAt: row.createdAt,
+          }))
+        : []
+    setRows([...behaviorRows, ...sensorRows, ...weatherRows].filter((row) => !type || row.alertType === type))
     setIsLoading(false)
   }, [status, type])
 
@@ -47,6 +79,7 @@ export default function AlertsPage() {
   }
 
   const columns: Array<TableColumn<AlertRow>> = [
+    { key: "source", label: "来源", render: (value) => sourceLabel(String(value)) },
     { key: "alertType", label: adminCopy.alerts.type, render: (value) => adminCopy.alerts.types[value as keyof typeof adminCopy.alerts.types] ?? String(value) },
     { key: "severity", label: adminCopy.alerts.severity },
     { key: "status", label: adminCopy.alerts.status },
@@ -57,8 +90,8 @@ export default function AlertsPage() {
       label: "操作",
       render: (_value, row) => (
         <span className="flex gap-2">
-          {row.status === "active" ? <button className="text-water" onClick={() => updateStatus(row.id, "acknowledged")} type="button">确认</button> : null}
-          {row.status === "acknowledged" ? <button className="text-moss" onClick={() => updateStatus(row.id, "resolved")} type="button">解决</button> : null}
+          {row.source === "behavior" && row.status === "active" ? <button className="text-water" onClick={() => updateStatus(row.id, "acknowledged")} type="button">确认</button> : null}
+          {row.source === "behavior" && row.status === "acknowledged" ? <button className="text-moss" onClick={() => updateStatus(row.id, "resolved")} type="button">解决</button> : null}
         </span>
       ),
     },
@@ -85,4 +118,10 @@ export default function AlertsPage() {
       <AdminDataTable columns={columns} emptyLabel={adminCopy.alerts.noData} isLoading={isLoading} rows={rows} />
     </div>
   )
+}
+
+function sourceLabel(value: string) {
+  if (value === "sensor") return "传感器"
+  if (value === "weather") return "天气"
+  return "行为"
 }

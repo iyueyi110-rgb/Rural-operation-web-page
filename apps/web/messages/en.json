@@ -780,6 +780,15 @@
         "weather": "Best sunny",
         "rainFallback": "Keep courtyard, meal, workshop and indoor classes.",
         "notice": "Reserve stay, meal and study quota."
+      },
+      "narrativeSixStops": {
+        "title": "Six-stop Narrative Route",
+        "summary": "A six-stop route connecting the ancient road, lychee fields, waterside rest, ridge courtyards, and resilience workshop.",
+        "totalTime": "5.5 hours",
+        "mobility": "Moderate",
+        "weather": "Best in clear weather",
+        "rainFallback": "On rainy days, shorten the waterside stop and move more time into indoor workshops and courtyard tea.",
+        "notice": "Reserve lunch and workshop capacity ahead of time."
       }
     }
   },

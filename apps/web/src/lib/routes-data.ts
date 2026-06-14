@@ -143,6 +143,28 @@ export const routeOptions: RouteOption[] = [
     rainFallbackKey: "plans.twoDayCourtyard.rainFallback",
     noticeKey: "plans.twoDayCourtyard.notice",
   },
+  {
+    id: "narrative-six-stops",
+    duration: "oneDay",
+    audience: "regular",
+    weather: "sunny",
+    titleKey: "plans.narrativeSixStops.title",
+    summaryKey: "plans.narrativeSixStops.summary",
+    totalTimeKey: "plans.narrativeSixStops.totalTime",
+    mobilityKey: "plans.narrativeSixStops.mobility",
+    weatherKey: "plans.narrativeSixStops.weather",
+    waypoints: [
+      "waypoints.visitorCenter",
+      "waypoints.ancientRoad",
+      "waypoints.lycheeGarden",
+      "waypoints.waterfrontRest",
+      "waypoints.ridgeCourtyard",
+      "waypoints.resilienceWorkshop",
+    ],
+    reservationNodes: ["reservationNodes.audioGuide", "reservationNodes.villageMeal", "reservationNodes.indoorWorkshop"],
+    rainFallbackKey: "plans.narrativeSixStops.rainFallback",
+    noticeKey: "plans.narrativeSixStops.notice",
+  },
 ]
 
 const weatherPriority: Record<RouteWeather, number> = {
