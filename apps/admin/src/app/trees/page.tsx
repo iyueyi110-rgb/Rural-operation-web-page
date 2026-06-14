@@ -38,6 +38,7 @@ export default function TreesAdminPage() {
   const [logContent, setLogContent] = useState("")
   const [logType, setLogType] = useState("watering")
   const [isLoading, setIsLoading] = useState(true)
+  const [isUploading, setIsUploading] = useState(false)
   const [message, setMessage] = useState("")
 
   const loadTrees = useCallback(async () => {
@@ -86,6 +87,51 @@ export default function TreesAdminPage() {
     })
     setMessage(response.ok ? "养护日志已录入。" : "养护日志录入失败。")
     if (response.ok) await loadTrees()
+  }
+
+  async function uploadGrowthPhoto(file: File | null) {
+    if (!selected || !file) return
+    setIsUploading(true)
+    setMessage("")
+
+    const formData = new FormData()
+    formData.set("file", file)
+
+    const uploadResponse = await fetch(`${adminApiBase}/upload`, {
+      method: "POST",
+      headers: { "X-Admin-Token": adminToken },
+      body: formData,
+    })
+
+    if (!uploadResponse.ok) {
+      setMessage("图片上传失败。")
+      setIsUploading(false)
+      return
+    }
+
+    const uploadPayload = (await uploadResponse.json()) as { data?: { url?: string } }
+    const imageUrl = uploadPayload.data?.url
+    if (!imageUrl) {
+      setMessage("图片上传失败。")
+      setIsUploading(false)
+      return
+    }
+
+    const growthPhotos = [...(selected.growthPhotos ?? []), imageUrl]
+    const saveResponse = await fetch(`${adminApiBase}/trees/${selected.treeCode}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
+      body: JSON.stringify({
+        fireMemory,
+        newShootsRecord,
+        growthPhotos,
+        adoptStatus: selected.adoptStatus,
+      }),
+    })
+
+    setMessage(saveResponse.ok ? "图片已追加到树档案。" : "图片已上传但档案保存失败。")
+    setIsUploading(false)
+    if (saveResponse.ok) await loadTrees()
   }
 
   const columns = useMemo<Array<TableColumn<TreeRow>>>(
@@ -137,8 +183,21 @@ export default function TreesAdminPage() {
                 图片 URL 列表
                 <textarea className="min-h-20 rounded-md border border-stone bg-rice p-3 font-mono text-xs" onChange={(event) => setGrowthPhotosText(event.target.value)} value={growthPhotosText} />
               </label>
+              <label className="grid gap-2 text-sm font-bold">
+                上传成长照片
+                <input
+                  accept="image/jpeg,image/png,image/webp"
+                  className="rounded-md border border-stone bg-rice p-3 text-sm"
+                  disabled={isUploading}
+                  onChange={(event) => {
+                    void uploadGrowthPhoto(event.target.files?.[0] ?? null)
+                    event.currentTarget.value = ""
+                  }}
+                  type="file"
+                />
+              </label>
               <button className="h-11 rounded-full bg-ink px-5 text-sm font-bold text-white" onClick={saveTree} type="button">
-                {adminCopy.trees.save}
+                {isUploading ? "上传中..." : adminCopy.trees.save}
               </button>
 
               <div className="border-t border-stone pt-4">

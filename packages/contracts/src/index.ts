@@ -275,6 +275,8 @@ export interface HarvestBookingData {
   guestCount: number
   guestName?: string
   guestPhone?: string
+  fruitDestination?: string
+  destinationNote?: string
   status: string
   createdAt: string
 }

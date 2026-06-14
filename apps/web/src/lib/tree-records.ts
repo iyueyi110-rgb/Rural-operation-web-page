@@ -13,6 +13,7 @@ export interface TreeProfile extends OrchardTreeData {
   rights: string[]
   availability: string
   careLogs: TreeCareLogData[]
+  harvestBookings: HarvestBookingData[]
 }
 
 const fallbackTrees: TreeProfile[] = orchardTreeOptions.map((tree) => ({
@@ -36,6 +37,7 @@ const fallbackTrees: TreeProfile[] = orchardTreeOptions.map((tree) => ({
   rights: tree.rights,
   availability: tree.availability,
   careLogs: [],
+  harvestBookings: [],
 }))
 
 function coerceGrowthPhotos(value: unknown): string[] {
@@ -65,6 +67,19 @@ function enrichTree(tree: {
     content: string
     imageUrl: string | null
     operator: string
+    createdAt: Date
+  }>
+  harvestBookings?: Array<{
+    id: string
+    treeId: string
+    scheduledDate: string
+    timeSlot: string
+    guestCount: number
+    guestName: string | null
+    guestPhone: string | null
+    fruitDestination: string | null
+    destinationNote: string | null
+    status: string
     createdAt: Date
   }>
 }): TreeProfile {
@@ -104,13 +119,18 @@ function enrichTree(tree: {
         operator: log.operator,
         createdAt: log.createdAt.toISOString(),
       })) ?? [],
+    harvestBookings:
+      tree.harvestBookings?.map(mapHarvestBooking) ?? [],
   }
 }
 
 export async function listTreeProfiles(): Promise<TreeProfile[]> {
   try {
     const trees = await prisma.orchardTree.findMany({
-      include: { careLogs: { orderBy: { createdAt: "desc" } } },
+      include: {
+        careLogs: { orderBy: { createdAt: "desc" } },
+        harvestBookings: { orderBy: { scheduledDate: "desc" } },
+      },
       orderBy: { treeCode: "asc" },
     })
     return trees.length > 0 ? trees.map(enrichTree) : fallbackTrees
@@ -124,7 +144,10 @@ export async function getTreeProfile(code: string): Promise<TreeProfile | null> 
   try {
     const tree = await prisma.orchardTree.findFirst({
       where: { OR: [{ treeCode: code }, { treeCode: code.toLowerCase() }, { id: code }] },
-      include: { careLogs: { orderBy: { createdAt: "desc" } } },
+      include: {
+        careLogs: { orderBy: { createdAt: "desc" } },
+        harvestBookings: { orderBy: { scheduledDate: "desc" } },
+      },
     })
     if (tree) return enrichTree(tree)
   } catch (caughtError) {
@@ -170,6 +193,8 @@ export function mapHarvestBooking(record: {
   guestCount: number
   guestName: string | null
   guestPhone: string | null
+  fruitDestination?: string | null
+  destinationNote?: string | null
   status: string
   createdAt: Date
 }): HarvestBookingData {
@@ -181,6 +206,8 @@ export function mapHarvestBooking(record: {
     guestCount: record.guestCount,
     guestName: record.guestName ?? undefined,
     guestPhone: record.guestPhone ?? undefined,
+    fruitDestination: record.fruitDestination ?? undefined,
+    destinationNote: record.destinationNote ?? undefined,
     status: record.status,
     createdAt: record.createdAt.toISOString(),
   }

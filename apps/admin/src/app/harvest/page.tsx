@@ -13,6 +13,8 @@ interface HarvestRow extends Record<string, unknown> {
   timeSlot: string
   guestCount: number
   guestName?: string
+  fruitDestination?: string
+  destinationNote?: string
   status: string
   createdAt: string
 }
@@ -46,11 +48,27 @@ export default function HarvestPage() {
     if (response.ok) await loadRows()
   }
 
+  async function updateDestination(row: HarvestRow, fruitDestination: string) {
+    const response = await fetch(`${adminApiBase}/harvest-bookings`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
+      body: JSON.stringify({
+        id: row.id,
+        status: row.status,
+        fruitDestination,
+        destinationNote: row.destinationNote ?? "",
+      }),
+    })
+    setMessage(response.ok ? "果实去向已更新。" : "果实去向更新失败。")
+    if (response.ok) await loadRows()
+  }
+
   const columns: Array<TableColumn<HarvestRow>> = [
     { key: "treeId", label: "树木" },
     { key: "scheduledDate", label: adminCopy.harvest.date },
     { key: "timeSlot", label: adminCopy.harvest.timeSlot },
     { key: "guestCount", label: adminCopy.harvest.guestCount },
+    { key: "fruitDestination", label: "果实去向", render: (value) => String(value ?? "未设置") },
     { key: "status", label: adminCopy.harvest.status },
     {
       key: "id",
@@ -59,6 +77,8 @@ export default function HarvestPage() {
         <span className="flex gap-2">
           <button className="text-moss" onClick={() => updateStatus(row.id, "confirmed")} type="button">确认</button>
           <button className="text-water" onClick={() => updateStatus(row.id, "completed")} type="button">完成</button>
+          <button className="text-lychee" onClick={() => updateDestination(row, "加工")} type="button">加工</button>
+          <button className="text-ink/70" onClick={() => updateDestination(row, "销售")} type="button">销售</button>
         </span>
       ),
     },

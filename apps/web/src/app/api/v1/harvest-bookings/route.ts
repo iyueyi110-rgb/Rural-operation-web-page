@@ -63,6 +63,8 @@ export async function POST(request: Request) {
       guestCount,
       guestName: typeof body.guestName === "string" ? body.guestName.trim() : null,
       guestPhone: maskPhone(typeof body.guestPhone === "string" ? body.guestPhone : undefined),
+      fruitDestination: typeof body.fruitDestination === "string" ? body.fruitDestination.trim() : null,
+      destinationNote: typeof body.destinationNote === "string" ? body.destinationNote.trim() : null,
       status: "pending",
     },
   })
@@ -86,7 +88,11 @@ export async function PATCH(request: Request) {
 
   const record = await prisma.harvestBooking.update({
     where: { id: body.id },
-    data: { status: body.status },
+    data: {
+      status: body.status,
+      fruitDestination: typeof body.fruitDestination === "string" ? body.fruitDestination.trim() : undefined,
+      destinationNote: typeof body.destinationNote === "string" ? body.destinationNote.trim() : undefined,
+    },
   })
 
   return jsonResponse(request, { data: mapHarvestBooking(record) })

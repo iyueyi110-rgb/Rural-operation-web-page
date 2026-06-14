@@ -104,6 +104,56 @@ export default async function TreeDetailPage({ params }: { params: { locale: Loc
 
       <Section className="pt-9">
         <div className="rounded-lg border border-stone bg-white p-5 shadow-soft">
+          <div className="flex items-center gap-2 text-sm font-bold text-moss">
+            <Leaf aria-hidden="true" className="h-4 w-4" />
+            成长照片
+          </div>
+          {tree.growthPhotos.length > 0 ? (
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {tree.growthPhotos.map((photo, index) => (
+                <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-rice" key={photo}>
+                  <Image
+                    alt={`${t(tree.nameKey)} 成长照片 ${index + 1}`}
+                    className="object-cover"
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    src={photo}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm font-semibold text-ink/58">暂无成长照片，后台上传后会在这里展示。</p>
+          )}
+        </div>
+      </Section>
+
+      <Section className="pt-9">
+        <div className="rounded-lg border border-stone bg-white p-5 shadow-soft">
+          <div className="flex items-center gap-2 text-sm font-bold text-lychee">
+            <CalendarDays aria-hidden="true" className="h-4 w-4" />
+            果实去向
+          </div>
+          <div className="mt-5 grid gap-4">
+            {tree.harvestBookings.filter((booking) => booking.fruitDestination).length > 0 ? (
+              tree.harvestBookings
+                .filter((booking) => booking.fruitDestination)
+                .map((booking) => (
+                  <article className="border-l-2 border-stone pl-4" key={booking.id}>
+                    <div className="text-xs font-bold text-lychee">{booking.scheduledDate} / {booking.timeSlot}</div>
+                    <h2 className="mt-1 text-base font-extrabold">{booking.fruitDestination}</h2>
+                    <p className="mt-1 text-sm leading-7 text-ink/68">{booking.destinationNote || "运营后台已记录本次采摘果实去向。"}</p>
+                  </article>
+                ))
+            ) : (
+              <p className="text-sm font-semibold text-ink/58">暂无果实去向记录，采摘完成后可在后台补充。</p>
+            )}
+          </div>
+        </div>
+      </Section>
+
+      <Section className="pt-9">
+        <div className="rounded-lg border border-stone bg-white p-5 shadow-soft">
           <div className="flex items-center gap-2 text-sm font-bold text-water">
             <CalendarDays aria-hidden="true" className="h-4 w-4" />
             {t("timeline.title")}

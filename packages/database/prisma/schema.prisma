@@ -273,6 +273,8 @@ model HarvestBooking {
   guestCount    Int
   guestName     String?
   guestPhone    String?
+  fruitDestination String?
+  destinationNote  String?  @db.Text
   status        String      @default("pending")
   createdAt     DateTime    @default(now()) @map("created_at")
   updatedAt     DateTime    @updatedAt @map("updated_at")
