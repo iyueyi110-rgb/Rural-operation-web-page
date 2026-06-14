@@ -29,7 +29,7 @@ export interface MapNodeMetric {
   orderCount: number
 }
 
-interface AdminMapProps {
+export interface AdminMapProps {
   activeLayer: MapLayer
   metrics: Map<string, MapNodeMetric>
   nodes: MapNode[]

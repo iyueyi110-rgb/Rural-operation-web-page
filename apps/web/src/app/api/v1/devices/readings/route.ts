@@ -1,4 +1,4 @@
-import { prisma } from "@zouma/database"
+import { prisma, type Prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
             type: reading.type,
             value: reading.value,
             unit: reading.unit,
-            raw: JSON.stringify(reading.raw),
+            raw: reading.raw as Prisma.InputJsonValue,
           },
         }),
       )

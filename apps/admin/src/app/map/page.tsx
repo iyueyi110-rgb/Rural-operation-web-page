@@ -1,12 +1,22 @@
 "use client"
 
 import { AlertTriangle, Layers, MapPinned, RefreshCw, ShoppingCart, Users } from "lucide-react"
+import dynamic from "next/dynamic"
 import { useEffect, useMemo, useState } from "react"
 
-import { AdminMap, type MapLayer, type MapNode, type MapNodeMetric } from "@admin/components/admin-map"
+import type { AdminMapProps, MapLayer, MapNode, MapNodeMetric } from "@admin/components/admin-map"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
 import { adminApiBase } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
+
+const AdminMap = dynamic<AdminMapProps>(() => import("@admin/components/admin-map").then((mod) => mod.AdminMap), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-[560px] items-center justify-center rounded-lg border border-stone bg-white text-sm font-bold text-ink/54">
+      {adminCopy.common.loading}
+    </div>
+  ),
+})
 
 interface NodeScore {
   nodeId: string

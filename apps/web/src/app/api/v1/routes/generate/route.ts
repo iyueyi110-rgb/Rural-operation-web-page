@@ -122,6 +122,7 @@ export async function POST(request: Request) {
         provider: "configuration-required",
         model: "ModelProviderAdapter",
         latencyMs: 0,
+        riskSlugs,
         message: error instanceof Error ? error.message : "Model provider is not configured",
       },
     })
