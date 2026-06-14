@@ -10,6 +10,7 @@ import {
   BarChart3,
   CalendarDays,
   LayoutDashboard,
+  Map,
   MapPin,
   RefreshCw,
   Settings,
@@ -23,6 +24,7 @@ import { adminCopy } from "@admin/lib/admin-copy"
 
 const menuIcons: Record<string, ComponentType<{ className?: string }>> = {
   dashboard: LayoutDashboard,
+  map: Map,
   feedback: ClipboardList,
   nodes: MapPin,
   orders: ShoppingCart,
@@ -38,6 +40,7 @@ const menuIcons: Record<string, ComponentType<{ className?: string }>> = {
 
 const menuHrefs: Record<string, string> = {
   dashboard: "/dashboard",
+  map: "/map",
   feedback: "/feedback",
   nodes: "/nodes",
   orders: "/orders",

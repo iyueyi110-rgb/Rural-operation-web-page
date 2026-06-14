@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import { Noto_Sans_SC } from "next/font/google"
 
+import "leaflet/dist/leaflet.css"
 import "./globals.css"
 import { adminCopy } from "@admin/lib/admin-copy"
 import { AdminShell } from "./admin-shell"
