@@ -5,6 +5,7 @@ import { ModelProviderAdapter } from "@zouma/utils"
 import { prisma } from "@zouma/database"
 
 import { getChinaDateString, getChinaDayRange, isPlainObject } from "@web/lib/aigc-api"
+import { extractJsonContent } from "@web/lib/ai-json"
 import { getWeatherSummary } from "@web/lib/weather"
 import { computeNodeDailyScores } from "@web/lib/node-scoring"
 import { generateControlCommands } from "@web/lib/infrastructure-control"
@@ -22,33 +23,6 @@ interface GeneratedReportPayload {
     deadline?: string
     status?: string
   }>
-}
-
-function extractJsonContent(content: string) {
-  const trimmed = content.trim()
-
-  try {
-    return JSON.parse(trimmed) as unknown
-  } catch {
-    const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)\s*```/i)
-
-    if (fenced?.[1]) {
-      try {
-        return JSON.parse(fenced[1]) as unknown
-      } catch {
-        // Continue to broad extraction below.
-      }
-    }
-
-    const firstBrace = trimmed.indexOf("{")
-    const lastBrace = trimmed.lastIndexOf("}")
-
-    if (firstBrace >= 0 && lastBrace > firstBrace) {
-      return JSON.parse(trimmed.slice(firstBrace, lastBrace + 1)) as unknown
-    }
-
-    throw new Error("AI report JSON could not be parsed")
-  }
 }
 
 function normalizeReportPayload(value: unknown): GeneratedReportPayload {

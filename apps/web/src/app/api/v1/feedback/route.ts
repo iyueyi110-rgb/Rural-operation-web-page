@@ -2,7 +2,10 @@ import { NextResponse } from "next/server"
 
 import type { Feedback, FeedbackRecord } from "@zouma/contracts"
 import { prisma } from "@zouma/database"
+import { ModelProviderAdapter } from "@zouma/utils"
 
+import { isPlainObject } from "@web/lib/aigc-api"
+import { extractJsonContent } from "@web/lib/ai-json"
 import {
   isFeedbackCategory,
   isFeedbackSeverity,
@@ -87,6 +90,32 @@ function toFeedbackRecord(ticket: FeedbackTicketWithRecords): FeedbackRecord {
   }
 }
 
+function normalizeAiSuggestion(value: unknown) {
+  if (!isPlainObject(value)) return null
+  const category = typeof value.category === "string" ? value.category : ""
+  const severity = typeof value.severity === "string" ? value.severity : ""
+  const urgencyReason = typeof value.urgencyReason === "string" ? value.urgencyReason : ""
+
+  if (!category || !severity || !urgencyReason) return null
+  return { category, severity, urgencyReason }
+}
+
+async function suggestFeedbackMeta(content: string) {
+  try {
+    const result = await ModelProviderAdapter.complete(
+      `分析以下游客反馈，返回 JSON：{"category":"内容讲解|服务接待|设施导视|支付订单|其他问题","severity":"low|medium|high|urgent","urgencyReason":"一句话理由"}\n反馈内容：${content}`,
+      {
+        systemPrompt: "你是走马村游客反馈分析助手。只返回 JSON，不要输出解释文字。",
+        temperature: 0.2,
+      },
+    )
+    return normalizeAiSuggestion(extractJsonContent(result.content))
+  } catch (error) {
+    console.error("Feedback AI suggestion failed:", error)
+    return null
+  }
+}
+
 export function OPTIONS(request: Request) {
   const allowedOrigins = getAllowedCorsOrigins()
   const requestOrigin = request.headers.get("origin")
@@ -144,12 +173,14 @@ export async function POST(request: Request) {
   }
 
   const now = new Date()
+  const handlingRecordId = createId("HR")
+  const sanitizedContent = sanitizeContent(content)
   const data = await prisma.feedbackTicket.create({
     data: {
       id: createId("FB"),
       category: body.category,
       severity: body.severity,
-      content: sanitizeContent(content),
+      content: sanitizedContent,
       rating,
       status: "submitted",
       source: "web",
@@ -157,9 +188,9 @@ export async function POST(request: Request) {
       updatedAt: now,
       handlingRecords: {
         create: {
-          id: createId("HR"),
+          id: handlingRecordId,
           status: "submitted",
-          note: "前台反馈已入库",
+          note: "前台反馈已入库。",
           operator: "系统",
           createdAt: now,
         },
@@ -167,6 +198,18 @@ export async function POST(request: Request) {
     },
     include: feedbackInclude,
   })
+
+  suggestFeedbackMeta(sanitizedContent)
+    .then(async (suggestion) => {
+      if (!suggestion) return
+      await prisma.feedbackHandlingRecord.update({
+        where: { id: handlingRecordId },
+        data: {
+          note: `前台反馈已入库。AI 建议：${suggestion.category}/${suggestion.severity} - ${suggestion.urgencyReason}`,
+        },
+      })
+    })
+    .catch((error) => console.error("Feedback AI suggestion update failed:", error))
 
   return jsonResponse(request, { data: toFeedbackRecord(data) }, { status: 201 })
 }
