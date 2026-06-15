@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server"
 import { prisma } from "@zouma/database"
 import { ModelProviderAdapter } from "@zouma/utils"
 
@@ -9,7 +8,7 @@ import {
   type RouteDuration,
   type RouteWeather,
 } from "@web/lib/routes-data"
-import { getChinaDateString } from "@web/lib/aigc-api"
+import { getChinaDateString, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 
 const durations: RouteDuration[] = ["halfDay", "oneDay", "twoDays"]
 const audiences: RouteAudience[] = ["senior", "family", "regular"]
@@ -51,11 +50,15 @@ function formatRouteTags(riskWaypointKeys = new Set<string>()) {
     .join("\n")
 }
 
+export function OPTIONS(request: Request) {
+  return optionsResponse(request)
+}
+
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null)
 
   if (!body || !isRouteDuration(body.duration) || !isRouteAudience(body.audience) || !isRouteWeather(body.weather)) {
-    return NextResponse.json({ error: { code: "INVALID_ROUTE_INPUT", message: "Route input is invalid." } }, { status: 400 })
+    return jsonResponse(request, { error: { code: "INVALID_ROUTE_INPUT", message: "Route input is invalid." } }, { status: 400 })
   }
 
   const fallbackRoute = selectRouteOption({
@@ -97,7 +100,7 @@ export async function POST(request: Request) {
       },
     }).catch((error) => console.error("Route generation log failed:", error))
 
-    return NextResponse.json({
+    return jsonResponse(request, {
       data: {
         route,
         provider: completion.provider,
@@ -116,7 +119,7 @@ export async function POST(request: Request) {
       },
     }).catch((logError) => console.error("Route generation log failed:", logError))
 
-    return NextResponse.json({
+    return jsonResponse(request, {
       data: {
         route: fallbackRoute,
         provider: "configuration-required",

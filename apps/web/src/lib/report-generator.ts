@@ -255,6 +255,14 @@ export async function generateDailyReport(date = getChinaDateString()) {
           content: devicePredictions.map((prediction) => prediction.message).join("；"),
         }
       : null
+  const deviceInspectionSection = {
+    type: "infrastructure",
+    title: "设备巡检",
+    content:
+      offlineDevices.length > 0
+        ? `${offlineDevices.length} 台设备离线或超时未上报，已生成巡检任务。`
+        : "所有设备运行正常，无需巡检。",
+  }
   const villagerSection = {
     type: "feedback",
     title: "村民任务协作",
@@ -266,6 +274,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     careAdviceSection,
     trafficForecastSection,
     ...(devicePredictionSection ? [devicePredictionSection] : []),
+    deviceInspectionSection,
     villagerSection,
     infrastructureSection,
   ]

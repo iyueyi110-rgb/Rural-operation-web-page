@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 
 const fallbackWeather = {
   data: {
@@ -9,13 +9,17 @@ const fallbackWeather = {
   },
 }
 
-export async function GET() {
+export function OPTIONS(request: Request) {
+  return optionsResponse(request)
+}
+
+export async function GET(request: Request) {
   const key = process.env.QWEATHER_API_KEY
   const location = process.env.QWEATHER_LOCATION_ID ?? "101040100"
   const host = process.env.QWEATHER_API_HOST ?? "https://devapi.qweather.com"
 
   if (!key) {
-    return NextResponse.json(fallbackWeather)
+    return jsonResponse(request, fallbackWeather)
   }
 
   const url = new URL("/v7/weather/now", host)
@@ -27,7 +31,7 @@ export async function GET() {
 
     if (!response.ok) {
       console.error("QWeather request failed:", response.status)
-      return NextResponse.json(fallbackWeather)
+      return jsonResponse(request, fallbackWeather)
     }
 
     const payload = (await response.json()) as {
@@ -35,7 +39,7 @@ export async function GET() {
       updateTime?: string
     }
 
-    return NextResponse.json({
+    return jsonResponse(request, {
       data: {
         temperature: payload.now?.temp ? `${payload.now.temp}℃` : "--℃",
         summary: payload.now?.text ? `实时天气：${payload.now.text}。路线建议会结合天气代理结果动态调整。` : fallbackWeather.data.summary,
@@ -45,6 +49,6 @@ export async function GET() {
     })
   } catch (caughtError) {
     console.error("QWeather request failed:", caughtError)
-    return NextResponse.json(fallbackWeather)
+    return jsonResponse(request, fallbackWeather)
   }
 }

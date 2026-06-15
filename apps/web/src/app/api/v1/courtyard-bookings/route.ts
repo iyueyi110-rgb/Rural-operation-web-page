@@ -1,5 +1,4 @@
-import { NextResponse } from "next/server"
-
+import { jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import {
   bookingDateOptions,
   courtyardOptions,
@@ -14,13 +13,17 @@ interface CourtyardBookingRequest {
   paymentMode?: PaymentMode
 }
 
+export function OPTIONS(request: Request) {
+  return optionsResponse(request)
+}
+
 export async function POST(request: Request) {
   let body: CourtyardBookingRequest
 
   try {
     body = (await request.json()) as CourtyardBookingRequest
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
+    return jsonResponse(request, { error: "Invalid JSON body" }, { status: 400 })
   }
 
   const courtyard = courtyardOptions.find((option) => option.id === body.courtyardId)
@@ -28,20 +31,20 @@ export async function POST(request: Request) {
   const paymentMode = paymentModeOptions.find((option) => option.value === body.paymentMode)
 
   if (!courtyard || !dateOption || !paymentMode || typeof body.guestCount !== "number") {
-    return NextResponse.json({ error: "Missing or invalid booking fields" }, { status: 400 })
+    return jsonResponse(request, { error: "Missing or invalid booking fields" }, { status: 400 })
   }
 
   if (body.guestCount < 1 || body.guestCount > courtyard.capacity) {
-    return NextResponse.json({ error: "Guest count exceeds courtyard capacity" }, { status: 400 })
+    return jsonResponse(request, { error: "Guest count exceeds courtyard capacity" }, { status: 400 })
   }
 
   if (courtyard.inventoryStatus === "maintenance" || dateOption.status === "booked") {
-    return NextResponse.json({ error: "Courtyard is not available for this date" }, { status: 409 })
+    return jsonResponse(request, { error: "Courtyard is not available for this date" }, { status: 409 })
   }
 
   const createdAt = new Date().toISOString()
 
-  return NextResponse.json({
+  return jsonResponse(request, {
     data: {
       id: `CB-${Date.now()}`,
       status: "pending_payment",
