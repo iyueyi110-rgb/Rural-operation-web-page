@@ -35,7 +35,7 @@ export interface AdminMapProps {
   nodes: MapNode[]
 }
 
-const mapCenter: LatLngExpression = [29.849, 106.318]
+const mapCenter: LatLngExpression = [29.8512, 106.321]
 
 export function AdminMap({ activeLayer, metrics, nodes }: AdminMapProps) {
   const geoNodes = nodes.filter((node) => typeof node.lat === "number" && typeof node.lng === "number")
@@ -57,8 +57,9 @@ export function AdminMap({ activeLayer, metrics, nodes }: AdminMapProps) {
       zoom={14}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.amap.com/">高德地图</a>'
+        subdomains={["1", "2", "3", "4"]}
+        url="https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"
       />
       {geoNodes.map((node) => {
         const metric = metrics.get(node.id) ?? emptyMetric(node.id)
