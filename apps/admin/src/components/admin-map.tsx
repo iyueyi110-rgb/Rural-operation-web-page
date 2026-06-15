@@ -36,6 +36,8 @@ export interface AdminMapProps {
 }
 
 const mapCenter: LatLngExpression = [29.8512, 106.321]
+const amapKey = process.env.NEXT_PUBLIC_AMAP_KEY ?? ""
+const tileUrl = `https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}${amapKey ? `&key=${amapKey}` : ""}`
 
 export function AdminMap({ activeLayer, metrics, nodes }: AdminMapProps) {
   const geoNodes = nodes.filter((node) => typeof node.lat === "number" && typeof node.lng === "number")
@@ -59,7 +61,7 @@ export function AdminMap({ activeLayer, metrics, nodes }: AdminMapProps) {
       <TileLayer
         attribution='&copy; <a href="https://www.amap.com/">高德地图</a>'
         subdomains={["1", "2", "3", "4"]}
-        url="https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"
+        url={tileUrl}
       />
       {geoNodes.map((node) => {
         const metric = metrics.get(node.id) ?? emptyMetric(node.id)
