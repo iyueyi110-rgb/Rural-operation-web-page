@@ -4,6 +4,7 @@ import { getMessages, setRequestLocale } from "next-intl/server"
 import { Noto_Sans_SC } from "next/font/google"
 import { notFound } from "next/navigation"
 
+import "leaflet/dist/leaflet.css"
 import "../globals.css"
 import { locales, type Locale } from "@web/i18n/routing"
 

@@ -14,6 +14,7 @@ import {
   type RouteWeather,
 } from "@web/lib/routes-data"
 import type { Locale } from "@web/i18n/routing"
+import { RouteSatelliteMap } from "./route-satellite-map"
 
 export function RouteGenerator({ locale }: { locale: Locale }) {
   const t = useTranslations("routes")
@@ -160,17 +161,17 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
           </div>
         </div>
         <div className="relative aspect-[16/11] bg-ink">
-          <Image
-            alt={mapMode === "scope" ? t("map.scopeAlt") : t("map.satelliteAlt")}
-            className="object-cover"
-            fill
-            sizes="(min-width: 1024px) 58vw, 100vw"
-            src={
-              mapMode === "scope"
-                ? "/images/routes/zouma-scope-map.png"
-                : "/images/routes/zouma-satellite-map.png"
-            }
-          />
+          {mapMode === "scope" ? (
+            <Image
+              alt={t("map.scopeAlt")}
+              className="object-cover"
+              fill
+              sizes="(min-width: 1024px) 58vw, 100vw"
+              src="/images/routes/zouma-scope-map.png"
+            />
+          ) : (
+            <RouteSatelliteMap />
+          )}
         </div>
       </section>
 
