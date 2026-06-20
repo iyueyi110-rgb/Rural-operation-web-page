@@ -32,14 +32,20 @@ export async function GET(request: Request) {
 
   const validRecipientType = isRecipientType(recipientType) ? recipientType : undefined
   const validCategories = rawCategories.filter(isNotificationCategory)
-  const normalizedRecipientId =
+  const recipientIds =
     validRecipientType && recipientId
-      ? normalizeRecipientId(validRecipientType, recipientId)
+      ? await resolveRecipientIds(validRecipientType, recipientId)
       : recipientId?.trim()
+        ? [recipientId.trim()]
+        : []
   const data = await prisma.notification.findMany({
     where: {
       ...(validRecipientType ? { recipientType: validRecipientType } : {}),
-      ...(normalizedRecipientId ? { recipientId: normalizedRecipientId } : {}),
+      ...(recipientIds.length === 1
+        ? { recipientId: recipientIds[0] }
+        : recipientIds.length > 1
+          ? { recipientId: { in: recipientIds } }
+          : {}),
       ...(isRead ? { isRead: isRead === "true" } : {}),
       ...(validCategories.length > 0 ? { category: { in: validCategories } } : {}),
     },
@@ -93,16 +99,18 @@ export async function PATCH(request: Request) {
 
   if (body.markAllRead === true) {
     const recipientType = isRecipientType(body.recipientType) ? body.recipientType : null
-    const recipientId =
+    const rawRecipientId =
       recipientType && typeof body.recipientId === "string"
-        ? normalizeRecipientId(recipientType, body.recipientId)
+        ? body.recipientId
         : ""
-    if (!recipientType || !recipientId) {
+    if (!recipientType || !rawRecipientId) {
       return jsonResponse(request, { error: "recipientType and recipientId are required" }, { status: 400 })
     }
 
+    const recipientIds = await resolveRecipientIds(recipientType, rawRecipientId)
+
     const result = await prisma.notification.updateMany({
-      where: { recipientType, recipientId, isRead: false },
+      where: { recipientType, recipientId: { in: recipientIds }, isRead: false },
       data: { isRead: true },
     })
     return jsonResponse(request, { data: { updated: result.count } })
@@ -134,6 +142,20 @@ function isNotificationCategory(value: unknown): value is NotificationCategory {
 function normalizeRecipientId(recipientType: RecipientType, recipientId: string) {
   const trimmed = recipientId.trim()
   return recipientType === "tourist" ? (maskPhone(trimmed) ?? "") : trimmed
+}
+
+async function resolveRecipientIds(recipientType: RecipientType, recipientId: string) {
+  const normalized = normalizeRecipientId(recipientType, recipientId)
+  if (recipientType !== "tourist" || /^1[3-9]\d{9}$/.test(recipientId.trim())) {
+    return normalized ? [normalized] : []
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: recipientId.trim() },
+    select: { mobile: true },
+  })
+  const maskedMobile = maskPhone(user?.mobile)
+  return Array.from(new Set([normalized, maskedMobile].filter((value): value is string => Boolean(value))))
 }
 
 function mapNotification(notification: {

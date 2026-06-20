@@ -10,6 +10,7 @@ import {
   ticketProducts,
 } from "@web/lib/tickets-data"
 import { MasterDetailLayout } from "@ui/index"
+import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
 
 type TicketProduct = (typeof ticketProducts)[number]
 type TicketProductId = TicketProduct["id"]
@@ -57,7 +58,7 @@ export function TicketFlow() {
     setSubmitError(false)
 
     try {
-      const response = await fetch("/api/v1/ticket-orders", {
+      const response = await fetchWithAuth("/api/v1/ticket-orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +76,7 @@ export function TicketFlow() {
 
       const result = (await response.json()) as { data: TicketOrder }
       setOrder(result.data)
-      window.localStorage.setItem("tourist_phone", phone.trim())
+      rememberTouristIdentity(phone)
     } catch (caughtError) {
       console.error("Ticket preorder failed:", caughtError)
       setOrder(null)

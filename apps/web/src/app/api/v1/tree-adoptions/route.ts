@@ -1,6 +1,7 @@
 import { prisma } from "@zouma/database"
 
 import { adoptionPlanOptions, orchardTreeOptions, type AdoptionPlan } from "@web/lib/trees-data"
+import { getBearerToken, verifyJWT } from "@web/lib/auth-jwt"
 import {
   acquireAdoptionLock,
   isRedisUnavailableError,
@@ -55,6 +56,27 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Tree is not available for adoption" }, { status: 409 })
   }
 
+  const authToken = getBearerToken(request)
+  const authSession = authToken ? await verifyJWT(authToken) : null
+  const authenticatedUser = authSession
+    ? await prisma.user.findUnique({
+        where: { id: authSession.userId },
+        select: { id: true, jwtSalt: true, mobile: true },
+      })
+    : null
+  const validAuthenticatedUser =
+    authenticatedUser && authenticatedUser.jwtSalt === authSession?.salt
+      ? authenticatedUser
+      : null
+  const adopterId = validAuthenticatedUser?.id ?? null
+  const adopterPhone = maskPhone(
+    validAuthenticatedUser
+      ? validAuthenticatedUser.mobile
+      : typeof body.adopterPhone === "string"
+        ? body.adopterPhone
+        : undefined,
+  )
+
   let lockToken: string | null = null
   try {
     lockToken = await acquireAdoptionLock(
@@ -100,9 +122,8 @@ export async function POST(request: Request) {
           plan: plan.value,
           adopterName:
             typeof body.adopterName === "string" ? body.adopterName.trim() : null,
-          adopterPhone: maskPhone(
-            typeof body.adopterPhone === "string" ? body.adopterPhone : undefined,
-          ),
+          adopterPhone,
+          adopterId,
           status: "pending_payment",
         },
       })

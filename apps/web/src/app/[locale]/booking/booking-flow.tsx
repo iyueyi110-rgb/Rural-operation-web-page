@@ -14,6 +14,7 @@ import {
   type CourtyardOption,
 } from "@web/lib/courtyards-data"
 import { MasterDetailLayout } from "@ui/index"
+import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
 
 type InventoryStatus = CourtyardOption["inventoryStatus"] | (typeof bookingDateOptions)[number]["status"]
 
@@ -108,7 +109,7 @@ export function BookingFlow() {
     setSubmitError(false)
 
     try {
-      const response = await fetch("/api/v1/courtyard-bookings", {
+      const response = await fetchWithAuth("/api/v1/courtyard-bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +128,7 @@ export function BookingFlow() {
 
       const result = (await response.json()) as { data: BookingOrder }
       setOrder(result.data)
-      window.localStorage.setItem("tourist_phone", phone.trim())
+      rememberTouristIdentity(phone)
     } catch (caughtError) {
       console.error("Courtyard booking failed:", caughtError)
       setOrder(null)

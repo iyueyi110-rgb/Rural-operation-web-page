@@ -14,6 +14,7 @@ import {
   type TreeAvailability,
 } from "@web/lib/trees-data"
 import { MasterDetailLayout } from "@ui/index"
+import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
 
 const availabilityTone: Record<TreeAvailability, string> = {
   available: "bg-moss/12 text-moss border-moss/20",
@@ -61,7 +62,7 @@ export function AdoptionFlow() {
     setSubmitError(false)
 
     try {
-      const response = await fetch("/api/v1/tree-adoptions", {
+      const response = await fetchWithAuth("/api/v1/tree-adoptions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +80,7 @@ export function AdoptionFlow() {
 
       const result = (await response.json()) as { data: TreeAdoptionOrder }
       setOrder(result.data)
-      window.localStorage.setItem("tourist_phone", phone.trim())
+      rememberTouristIdentity(phone)
     } catch (caughtError) {
       console.error("Tree adoption failed:", caughtError)
       setOrder(null)
