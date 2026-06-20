@@ -68,3 +68,37 @@ export async function POST(request: Request) {
     },
   })
 }
+
+export async function PATCH(request: Request) {
+  const body = (await request.json().catch(() => null)) as unknown
+  if (!isPlainObject(body) || typeof body.id !== "string") {
+    return jsonResponse(request, { error: "Invalid update" }, { status: 400 })
+  }
+
+  const existing = await prisma.treeAdoption.findUnique({ where: { id: body.id.trim() } })
+  if (!existing) {
+    return jsonResponse(request, { error: "Adoption not found" }, { status: 404 })
+  }
+
+  const validStatuses = ["pending_payment", "active", "completed", "cancelled"]
+  const nextStatus =
+    typeof body.status === "string" && validStatuses.includes(body.status)
+      ? body.status
+      : existing.status
+  const data = await prisma.treeAdoption.update({
+    where: { id: existing.id },
+    data: {
+      status: nextStatus,
+      ...(typeof body.adopterName === "string"
+        ? { adopterName: body.adopterName.trim() || null }
+        : {}),
+      ...(typeof body.adopterPhone === "string"
+        ? { adopterPhone: maskPhone(body.adopterPhone.trim()) ?? null }
+        : {}),
+    },
+  })
+
+  return jsonResponse(request, {
+    data: { id: data.id, status: data.status, updatedAt: data.updatedAt.toISOString() },
+  })
+}
