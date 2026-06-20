@@ -389,7 +389,43 @@
       "subtitle": "A lightweight village portal connecting stories, routes, courtyards, tree adoption and repeat visits.",
       "primaryCta": "View realms",
       "secondaryCta": "Today",
-      "imageAlt": "Aerial view of Zouma Village"
+      "imageAlt": "Aerial view of Zouma Village",
+      "startBrowsing": "Start exploring",
+      "videoAlt": "Aerial view of the Longxi River, mountain ridges and Zouma Village"
+    },
+    "history": {
+      "eyebrow": "Layers of history",
+      "title": "Four chapters along one mountain ridge",
+      "description": "A source-reviewed village narrative, from regional gazetteers and a physical road marker to today's Four Realms plan.",
+      "sections": {
+        "tang": {
+          "title": "Tang-era Lewen County: a regional horizon",
+          "body": "The Changshou District Gazetteer records the establishment of Lewen County in the Tang era, providing a time marker for the wider region. It is presented here as regional context, without equating an ancient county boundary or seat with present-day Zouma Village.",
+          "source": "Basis: administrative-history entries in the Changshou District Gazetteer; reviewed as regional history."
+        },
+        "lychee": {
+          "title": "The lychee road: clues from Feiziyuan",
+          "body": "The Fuzhou Gazetteer preserves a Tianbao-era reference to Feiziyuan, offering evidence of the historical relationship between lychee cultivation and mountain travel in the Changshou area. The Zouma ridge story connects orchard, road and seasonal journeys without inventing an exact route.",
+          "source": "Basis: the Tianbao-era Feiziyuan entry in the Fuzhou Gazetteer; documentary clues are not presented as a proven route."
+        },
+        "milestone": {
+          "title": "1897: a stone guidepost",
+          "body": "A guidepost dated to the twenty-third year of the Guangxu reign and unearthed on Zouma ridge is tangible evidence of historic movement. It brings the broad chronology of gazetteers down to the everyday scale of villagers and travelers finding their way.",
+          "source": "Basis: the Guangxu 23 guidepost unearthed on Zouma ridge; future interpretation follows verified artifact records."
+        },
+        "modern": {
+          "title": "Zouma today: Four Realms growing together",
+          "body": "Zouma Village in Fengcheng Subdistrict, Changshou District now organizes its rural experience through the Ancient Road, Lychee Field, Resilience Valley and Ridge Dwelling realms. This village is not Zouma Ancient Town in Jiulongpo District; they are separate places.",
+          "source": "Basis: the contemporary Four Realms plan; location verified as Zouma Village, Fengcheng Subdistrict, Changshou District, Chongqing."
+        }
+      },
+      "audio": {
+        "tang": "Listen to the Lewen County chapter",
+        "lychee": "Listen to the lychee road chapter",
+        "milestone": "Listen to the guidepost chapter",
+        "modern": "Listen to the Four Realms chapter",
+        "pending": "Audio in production"
+      }
     },
     "quickActions": {
       "tickets": "Ticket preorder",
@@ -468,6 +504,24 @@
         "summary": "Courtyards for stays, workshops and shared life.",
         "cta": "Courtyard preview",
         "titleImageAlt": "Courtyard scene"
+      }
+    },
+    "mapGateway": {
+      "eyebrow": "Four Realms",
+      "title": "Choose a direction to explore",
+      "description": "Enter four rural experiences through the map. Select a realm polygon or its accessible link to continue to scenes, routes, bookings and adoption.",
+      "mapAria": "Interactive map of Zouma Village's Four Realms",
+      "legendAria": "Four Realms scene links",
+      "anchorHint": "Guidepost, ancient tree and herbal courtyard",
+      "provider": {
+        "loading": "Loading map",
+        "amap": "AMap 2.5D",
+        "leaflet": "Leaflet map"
+      },
+      "anchors": {
+        "milestone": "Guangxu guidepost",
+        "ancientTree": "Ancient lychee tree",
+        "courtyard": "Herbal courtyard"
       }
     },
     "booking": {

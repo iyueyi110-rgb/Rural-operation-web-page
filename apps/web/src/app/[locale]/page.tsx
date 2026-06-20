@@ -5,10 +5,13 @@ import { CalendarDays, CloudSun, Map, MoveRight, ShieldCheck, Sprout, Ticket, Us
 import type { ComponentType } from "react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
-import { featuredPlayCards, homeScenes, previewStats } from "@web/lib/home-data"
+import { HeroScreen } from "@web/components/hero-screen"
+import { HistoryScroll } from "@web/components/history-scroll"
+import { RealmMapGateway } from "@web/components/realm-map-gateway"
+import { featuredPlayCards } from "@web/lib/home-data"
 import { getSiteUrl } from "@web/lib/site-url"
 import { getWeatherSummary } from "@web/lib/weather"
-import { Section, StatusBadge } from "@ui/index"
+import { Section } from "@ui/index"
 import type { Locale } from "@web/i18n/routing"
 
 export const dynamic = "force-dynamic"
@@ -41,7 +44,6 @@ export async function generateMetadata({
 export default async function HomePage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale)
   const t = await getTranslations("home")
-  const common = await getTranslations("common")
   const weather = await getWeatherSummary()
   const weatherIsLive = weather.source === "qweather"
 
@@ -119,58 +121,8 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
         </Section>
       </header>
 
-      <section id="top" className="relative min-h-[92svh] overflow-hidden pt-16 text-white">
-        <Image
-          alt={t("hero.imageAlt")}
-          className="object-cover"
-          fill
-          priority
-          sizes="100vw"
-          src="/images/home/hero-village.webp"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/74 via-ink/36 to-ink/86" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#f7f3e8] to-transparent" />
-
-        <Section className="relative z-10 flex min-h-[calc(92svh-4rem)] flex-col justify-center pb-20 pt-14">
-          <div className="max-w-4xl">
-            <StatusBadge>{t("hero.badge")}</StatusBadge>
-            <h1 className="mt-7 max-w-3xl break-words text-4xl font-extrabold leading-tight tracking-normal sm:text-6xl lg:text-7xl">
-              {t("hero.title")}
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/86 sm:text-xl">
-              {t("hero.subtitle")}
-            </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link
-                className="inline-flex h-12 items-center gap-2 rounded-full bg-lychee px-6 text-sm font-bold text-white shadow-soft transition hover:bg-[#a8312f]"
-                href="#realms"
-              >
-                {t("hero.primaryCta")}
-                <MoveRight aria-hidden="true" className="h-4 w-4" />
-              </Link>
-              <Link
-                className="inline-flex h-12 items-center gap-2 rounded-full border border-white/28 bg-white/10 px-6 text-sm font-bold text-white backdrop-blur transition hover:bg-white/18"
-                href="#weather"
-              >
-                <CloudSun aria-hidden="true" className="h-4 w-4" />
-                {t("hero.secondaryCta")}
-              </Link>
-            </div>
-          </div>
-
-          <div className="mt-14 grid gap-3 sm:grid-cols-3">
-            {previewStats.map((stat) => (
-              <div
-                className="rounded-lg border border-white/14 bg-white/10 p-4 backdrop-blur-md"
-                key={stat.labelKey}
-              >
-                <div className="text-2xl font-extrabold">{t(stat.valueKey)}</div>
-                <div className="mt-1 text-sm text-white/72">{t(stat.labelKey)}</div>
-              </div>
-            ))}
-          </div>
-        </Section>
-      </section>
+      <HeroScreen weather={weather} />
+      <HistoryScroll />
 
       <Section className="relative z-20 -mt-6">
         <div
@@ -235,6 +187,8 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
         </div>
       </Section>
 
+      <RealmMapGateway />
+
       <Section className="grid gap-5 pt-20 lg:grid-cols-[1.08fr_0.92fr]">
         <div
           className="overflow-hidden rounded-lg border border-stone bg-white shadow-soft"
@@ -279,53 +233,6 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
               </div>
             ))}
           </div>
-        </div>
-      </Section>
-
-      <Section className="pt-20" id="realms">
-        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.18em] text-lychee">
-              {t("realms.eyebrow")}
-            </p>
-            <h2 className="mt-3 max-w-2xl text-3xl font-extrabold tracking-normal sm:text-4xl">
-              {t("realms.title")}
-            </h2>
-          </div>
-          <p className="max-w-md text-sm leading-6 text-ink/68">{t("realms.description")}</p>
-        </div>
-
-        <div className="mt-9 grid gap-5 md:grid-cols-2">
-          {homeScenes.map((scene) => (
-            <article
-              className="group overflow-hidden rounded-lg border border-stone bg-white shadow-soft"
-              key={scene.slug}
-            >
-              <div className="relative aspect-[16/9] overflow-hidden">
-                <Image
-                  alt={t(`${scene.titleKey}ImageAlt`)}
-                  className="object-cover transition duration-500 group-hover:scale-105"
-                  fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  src={scene.coverAsset}
-                />
-                <div className="absolute left-4 top-4 rounded-full bg-ink/72 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-                  {common("updatedAt", { date: scene.updatedAt })}
-                </div>
-              </div>
-              <div className="p-5 sm:p-6">
-                <h3 className="text-2xl font-extrabold">{t(scene.titleKey)}</h3>
-                <p className="mt-3 text-sm leading-7 text-ink/68">{t(scene.summaryKey)}</p>
-                <Link
-                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-moss"
-                  href={`/${params.locale}${scene.cta.href}`}
-                >
-                  {t(scene.cta.labelKey)}
-                  <MoveRight aria-hidden="true" className="h-4 w-4" />
-                </Link>
-              </div>
-            </article>
-          ))}
         </div>
       </Section>
 

@@ -1,0 +1,48 @@
+export const historySections = [
+  {
+    id: "tang",
+    titleKey: "history.sections.tang.title",
+    bodyKey: "history.sections.tang.body",
+    sourceKey: "history.sections.tang.source",
+    audioLabelKey: "history.audio.tang",
+    audioUrl: null,
+    imageUrl: "/images/home/ancient-road-user.webp",
+    reviewed: true,
+    locationScope: "changshou-fengcheng-zouma-village",
+  },
+  {
+    id: "lychee",
+    titleKey: "history.sections.lychee.title",
+    bodyKey: "history.sections.lychee.body",
+    sourceKey: "history.sections.lychee.source",
+    audioLabelKey: "history.audio.lychee",
+    audioUrl: null,
+    imageUrl: "/images/home/lychee-field-user.webp",
+    reviewed: true,
+    locationScope: "changshou-fengcheng-zouma-village",
+  },
+  {
+    id: "milestone",
+    titleKey: "history.sections.milestone.title",
+    bodyKey: "history.sections.milestone.body",
+    sourceKey: "history.sections.milestone.source",
+    audioLabelKey: "history.audio.milestone",
+    audioUrl: null,
+    imageUrl: "/images/home/ancient-road.webp",
+    reviewed: true,
+    locationScope: "changshou-fengcheng-zouma-village",
+  },
+  {
+    id: "modern",
+    titleKey: "history.sections.modern.title",
+    bodyKey: "history.sections.modern.body",
+    sourceKey: "history.sections.modern.source",
+    audioLabelKey: "history.audio.modern",
+    audioUrl: null,
+    imageUrl: "/images/home/hero-village.webp",
+    reviewed: true,
+    locationScope: "changshou-fengcheng-zouma-village",
+  },
+] as const
+
+export type HistorySection = (typeof historySections)[number]
