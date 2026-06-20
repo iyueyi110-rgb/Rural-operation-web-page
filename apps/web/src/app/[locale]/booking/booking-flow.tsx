@@ -59,10 +59,12 @@ function resolveInventoryStatus(courtyard: CourtyardOption, dateStatus: Inventor
 
 export function BookingFlow() {
   const t = useTranslations("booking")
+  const systemT = useTranslations("villagerSystem")
   const [selectedCourtyardId, setSelectedCourtyardId] = useState(courtyardOptions[0].id)
   const [selectedDate, setSelectedDate] = useState<string>(bookingDateOptions[0].value)
   const [guestCount, setGuestCount] = useState(4)
   const [paymentMode, setPaymentMode] = useState<PaymentMode>("deposit")
+  const [phone, setPhone] = useState("")
   const [order, setOrder] = useState<BookingOrder | null>(null)
   const [submitError, setSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -77,7 +79,9 @@ export function BookingFlow() {
   const selectedStatus = resolveInventoryStatus(selectedCourtyard, selectedDateOption.status)
   const capacityExceeded = guestCount > selectedCourtyard.capacity
   const canConfirm =
-    !capacityExceeded && (selectedStatus === "available" || selectedStatus === "limited")
+    !capacityExceeded &&
+    (selectedStatus === "available" || selectedStatus === "limited") &&
+    /^1[3-9]\d{9}$/.test(phone.trim())
 
   useEffect(() => {
     fetch(`/api/v1/activities?courtyardId=${selectedCourtyard.id}`)
@@ -123,6 +127,7 @@ export function BookingFlow() {
 
       const result = (await response.json()) as { data: BookingOrder }
       setOrder(result.data)
+      window.localStorage.setItem("tourist_phone", phone.trim())
     } catch (caughtError) {
       console.error("Courtyard booking failed:", caughtError)
       setOrder(null)
@@ -291,6 +296,10 @@ export function BookingFlow() {
               ))}
             </div>
           </div>
+          <label className="grid gap-2 text-sm font-semibold">
+            {systemT("touristIdentity.phone")}
+            <input className="h-12 rounded-md border border-stone bg-rice px-3 outline-none focus:border-water" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder={systemT("touristIdentity.phonePlaceholder")} value={phone} />
+          </label>
         </div>
 
         <div className="mt-5 rounded-md bg-rice p-4">

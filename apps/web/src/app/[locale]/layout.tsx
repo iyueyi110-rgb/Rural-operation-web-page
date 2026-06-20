@@ -6,6 +6,7 @@ import { notFound } from "next/navigation"
 
 import "leaflet/dist/leaflet.css"
 import "../globals.css"
+import { NotificationBell } from "@web/components/notification-bell"
 import { locales, type Locale } from "@web/i18n/routing"
 
 const notoSansSc = Noto_Sans_SC({
@@ -35,7 +36,10 @@ export default async function LocaleLayout({
   return (
     <html lang={params.locale} className={notoSansSc.className}>
       <body>
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
+          {children}
+          <NotificationBell />
+        </NextIntlClientProvider>
       </body>
     </html>
   )

@@ -1096,5 +1096,42 @@
       "loading": "Loading farming calendar",
       "empty": "No farming calendar items match the filters"
     }
+  },
+  "villagerSystem": {
+    "common": { "loading": "読み込み中", "error": "ページを表示できません", "retry": "再試行", "refresh": "更新", "saving": "保存中" },
+    "nav": { "dashboard": "ホーム", "tasks": "タスク", "earnings": "収益", "notifications": "通知", "logout": "退出" },
+    "login": {
+      "eyebrow": "村民ポータル", "title": "村民ログイン", "body": "登録済みの電話番号でタスクと収益を確認できます。",
+      "phone": "電話番号", "phonePlaceholder": "登録済み電話番号", "otp": "確認コード", "otpPlaceholder": "6桁のコード",
+      "request": "コードを取得", "requesting": "生成中", "verify": "ログイン", "verifying": "確認中",
+      "developmentOtp": "試験用コード：{otp}", "requestError": "該当する村民が見つかりません", "verifyError": "コードが無効または期限切れです"
+    },
+    "dashboard": { "eyebrow": "今日の協働", "greeting": "こんにちは、{name}", "monthlyCompleted": "今月完了", "monthlyEarnings": "今月の収益", "pendingTasks": "未処理", "latestTasks": "最近のタスク", "latestNotifications": "最新通知" },
+    "tasks": {
+      "eyebrow": "タスク協働", "title": "マイタスク", "empty": "タスクはありません", "noNode": "場所未指定", "noDescription": "説明なし", "noDeadline": "期限未設定",
+      "filters": { "pending": "未受領", "active": "進行中", "completed": "完了" },
+      "actions": { "pending": "受け取る", "accepted": "開始", "in_progress": "完了する" }
+    },
+    "earnings": { "eyebrow": "労働収益", "title": "マイ収益", "total": "累計収益", "monthly": "今月", "trend": "最近の収益", "completedTasks": "完了タスク", "empty": "タスク完了後に収益が表示されます" },
+    "notifications": { "eyebrow": "メッセージ", "title": "通知", "markAll": "すべて既読", "empty": "通知はありません" },
+    "touristNotifications": {
+      "open": "通知を開く", "eyebrow": "果樹園からのお知らせ", "title": "通知センター", "body": "樹木とアクティビティの最新情報を確認します。", "noIdentity": "認養・予約・チケット購入時に電話番号を登録してください。",
+      "categories": { "all": "すべて", "tree": "樹木", "activity": "活動" }
+    },
+    "touristIdentity": { "phone": "連絡先電話番号", "phonePlaceholder": "11桁の携帯番号" },
+    "interactions": {
+      "eyebrow": "認養体験", "title": "マイ体験", "body": "果樹の作業を完了し、手入れ記録を残しましょう。", "empty": "未完了の体験タスクはありません", "notePlaceholder": "任意の作業メモ", "upload": "写真をアップロードして完了", "shareText": "走馬村で果樹 {treeCode} を認養しています。成長を一緒に見守りましょう。",
+      "points": { "watering": "10点", "fertilizing": "10点", "photo_upload": "15点", "diary": "20点", "share": "15点" },
+      "descriptions": { "watering": "認養した果樹に水を与える", "fertilizing": "施肥作業を記録する", "photo_upload": "最新の成長写真を投稿する", "diary": "手入れの観察を書く", "share": "果樹の成長を共有する" },
+      "actions": { "watering": "水やり完了", "fertilizing": "施肥完了", "photo_upload": "写真を投稿", "diary": "日記を送信", "share": "コピーして完了" }
+    },
+    "metadata": {
+      "login": { "title": "村民ログイン｜走馬村", "description": "村民ポータルにログイン" },
+      "dashboard": { "title": "村民ホーム｜走馬村", "description": "タスク・収益・通知を確認" },
+      "tasks": { "title": "村民タスク｜走馬村", "description": "タスクの進捗を管理" },
+      "earnings": { "title": "村民収益｜走馬村", "description": "労働収益を確認" },
+      "notifications": { "title": "村民通知｜走馬村", "description": "タスク通知を確認" },
+      "touristNotifications": { "title": "通知センター｜走馬村", "description": "樹木と活動の通知を確認" }
+    }
   }
 }

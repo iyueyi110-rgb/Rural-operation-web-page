@@ -26,9 +26,11 @@ interface TicketOrder {
 
 export function TicketFlow() {
   const t = useTranslations("tickets")
+  const systemT = useTranslations("villagerSystem")
   const [selectedProductId, setSelectedProductId] = useState<TicketProductId>(ticketProducts[0].id)
   const [selectedDate, setSelectedDate] = useState<TicketDate>(ticketDateOptions[0].value)
   const [quantity, setQuantity] = useState<(typeof quantityOptions)[number]>(2)
+  const [phone, setPhone] = useState("")
   const [order, setOrder] = useState<TicketOrder | null>(null)
   const [submitError, setSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -47,7 +49,7 @@ export function TicketFlow() {
   }
 
   async function handleConfirm() {
-    if (isSubmitting) {
+    if (isSubmitting || !/^1[3-9]\d{9}$/.test(phone.trim())) {
       return
     }
 
@@ -73,6 +75,7 @@ export function TicketFlow() {
 
       const result = (await response.json()) as { data: TicketOrder }
       setOrder(result.data)
+      window.localStorage.setItem("tourist_phone", phone.trim())
     } catch (caughtError) {
       console.error("Ticket preorder failed:", caughtError)
       setOrder(null)
@@ -190,6 +193,10 @@ export function TicketFlow() {
                 ))}
               </select>
             </label>
+            <label className="grid gap-2 text-sm font-semibold">
+              {systemT("touristIdentity.phone")}
+              <input className="h-12 rounded-md border border-stone bg-rice px-3 outline-none focus:border-water" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder={systemT("touristIdentity.phonePlaceholder")} value={phone} />
+            </label>
           </div>
 
           <div className="mt-5 rounded-md bg-rice p-4">
@@ -226,11 +233,11 @@ export function TicketFlow() {
 
           <button
             className={
-              !isSubmitting
+              !isSubmitting && /^1[3-9]\d{9}$/.test(phone.trim())
                 ? "mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white transition hover:bg-moss"
                 : "mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink/20 px-5 text-sm font-bold text-ink/46"
             }
-            disabled={isSubmitting}
+            disabled={isSubmitting || !/^1[3-9]\d{9}$/.test(phone.trim())}
             onClick={handleConfirm}
             type="button"
           >

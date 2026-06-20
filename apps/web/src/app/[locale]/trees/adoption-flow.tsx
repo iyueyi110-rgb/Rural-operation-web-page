@@ -29,10 +29,12 @@ interface TreeAdoptionOrder {
 
 export function AdoptionFlow() {
   const t = useTranslations("trees")
+  const systemT = useTranslations("villagerSystem")
   const locale = useLocale()
   const [selectedTreeId, setSelectedTreeId] = useState(orchardTreeOptions[0].id)
   const [selectedPlan, setSelectedPlan] = useState<AdoptionPlan>("seasonal")
   const [agreementAccepted, setAgreementAccepted] = useState(false)
+  const [phone, setPhone] = useState("")
   const [order, setOrder] = useState<TreeAdoptionOrder | null>(null)
   const [submitError, setSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -41,7 +43,7 @@ export function AdoptionFlow() {
     () => orchardTreeOptions.find((tree) => tree.id === selectedTreeId) ?? orchardTreeOptions[0],
     [selectedTreeId],
   )
-  const canConfirm = agreementAccepted && selectedTree.availability !== "maintenance"
+  const canConfirm = agreementAccepted && selectedTree.availability !== "maintenance" && /^1[3-9]\d{9}$/.test(phone.trim())
 
   function selectTree(tree: OrchardTreeOption) {
     setSelectedTreeId(tree.id)
@@ -67,6 +69,7 @@ export function AdoptionFlow() {
         body: JSON.stringify({
           treeId: selectedTree.id,
           plan: selectedPlan,
+          adopterPhone: phone.trim(),
         }),
       })
 
@@ -76,6 +79,7 @@ export function AdoptionFlow() {
 
       const result = (await response.json()) as { data: TreeAdoptionOrder }
       setOrder(result.data)
+      window.localStorage.setItem("tourist_phone", phone.trim())
     } catch (caughtError) {
       console.error("Tree adoption failed:", caughtError)
       setOrder(null)
@@ -233,6 +237,11 @@ export function AdoptionFlow() {
               ))}
             </div>
           </div>
+
+          <label className="mt-4 grid gap-2 text-sm font-semibold">
+            {systemT("touristIdentity.phone")}
+            <input className="h-12 rounded-md border border-stone bg-rice px-3 outline-none focus:border-water" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder={systemT("touristIdentity.phonePlaceholder")} value={phone} />
+          </label>
 
           <label className="mt-4 flex items-start gap-3 rounded-md bg-ink p-4 text-white">
             <input

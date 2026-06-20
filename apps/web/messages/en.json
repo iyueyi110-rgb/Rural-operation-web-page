@@ -1096,5 +1096,42 @@
       "loading": "Loading farming calendar",
       "empty": "No farming calendar items match the filters"
     }
+  },
+  "villagerSystem": {
+    "common": { "loading": "Loading", "error": "This page is temporarily unavailable", "retry": "Try again", "refresh": "Refresh", "saving": "Saving" },
+    "nav": { "dashboard": "Dashboard", "tasks": "Tasks", "earnings": "Earnings", "notifications": "Alerts", "logout": "Log out" },
+    "login": {
+      "eyebrow": "Villager portal", "title": "Villager sign in", "body": "Use your registered phone number to access tasks and earnings.",
+      "phone": "Phone", "phonePlaceholder": "Registered phone number", "otp": "Verification code", "otpPlaceholder": "6-digit code",
+      "request": "Get code", "requesting": "Generating", "verify": "Sign in", "verifying": "Verifying",
+      "developmentOtp": "Pilot code: {otp}", "requestError": "No active villager matches this phone", "verifyError": "The code is invalid or expired"
+    },
+    "dashboard": { "eyebrow": "Today's work", "greeting": "Hello, {name}", "monthlyCompleted": "Done this month", "monthlyEarnings": "Monthly earnings", "pendingTasks": "To do", "latestTasks": "Recent tasks", "latestNotifications": "Latest alerts" },
+    "tasks": {
+      "eyebrow": "Task collaboration", "title": "My tasks", "empty": "No tasks here", "noNode": "No location", "noDescription": "No task description", "noDeadline": "No due date",
+      "filters": { "pending": "Available", "active": "In progress", "completed": "Completed" },
+      "actions": { "pending": "Accept task", "accepted": "Start task", "in_progress": "Complete task" }
+    },
+    "earnings": { "eyebrow": "Work earnings", "title": "My earnings", "total": "Total earnings", "monthly": "This month", "trend": "Recent earnings", "completedTasks": "Completed tasks", "empty": "Earnings will appear after tasks are completed" },
+    "notifications": { "eyebrow": "Message center", "title": "My alerts", "markAll": "Mark all as read", "empty": "No notifications" },
+    "touristNotifications": {
+      "open": "Open notifications", "eyebrow": "Orchard updates", "title": "Notification center", "body": "See the latest tree and activity updates.", "noIdentity": "Leave your phone number during adoption, booking, or ticket purchase to receive updates.",
+      "categories": { "all": "All", "tree": "Trees", "activity": "Activities" }
+    },
+    "touristIdentity": { "phone": "Contact phone", "phonePlaceholder": "11-digit mobile number" },
+    "interactions": {
+      "eyebrow": "Adoption activities", "title": "My interactions", "body": "Complete orchard activities and keep your care record.", "empty": "No pending interaction tasks", "notePlaceholder": "Optional care note", "upload": "Upload photo and complete", "shareText": "I adopted tree {treeCode} in Zouma Village. Follow its growth with me.",
+      "points": { "watering": "10 pts", "fertilizing": "10 pts", "photo_upload": "15 pts", "diary": "20 pts", "share": "15 pts" },
+      "descriptions": { "watering": "Water your adopted tree", "fertilizing": "Record a fertilizing session", "photo_upload": "Upload a recent growth photo", "diary": "Write a care observation", "share": "Share the tree's progress" },
+      "actions": { "watering": "Finish watering", "fertilizing": "Finish fertilizing", "photo_upload": "Upload photo", "diary": "Submit diary", "share": "Copy and complete" }
+    },
+    "metadata": {
+      "login": { "title": "Villager sign in | Zouma Village", "description": "Sign in to the villager portal" },
+      "dashboard": { "title": "Villager dashboard | Zouma Village", "description": "View tasks, earnings, and alerts" },
+      "tasks": { "title": "Villager tasks | Zouma Village", "description": "Manage villager task progress" },
+      "earnings": { "title": "Villager earnings | Zouma Village", "description": "View villager work earnings" },
+      "notifications": { "title": "Villager alerts | Zouma Village", "description": "View villager task alerts" },
+      "touristNotifications": { "title": "Notifications | Zouma Village", "description": "View tree and activity updates" }
+    }
   }
 }

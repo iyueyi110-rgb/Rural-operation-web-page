@@ -1096,5 +1096,42 @@
       "loading": "正在加载农事日历",
       "empty": "暂无符合条件的农事条目"
     }
+  },
+  "villagerSystem": {
+    "common": { "loading": "正在加载", "error": "页面暂时无法显示", "retry": "重新尝试", "refresh": "刷新", "saving": "正在保存" },
+    "nav": { "dashboard": "仪表盘", "tasks": "任务", "earnings": "收益", "notifications": "通知", "logout": "退出" },
+    "login": {
+      "eyebrow": "村民轻门户", "title": "村民登录", "body": "使用登记手机号获取临时验证码，进入你的任务与收益中心。",
+      "phone": "手机号", "phonePlaceholder": "请输入登记手机号", "otp": "验证码", "otpPlaceholder": "6 位验证码",
+      "request": "获取验证码", "requesting": "正在生成", "verify": "登录", "verifying": "正在验证",
+      "developmentOtp": "试运营验证码：{otp}", "requestError": "未找到匹配的在岗村民", "verifyError": "验证码错误或已过期"
+    },
+    "dashboard": { "eyebrow": "今日协作", "greeting": "你好，{name}", "monthlyCompleted": "本月完成", "monthlyEarnings": "本月收益", "pendingTasks": "待处理", "latestTasks": "最近任务", "latestNotifications": "最新通知" },
+    "tasks": {
+      "eyebrow": "任务协作", "title": "我的任务", "empty": "当前没有任务", "noNode": "未指定节点", "noDescription": "暂无任务说明", "noDeadline": "未设置截止日期",
+      "filters": { "pending": "待接取", "active": "进行中", "completed": "已完成" },
+      "actions": { "pending": "接取任务", "accepted": "开始任务", "in_progress": "完成任务" }
+    },
+    "earnings": { "eyebrow": "劳动收益", "title": "我的收益", "total": "累计收益", "monthly": "本月收益", "trend": "近期收益趋势", "completedTasks": "已完成任务", "empty": "完成任务后，收益记录会显示在这里" },
+    "notifications": { "eyebrow": "消息中心", "title": "我的通知", "markAll": "全部标记为已读", "empty": "暂无通知" },
+    "touristNotifications": {
+      "open": "打开通知中心", "eyebrow": "果园消息", "title": "通知中心", "body": "查看认养树木与活动的最新消息。", "noIdentity": "完成认养、预约或购票并留下手机号后即可查看通知。",
+      "categories": { "all": "全部", "tree": "树木", "activity": "活动" }
+    },
+    "touristIdentity": { "phone": "联系电话", "phonePlaceholder": "请输入 11 位手机号" },
+    "interactions": {
+      "eyebrow": "认养互动", "title": "我的互动", "body": "完成果树互动任务，留下属于你的养护记录。", "empty": "当前没有待完成的互动任务", "notePlaceholder": "可选：记录本次操作", "upload": "拍照并完成", "shareText": "我正在走马村认养果树 {treeCode}，一起见证它的成长。",
+      "points": { "watering": "10 分", "fertilizing": "10 分", "photo_upload": "15 分", "diary": "20 分", "share": "15 分" },
+      "descriptions": { "watering": "为认养果树完成一次浇水", "fertilizing": "记录一次施肥养护", "photo_upload": "上传一张最新成长照片", "diary": "写下本次养护观察", "share": "把果树成长分享给朋友" },
+      "actions": { "watering": "完成浇水", "fertilizing": "完成施肥", "photo_upload": "上传照片", "diary": "提交日记", "share": "复制分享并完成" }
+    },
+    "metadata": {
+      "login": { "title": "村民登录｜走马村", "description": "走马村村民轻门户登录" },
+      "dashboard": { "title": "村民仪表盘｜走马村", "description": "查看村民任务、收益与通知" },
+      "tasks": { "title": "村民任务｜走马村", "description": "管理村民任务进度" },
+      "earnings": { "title": "村民收益｜走马村", "description": "查看村民劳动收益" },
+      "notifications": { "title": "村民通知｜走马村", "description": "查看村民任务通知" },
+      "touristNotifications": { "title": "通知中心｜走马村", "description": "查看树木与活动通知" }
+    }
   }
 }

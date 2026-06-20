@@ -6,6 +6,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
 
 import type { Locale } from "@web/i18n/routing"
+import { InteractionPanel } from "@web/components/interaction-panel"
 import { getSiteUrl } from "@web/lib/site-url"
 import { getTreeProfile } from "@web/lib/tree-records"
 import { PageHeader, Section } from "@ui/index"
@@ -179,6 +180,10 @@ export default async function TreeDetailPage({ params }: { params: { locale: Loc
             )}
           </div>
         </div>
+      </Section>
+
+      <Section className="pt-9">
+        <InteractionPanel treeCode={tree.treeCode} treeId={tree.id} />
       </Section>
     </main>
   )
