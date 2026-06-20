@@ -77,6 +77,12 @@ export async function POST(request: Request) {
     },
   })
 
+  if (data.villagerId) {
+    void notifyVillagerTaskAssignment(data).catch((error) =>
+      console.error("Failed to create task notification:", error),
+    )
+  }
+
   return jsonResponse(request, { data: mapTask(data) }, { status: 201 })
 }
 
@@ -123,5 +129,42 @@ export async function PATCH(request: Request) {
     },
   })
 
+  if (data.villagerId && data.villagerId !== existing.villagerId) {
+    void notifyVillagerTaskAssignment(data).catch((error) =>
+      console.error("Failed to create reassignment notification:", error),
+    )
+  }
+
   return jsonResponse(request, { data: mapTask(data) })
+}
+
+async function notifyVillagerTaskAssignment(task: {
+  id: string
+  title: string
+  description: string | null
+  villagerId: string | null
+}) {
+  if (!task.villagerId) return
+  const existing = await prisma.notification.findFirst({
+    where: {
+      recipientType: "villager",
+      recipientId: task.villagerId,
+      refType: "task",
+      refId: task.id,
+    },
+    select: { id: true },
+  })
+  if (existing) return
+
+  await prisma.notification.create({
+    data: {
+      recipientType: "villager",
+      recipientId: task.villagerId,
+      title: `📋 新任务：${task.title}`,
+      body: task.description?.slice(0, 200) ?? "",
+      category: "task",
+      refType: "task",
+      refId: task.id,
+    },
+  })
 }

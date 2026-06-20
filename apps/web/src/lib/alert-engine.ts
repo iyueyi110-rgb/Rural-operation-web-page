@@ -8,6 +8,15 @@ import { getWeatherCondition } from "@web/lib/weather"
 import { fetchWeatherAlerts } from "@web/lib/weather-alerts"
 import { routeOptions } from "@web/lib/routes-data"
 
+const alertTypeLabel: Record<string, string> = {
+  night_linger: "夜间滞留告警",
+  crowd: "人流拥堵告警",
+  waterside: "近水风险告警",
+  reverse_path: "逆向穿行告警",
+  fire_risk: "火险告警",
+  flood_risk: "洪涝告警",
+}
+
 function mapAlert(record: {
   id: string
   alertType: string
@@ -54,7 +63,7 @@ async function createAlertIfAbsent({
 
   if (existing) return existing
 
-  return prisma.alert.create({
+  const alert = await prisma.alert.create({
     data: {
       alertType,
       nodeId: nodeId ?? null,
@@ -63,6 +72,20 @@ async function createAlertIfAbsent({
       status: "active",
     },
   })
+
+  void prisma.notification.create({
+    data: {
+      recipientType: "operator",
+      recipientId: "all",
+      title: `${alert.severity === "high" ? "🔴" : "🟡"} ${alertTypeLabel[alert.alertType] ?? alert.alertType}`,
+      body: alert.message,
+      category: "alert",
+      refType: "alert",
+      refId: alert.id,
+    },
+  }).catch((error) => console.error("Failed to create alert notification:", error))
+
+  return alert
 }
 
 export async function runAlertChecks(date: string): Promise<AlertData[]> {

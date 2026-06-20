@@ -13,6 +13,7 @@ import { generateCareAdvice } from "@web/lib/care-advisor"
 import { predictTomorrowTraffic } from "@web/lib/traffic-forecast"
 import { runAnomalyDetection } from "@web/lib/alert-engine"
 import { predictDeviceIssues } from "@web/lib/device-predictor"
+import { shouldCreateReportNotification } from "@web/lib/notification-hooks"
 
 interface GeneratedReportPayload {
   title: string
@@ -71,6 +72,10 @@ function normalizeReportPayload(value: unknown): GeneratedReportPayload {
 
 export async function generateDailyReport(date = getChinaDateString()) {
   const { start, end } = getChinaDayRange(date)
+  const existingReport = await prisma.dailyReport.findUnique({
+    where: { date },
+    select: { id: true },
+  })
 
   await computeNodeDailyScores(date)
   await runAnomalyDetection(date)
@@ -290,7 +295,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     })),
   }
 
-  return prisma.dailyReport.upsert({
+  const report = await prisma.dailyReport.upsert({
     where: { date },
     create: {
       date,
@@ -312,6 +317,22 @@ export async function generateDailyReport(date = getChinaDateString()) {
       generatedAt: new Date(),
     },
   })
+
+  if (shouldCreateReportNotification(existingReport)) {
+    void prisma.notification.create({
+      data: {
+        recipientType: "operator",
+        recipientId: "all",
+        title: `📊 运营日报已生成（${date}）`,
+        body: parsed.summary.slice(0, 200),
+        category: "report",
+        refType: "report",
+        refId: date,
+      },
+    }).catch((error) => console.error("Failed to create report notification:", error))
+  }
+
+  return report
 }
 
 function formatConfidence(confidence: string) {

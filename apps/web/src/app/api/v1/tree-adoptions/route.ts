@@ -2,6 +2,7 @@ import { prisma } from "@zouma/database"
 
 import { adoptionPlanOptions, orchardTreeOptions, type AdoptionPlan } from "@web/lib/trees-data"
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { generateInteractionTasks } from "@web/lib/interaction-generator"
 import { listTreeAdoptions, maskPhone } from "@web/lib/tree-records"
 
 interface TreeAdoptionRequest {
@@ -97,6 +98,12 @@ export async function PATCH(request: Request) {
         : {}),
     },
   })
+
+  if (existing.status !== "active" && nextStatus === "active") {
+    void generateInteractionTasks(data.id, data.treeId).catch((error) =>
+      console.error("Failed to generate interaction tasks:", error),
+    )
+  }
 
   return jsonResponse(request, {
     data: { id: data.id, status: data.status, updatedAt: data.updatedAt.toISOString() },
