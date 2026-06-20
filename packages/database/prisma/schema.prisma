@@ -151,6 +151,75 @@ model Visitor {
   @@map("visitor")
 }
 
+model User {
+  id          String    @id @default(cuid())
+  mobile      String    @unique
+  nickname    String?
+  role        String    @default("visitor")
+  locale      String    @default("zh-CN")
+  otpCode     String?
+  otpExpiry   DateTime?
+  jwtSalt     String?
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  profile     UserProfile?
+  adoptions   TreeAdoption[]
+  routePlans  RoutePlan[]
+
+  @@index([mobile, role])
+  @@map("user")
+}
+
+model UserProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique @map("user_id")
+  ageGroup      String?
+  travelPref    Json?
+  mobilityLevel String?
+  childFlag     Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@map("user_profile")
+}
+
+model RoutePlan {
+  id                String   @id @default(cuid())
+  userId            String
+  inputsJson        Json
+  outputJson        Json
+  weatherSnapshotId String?
+  createdAt         DateTime @default(now()) @map("created_at")
+  user              User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@map("route_plan")
+}
+
+model Recommendation {
+  id             String    @id @default(cuid())
+  bizDate        String    @map("biz_date")
+  type           String
+  targetObject   String?   @map("target_object")
+  evidenceJson   Json      @map("evidence_json")
+  message        String    @db.Text
+  actionSteps    Json      @map("action_steps")
+  ownerRole      String    @map("owner_role")
+  expectedImpact String?   @db.Text @map("expected_impact")
+  confidence     Float     @default(0)
+  status         String    @default("draft")
+  approvedBy     String?   @map("approved_by")
+  approvedAt     DateTime? @map("approved_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@index([bizDate, status])
+  @@index([type, createdAt])
+  @@map("recommendation")
+}
+
 model NodeDailyScore {
   id               String   @id @default(cuid())
   nodeId           String
@@ -279,6 +348,8 @@ model OrchardTree {
   blurredLocation  String
   lat              Float?
   lng              Float?
+  hiddenGeo        String?
+  version          Int                      @default(1)
   fireMemory       String?                  @db.Text
   newShootsRecord  String?                  @db.Text
   growthPhotos     Json                     @default("[]")
@@ -317,10 +388,12 @@ model TreeAdoption {
   adopterName      String?
   adopterPhone     String?
   adopterId        String?
+  rightsJson       Json?
   status           String                   @default("pending_payment")
   createdAt        DateTime                 @default(now()) @map("created_at")
   updatedAt        DateTime                 @updatedAt @map("updated_at")
   tree             OrchardTree              @relation(fields: [treeId], references: [id])
+  adopter          User?                    @relation(fields: [adopterId], references: [id])
   interactionTasks VisitorInteractionTask[]
 
   @@index([adopterPhone, createdAt])
