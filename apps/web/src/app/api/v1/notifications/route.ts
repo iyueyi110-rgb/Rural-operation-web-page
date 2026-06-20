@@ -18,12 +18,12 @@ export async function GET(request: Request) {
   const recipientType = searchParams.get("recipientType")
   const recipientId = searchParams.get("recipientId")
   const isRead = searchParams.get("isRead")
-  const category = searchParams.get("category")
+  const rawCategories = searchParams.getAll("category")
 
   if (recipientType && !isRecipientType(recipientType)) {
     return jsonResponse(request, { error: "Invalid recipientType" }, { status: 400 })
   }
-  if (category && !isNotificationCategory(category)) {
+  if (rawCategories.some((category) => !isNotificationCategory(category))) {
     return jsonResponse(request, { error: "Invalid category" }, { status: 400 })
   }
   if (isRead && isRead !== "true" && isRead !== "false") {
@@ -31,7 +31,7 @@ export async function GET(request: Request) {
   }
 
   const validRecipientType = isRecipientType(recipientType) ? recipientType : undefined
-  const validCategory = isNotificationCategory(category) ? category : undefined
+  const validCategories = rawCategories.filter(isNotificationCategory)
   const normalizedRecipientId =
     validRecipientType && recipientId
       ? normalizeRecipientId(validRecipientType, recipientId)
@@ -41,7 +41,7 @@ export async function GET(request: Request) {
       ...(validRecipientType ? { recipientType: validRecipientType } : {}),
       ...(normalizedRecipientId ? { recipientId: normalizedRecipientId } : {}),
       ...(isRead ? { isRead: isRead === "true" } : {}),
-      ...(validCategory ? { category: validCategory } : {}),
+      ...(validCategories.length > 0 ? { category: { in: validCategories } } : {}),
     },
     orderBy: { createdAt: "desc" },
     take: 50,

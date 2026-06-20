@@ -100,8 +100,27 @@ export async function PATCH(request: Request) {
   })
 
   if (existing.status !== "active" && nextStatus === "active") {
-    void generateInteractionTasks(data.id, data.treeId).catch((error) =>
-      console.error("Failed to generate interaction tasks:", error),
+    void (async () => {
+      await generateInteractionTasks(data.id, data.treeId)
+      if (!data.adopterPhone) return
+
+      const tree = await prisma.orchardTree.findUnique({
+        where: { id: data.treeId },
+        select: { treeCode: true },
+      })
+      await prisma.notification.create({
+        data: {
+          recipientType: "tourist",
+          recipientId: data.adopterPhone,
+          title: "🎉 你的果树认养已激活",
+          body: "现在可以开始浇水、施肥、拍照等互动任务。打开果树页面查看你的专属任务。",
+          category: "tree",
+          refType: "tree_adoption",
+          refId: tree?.treeCode ?? data.treeId,
+        },
+      })
+    })().catch((error) =>
+      console.error("Failed to complete adoption activation workflow:", error),
     )
   }
 

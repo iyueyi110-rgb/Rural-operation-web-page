@@ -19,10 +19,10 @@ export function TouristNotificationCenter() {
 
   const load = useCallback(async (currentPhone = phone) => {
     if (!currentPhone) return
-    const response = await fetch(`/api/v1/notifications?recipientType=tourist&recipientId=${encodeURIComponent(currentPhone)}`)
+    const response = await fetch(`/api/v1/notifications?recipientType=tourist&recipientId=${encodeURIComponent(currentPhone)}&category=tree&category=activity`)
     if (response.ok) {
       const result = (await response.json()) as { data: AppNotification[] }
-      setNotifications(result.data.filter((item) => ["tree", "activity"].includes(item.category)))
+      setNotifications(result.data)
     }
   }, [phone])
 
