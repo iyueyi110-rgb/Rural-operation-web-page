@@ -1,6 +1,11 @@
 import { prisma } from "@zouma/database"
 
 import { adoptionPlanOptions, orchardTreeOptions, type AdoptionPlan } from "@web/lib/trees-data"
+import {
+  acquireAdoptionLock,
+  isRedisUnavailableError,
+  releaseAdoptionLock,
+} from "@web/lib/adoption-lock"
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { generateInteractionTasks } from "@web/lib/interaction-generator"
 import { listTreeAdoptions, maskPhone } from "@web/lib/tree-records"
@@ -50,15 +55,70 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Tree is not available for adoption" }, { status: 409 })
   }
 
-  const record = await prisma.treeAdoption.create({
-    data: {
-      treeId: dbTree.id,
-      plan: plan.value,
-      adopterName: typeof body.adopterName === "string" ? body.adopterName.trim() : null,
-      adopterPhone: maskPhone(typeof body.adopterPhone === "string" ? body.adopterPhone : undefined),
-      status: "pending_payment",
-    },
-  })
+  let lockToken: string | null = null
+  try {
+    lockToken = await acquireAdoptionLock(
+      dbTree.id,
+      typeof body.adopterPhone === "string" ? body.adopterPhone.trim() : "anonymous",
+    )
+    if (!lockToken) {
+      return jsonResponse(
+        request,
+        { error: "Tree is currently being reserved, please try again." },
+        { status: 409 },
+      )
+    }
+  } catch (error) {
+    if (!isRedisUnavailableError(error)) throw error
+    console.warn("Redis unavailable, continuing with database optimistic lock")
+  }
+
+  let record
+  try {
+    record = await prisma.$transaction(async (tx) => {
+      const currentTree = await tx.orchardTree.findUnique({
+        where: { id: dbTree.id },
+        select: { adoptStatus: true, version: true },
+      })
+      if (!currentTree || currentTree.adoptStatus !== "available") {
+        throw new AdoptionConflictError()
+      }
+
+      const updated = await tx.orchardTree.updateMany({
+        where: {
+          id: dbTree.id,
+          version: currentTree.version,
+          adoptStatus: "available",
+        },
+        data: { adoptStatus: "reserved", version: { increment: 1 } },
+      })
+      if (updated.count !== 1) throw new AdoptionConflictError()
+
+      return tx.treeAdoption.create({
+        data: {
+          treeId: dbTree.id,
+          plan: plan.value,
+          adopterName:
+            typeof body.adopterName === "string" ? body.adopterName.trim() : null,
+          adopterPhone: maskPhone(
+            typeof body.adopterPhone === "string" ? body.adopterPhone : undefined,
+          ),
+          status: "pending_payment",
+        },
+      })
+    })
+  } catch (error) {
+    if (error instanceof AdoptionConflictError) {
+      return jsonResponse(request, { error: "Tree is no longer available" }, { status: 409 })
+    }
+    throw error
+  } finally {
+    if (lockToken) {
+      await releaseAdoptionLock(dbTree.id, lockToken).catch((error) =>
+        console.error("Failed to release adoption lock:", error),
+      )
+    }
+  }
 
   return jsonResponse(request, {
     data: {
@@ -69,6 +129,8 @@ export async function POST(request: Request) {
     },
   })
 }
+
+class AdoptionConflictError extends Error {}
 
 export async function PATCH(request: Request) {
   const body = (await request.json().catch(() => null)) as unknown
