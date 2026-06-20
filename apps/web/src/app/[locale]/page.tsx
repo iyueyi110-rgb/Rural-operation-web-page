@@ -61,6 +61,10 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
                 {t("quickActions.me")}
               </Link>
               <span aria-hidden="true" className="h-3 w-px bg-white/18" />
+              <Link className="transition hover:text-white" href={`/${params.locale}/villager/login`}>
+                {t("quickActions.villager")}
+              </Link>
+              <span aria-hidden="true" className="h-3 w-px bg-white/18" />
               <Link className="transition hover:text-white" href={`/${params.locale}/privacy`}>
                 {t("quickActions.privacy")}
               </Link>

@@ -6,7 +6,11 @@ import { usePathname, useRouter } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useState, type ReactNode } from "react"
 
-import { clearVillagerToken, getVillagerSession } from "@web/lib/villager-auth-client"
+import {
+  clearVillagerToken,
+  fetchWithVillagerAuth,
+  getVillagerSession,
+} from "@web/lib/villager-auth-client"
 
 const tabs = [
   { key: "dashboard", href: "dashboard", icon: LayoutDashboard },
@@ -21,25 +25,44 @@ export default function VillagerLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const isLogin = pathname.endsWith("/villager/login")
-  const [ready, setReady] = useState(isLogin)
+  const [validatedVillagerId, setValidatedVillagerId] = useState<string | null>(null)
 
   useEffect(() => {
     if (isLogin) {
-      setReady(true)
+      setValidatedVillagerId(null)
       return
     }
-    if (!getVillagerSession()) {
+    const session = getVillagerSession()
+    if (!session) {
       clearVillagerToken()
       router.replace(`/${locale}/villager/login`)
       return
     }
-    setReady(true)
+
+    let cancelled = false
+    setValidatedVillagerId(null)
+    void fetchWithVillagerAuth("/api/v1/villager/me")
+      .then((response) => {
+        if (cancelled) return
+        if (!response.ok) {
+          clearVillagerToken()
+          router.replace(`/${locale}/villager/login`)
+          return
+        }
+        setValidatedVillagerId(session.id)
+      })
+      .catch(() => {
+        if (!cancelled) setValidatedVillagerId(session.id)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [isLogin, locale, router])
 
-  if (!ready) {
+  if (isLogin) return children
+  if (!validatedVillagerId) {
     return <main className="min-h-screen bg-rice p-6 text-ink">{t("common.loading")}</main>
   }
-  if (isLogin) return children
 
   return (
     <div className="min-h-screen bg-rice pb-24 text-ink">

@@ -394,6 +394,7 @@
     "quickActions": {
       "tickets": "Ticket preorder",
       "me": "Member center",
+      "villager": "Villager",
       "privacy": "Privacy center"
     },
     "stats": {
