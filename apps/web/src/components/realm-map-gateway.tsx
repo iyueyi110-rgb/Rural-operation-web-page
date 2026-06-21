@@ -35,7 +35,15 @@ declare global {
   }
 }
 
-const center: Coordinate = [106.321, 29.8512]
+const legacyCenter: Coordinate = [106.321, 29.8512]
+const center: Coordinate = [107.067, 29.8255]
+
+function relocateToChangshou([longitude, latitude]: Coordinate): Coordinate {
+  return [
+    Number((longitude + center[0] - legacyCenter[0]).toFixed(6)),
+    Number((latitude + center[1] - legacyCenter[1]).toFixed(6)),
+  ]
+}
 
 const realms = [
   {
@@ -47,7 +55,7 @@ const realms = [
       [106.318, 29.861],
       [106.322, 29.854],
       [106.314, 29.85],
-    ] as Coordinate[],
+    ].map((point) => relocateToChangshou(point as Coordinate)),
   },
   {
     slug: "lychee-field",
@@ -58,7 +66,7 @@ const realms = [
       [106.332, 29.858],
       [106.331, 29.85],
       [106.322, 29.853],
-    ] as Coordinate[],
+    ].map((point) => relocateToChangshou(point as Coordinate)),
   },
   {
     slug: "resilience-valley",
@@ -69,7 +77,7 @@ const realms = [
       [106.322, 29.853],
       [106.322, 29.842],
       [106.31, 29.84],
-    ] as Coordinate[],
+    ].map((point) => relocateToChangshou(point as Coordinate)),
   },
   {
     slug: "ridge-dwelling",
@@ -80,22 +88,22 @@ const realms = [
       [106.332, 29.85],
       [106.335, 29.841],
       [106.322, 29.842],
-    ] as Coordinate[],
+    ].map((point) => relocateToChangshou(point as Coordinate)),
   },
 ] as const
 
 const anchors = [
   {
     labelKey: "mapGateway.anchors.milestone",
-    position: [106.314, 29.856] as Coordinate,
+    position: relocateToChangshou([106.314, 29.856]),
   },
   {
     labelKey: "mapGateway.anchors.ancientTree",
-    position: [106.327, 29.855] as Coordinate,
+    position: relocateToChangshou([106.327, 29.855]),
   },
   {
     labelKey: "mapGateway.anchors.courtyard",
-    position: [106.329, 29.845] as Coordinate,
+    position: relocateToChangshou([106.329, 29.845]),
   },
 ] as const
 

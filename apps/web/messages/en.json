@@ -4,6 +4,10 @@
       "title": "Zouma Village Portal",
       "description": "A placeholder English experience for the Zouma Village Web/PWA."
     },
+    "explore": {
+      "title": "Explore Zouma Village",
+      "description": "Open a second-level journey through Zouma Village history, weather and the Four Realms map."
+    },
     "routes": {
       "title": "Zouma Route Generator",
       "description": "Generate explainable routes by duration, audience and weather."
@@ -614,6 +618,10 @@
       "eyebrow": "Tree Adoption Preview",
       "title": "Tree adoption needs ceremony and trust",
       "body": "A long-term relationship around tree files and care logs.",
+      "imageAlt": "Adoptable lychee trees in Zouma Village orchard",
+      "imageBadge": "One tree, one lasting relationship",
+      "cta": "Adopt a tree now",
+      "ctaHint": "Go directly to available trees, profiles, rights and growth records.",
       "steps": {
         "1": {
           "title": "Tree file",

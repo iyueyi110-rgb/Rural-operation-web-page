@@ -1,5 +1,15 @@
 import { prisma } from "../src/index"
 
+const legacyCenter = { lat: 29.8512, lng: 106.321 }
+const zoumaVillageCenter = { lat: 29.8255, lng: 107.067 }
+
+function relocateToChangshou(lat: number, lng: number) {
+  return {
+    lat: Number((lat + zoumaVillageCenter.lat - legacyCenter.lat).toFixed(6)),
+    lng: Number((lng + zoumaVillageCenter.lng - legacyCenter.lng).toFixed(6)),
+  }
+}
+
 const nodes = [
   {
     slug: "visitor-center",
@@ -188,7 +198,10 @@ const nodes = [
     lat: 29.852,
     lng: 106.328,
   },
-]
+].map((node) => ({
+  ...node,
+  ...relocateToChangshou(node.lat, node.lng),
+}))
 
 export async function seedNodes() {
   for (const node of nodes) {

@@ -1,16 +1,25 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { CloudSun, MoveDown } from "lucide-react"
+import Link from "next/link"
+import { CloudSun, MoveRight, Sprout } from "lucide-react"
 import { useTranslations } from "next-intl"
 
+import type { Locale } from "@web/i18n/routing"
 import { previewStats } from "@web/lib/home-data"
+import { buildAdoptionHref, buildExploreHref } from "@web/lib/home-navigation"
 import type { WeatherSummary } from "@web/lib/weather"
 import { Section, StatusBadge } from "@ui/index"
 
 const heroVideoUrl = process.env.NEXT_PUBLIC_HOME_HERO_VIDEO_URL?.trim()
 
-export function HeroScreen({ weather }: { weather: WeatherSummary }) {
+export function HeroScreen({
+  locale,
+  weather,
+}: {
+  locale: Locale
+  weather: WeatherSummary
+}) {
   const t = useTranslations("home")
   const videoRef = useRef<HTMLVideoElement>(null)
   const [reduceMotion, setReduceMotion] = useState(false)
@@ -37,13 +46,6 @@ export function HeroScreen({ weather }: { weather: WeatherSummary }) {
 
     void video.play().catch(() => undefined)
   }, [reduceMotion])
-
-  const browseHistory = () => {
-    document.getElementById("history")?.scrollIntoView({
-      behavior: reduceMotion ? "auto" : "smooth",
-      block: "start",
-    })
-  }
 
   return (
     <section
@@ -75,14 +77,22 @@ export function HeroScreen({ weather }: { weather: WeatherSummary }) {
           <p className="mt-6 max-w-2xl text-base leading-8 text-white/78 sm:text-lg">
             {t("hero.subtitle")}
           </p>
-          <button
-            className="mt-9 inline-flex h-12 items-center gap-2 rounded-full border border-white/35 bg-white/12 px-6 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-            onClick={browseHistory}
-            type="button"
-          >
-            {t("hero.startBrowsing")}
-            <MoveDown aria-hidden="true" className="h-4 w-4" />
-          </button>
+          <div className="mt-9 flex w-full max-w-md flex-col items-stretch justify-center gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
+            <Link
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-lychee px-7 text-sm font-bold text-white shadow-soft transition hover:bg-[#a8312f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              href={buildAdoptionHref(locale)}
+            >
+              <Sprout aria-hidden="true" className="h-4 w-4" />
+              {t("adoption.cta")}
+            </Link>
+            <Link
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-white/12 px-7 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              href={buildExploreHref(locale)}
+            >
+              {t("hero.startBrowsing")}
+              <MoveRight aria-hidden="true" className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
 
         <div className="grid gap-3 lg:grid-cols-[1.35fr_1fr]">

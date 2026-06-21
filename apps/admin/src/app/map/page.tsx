@@ -8,6 +8,7 @@ import type { AdminMapProps, MapLayer, MapNode, MapNodeMetric } from "@admin/com
 import { AdminStatCard } from "@admin/components/admin-stat-card"
 import { adminApiBase } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
+import { zoumaVillageLabel } from "@admin/lib/map-location"
 
 const AdminMap = dynamic<AdminMapProps>(() => import("@admin/components/admin-map").then((mod) => mod.AdminMap), {
   ssr: false,
@@ -139,6 +140,7 @@ export default function MapPage() {
         <div>
           <p className="text-sm font-bold text-water">{adminCopy.map.subtitle}</p>
           <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.map.title}</h1>
+          <p className="mt-1 text-xs font-semibold text-ink/54">{zoumaVillageLabel}</p>
         </div>
         <button
           className="flex h-10 items-center justify-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold text-ink disabled:opacity-50"

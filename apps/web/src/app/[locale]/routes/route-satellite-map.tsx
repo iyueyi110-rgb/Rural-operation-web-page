@@ -3,7 +3,7 @@
 import { MapContainer, TileLayer } from "react-leaflet"
 import type { LatLngExpression } from "leaflet"
 
-const zoumaCenter: LatLngExpression = [29.8512, 106.321]
+const zoumaCenter: LatLngExpression = [29.8255, 107.067]
 const amapKey = process.env.NEXT_PUBLIC_AMAP_KEY ?? ""
 const amapKeyQuery = amapKey ? `&key=${amapKey}` : ""
 const satelliteTileUrl = `https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}${amapKeyQuery}`
