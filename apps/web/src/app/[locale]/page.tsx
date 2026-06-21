@@ -2,8 +2,10 @@ import type { Metadata } from "next"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { HeroScreen } from "@web/components/hero-screen"
+import { HistoryScroll } from "@web/components/history-scroll"
 import { HomeAdoptionFeature } from "@web/components/home-adoption-feature"
 import { HomeHeader } from "@web/components/home-header"
+import { RealmMapGateway } from "@web/components/realm-map-gateway"
 import type { Locale } from "@web/i18n/routing"
 import { getSiteUrl } from "@web/lib/site-url"
 import { getWeatherSummary } from "@web/lib/weather"
@@ -44,6 +46,8 @@ export default async function HomePage({
     <main className="overflow-hidden text-ink">
       <HomeHeader locale={params.locale} />
       <HeroScreen locale={params.locale} weather={weather} />
+      <HistoryScroll />
+      <RealmMapGateway />
       <HomeAdoptionFeature locale={params.locale} />
     </main>
   )

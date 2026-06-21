@@ -28,9 +28,10 @@ test("routes the primary homepage actions to dedicated destinations", () => {
   assert.equal(buildAdoptionHref("ja"), "/ja/trees")
 })
 
-test("keeps adoption on the homepage and exploration on the second-level page", () => {
+test("keeps the complete three-stage flow and adoption on the homepage", () => {
   assert.match(homePageSource, /HomeAdoptionFeature/)
-  assert.doesNotMatch(homePageSource, /HistoryScroll|RealmMapGateway/)
+  assert.match(homePageSource, /HistoryScroll/)
+  assert.match(homePageSource, /RealmMapGateway/)
   assert.match(explorePageSource, /ExploreExperience/)
   assert.match(exploreExperienceSource, /HistoryScroll/)
   assert.match(exploreExperienceSource, /RealmMapGateway/)
