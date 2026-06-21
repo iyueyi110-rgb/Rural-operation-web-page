@@ -4,6 +4,7 @@ import { prisma } from "@zouma/database"
 import type { AlertData, AlertType } from "@zouma/contracts"
 
 import { getChinaDayRange } from "@web/lib/aigc-api"
+import { scheduleWeatherRecommendationGeneration } from "@web/lib/recommendation-generator"
 import { getWeatherCondition } from "@web/lib/weather"
 import { fetchWeatherAlerts } from "@web/lib/weather-alerts"
 import { routeOptions } from "@web/lib/routes-data"
@@ -199,6 +200,10 @@ export async function runAlertChecks(date: string): Promise<AlertData[]> {
         dayStart: start,
       }),
     )
+  }
+
+  if (weatherAlerts.length > 0) {
+    scheduleWeatherRecommendationGeneration(date, weatherAlerts)
   }
 
   return created.map(mapAlert)

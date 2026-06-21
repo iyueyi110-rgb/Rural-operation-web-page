@@ -2,13 +2,96 @@ import assert from "node:assert/strict"
 import test from "node:test"
 
 import {
+  assembleRecommendationContext,
+  buildWeatherRecommendationPayload,
   getRecommendationReviewStatus,
   isAllowedRecommendationEndpoint,
   isValidRecommendationDate,
   normalizeRecommendationPayload,
   scheduleRecommendationGeneration,
+  scheduleWeatherRecommendationGeneration,
   shouldSkipRecommendationGeneration,
 } from "./recommendation-generator"
+
+test("assembles all five decision streams without dropping source data", () => {
+  const context = assembleRecommendationContext("2026-06-21", {
+    villagerProduction: { farmingCalendar: [{ title: "夏至修枝" }] },
+    visitorBehavior: { routeGenerations: 8, interactionPoints: 60 },
+    ecologicalSensing: { activeAlerts: [{ type: "heat" }] },
+    productFeedback: { productOrderRevenue: 880 },
+    operatingIntelligence: { recommendationHistory: [{ status: "executed" }] },
+  })
+
+  assert.equal(context.date, "2026-06-21")
+  assert.deepEqual(context.F1_villagerProduction, {
+    farmingCalendar: [{ title: "夏至修枝" }],
+  })
+  assert.equal(
+    (context.F2_visitorBehavior as { routeGenerations: number })
+      .routeGenerations,
+    8,
+  )
+  assert.equal(
+    (
+      context.F5_operatingIntelligence as {
+        recommendationHistory: unknown[]
+      }
+    ).recommendationHistory.length,
+    1,
+  )
+})
+
+test("builds one auditable weather recommendation from the strongest warning", () => {
+  const payload = buildWeatherRecommendationPayload("2026-06-21", [
+    {
+      id: "weather-1",
+      type: "wind",
+      severity: "medium",
+      title: "大风黄色预警",
+      text: "下午阵风增强。",
+      createdAt: "2026-06-21T01:00:00.000Z",
+      source: "qweather",
+    },
+    {
+      id: "weather-2",
+      type: "rainstorm",
+      severity: "high",
+      title: "暴雨橙色预警",
+      text: "两小时内有强降雨。",
+      createdAt: "2026-06-21T02:00:00.000Z",
+      source: "qweather",
+    },
+  ])
+
+  assert.equal(payload.type, "weather_plan")
+  assert.equal(payload.targetObject, "走马村全域")
+  assert.equal(payload.evidenceJson.highestSeverity, "high")
+  assert.deepEqual(payload.evidenceJson.alertTypes, ["wind", "rainstorm"])
+  assert.match(payload.message, /暴雨橙色预警/)
+  assert.ok(payload.actionSteps.length >= 2)
+  assert.match(payload.expectedImpact, /30 分钟/)
+})
+
+test("weather recommendation scheduling never blocks alert creation", async () => {
+  let captured: unknown
+  const result = scheduleWeatherRecommendationGeneration(
+    "2026-06-21",
+    [],
+    async () => {
+      throw new Error("weather recommendation unavailable")
+    },
+    (error) => {
+      captured = error
+    },
+  )
+
+  assert.equal(result, undefined)
+  await new Promise((resolve) => setTimeout(resolve, 0))
+  assert.match(
+    captured instanceof Error ? captured.message : "",
+    /weather recommendation unavailable/,
+  )
+})
 
 test("normalizes an Evidence, Action and Impact recommendation payload", () => {
   const payload = normalizeRecommendationPayload({

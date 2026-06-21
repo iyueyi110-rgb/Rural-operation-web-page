@@ -1,4 +1,5 @@
 import { prisma, type Prisma } from "@zouma/database"
+import type { WeatherAlertData } from "@zouma/contracts"
 
 import { extractJsonContent } from "./ai-json"
 import { getWeatherSummary } from "./weather"
@@ -17,7 +18,7 @@ const allowedActionEndpoints = new Set([
   "/api/v1/alerts",
 ])
 
-const recommendationSystemPrompt = `你是走马村云脑运营智策助手。根据输入的 F1 村民生产、F2 游客行为、F3 生态感知、F4 农产品反馈和当日日报数据，只生成一张最高优先级智策卡。
+const recommendationSystemPrompt = `你是走马村云脑运营智策助手。根据输入的 F1 村民生产、F2 游客行为、F3 生态感知、F4 农产品反馈和 F5 运营智策闭环数据，只生成一张最高优先级智策卡。
 严格返回 JSON 对象，不要 Markdown。必须包含：
 - type: weather_plan | crowd_diversion | inventory_alert | maintenance
 - target_object: string 或 null
@@ -48,6 +49,28 @@ export interface NormalizedRecommendationPayload {
   ownerRole: string
   expectedImpact: string
   confidence: number
+}
+
+interface RecommendationFlows {
+  villagerProduction: unknown
+  visitorBehavior: unknown
+  ecologicalSensing: unknown
+  productFeedback: unknown
+  operatingIntelligence: unknown
+}
+
+export function assembleRecommendationContext(
+  date: string,
+  flows: RecommendationFlows,
+) {
+  return {
+    date,
+    F1_villagerProduction: flows.villagerProduction,
+    F2_visitorBehavior: flows.visitorBehavior,
+    F3_ecologicalSensing: flows.ecologicalSensing,
+    F4_productFeedback: flows.productFeedback,
+    F5_operatingIntelligence: flows.operatingIntelligence,
+  }
 }
 
 export function normalizeRecommendationPayload(
@@ -168,6 +191,97 @@ export function scheduleRecommendationGeneration(
   void generate(date).catch(onError)
 }
 
+export function scheduleWeatherRecommendationGeneration(
+  date: string,
+  alerts: WeatherAlertData[],
+  generate: (
+    bizDate: string,
+    weatherAlerts: WeatherAlertData[],
+  ) => Promise<unknown> = generateWeatherRecommendations,
+  onError: (error: unknown) => void = (error) =>
+    console.error("Weather recommendation failed:", error),
+) {
+  void generate(date, alerts).catch(onError)
+}
+
+export function buildWeatherRecommendationPayload(
+  date: string,
+  alerts: WeatherAlertData[],
+): NormalizedRecommendationPayload {
+  if (!isValidRecommendationDate(date) || alerts.length === 0) {
+    throw new Error("Weather recommendation requires a date and alerts")
+  }
+
+  const severityRank: Record<WeatherAlertData["severity"], number> = {
+    low: 1,
+    medium: 2,
+    high: 3,
+  }
+  const strongest = [...alerts].sort(
+    (left, right) => severityRank[right.severity] - severityRank[left.severity],
+  )[0]
+
+  return {
+    type: "weather_plan",
+    targetObject: "走马村全域",
+    evidenceJson: {
+      bizDate: date,
+      weatherAlertCount: alerts.length,
+      highestSeverity: strongest.severity,
+      alertTypes: alerts.map((alert) => alert.type),
+      warningIds: alerts.map((alert) => alert.id),
+    },
+    message: `${strongest.title}：${strongest.text}`,
+    actionSteps: [
+      { action: "复核预警影响范围，调整当日路线、活动和采摘安排" },
+      { action: "通知现场运营与村民负责人，确认临水、高温或大风风险点" },
+    ],
+    ownerRole: "operator",
+    expectedImpact: "30 分钟内完成预警响应与现场复核，降低游客和生产风险。",
+    confidence: strongest.severity === "high" ? 0.95 : 0.88,
+  }
+}
+
+export async function generateWeatherRecommendations(
+  date: string,
+  weatherAlerts: WeatherAlertData[],
+) {
+  if (!isValidRecommendationDate(date)) {
+    throw new Error("Invalid recommendation date")
+  }
+  if (weatherAlerts.length === 0) {
+    return { recommendation: null, created: false }
+  }
+
+  const existing = await prisma.recommendation.findFirst({
+    where: {
+      bizDate: date,
+      type: "weather_plan",
+      status: { in: ["draft", "approved"] },
+    },
+    orderBy: { createdAt: "desc" },
+  })
+  if (existing) return { recommendation: existing, created: false }
+
+  const payload = buildWeatherRecommendationPayload(date, weatherAlerts)
+  const recommendation = await prisma.recommendation.create({
+    data: {
+      bizDate: date,
+      type: payload.type,
+      targetObject: payload.targetObject,
+      evidenceJson: payload.evidenceJson as Prisma.InputJsonValue,
+      message: payload.message,
+      actionSteps: payload.actionSteps as unknown as Prisma.InputJsonValue,
+      ownerRole: payload.ownerRole,
+      expectedImpact: payload.expectedImpact,
+      confidence: payload.confidence,
+      status: "draft",
+    },
+  })
+
+  return { recommendation, created: true }
+}
+
 export async function generateRecommendations(date: string) {
   if (!isValidRecommendationDate(date)) {
     throw new Error("Invalid recommendation date")
@@ -210,49 +324,155 @@ export async function generateRecommendations(date: string) {
   return { recommendation, created: true }
 }
 
-async function collectRecommendationContext(date: string) {
-  const { start, end } = getChinaDayRange(date)
+export async function collectRecommendationContext(date: string) {
+  const range = getChinaDayRange(date)
   const [
-    dailyReport,
-    activeVillagers,
-    completedTasks,
-    presence,
-    orders,
-    weather,
-    activeAlerts,
-    sensorReadings,
-    feedback,
-    products,
+    villagerProduction,
+    visitorBehavior,
+    ecologicalSensing,
+    productFeedback,
+    operatingIntelligence,
   ] = await Promise.all([
-    prisma.dailyReport.findUnique({
-      where: { date },
-      select: { metrics: true, sections: true, actionItems: true },
-    }),
+    collectVillagerProduction(date, range),
+    collectVisitorBehavior(range),
+    collectEcologicalSensing(range),
+    collectProductFeedback(range),
+    collectOperatingIntelligence(date),
+  ])
+
+  return assembleRecommendationContext(date, {
+    villagerProduction,
+    visitorBehavior,
+    ecologicalSensing,
+    productFeedback,
+    operatingIntelligence,
+  })
+}
+
+async function collectVillagerProduction(
+  date: string,
+  range: ReturnType<typeof getChinaDayRange>,
+) {
+  const [activeVillagers, completedTasks, farmingCalendar] = await Promise.all([
     prisma.villager.count({ where: { status: "active" } }),
     prisma.task.findMany({
-      where: { status: "completed", updatedAt: { gte: start, lte: end } },
+      where: {
+        status: "completed",
+        updatedAt: { gte: range.start, lte: range.end },
+      },
       select: { earnings: true, taskType: true, villagerId: true },
     }),
+    prisma.farmingCalendar.findMany({
+      where: {
+        OR: [
+          { startDate: { gte: date } },
+          { startDate: { lte: date }, endDate: { gte: date } },
+        ],
+      },
+      select: {
+        title: true,
+        activityType: true,
+        startDate: true,
+        endDate: true,
+        treeSpecies: true,
+        status: true,
+      },
+      orderBy: { startDate: "asc" },
+      take: 10,
+    }),
+  ])
+
+  return {
+    activeVillagers,
+    completedTaskCount: completedTasks.length,
+    totalEarnings: completedTasks.reduce((sum, task) => sum + task.earnings, 0),
+    participantCount: new Set(
+      completedTasks.map((task) => task.villagerId).filter(Boolean),
+    ).size,
+    taskTypes: completedTasks.map((task) => task.taskType),
+    farmingCalendar,
+  }
+}
+
+async function collectVisitorBehavior(
+  range: ReturnType<typeof getChinaDayRange>,
+) {
+  const [presence, orders, routeLogs, interactionTasks] = await Promise.all([
     prisma.presenceLog.aggregate({
-      where: { timestamp: { gte: start, lte: end } },
+      where: { timestamp: { gte: range.start, lte: range.end } },
       _sum: { peopleCount: true },
       _max: { peopleCount: true },
       _avg: { dwellAvgMin: true },
     }),
     prisma.unifiedOrder.aggregate({
-      where: { createdAt: { gte: start, lte: end } },
+      where: { createdAt: { gte: range.start, lte: range.end } },
       _count: { _all: true },
       _sum: { totalAmount: true, quantity: true },
     }),
+    prisma.routeGenerationLog.findMany({
+      where: { createdAt: { gte: range.start, lte: range.end } },
+      select: {
+        routeId: true,
+        duration: true,
+        audience: true,
+        weather: true,
+        provider: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    }),
+    prisma.visitorInteractionTask.findMany({
+      where: {
+        OR: [
+          { createdAt: { gte: range.start, lte: range.end } },
+          { completedAt: { gte: range.start, lte: range.end } },
+        ],
+      },
+      select: { taskType: true, status: true, points: true },
+      orderBy: { updatedAt: "desc" },
+      take: 100,
+    }),
+  ])
+
+  return {
+    totalVisitors: presence._sum.peopleCount ?? 0,
+    peakPeopleCount: presence._max.peopleCount ?? 0,
+    averageDwellMinutes: presence._avg.dwellAvgMin ?? 0,
+    orderCount: orders._count._all,
+    revenue: orders._sum.totalAmount ?? 0,
+    quantity: orders._sum.quantity ?? 0,
+    routeGenerationCount: routeLogs.length,
+    routeGenerations: routeLogs,
+    interactionTaskCount: interactionTasks.length,
+    completedInteractionCount: interactionTasks.filter(
+      (task) => task.status === "completed",
+    ).length,
+    interactionPoints: interactionTasks.reduce(
+      (sum, task) => sum + task.points,
+      0,
+    ),
+    interactionTypes: interactionTasks.map((task) => task.taskType),
+  }
+}
+
+async function collectEcologicalSensing(
+  range: ReturnType<typeof getChinaDayRange>,
+) {
+  const [weather, activeAlerts, sensorReadings] = await Promise.all([
     getWeatherSummary(),
     prisma.alert.findMany({
       where: { status: { in: ["active", "acknowledged"] } },
-      select: { alertType: true, severity: true, message: true, nodeId: true },
+      select: {
+        alertType: true,
+        severity: true,
+        message: true,
+        nodeId: true,
+      },
       orderBy: { createdAt: "desc" },
       take: 10,
     }),
     prisma.sensorReading.findMany({
-      where: { createdAt: { gte: start, lte: end } },
+      where: { createdAt: { gte: range.start, lte: range.end } },
       select: {
         type: true,
         value: true,
@@ -263,49 +483,80 @@ async function collectRecommendationContext(date: string) {
       orderBy: { createdAt: "desc" },
       take: 20,
     }),
-    prisma.feedbackTicket.aggregate({
-      where: { createdAt: { gte: start, lte: end } },
-      _count: { _all: true },
-      _avg: { rating: true },
+  ])
+
+  return { weather, activeAlerts, sensorReadings }
+}
+
+async function collectProductFeedback(
+  range: ReturnType<typeof getChinaDayRange>,
+) {
+  const [feedback, activeProductCount, lowStockProducts, productOrders] =
+    await Promise.all([
+      prisma.feedbackTicket.findMany({
+        where: { createdAt: { gte: range.start, lte: range.end } },
+        select: { rating: true, severity: true, category: true },
+        take: 100,
+      }),
+      prisma.product.count({ where: { status: "active" } }),
+      prisma.product.findMany({
+        where: { status: "active", stockStatus: { not: "available" } },
+        select: { id: true, name: true, stockStatus: true, price: true },
+        orderBy: { stockStatus: "asc" },
+        take: 10,
+      }),
+      prisma.unifiedOrder.aggregate({
+        where: {
+          orderType: "product_order",
+          createdAt: { gte: range.start, lte: range.end },
+        },
+        _count: { _all: true },
+        _sum: { totalAmount: true, quantity: true },
+      }),
+    ])
+
+  return {
+    feedbackCount: feedback.length,
+    averageRating: feedback.length
+      ? feedback.reduce((sum, item) => sum + item.rating, 0) / feedback.length
+      : 0,
+    highPriorityFeedback: feedback.filter((item) =>
+      ["high", "urgent"].includes(item.severity),
+    ).length,
+    feedbackCategories: feedback.map((item) => item.category),
+    activeProductCount,
+    lowStockProducts,
+    productOrderCount: productOrders._count._all,
+    productOrderRevenue: productOrders._sum.totalAmount ?? 0,
+    productOrderQuantity: productOrders._sum.quantity ?? 0,
+  }
+}
+
+async function collectOperatingIntelligence(date: string) {
+  const [dailyReport, recommendationHistory] = await Promise.all([
+    prisma.dailyReport.findUnique({
+      where: { date },
+      select: {
+        metrics: true,
+        sections: true,
+        actionItems: true,
+        status: true,
+      },
     }),
-    prisma.product.findMany({
-      where: { status: "active" },
-      select: { id: true, name: true, stockStatus: true, price: true },
-      orderBy: { stockStatus: "asc" },
-      take: 10,
+    prisma.recommendation.findMany({
+      where: { bizDate: date },
+      select: {
+        type: true,
+        status: true,
+        expectedImpact: true,
+        confidence: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 20,
     }),
   ])
 
-  return {
-    date,
-    dailyReport,
-    F1_villagerProduction: {
-      activeVillagers,
-      completedTaskCount: completedTasks.length,
-      totalEarnings: completedTasks.reduce(
-        (sum, task) => sum + task.earnings,
-        0,
-      ),
-      participantCount: new Set(
-        completedTasks.map((task) => task.villagerId).filter(Boolean),
-      ).size,
-      taskTypes: completedTasks.map((task) => task.taskType),
-    },
-    F2_visitorBehavior: {
-      totalVisitors: presence._sum.peopleCount ?? 0,
-      peakPeopleCount: presence._max.peopleCount ?? 0,
-      averageDwellMinutes: presence._avg.dwellAvgMin ?? 0,
-      orderCount: orders._count._all,
-      revenue: orders._sum.totalAmount ?? 0,
-      quantity: orders._sum.quantity ?? 0,
-    },
-    F3_ecologicalSensing: { weather, activeAlerts, sensorReadings },
-    F4_productFeedback: {
-      feedbackCount: feedback._count._all,
-      averageRating: feedback._avg.rating ?? 0,
-      lowStockProducts: products,
-    },
-  }
+  return { dailyReport, recommendationHistory }
 }
 
 function isRecommendationType(value: unknown): value is RecommendationType {
