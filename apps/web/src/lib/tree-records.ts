@@ -4,6 +4,7 @@ import { prisma } from "@zouma/database"
 import type { HarvestBookingData, HarvestShipmentData, OrchardTreeData, TreeAdoptionData, TreeCareLogData } from "@zouma/contracts"
 
 import { orchardTreeOptions } from "@web/lib/trees-data"
+import { resolveTreeHiddenGeo } from "@web/lib/tree-geo"
 
 export interface TreeProfile extends OrchardTreeData {
   nameKey: string
@@ -53,6 +54,7 @@ function enrichTree(tree: {
   blurredLocation: string
   lat: number | null
   lng: number | null
+  hiddenGeo: string | null
   fireMemory: string | null
   newShootsRecord: string | null
   growthPhotos: unknown
@@ -95,8 +97,7 @@ function enrichTree(tree: {
     age: tree.age,
     healthStatus: tree.healthStatus,
     blurredLocation: tree.blurredLocation,
-    lat: tree.lat ?? undefined,
-    lng: tree.lng ?? undefined,
+    hiddenGeo: resolveTreeHiddenGeo(tree.hiddenGeo, tree.lat, tree.lng),
     fireMemory: tree.fireMemory ?? undefined,
     newShootsRecord: tree.newShootsRecord ?? undefined,
     growthPhotos: coerceGrowthPhotos(tree.growthPhotos),
@@ -137,6 +138,7 @@ export async function listTreeProfiles(): Promise<TreeProfile[]> {
       },
       orderBy: { treeCode: "asc" },
     })
+    await backfillTreeHiddenGeo(trees)
     return trees.length > 0 ? trees.map(enrichTree) : fallbackTrees
   } catch (caughtError) {
     console.error("Tree list fallback activated:", caughtError)
@@ -156,7 +158,10 @@ export async function getTreeProfile(code: string): Promise<TreeProfile | null> 
         },
       },
     })
-    if (tree) return enrichTree(tree)
+    if (tree) {
+      await backfillTreeHiddenGeo([tree])
+      return enrichTree(tree)
+    }
   } catch (caughtError) {
     console.error("Tree detail fallback activated:", caughtError)
   }
@@ -180,10 +185,13 @@ export async function listTreeAdoptions(adopterPhone?: string): Promise<TreeAdop
     orderBy: { createdAt: "desc" },
   })
 
+  await backfillTreeHiddenGeo(records.map((record) => record.tree))
+
   return records.map((record) => ({
     id: record.id,
     treeId: record.treeId,
     treeCode: record.tree.treeCode,
+    hiddenGeo: resolveTreeHiddenGeo(record.tree.hiddenGeo, record.tree.lat, record.tree.lng),
     plan: record.plan,
     adopterName: record.adopterName ?? undefined,
     adopterPhone: record.adopterPhone ?? undefined,
@@ -192,6 +200,33 @@ export async function listTreeAdoptions(adopterPhone?: string): Promise<TreeAdop
     updatedAt: record.updatedAt.toISOString(),
     harvestBookings: record.tree.harvestBookings.map((booking) => mapHarvestBooking(booking)),
   }))
+}
+
+async function backfillTreeHiddenGeo(
+  trees: Array<{
+    id: string
+    hiddenGeo: string | null
+    lat: number | null
+    lng: number | null
+  }>,
+) {
+  const updates = trees.flatMap((tree) => {
+    const hiddenGeo = resolveTreeHiddenGeo(tree.hiddenGeo, tree.lat, tree.lng)
+    if (!hiddenGeo || hiddenGeo === tree.hiddenGeo) return []
+
+    return [
+      prisma.orchardTree.updateMany({
+        where: { id: tree.id, OR: [{ hiddenGeo: null }, { hiddenGeo: "" }] },
+        data: { hiddenGeo },
+      }),
+    ]
+  })
+
+  if (updates.length > 0) {
+    await Promise.all(updates).catch((error) =>
+      console.error("Tree hiddenGeo backfill failed:", error),
+    )
+  }
 }
 
 export function maskPhone(phone?: string) {

@@ -1,6 +1,7 @@
 import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { sendSms } from "@web/lib/sms-provider"
 import { maskPhone } from "@web/lib/tree-records"
 
 const recipientTypes = ["villager", "tourist", "operator"] as const
@@ -63,16 +64,31 @@ export async function POST(request: Request) {
   }
 
   const recipientType = isRecipientType(body.recipientType) ? body.recipientType : null
+  const rawRecipientId =
+    recipientType && typeof body.recipientId === "string" ? body.recipientId.trim() : ""
   const recipientId =
-    recipientType && typeof body.recipientId === "string"
-      ? normalizeRecipientId(recipientType, body.recipientId)
+    recipientType && rawRecipientId
+      ? normalizeRecipientId(recipientType, rawRecipientId)
       : ""
   const title = typeof body.title === "string" ? body.title.trim() : ""
   const content = typeof body.body === "string" ? body.body.trim() : ""
   const category = isNotificationCategory(body.category) ? body.category : null
+  const requestedChannel =
+    body.channel === undefined || body.channel === "in_app"
+      ? "in_app"
+      : body.channel === "sms"
+        ? "sms"
+        : null
 
-  if (!recipientType || !recipientId || !title || !content || !category) {
+  if (!recipientType || !recipientId || !title || !content || !category || !requestedChannel) {
     return jsonResponse(request, { error: "Missing required notification fields" }, { status: 400 })
+  }
+
+  let deliveryChannel = "in_app"
+  if (requestedChannel === "sms") {
+    const phone = await resolveSmsPhone(recipientType, rawRecipientId)
+    const sent = phone ? await sendSms(phone, `${title}\n${content}`) : false
+    deliveryChannel = sent ? "sms" : "in_app"
   }
 
   const data = await prisma.notification.create({
@@ -82,7 +98,7 @@ export async function POST(request: Request) {
       title,
       body: content,
       category,
-      channel: "in_app",
+      channel: deliveryChannel,
       refType: typeof body.refType === "string" ? body.refType.trim() || null : null,
       refId: typeof body.refId === "string" ? body.refId.trim() || null : null,
     },
@@ -156,6 +172,17 @@ async function resolveRecipientIds(recipientType: RecipientType, recipientId: st
   })
   const maskedMobile = maskPhone(user?.mobile)
   return Array.from(new Set([normalized, maskedMobile].filter((value): value is string => Boolean(value))))
+}
+
+async function resolveSmsPhone(recipientType: RecipientType, recipientId: string) {
+  if (/^1[3-9]\d{9}$/.test(recipientId)) return recipientId
+  if (recipientType !== "villager") return null
+
+  const villager = await prisma.villager.findUnique({
+    where: { id: recipientId },
+    select: { phone: true },
+  })
+  return villager?.phone && /^1[3-9]\d{9}$/.test(villager.phone) ? villager.phone : null
 }
 
 function mapNotification(notification: {

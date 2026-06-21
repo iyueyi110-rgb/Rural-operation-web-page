@@ -303,8 +303,7 @@ export interface OrchardTreeData {
   age: number
   healthStatus: string
   blurredLocation: string
-  lat?: number
-  lng?: number
+  hiddenGeo?: string
   fireMemory?: string
   newShootsRecord?: string
   growthPhotos: string[]
@@ -328,6 +327,7 @@ export interface TreeAdoptionData {
   id: string
   treeId: string
   treeCode?: string
+  hiddenGeo?: string
   plan: string
   adopterName?: string
   adopterPhone?: string
