@@ -15,6 +15,7 @@ import { runAnomalyDetection } from "@web/lib/alert-engine"
 import { predictDeviceIssues } from "@web/lib/device-predictor"
 import { shouldCreateReportNotification } from "@web/lib/notification-hooks"
 import { scheduleRecommendationGeneration } from "@web/lib/recommendation-generator"
+import { checkDeviceHeartbeatSafely, OFFLINE_THRESHOLD_MS } from "@web/lib/device-heartbeat"
 
 interface GeneratedReportPayload {
   title: string
@@ -81,8 +82,8 @@ export async function generateDailyReport(date = getChinaDateString()) {
   await computeNodeDailyScores(date)
   await runAnomalyDetection(date)
 
-  const offlineThreshold = new Date(Date.now() - 30 * 60 * 1000)
-  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices, productRanking, completedTasks, trafficForecast] = await Promise.all([
+  const offlineThreshold = new Date(Date.now() - OFFLINE_THRESHOLD_MS)
+  const [presenceAgg, orderAgg, feedbackAgg, nodeScores, weather, offlineDevices, productRanking, completedTasks, trafficForecast, heartbeat] = await Promise.all([
     prisma.presenceLog.aggregate({
       where: { timestamp: { gte: start, lte: end } },
       _sum: { peopleCount: true },
@@ -109,7 +110,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     prisma.device.findMany({
       where: {
         OR: [{ lastSeenAt: null }, { lastSeenAt: { lt: offlineThreshold } }],
-        status: "active",
+        status: { in: ["active", "warning"] },
       },
       orderBy: { lastSeenAt: "asc" },
       take: 5,
@@ -127,6 +128,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
       select: { villagerId: true, earnings: true },
     }),
     predictTomorrowTraffic(),
+    checkDeviceHeartbeatSafely(),
   ])
 
   const villagerStats = {
@@ -138,6 +140,11 @@ export async function generateDailyReport(date = getChinaDateString()) {
     low: trafficForecast.low,
     high: trafficForecast.high,
     confidence: trafficForecast.confidence,
+  }
+  const deviceHeartbeat = {
+    offlineDeviceCount: heartbeat?.offlineDevices.length ?? offlineDevices.length,
+    alertCreatedCount: heartbeat?.alertCreatedCount ?? 0,
+    checkedAt: heartbeat?.checkedAt ?? null,
   }
 
   const metrics = {
@@ -151,6 +158,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     alertCount: nodeScores.filter((score) => score.safetyRisk > 70).length,
     villagerStats,
     trafficForecast: trafficForecastData,
+    deviceHeartbeat,
   }
 
   const context = {
@@ -188,6 +196,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     })),
     villagerStats,
     trafficForecast: trafficForecastData,
+    deviceHeartbeat,
   }
 
   const result = await ModelProviderAdapter.complete(JSON.stringify(context), {
@@ -223,7 +232,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     ...offlineDevices.map((device) => ({
       priority: "medium",
       category: "facility",
-      action: `设备 ${device.name}（${device.deviceId}）超过 30 分钟未上报，请巡检供电、网络与安装位置。`,
+      action: `设备 ${device.name}（${device.deviceId}）超过 90 分钟未上报，请巡检供电、网络与安装位置。`,
       status: "active",
     })),
     ...devicePredictions.map((prediction) => ({
@@ -266,7 +275,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     title: "设备巡检",
     content:
       offlineDevices.length > 0
-        ? `${offlineDevices.length} 台设备离线或超时未上报，已生成巡检任务。`
+        ? `${offlineDevices.length} 台设备超过 90 分钟未上报，已生成离线告警。`
         : "所有设备运行正常，无需巡检。",
   }
   const villagerSection = {
@@ -288,6 +297,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
     ...parsed.metrics,
     villagerStats,
     trafficForecast: trafficForecastData,
+    deviceHeartbeat,
     productRanking: productRanking.map((item) => ({
       productName: item.productName,
       quantity: item._sum.quantity ?? 0,

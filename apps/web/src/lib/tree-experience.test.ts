@@ -7,6 +7,7 @@ import {
   growthStages,
   normalizeAdoptionRights,
   normalizeSensorStatus,
+  shouldDisplaySensorValues,
 } from "./tree-experience"
 
 test("maps sensor states to active, warning and inactive displays", () => {
@@ -36,6 +37,10 @@ test("maps sensor states to active, warning and inactive displays", () => {
       (metric) => metric.isBaseline,
     ),
   )
+  assert.equal(shouldDisplaySensorValues("active", false), true)
+  assert.equal(shouldDisplaySensorValues("warning", false), true)
+  assert.equal(shouldDisplaySensorValues("inactive", false), false)
+  assert.equal(shouldDisplaySensorValues("active", true), false)
 })
 
 test("normalizes rights and locks pending payment cards", () => {

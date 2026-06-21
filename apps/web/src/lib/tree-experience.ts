@@ -51,6 +51,13 @@ export function normalizeSensorStatus(value: unknown): SensorDisplayStatus {
   return "warning"
 }
 
+export function shouldDisplaySensorValues(
+  status: SensorDisplayStatus,
+  loading: boolean,
+) {
+  return !loading && status !== "inactive"
+}
+
 export function buildEnvironmentMetrics(
   readings: SensorReadingInput[],
   status: SensorDisplayStatus,

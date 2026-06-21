@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl"
 import {
   buildEnvironmentMetrics,
   normalizeSensorStatus,
+  shouldDisplaySensorValues,
   type SensorDisplayStatus,
 } from "@web/lib/tree-experience"
 
@@ -63,6 +64,7 @@ export function TreeEnvironmentCard({ treeId }: { treeId: string }) {
   const metrics = buildEnvironmentMetrics(payload?.data ?? [], status)
   const loading = payload === null && !failed
   const statusKey = loading ? "loading" : status
+  const displayValues = shouldDisplaySensorValues(status, loading)
 
   return (
     <article
@@ -113,7 +115,8 @@ export function TreeEnvironmentCard({ treeId }: { treeId: string }) {
                   {t(`metrics.${metric.id}`)}
                 </div>
                 <span className="text-base font-extrabold">
-                  {loading ? "--" : Math.round(metric.value)} {metric.unit}
+                  {displayValues ? Math.round(metric.value) : "--"}{" "}
+                  {metric.unit}
                 </span>
               </div>
               <div
@@ -122,13 +125,13 @@ export function TreeEnvironmentCard({ treeId }: { treeId: string }) {
                 })}
                 aria-valuemax={metric.max}
                 aria-valuemin={0}
-                aria-valuenow={loading ? undefined : metric.value}
+                aria-valuenow={displayValues ? metric.value : undefined}
                 className="mt-4 h-2 overflow-hidden rounded-full bg-stone/65"
                 role="progressbar"
               >
                 <div
                   className={`h-full rounded-full ${status === "active" ? "bg-water" : "bg-ink/28"}`}
-                  style={{ width: loading ? "12%" : `${progress}%` }}
+                  style={{ width: displayValues ? `${progress}%` : "0%" }}
                 />
               </div>
             </div>

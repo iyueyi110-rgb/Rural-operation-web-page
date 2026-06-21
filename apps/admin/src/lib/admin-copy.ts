@@ -228,6 +228,7 @@ export const adminCopy = {
       heat: "高温预警",
       wind: "大风预警",
       typhoon: "台风预警",
+      device_offline: "设备离线",
       other: "其他天气预警",
     },
   },
