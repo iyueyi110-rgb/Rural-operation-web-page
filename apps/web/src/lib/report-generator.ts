@@ -14,6 +14,7 @@ import { predictTomorrowTraffic } from "@web/lib/traffic-forecast"
 import { runAnomalyDetection } from "@web/lib/alert-engine"
 import { predictDeviceIssues } from "@web/lib/device-predictor"
 import { shouldCreateReportNotification } from "@web/lib/notification-hooks"
+import { scheduleRecommendationGeneration } from "@web/lib/recommendation-generator"
 
 interface GeneratedReportPayload {
   title: string
@@ -331,6 +332,8 @@ export async function generateDailyReport(date = getChinaDateString()) {
       },
     }).catch((error) => console.error("Failed to create report notification:", error))
   }
+
+  scheduleRecommendationGeneration(date)
 
   return report
 }
