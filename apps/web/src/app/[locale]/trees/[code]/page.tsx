@@ -6,9 +6,12 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
 
 import type { Locale } from "@web/i18n/routing"
+import { AdoptionRightsPanel } from "@web/components/adoption-rights-panel"
+import { GrowthAnimation } from "@web/components/growth-animation"
 import { InteractionPanel } from "@web/components/interaction-panel"
+import { TreeEnvironmentCard } from "@web/components/tree-environment-card"
 import { getSiteUrl } from "@web/lib/site-url"
-import { getTreeProfile } from "@web/lib/tree-records"
+import { getTreeAdoptionRights, getTreeProfile } from "@web/lib/tree-records"
 import { PageHeader, Section } from "@ui/index"
 
 import { HarvestShipmentForm } from "./harvest-shipment-form"
@@ -35,6 +38,7 @@ export default async function TreeDetailPage({ params }: { params: { locale: Loc
   const tree = await getTreeProfile(params.code)
 
   if (!tree) notFound()
+  const adoptionRights = await getTreeAdoptionRights(tree.id)
 
   return (
     <main className="min-h-screen bg-rice pb-16 text-ink">
@@ -180,6 +184,22 @@ export default async function TreeDetailPage({ params }: { params: { locale: Loc
             )}
           </div>
         </div>
+      </Section>
+
+      <Section className="pt-9">
+        <TreeEnvironmentCard treeId={tree.id} />
+      </Section>
+
+      <Section className="pt-9">
+        <AdoptionRightsPanel
+          plan={adoptionRights?.plan ?? "annual"}
+          rightsJson={adoptionRights?.rightsJson ?? null}
+          status={adoptionRights?.status ?? tree.adoptStatus}
+        />
+      </Section>
+
+      <Section className="pt-9">
+        <GrowthAnimation stage="flowering" />
       </Section>
 
       <Section className="pt-9">

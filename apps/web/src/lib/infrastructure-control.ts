@@ -95,8 +95,9 @@ export function mapControlCommand(record: {
   }
 }
 
-export async function getLatestSensorReadings() {
+export async function getLatestSensorReadings(nodeId?: string) {
   const readings = await prisma.sensorReading.findMany({
+    where: nodeId ? { nodeId } : undefined,
     orderBy: { createdAt: "desc" },
     take: 200,
   })

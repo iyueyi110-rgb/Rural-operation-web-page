@@ -83,6 +83,85 @@
       "eyebrow": "Tree profile",
       "planTitle": "Plan"
     },
+    "experience": {
+      "environment": {
+        "eyebrow": "Orchard microclimate",
+        "title": "Under-tree conditions",
+        "description": "Live LoRa readings are preferred. Seasonal climate baselines take over while sensors are offline or under maintenance.",
+        "status": {
+          "loading": "Reading sensors",
+          "active": "Live LoRa",
+          "warning": "Sensor offline",
+          "inactive": "Device maintenance"
+        },
+        "metrics": {
+          "soilMoisture": "Soil moisture",
+          "airHumidity": "Air humidity",
+          "lightIntensity": "Light intensity"
+        },
+        "progressAria": "{label} indicator",
+        "baselineNote": "Seasonal climate baselines are shown until the live sensor connection returns.",
+        "inactiveNote": "The device is under maintenance, so baseline indicators are muted."
+      },
+      "rights": {
+        "eyebrow": "Adoption Rights",
+        "title": "Rights for this adoption",
+        "description": "Harvest, visits, a custom nameplate and delivery unlock with the adoption status.",
+        "state": {
+          "unlocked": "Active",
+          "locked": "Pending payment",
+          "preview": "Preview"
+        },
+        "cards": {
+          "harvestQuota": {
+            "title": "Minimum harvest",
+            "body": "Receive {quota} of harvest or equivalent farm produce this cycle."
+          },
+          "onsiteBooking": {
+            "title": "On-site picking",
+            "body": "Choose a priority picking slot during harvest season."
+          },
+          "nameplate": {
+            "title": "Custom tree plate",
+            "body": "Add a personal name and message to your adopted tree."
+          },
+          "coldChain": {
+            "title": "Cold-chain delivery",
+            "body": "Have the harvest packed and shipped when you cannot visit."
+          }
+        },
+        "lockedNote": "All four rights become available after payment is completed.",
+        "previewNote": "Complete an adoption to unlock the rights included in your plan."
+      },
+      "growth": {
+        "eyebrow": "Growth Timeline",
+        "title": "A lychee's journey",
+        "description": "Swipe through flowering, fruiting, ripening and harvest to explore each stage.",
+        "timelineAria": "Lychee growth stages",
+        "stages": {
+          "flowering": {
+            "label": "Flowering",
+            "body": "Blossoms open for pollination.",
+            "detail": "Temperature, humidity and rainfall guide canopy ventilation and blossom protection."
+          },
+          "fruiting": {
+            "label": "Fruiting",
+            "body": "Young fruit enters its stable phase.",
+            "detail": "Fruit density, branch load and soil moisture shape the next care actions."
+          },
+          "ripening": {
+            "label": "Ripening",
+            "body": "Color and sweetness develop.",
+            "detail": "Light, fruit color and weather are monitored while picking reservations are prepared."
+          },
+          "harvest": {
+            "label": "Harvest",
+            "body": "Ripe fruit fulfills adoption rights.",
+            "detail": "Pick during a reserved visit or choose cold-chain delivery, with every destination recorded."
+          }
+        }
+      }
+    },
     "plans": {
       "seasonal": {
         "label": "Seasonal",

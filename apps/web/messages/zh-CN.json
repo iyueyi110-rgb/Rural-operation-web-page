@@ -452,6 +452,85 @@
       "eyebrow": "树档案",
       "planTitle": "认养方案"
     },
+    "experience": {
+      "environment": {
+        "eyebrow": "果园微气候",
+        "title": "树下环境",
+        "description": "优先读取 LoRa 传感数据；断线或维护时切换为当季历史气候基准值。",
+        "status": {
+          "loading": "读取传感数据",
+          "active": "LoRa 实时",
+          "warning": "传感断线",
+          "inactive": "设备维护中"
+        },
+        "metrics": {
+          "soilMoisture": "土壤水分",
+          "airHumidity": "空气湿度",
+          "lightIntensity": "光照强度"
+        },
+        "progressAria": "{label}指标进度",
+        "baselineNote": "当前显示走马村当季历史气候基准值，传感恢复后会自动切回实时数据。",
+        "inactiveNote": "设备正在维护，指标暂以历史基准灰显。"
+      },
+      "rights": {
+        "eyebrow": "Adoption Rights",
+        "title": "本次认养权益",
+        "description": "权益随认养状态动态解锁，收获、到访、树牌与配送均保留明确兑现入口。",
+        "state": {
+          "unlocked": "已生效",
+          "locked": "待支付",
+          "preview": "权益预览"
+        },
+        "cards": {
+          "harvestQuota": {
+            "title": "最低产量保障",
+            "body": "本周期保障 {quota} 收获额度或等值农产品。"
+          },
+          "onsiteBooking": {
+            "title": "实地采摘预约",
+            "body": "采收季可优先选择到村采摘时段。"
+          },
+          "nameplate": {
+            "title": "专属树牌定制",
+            "body": "为认养树生成专属姓名与祝福树牌。"
+          },
+          "coldChain": {
+            "title": "冷链包邮",
+            "body": "无法到村时可选择采摘后冷链配送。"
+          }
+        },
+        "lockedNote": "完成支付后，四项权益会自动高亮并进入可使用状态。",
+        "previewNote": "完成认养后即可按所选方案解锁对应权益。"
+      },
+      "growth": {
+        "eyebrow": "Growth Timeline",
+        "title": "一颗荔枝的生长旅程",
+        "description": "横向滑动选择生长节点，查看花期、挂果、转熟与采收的阶段变化。",
+        "timelineAria": "荔枝生长阶段",
+        "stages": {
+          "flowering": {
+            "label": "花期",
+            "body": "花序展开，等待授粉。",
+            "detail": "花期重点观察温湿度与降雨，保持树冠通风，减少花序损伤。"
+          },
+          "fruiting": {
+            "label": "挂果",
+            "body": "幼果形成，进入稳果期。",
+            "detail": "挂果期记录幼果密度与枝条承载，结合土壤水分安排精细养护。"
+          },
+          "ripening": {
+            "label": "转熟",
+            "body": "果皮着色，糖度累积。",
+            "detail": "转熟期持续观察光照、果色和天气，准备采收预约与品质记录。"
+          },
+          "harvest": {
+            "label": "采收",
+            "body": "成熟采摘，兑现权益。",
+            "detail": "按预约时段采收并记录果实去向，可到村体验或选择冷链配送。"
+          }
+        }
+      }
+    },
     "plans": {
       "seasonal": {
         "label": "一季认养",

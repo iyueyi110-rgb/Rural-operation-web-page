@@ -83,6 +83,85 @@
       "eyebrow": "樹プロフィール",
       "planTitle": "里親プラン"
     },
+    "experience": {
+      "environment": {
+        "eyebrow": "果樹園の微気候",
+        "title": "樹下の環境",
+        "description": "LoRa のリアルタイム値を優先し、切断時や整備中は季節の気候基準値へ切り替えます。",
+        "status": {
+          "loading": "センサー読取中",
+          "active": "LoRa リアルタイム",
+          "warning": "センサー切断",
+          "inactive": "機器整備中"
+        },
+        "metrics": {
+          "soilMoisture": "土壌水分",
+          "airHumidity": "空気湿度",
+          "lightIntensity": "日照強度"
+        },
+        "progressAria": "{label}の指標",
+        "baselineNote": "接続が戻るまで、走馬村の季節別気候基準値を表示します。",
+        "inactiveNote": "機器整備中のため、基準指標をグレー表示しています。"
+      },
+      "rights": {
+        "eyebrow": "Adoption Rights",
+        "title": "今回の里親権益",
+        "description": "収穫、来訪、専用樹名札、配送の権益が里親状態に応じて解放されます。",
+        "state": {
+          "unlocked": "有効",
+          "locked": "支払い待ち",
+          "preview": "プレビュー"
+        },
+        "cards": {
+          "harvestQuota": {
+            "title": "最低収穫保証",
+            "body": "今期は {quota} の収穫量または同等の農産物を保証します。"
+          },
+          "onsiteBooking": {
+            "title": "現地収穫予約",
+            "body": "収穫期の優先時間枠を選択できます。"
+          },
+          "nameplate": {
+            "title": "専用樹名札",
+            "body": "里親樹に名前とメッセージを加えられます。"
+          },
+          "coldChain": {
+            "title": "低温配送",
+            "body": "来村できない場合は収穫後の低温配送を選べます。"
+          }
+        },
+        "lockedNote": "支払い完了後、四つの権益が利用可能になります。",
+        "previewNote": "里親手続きを完了すると、プランに含まれる権益が解放されます。"
+      },
+      "growth": {
+        "eyebrow": "Growth Timeline",
+        "title": "ライチが実るまで",
+        "description": "横にスワイプして、開花、結実、成熟、収穫の変化を確認できます。",
+        "timelineAria": "ライチの成長段階",
+        "stages": {
+          "flowering": {
+            "label": "開花",
+            "body": "花序が開き、受粉を待ちます。",
+            "detail": "温湿度と降雨を観察し、樹冠の通風を保って花序を守ります。"
+          },
+          "fruiting": {
+            "label": "結実",
+            "body": "幼果が安定期に入ります。",
+            "detail": "幼果密度、枝の負荷、土壌水分に合わせて養護を調整します。"
+          },
+          "ripening": {
+            "label": "成熟",
+            "body": "果皮が色づき、糖度が上がります。",
+            "detail": "日照、果色、天気を見ながら収穫予約と品質記録を準備します。"
+          },
+          "harvest": {
+            "label": "収穫",
+            "body": "成熟果を摘み、権益を実現します。",
+            "detail": "予約時間に現地収穫するか、低温配送を選び、果実の行き先を記録します。"
+          }
+        }
+      }
+    },
     "plans": {
       "seasonal": {
         "label": "一季",

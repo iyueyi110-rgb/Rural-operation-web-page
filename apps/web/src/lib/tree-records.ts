@@ -17,6 +17,12 @@ export interface TreeProfile extends OrchardTreeData {
   harvestBookings: HarvestBookingData[]
 }
 
+export interface TreeAdoptionRightsSummary {
+  plan: string
+  status: string
+  rightsJson: unknown
+}
+
 const fallbackTrees: TreeProfile[] = orchardTreeOptions.map((tree) => ({
   id: tree.id,
   treeCode: tree.id,
@@ -167,6 +173,22 @@ export async function getTreeProfile(code: string): Promise<TreeProfile | null> 
   }
 
   return fallbackTrees.find((tree) => tree.treeCode === code || tree.id === code) ?? null
+}
+
+export async function getTreeAdoptionRights(
+  treeId: string,
+): Promise<TreeAdoptionRightsSummary | null> {
+  const records = await prisma.treeAdoption.findMany({
+    where: { treeId, status: { in: ["active", "pending_payment"] } },
+    select: { plan: true, status: true, rightsJson: true },
+    orderBy: { createdAt: "desc" },
+    take: 10,
+  })
+  const record = records.find((item) => item.status === "active") ?? records[0]
+
+  return record
+    ? { plan: record.plan, status: record.status, rightsJson: record.rightsJson }
+    : null
 }
 
 export async function listTreeAdoptions(adopterPhone?: string): Promise<TreeAdoptionData[]> {
