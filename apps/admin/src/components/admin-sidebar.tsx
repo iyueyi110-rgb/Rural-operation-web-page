@@ -11,6 +11,7 @@ import {
   BarChart3,
   CalendarDays,
   LayoutDashboard,
+  Lightbulb,
   ListChecks,
   Map,
   MapPin,
@@ -31,6 +32,7 @@ import { adminCopy } from "@admin/lib/admin-copy"
 
 const menuIcons: Record<string, ComponentType<{ className?: string }>> = {
   dashboard: LayoutDashboard,
+  recommendations: Lightbulb,
   map: Map,
   feedback: ClipboardList,
   nodes: MapPin,
@@ -54,6 +56,7 @@ const menuIcons: Record<string, ComponentType<{ className?: string }>> = {
 
 const menuHrefs: Record<string, string> = {
   dashboard: "/dashboard",
+  recommendations: "/admin/recommendations",
   map: "/map",
   feedback: "/feedback",
   nodes: "/nodes",

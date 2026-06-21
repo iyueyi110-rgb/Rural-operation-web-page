@@ -1,208 +1,408 @@
 "use client"
 
-import { AlertTriangle, BarChart3, FileText, RefreshCw, ShoppingCart, Star, Users } from "lucide-react"
-import { useEffect, useState } from "react"
+import {
+  Activity,
+  BadgeCheck,
+  CloudSun,
+  PackageCheck,
+  Sparkles,
+  Users,
+} from "lucide-react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import type { ReactNode } from "react"
 
-import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, nodeDisplayName } from "@admin/lib/admin-api"
-import { adminCopy } from "@admin/lib/admin-copy"
+import {
+  ActiveAlertsPanel,
+  type ActiveAlertRow,
+} from "@admin/components/active-alerts-panel"
+import { DashboardModuleCard } from "@admin/components/dashboard-module-card"
+import {
+  RecommendationReviewPanel,
+  type RecommendationRow,
+} from "@admin/components/recommendation-review-panel"
+import { fetchAdminApi } from "@admin/lib/admin-api"
+import {
+  buildSparklinePath,
+  summarizeProductFeedback,
+  summarizeProduction,
+  summarizeVisitorBehavior,
+} from "@admin/lib/dashboard-data"
 
-interface FeedbackRecord {
-  rating: number
+const THIRTY_SECONDS = 30_000
+const ONE_HOUR = 60 * 60_000
+const ONE_DAY = 24 * ONE_HOUR
+
+interface ApiList<T> {
+  data: T[]
 }
 
-interface OrderResponse {
-  meta: { total: number; totalAmount: number }
+interface VillagerRow {
+  status: string
 }
 
-interface LatestPresenceItem {
-  latest: { peopleCount: number } | null
+interface TaskRow {
+  earnings: number
 }
 
-interface ScoreItem {
-  attractiveness: number
-  safetyRisk: number
-  weatherCondition?: string | null
-  node: { slug: string; nameKey: string }
+interface ConsumptionRow {
+  nodeId?: string | null
+  totalAmount: number
+  orderCount: number
 }
 
-interface DailyReport {
-  summary: string
-  actionItems: Array<{ priority: string; action: string }>
+interface PresenceRow {
+  peopleCount: number
 }
 
-interface AlertRow {
+interface SensorRow {
   id: string
-  alertType: keyof typeof adminCopy.alerts.types
+  type: string
+  value: number
+  unit: string
+  createdAt: string
+}
+
+interface FeedbackRow {
+  rating: number
   severity: string
-  message: string
+}
+
+interface ProductRow {
+  stockStatus: string
 }
 
 export default function DashboardPage() {
-  const [orders, setOrders] = useState<OrderResponse["meta"] | null>(null)
-  const [visitorCount, setVisitorCount] = useState(0)
-  const [avgRating, setAvgRating] = useState("0.0")
-  const [scores, setScores] = useState<ScoreItem[]>([])
-  const [alerts, setAlerts] = useState<AlertRow[]>([])
-  const [latestReport, setLatestReport] = useState<DailyReport | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [error, setError] = useState("")
-
-  async function loadDashboard() {
-    setIsLoading(true)
-    setError("")
-
-    try {
-      const [ordersResult, presenceResult, feedbackResult, scoresResult, reportResult, alertsResult] = await Promise.allSettled([
-        fetch(`${adminApiBase}/orders?date=${today()}`).then((res) => res.json()) as Promise<OrderResponse>,
-        fetch(`${adminApiBase}/presence?latest=true`).then((res) => res.json()) as Promise<{ data: LatestPresenceItem[] }>,
-        fetch(`${adminApiBase}/feedback`).then((res) => res.json()) as Promise<{ data: FeedbackRecord[] }>,
-        fetch(`${adminApiBase}/nodes/scores?date=${today()}`).then((res) => res.json()) as Promise<{ data: ScoreItem[] }>,
-        fetch(`${adminApiBase}/reports/latest`).then((res) => res.json()) as Promise<{ data: DailyReport | null }>,
-        fetch(`${adminApiBase}/alerts?status=active&run=true`).then((res) => res.json()) as Promise<{ data: AlertRow[] }>,
-      ])
-
-      if (ordersResult.status === "fulfilled") setOrders(ordersResult.value.meta)
-      if (presenceResult.status === "fulfilled") {
-        setVisitorCount(
-          presenceResult.value.data.reduce((sum, item) => sum + (item.latest?.peopleCount ?? 0), 0),
-        )
-      }
-      if (feedbackResult.status === "fulfilled") {
-        const feedback = feedbackResult.value.data
-        const average = feedback.length
-          ? feedback.reduce((sum, item) => sum + item.rating, 0) / feedback.length
-          : 0
-        setAvgRating(average.toFixed(1))
-      }
-      if (scoresResult.status === "fulfilled") setScores(scoresResult.value.data)
-      if (reportResult.status === "fulfilled") setLatestReport(reportResult.value.data)
-      if (alertsResult.status === "fulfilled") setAlerts(alertsResult.value.data)
-    } catch (caughtError) {
-      setError(caughtError instanceof Error ? caughtError.message : adminCopy.common.error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  async function generateReport() {
-    setIsGenerating(true)
-    setError("")
-
-    try {
-      const response = await fetch(`${adminApiBase}/reports`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date: today() }),
-      })
-
-      if (!response.ok) throw new Error(adminCopy.common.error)
-      await loadDashboard()
-    } catch (caughtError) {
-      setError(caughtError instanceof Error ? caughtError.message : adminCopy.common.error)
-    } finally {
-      setIsGenerating(false)
-    }
-  }
-
-  useEffect(() => {
-    void loadDashboard()
-  }, [])
-
-  const topScores = scores.slice(0, 5)
+  const production = useModuleData(loadProduction, ONE_HOUR)
+  const behavior = useModuleData(loadVisitorBehavior, THIRTY_SECONDS)
+  const ecology = useModuleData(loadEcology, THIRTY_SECONDS)
+  const productFeedback = useModuleData(loadProductFeedback, ONE_HOUR)
+  const recommendations = useModuleData(loadRecommendations, ONE_DAY)
 
   return (
-    <div className="grid gap-5">
-      <header>
-        <p className="text-sm font-bold text-water">{adminCopy.shell.subtitle}</p>
-        <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.dashboard.title}</h1>
+    <div className="-m-4 min-h-screen bg-[#0b1411] p-4 text-white sm:-m-6 sm:p-6">
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-emerald-300">
+            <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.9)]" />
+            AIGC Cloud Brain
+          </div>
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight">
+            五流运营总览
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-white/50">
+            生产、游客、生态、产品反馈与智策卡在同一屏协同，数据按业务节奏自动更新。
+          </p>
+        </div>
+        <div className="rounded-full bg-white/5 px-4 py-2 text-xs font-bold text-white/50">
+          上海时区 · 模块独立刷新
+        </div>
       </header>
 
-      {error ? <ErrorLine message={error} /> : null}
+      <div className="grid gap-4 xl:grid-cols-2">
+        <DashboardModuleCard
+          icon={<Users aria-hidden="true" className="h-5 w-5" />}
+          loading={production.loading}
+          onRefresh={production.refresh}
+          title="村民生产数据"
+        >
+          <ModuleError message={production.error} />
+          <div className="grid grid-cols-3 gap-3">
+            <Metric
+              label="在岗村民"
+              value={production.data?.activeVillagers ?? 0}
+            />
+            <Metric
+              label="完成任务"
+              value={production.data?.completedTasks ?? 0}
+            />
+            <Metric
+              label="完成收益"
+              value={`¥${production.data?.completedEarnings ?? 0}`}
+            />
+          </div>
+          <Freshness
+            icon={<BadgeCheck className="h-3.5 w-3.5" />}
+            label="每小时同步"
+          />
+        </DashboardModuleCard>
 
-      <div className="grid gap-3 md:grid-cols-4">
-        <AdminStatCard icon={<Users className="h-4 w-4" />} label={adminCopy.dashboard.visitors} value={isLoading ? "..." : visitorCount} />
-        <AdminStatCard icon={<ShoppingCart className="h-4 w-4" />} label={adminCopy.dashboard.orders} value={isLoading ? "..." : (orders?.total ?? 0)} />
-        <AdminStatCard icon={<BarChart3 className="h-4 w-4" />} label={adminCopy.dashboard.revenue} value={isLoading ? "..." : `¥${orders?.totalAmount ?? 0}`} />
-        <AdminStatCard icon={<Star className="h-4 w-4" />} label={adminCopy.dashboard.satisfaction} value={isLoading ? "..." : avgRating} />
+        <DashboardModuleCard
+          icon={<Activity aria-hidden="true" className="h-5 w-5" />}
+          loading={behavior.loading}
+          onRefresh={behavior.refresh}
+          title="游客行为分析"
+        >
+          <ModuleError message={behavior.error} />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Metric
+              label="当前客流"
+              value={behavior.data?.currentVisitors ?? 0}
+            />
+            <Metric label="峰值客流" value={behavior.data?.peakVisitors ?? 0} />
+            <Metric label="消费订单" value={behavior.data?.orderCount ?? 0} />
+            <Metric
+              label="消费金额"
+              value={`¥${behavior.data?.revenue ?? 0}`}
+            />
+          </div>
+          <Sparkline
+            label="节点实时客流趋势"
+            values={behavior.data?.trend ?? []}
+          />
+        </DashboardModuleCard>
+
+        <DashboardModuleCard
+          icon={<CloudSun aria-hidden="true" className="h-5 w-5" />}
+          loading={ecology.loading}
+          onRefresh={ecology.refresh}
+          title="生态感知面板"
+        >
+          <ModuleError message={ecology.error} />
+          <div className="mb-4 grid grid-cols-3 gap-2">
+            {(ecology.data?.sensors ?? []).slice(0, 3).map((sensor) => (
+              <div className="rounded-lg bg-white/[0.035] p-3" key={sensor.id}>
+                <div className="truncate text-[11px] font-bold text-white/40">
+                  {sensorTypeLabel(sensor.type)}
+                </div>
+                <div className="mt-1 text-lg font-extrabold text-emerald-200">
+                  {sensor.value}
+                  <span className="ml-1 text-xs text-white/40">
+                    {sensor.unit}
+                  </span>
+                </div>
+              </div>
+            ))}
+            {!ecology.data?.sensors.length ? (
+              <p className="col-span-3 text-sm font-semibold text-white/40">
+                传感数据待接入。
+              </p>
+            ) : null}
+          </div>
+          <ActiveAlertsPanel
+            alerts={ecology.data?.alerts ?? []}
+            onAssigned={ecology.refresh}
+          />
+        </DashboardModuleCard>
+
+        <DashboardModuleCard
+          icon={<PackageCheck aria-hidden="true" className="h-5 w-5" />}
+          loading={productFeedback.loading}
+          onRefresh={productFeedback.refresh}
+          title="农产品反馈"
+        >
+          <ModuleError message={productFeedback.error} />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Metric
+              label="平均评分"
+              value={(productFeedback.data?.averageRating ?? 0).toFixed(1)}
+            />
+            <Metric
+              label="高优反馈"
+              value={productFeedback.data?.urgentFeedback ?? 0}
+            />
+            <Metric
+              label="在售产品"
+              value={productFeedback.data?.availableProducts ?? 0}
+            />
+            <Metric
+              label="产品总数"
+              value={productFeedback.data?.productCount ?? 0}
+            />
+          </div>
+          <Freshness
+            icon={<PackageCheck className="h-3.5 w-3.5" />}
+            label="每小时汇总"
+          />
+        </DashboardModuleCard>
+
+        <div className="xl:col-span-2">
+          <DashboardModuleCard
+            icon={<Sparkles aria-hidden="true" className="h-5 w-5" />}
+            loading={recommendations.loading}
+            onRefresh={recommendations.refresh}
+            title="运营智策卡"
+          >
+            <ModuleError message={recommendations.error} />
+            <RecommendationReviewPanel
+              items={(recommendations.data ?? []).slice(0, 3)}
+              onReviewed={recommendations.refresh}
+            />
+          </DashboardModuleCard>
+        </div>
       </div>
-
-      <section className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
-        <div className="rounded-lg border border-stone bg-white p-5 shadow-soft">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-lg font-extrabold">{adminCopy.dashboard.latestReport}</h2>
-            <button
-              className="flex h-9 items-center gap-2 rounded-full border border-stone px-4 text-sm font-bold disabled:opacity-50"
-              disabled={isGenerating}
-              onClick={generateReport}
-              type="button"
-            >
-              <RefreshCw className={`h-4 w-4 ${isGenerating ? "animate-spin" : ""}`} />
-              {isGenerating ? adminCopy.reports.generating : adminCopy.dashboard.generateReport}
-            </button>
-          </div>
-          {latestReport ? (
-            <div className="mt-4">
-              <p className="text-sm leading-7 text-ink/66">{latestReport.summary}</p>
-              <div className="mt-4 grid gap-2">
-                {latestReport.actionItems.slice(0, 3).map((item) => (
-                  <div className="rounded-md bg-rice px-3 py-2 text-sm font-semibold text-ink/70" key={item.action}>
-                    {item.priority} / {item.action}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p className="mt-4 text-sm font-semibold text-ink/54">{adminCopy.reports.noData}</p>
-          )}
-        </div>
-
-        <div className="rounded-lg border border-stone bg-white p-5 shadow-soft">
-          <h2 className="text-lg font-extrabold">{adminCopy.dashboard.activeAlerts}</h2>
-          <div className="mt-4 grid gap-3">
-            {alerts.length ? alerts.map((alert) => (
-              <div className="rounded-md border border-lychee/20 bg-lychee/5 p-3" key={alert.id}>
-                <div className="text-sm font-extrabold text-lychee">{adminCopy.alerts.types[alert.alertType] ?? alert.alertType}</div>
-                <div className="mt-1 text-xs font-semibold text-ink/58">{alert.severity} / {alert.message}</div>
-              </div>
-            )) : <p className="text-sm font-semibold text-ink/54">暂无活跃告警。</p>}
-          </div>
-        </div>
-      </section>
-
-      <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
-        <h2 className="text-lg font-extrabold">{adminCopy.dashboard.hotNodes}</h2>
-        <div className="mt-4 grid gap-3 md:grid-cols-5">
-          {topScores.length ? topScores.map((score, index) => (
-            <div className="rounded-md bg-rice p-3" key={score.node.slug}>
-              <div className="text-xs font-bold text-water">#{index + 1}</div>
-              <div className="mt-1 truncate text-sm font-extrabold">{nodeDisplayName(score.node.slug, score.node.nameKey)}</div>
-              <div className="mt-2 text-xs font-semibold text-ink/58">吸引力 {score.attractiveness}</div>
-              <div className={`text-xs font-semibold ${riskTone(score.safetyRisk)}`}>风险 {score.safetyRisk}</div>
-            </div>
-          )) : <p className="text-sm font-semibold text-ink/54">{adminCopy.dashboard.noData}</p>}
-        </div>
-      </section>
     </div>
   )
 }
 
-function today() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(new Date())
+function useModuleData<T>(loader: () => Promise<T>, refreshInterval: number) {
+  const [data, setData] = useState<T | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+
+  const refresh = useCallback(async () => {
+    setLoading(true)
+    setError("")
+    try {
+      setData(await loader())
+    } catch {
+      setError("数据暂时不可用，请稍后刷新。")
+    } finally {
+      setLoading(false)
+    }
+  }, [loader])
+
+  useEffect(() => {
+    void refresh()
+    const intervalId = window.setInterval(() => void refresh(), refreshInterval)
+    return () => window.clearInterval(intervalId)
+  }, [refresh, refreshInterval])
+
+  return { data, loading, error, refresh }
 }
 
-function riskTone(value: number) {
-  if (value > 70) return "text-lychee"
-  if (value >= 30) return "text-yellow-500"
-  return "text-moss"
+async function loadProduction() {
+  const [villagers, tasks] = await Promise.all([
+    fetchAdminApi<ApiList<VillagerRow>>("/villagers"),
+    fetchAdminApi<ApiList<TaskRow>>("/tasks?status=completed"),
+  ])
+  return summarizeProduction(villagers.data, tasks.data)
 }
 
-function ErrorLine({ message }: { message: string }) {
+async function loadVisitorBehavior() {
+  const consumption = await fetchAdminApi<ApiList<ConsumptionRow>>(
+    "/analytics/consumption/by-node",
+  )
+  const nodeId = consumption.data.find((item) => item.nodeId)?.nodeId
+  const presence = nodeId
+    ? await fetchAdminApi<ApiList<PresenceRow>>(
+        `/presence/series?nodeId=${encodeURIComponent(nodeId)}&limit=48`,
+      )
+    : { data: [] }
+  return {
+    ...summarizeVisitorBehavior(consumption.data, presence.data),
+    trend: presence.data.map((item) => item.peopleCount),
+  }
+}
+
+async function loadEcology() {
+  const [sensors, alerts] = await Promise.all([
+    fetchAdminApi<ApiList<SensorRow>>("/infrastructure/sensors/latest"),
+    fetchAdminApi<ApiList<ActiveAlertRow>>("/alerts?status=active"),
+  ])
+  return { sensors: sensors.data, alerts: alerts.data }
+}
+
+async function loadProductFeedback() {
+  const [feedback, products] = await Promise.all([
+    fetchAdminApi<ApiList<FeedbackRow>>("/feedback"),
+    fetchAdminApi<ApiList<ProductRow>>("/products?includeInactive=true"),
+  ])
+  return summarizeProductFeedback(feedback.data, products.data)
+}
+
+async function loadRecommendations() {
+  const result = await fetchAdminApi<ApiList<RecommendationRow>>(
+    "/recommendations?status=draft",
+  )
+  return result.data
+}
+
+function Metric({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="flex items-center gap-2 rounded-md bg-lychee/10 px-4 py-3 text-sm font-semibold text-lychee">
-      <AlertTriangle className="h-4 w-4" />
-      {message}
+    <div className="rounded-lg bg-white/[0.035] p-3">
+      <div className="text-[11px] font-bold text-white/38">{label}</div>
+      <div className="mt-1 text-xl font-extrabold tracking-tight text-white">
+        {value}
+      </div>
     </div>
   )
+}
+
+function Sparkline({ label, values }: { label: string; values: number[] }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const path = buildSparklinePath(values, 320, 56)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const context = canvas?.getContext("2d")
+    if (!canvas || !context || !path) return
+
+    const points = Array.from(
+      path.matchAll(/(?:M|L) ([\d.]+) ([\d.]+)/g),
+      (match) => [Number(match[1]), Number(match[2])],
+    )
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    context.save()
+    context.scale(2, 2)
+    context.beginPath()
+    if (points.length === 1) {
+      context.arc(points[0][0], points[0][1], 4, 0, Math.PI * 2)
+    } else {
+      points.forEach(([x, y], index) => {
+        if (index === 0) context.moveTo(x, y)
+        else context.lineTo(x, y)
+      })
+    }
+    context.lineCap = "round"
+    context.lineJoin = "round"
+    context.lineWidth = 3
+    context.strokeStyle = "#72d49a"
+    context.fillStyle = "#72d49a"
+    context.shadowBlur = 12
+    context.shadowColor = "rgba(114, 212, 154, 0.35)"
+    if (points.length === 1) context.fill()
+    else context.stroke()
+    context.restore()
+  }, [path])
+
+  return (
+    <figure className="mt-4 rounded-lg bg-black/10 p-3">
+      <figcaption className="mb-2 text-[11px] font-bold text-white/38">
+        {label}
+      </figcaption>
+      {path ? (
+        <canvas
+          aria-label={label}
+          className="h-14 w-full"
+          height={112}
+          ref={canvasRef}
+          role="img"
+          width={640}
+        />
+      ) : (
+        <div className="flex h-14 items-center text-xs font-semibold text-white/35">
+          暂无趋势样本
+        </div>
+      )}
+    </figure>
+  )
+}
+
+function Freshness({ icon, label }: { icon: ReactNode; label: string }) {
+  return (
+    <div className="mt-4 flex items-center gap-2 text-xs font-bold text-emerald-200/60">
+      {icon}
+      {label}
+    </div>
+  )
+}
+
+function ModuleError({ message }: { message: string }) {
+  return message ? (
+    <p className="mb-3 rounded-md bg-red-400/10 px-3 py-2 text-xs font-semibold text-red-200">
+      {message}
+    </p>
+  ) : null
+}
+
+function sensorTypeLabel(type: string) {
+  const labels: Record<string, string> = {
+    soil_moisture: "土壤水分",
+    air_humidity: "空气湿度",
+    humidity: "空气湿度",
+    light_intensity: "光照强度",
+    light: "光照强度",
+    temperature: "环境温度",
+  }
+  return labels[type] ?? type
 }

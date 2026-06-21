@@ -14,6 +14,7 @@ export const adminCopy = {
   },
   menu: [
     { key: "dashboard", label: "云脑总览", status: "active" },
+    { key: "recommendations", label: "智策中心", status: "active" },
     { key: "map", label: "地图监控", status: "active" },
     { key: "feedback", label: "反馈管理", status: "active" },
     { key: "nodes", label: "节点管理", status: "active" },
