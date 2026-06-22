@@ -41,32 +41,35 @@ a {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
 }
 
-.realm-map-label {
+.realm-region-marker {
   border: 0;
-  background: rgba(25, 32, 27, 0.84);
-  color: white;
-  box-shadow: none;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
+  background: transparent;
 }
 
-.realm-map-label::before {
-  display: none;
-}
-
-.realm-anchor-label {
+.realm-region-label {
   display: inline-flex;
+  align-items: center;
+  gap: 6px;
   transform: translate(-50%, -50%);
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 999px;
-  background: rgba(25, 32, 27, 0.86);
-  padding: 5px 9px;
+  background: rgba(25, 32, 27, 0.82);
+  padding: 7px 10px;
   color: white;
-  font-size: 11px;
+  box-shadow: 0 4px 14px rgba(8, 16, 10, 0.28);
+  font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
   backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.realm-region-label__dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

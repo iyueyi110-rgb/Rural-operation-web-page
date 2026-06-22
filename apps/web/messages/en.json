@@ -599,7 +599,7 @@
       "anchorHint": "Guidepost, ancient tree and herbal courtyard",
       "provider": {
         "loading": "Loading map",
-        "amap": "AMap 2.5D",
+        "amap": "AMap satellite",
         "leaflet": "Leaflet map"
       },
       "anchors": {

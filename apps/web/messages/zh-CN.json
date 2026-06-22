@@ -204,7 +204,7 @@
       "anchorHint": "指路碑、古树与药铺合院",
       "provider": {
         "loading": "地图加载中",
-        "amap": "高德 2.5D 地图",
+        "amap": "高德卫星图",
         "leaflet": "Leaflet 地图"
       },
       "anchors": {

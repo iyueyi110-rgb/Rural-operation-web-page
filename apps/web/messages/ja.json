@@ -599,7 +599,7 @@
       "anchorHint": "道標、古木、薬舗の中庭",
       "provider": {
         "loading": "地図を読み込み中",
-        "amap": "高徳 2.5D 地図",
+        "amap": "高徳衛星地図",
         "leaflet": "Leaflet 地図"
       },
       "anchors": {

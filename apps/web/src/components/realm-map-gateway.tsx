@@ -26,7 +26,10 @@ interface AMapNamespace {
     options: Record<string, unknown>,
   ) => AMapInstance
   Marker: new (options: Record<string, unknown>) => AMapShape
-  Polygon: new (options: Record<string, unknown>) => AMapShape
+  TileLayer: {
+    RoadNet: new () => unknown
+    Satellite: new () => unknown
+  }
 }
 
 declare global {
@@ -35,79 +38,32 @@ declare global {
   }
 }
 
-const legacyCenter: Coordinate = [106.321, 29.8512]
-const zoumaVillageCenter: Coordinate = [107.067, 29.8255]
-
-function relocateToChangshou([longitude, latitude]: Coordinate): Coordinate {
-  return [
-    Number(
-      (longitude + zoumaVillageCenter[0] - legacyCenter[0]).toFixed(6),
-    ),
-    Number(
-      (latitude + zoumaVillageCenter[1] - legacyCenter[1]).toFixed(6),
-    ),
-  ]
-}
+const zoumaVillageCenter: Coordinate = [107.1055, 29.8105]
 
 const realms = [
   {
     slug: "ancient-road",
     titleKey: "realms.ancientRoad.title",
     color: "#b93835",
-    points: [
-      [106.309, 29.857],
-      [106.318, 29.861],
-      [106.322, 29.854],
-      [106.314, 29.85],
-    ].map((point) => relocateToChangshou(point as Coordinate)),
+    position: [107.099141, 29.812567] satisfies Coordinate,
   },
   {
     slug: "lychee-field",
     titleKey: "realms.lycheeField.title",
     color: "#9a6c2f",
-    points: [
-      [106.322, 29.861],
-      [106.332, 29.858],
-      [106.331, 29.85],
-      [106.322, 29.853],
-    ].map((point) => relocateToChangshou(point as Coordinate)),
+    position: [107.102516, 29.808982] satisfies Coordinate,
   },
   {
     slug: "resilience-valley",
     titleKey: "realms.resilienceValley.title",
     color: "#2f7686",
-    points: [
-      [106.314, 29.849],
-      [106.322, 29.853],
-      [106.322, 29.842],
-      [106.31, 29.84],
-    ].map((point) => relocateToChangshou(point as Coordinate)),
+    position: [107.1038, 29.8063] satisfies Coordinate,
   },
   {
     slug: "ridge-dwelling",
     titleKey: "realms.ridgeDwelling.title",
     color: "#46624a",
-    points: [
-      [106.322, 29.852],
-      [106.332, 29.85],
-      [106.335, 29.841],
-      [106.322, 29.842],
-    ].map((point) => relocateToChangshou(point as Coordinate)),
-  },
-] as const
-
-const anchors = [
-  {
-    labelKey: "mapGateway.anchors.milestone",
-    position: relocateToChangshou([106.314, 29.856]),
-  },
-  {
-    labelKey: "mapGateway.anchors.ancientTree",
-    position: relocateToChangshou([106.327, 29.855]),
-  },
-  {
-    labelKey: "mapGateway.anchors.courtyard",
-    position: relocateToChangshou([106.329, 29.845]),
+    position: [107.1083, 29.8083] satisfies Coordinate,
   },
 ] as const
 
@@ -165,6 +121,18 @@ export function RealmMapGateway() {
     let disposed = false
     let teardown: () => void = () => undefined
     const navigate = (slug: string) => router.push(`/${locale}/scenes/${slug}`)
+    const createRealmLabel = (realm: (typeof realms)[number]) => {
+      const label = document.createElement("span")
+      label.className = "realm-region-label"
+
+      const dot = document.createElement("span")
+      dot.className = "realm-region-label__dot"
+      dot.style.backgroundColor = realm.color
+
+      label.textContent = t(realm.titleKey)
+      label.prepend(dot)
+      return label
+    }
 
     const initLeaflet = async () => {
       const L = await import("leaflet")
@@ -174,61 +142,27 @@ export function RealmMapGateway() {
       const map = L.map(container, {
         scrollWheelZoom: false,
         zoomControl: true,
-      }).setView([zoumaVillageCenter[1], zoumaVillageCenter[0]], 15)
+      }).setView([zoumaVillageCenter[1], zoumaVillageCenter[0]], 16)
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19,
-      }).addTo(map)
+      L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          attribution:
+            "Tiles &copy; Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+          maxZoom: 19,
+        },
+      ).addTo(map)
 
       realms.forEach((realm) => {
-        L.polygon(
-          realm.points.map(([longitude, latitude]) => [latitude, longitude]),
-          {
-            color: realm.color,
-            fillColor: realm.color,
-            fillOpacity: 0.5,
-            weight: 2,
-          },
-        )
+        L.marker([realm.position[1], realm.position[0]], {
+          icon: L.divIcon({
+            className: "realm-region-marker",
+            html: createRealmLabel(realm),
+          }),
+        })
           .addTo(map)
-          .bindTooltip(t(realm.titleKey), {
-            className: "realm-map-label",
-            direction: "center",
-            permanent: true,
-          })
           .on("click", () => navigate(realm.slug))
       })
-
-      anchors.forEach((anchor) => {
-        L.circleMarker([anchor.position[1], anchor.position[0]], {
-          color: "#ffffff",
-          fillColor: "#19201b",
-          fillOpacity: 1,
-          radius: 6,
-          weight: 2,
-        })
-          .addTo(map)
-          .bindTooltip(t(anchor.labelKey))
-      })
-
-      L.circleMarker(
-        [zoumaVillageCenter[1], zoumaVillageCenter[0]],
-        {
-          color: "#ffffff",
-          fillColor: "#b93835",
-          fillOpacity: 1,
-          radius: 8,
-          weight: 3,
-        },
-      )
-        .addTo(map)
-        .bindTooltip(t("mapGateway.locationLabel"), {
-          className: "realm-map-label",
-          direction: "top",
-          permanent: true,
-        })
 
       setProvider("leaflet")
       return () => {
@@ -243,43 +177,25 @@ export function RealmMapGateway() {
       container.innerHTML = ""
       const map = new AMap.Map(container, {
         center: zoumaVillageCenter,
-        mapStyle: "amap://styles/whitesmoke",
-        pitch: 48,
+        layers: [
+          new AMap.TileLayer.Satellite(),
+          new AMap.TileLayer.RoadNet(),
+        ],
+        pitch: 0,
         viewMode: "3D",
-        zoom: 15,
+        zoom: 16,
       })
 
       const overlays: AMapShape[] = realms.map((realm) => {
-        const polygon = new AMap.Polygon({
+        const label = createRealmLabel(realm)
+        const marker = new AMap.Marker({
+          content: label,
           cursor: "pointer",
-          fillColor: realm.color,
-          fillOpacity: 0.52,
-          path: realm.points,
-          strokeColor: realm.color,
-          strokeWeight: 2,
+          position: realm.position,
         })
-        polygon.on("click", () => navigate(realm.slug))
-        return polygon
+        marker.on("click", () => navigate(realm.slug))
+        return marker
       })
-
-      anchors.forEach((anchor) => {
-        const label = document.createElement("span")
-        label.className = "realm-anchor-label"
-        label.textContent = t(anchor.labelKey)
-        overlays.push(
-          new AMap.Marker({ content: label, position: anchor.position }),
-        )
-      })
-
-      const villageLabel = document.createElement("span")
-      villageLabel.className = "realm-anchor-label realm-village-label"
-      villageLabel.textContent = t("mapGateway.locationLabel")
-      overlays.push(
-        new AMap.Marker({
-          content: villageLabel,
-          position: zoumaVillageCenter,
-        }),
-      )
 
       map.add(overlays)
       setProvider("amap")
