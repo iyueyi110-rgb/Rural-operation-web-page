@@ -43,6 +43,7 @@ export default function VillagersPage() {
   const [nodes, setNodes] = useState<NodeRow[]>([])
   const [selected, setSelected] = useState<VillagerRow | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState("")
   const [message, setMessage] = useState("")
   const [form, setForm] = useState({
     name: "",
@@ -54,15 +55,30 @@ export default function VillagersPage() {
 
   async function loadData() {
     setIsLoading(true)
-    const [villagerResponse, nodeResponse] = await Promise.all([
-      fetch(`${adminApiBase}/villagers`),
-      fetch(`${adminApiBase}/nodes`),
-    ])
-    const villagerPayload = (await villagerResponse.json()) as { data?: VillagerRow[] }
-    const nodePayload = (await nodeResponse.json()) as { data?: NodeRow[] }
-    setVillagers(villagerPayload.data ?? [])
-    setNodes(nodePayload.data ?? [])
-    setIsLoading(false)
+    setError("")
+
+    try {
+      const [villagerResponse, nodeResponse] = await Promise.all([
+        fetch(`${adminApiBase}/villagers`),
+        fetch(`${adminApiBase}/nodes`),
+      ])
+
+      if (!villagerResponse.ok || !nodeResponse.ok) {
+        throw new Error(adminCopy.common.error)
+      }
+
+      const villagerPayload = (await villagerResponse.json()) as { data?: VillagerRow[] }
+      const nodePayload = (await nodeResponse.json()) as { data?: NodeRow[] }
+      setVillagers(villagerPayload.data ?? [])
+      setNodes(nodePayload.data ?? [])
+    } catch (caughtError) {
+      console.warn("Villager data load failed", caughtError)
+      setVillagers([])
+      setNodes([])
+      setError(adminCopy.common.error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -96,19 +112,23 @@ export default function VillagersPage() {
 
   async function saveVillager() {
     setMessage("")
-    const response = await fetch(`${adminApiBase}/villagers`, {
-      method: selected ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({
-        ...(selected ? { id: selected.id } : {}),
-        ...form,
-        nodeId: form.nodeId || null,
-      }),
-    })
-    setMessage(response.ok ? adminCopy.villagers.saved : adminCopy.villagers.saveFailed)
-    if (response.ok) {
-      await loadData()
-      resetForm()
+    try {
+      const response = await fetch(`${adminApiBase}/villagers`, {
+        method: selected ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
+        body: JSON.stringify({
+          ...(selected ? { id: selected.id } : {}),
+          ...form,
+          nodeId: form.nodeId || null,
+        }),
+      })
+      setMessage(response.ok ? adminCopy.villagers.saved : adminCopy.villagers.saveFailed)
+      if (response.ok) {
+        await loadData()
+        resetForm()
+      }
+    } catch {
+      setMessage(adminCopy.villagers.saveFailed)
     }
   }
 
@@ -149,6 +169,7 @@ export default function VillagersPage() {
         </div>
       </header>
 
+      {error ? <div className="rounded-md bg-lychee/10 p-3 text-sm font-bold text-lychee">{error}</div> : null}
       {message ? <div className="rounded-md bg-rice p-3 text-sm font-bold text-ink/70">{message}</div> : null}
 
       <div className="grid gap-3 md:grid-cols-3">
