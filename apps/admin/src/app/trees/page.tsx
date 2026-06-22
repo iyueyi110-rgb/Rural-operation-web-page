@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
-import { adminApiBase } from "@admin/lib/admin-api"
+import { adminApiBase, adminApiToken, fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface CareLog {
@@ -26,8 +26,6 @@ interface TreeRow extends Record<string, unknown> {
   growthPhotos: string[]
   careLogs: CareLog[]
 }
-
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
 export default function TreesAdminPage() {
   const [trees, setTrees] = useState<TreeRow[]>([])
@@ -64,29 +62,35 @@ export default function TreesAdminPage() {
 
   async function saveTree() {
     if (!selected) return
-    const response = await fetch(`${adminApiBase}/trees/${selected.treeCode}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({
-        fireMemory,
-        newShootsRecord,
-        growthPhotos: growthPhotosText.split("\n").map((item) => item.trim()).filter(Boolean),
-        adoptStatus: selected.adoptStatus,
-      }),
-    })
-    setMessage(response.ok ? "档案已保存。" : "档案保存失败。")
-    if (response.ok) await loadTrees()
+    try {
+      await fetchAdminApi(`/trees/${selected.treeCode}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          fireMemory,
+          newShootsRecord,
+          growthPhotos: growthPhotosText.split("\n").map((item) => item.trim()).filter(Boolean),
+          adoptStatus: selected.adoptStatus,
+        }),
+      })
+      setMessage("档案已保存。")
+      await loadTrees()
+    } catch {
+      setMessage("档案保存失败。")
+    }
   }
 
   async function addCareLog() {
     if (!selected || !logContent.trim()) return
-    const response = await fetch(`${adminApiBase}/trees/${selected.treeCode}/care-logs`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({ logType, content: logContent, operator: "运营后台" }),
-    })
-    setMessage(response.ok ? "养护日志已录入。" : "养护日志录入失败。")
-    if (response.ok) await loadTrees()
+    try {
+      await fetchAdminApi(`/trees/${selected.treeCode}/care-logs`, {
+        method: "POST",
+        body: JSON.stringify({ logType, content: logContent, operator: "运营后台" }),
+      })
+      setMessage("养护日志已录入。")
+      await loadTrees()
+    } catch {
+      setMessage("养护日志录入失败。")
+    }
   }
 
   async function uploadGrowthPhoto(file: File | null) {
@@ -99,7 +103,7 @@ export default function TreesAdminPage() {
 
     const uploadResponse = await fetch(`${adminApiBase}/upload`, {
       method: "POST",
-      headers: { "X-Admin-Token": adminToken },
+      headers: { "X-Admin-Token": adminApiToken },
       body: formData,
     })
 
@@ -118,20 +122,23 @@ export default function TreesAdminPage() {
     }
 
     const growthPhotos = [...(selected.growthPhotos ?? []), imageUrl]
-    const saveResponse = await fetch(`${adminApiBase}/trees/${selected.treeCode}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({
-        fireMemory,
-        newShootsRecord,
-        growthPhotos,
-        adoptStatus: selected.adoptStatus,
-      }),
-    })
-
-    setMessage(saveResponse.ok ? "图片已追加到树档案。" : "图片已上传但档案保存失败。")
-    setIsUploading(false)
-    if (saveResponse.ok) await loadTrees()
+    try {
+      await fetchAdminApi(`/trees/${selected.treeCode}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          fireMemory,
+          newShootsRecord,
+          growthPhotos,
+          adoptStatus: selected.adoptStatus,
+        }),
+      })
+      setMessage("图片已追加到树档案。")
+      await loadTrees()
+    } catch {
+      setMessage("图片已上传但档案保存失败。")
+    } finally {
+      setIsUploading(false)
+    }
   }
 
   const columns = useMemo<Array<TableColumn<TreeRow>>>(

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
-import { adminApiBase } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface ShipmentRow {
@@ -32,7 +32,6 @@ interface HarvestRow extends Record<string, unknown> {
   shipment?: ShipmentRow
 }
 
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 const shipmentStatuses: ShipmentRow["status"][] = ["pending", "picking", "shipping", "delivered"]
 
 function getNextShipmentStatus(status?: ShipmentRow["status"]) {
@@ -59,10 +58,7 @@ export default function HarvestPage() {
 
   const loadRows = useCallback(async () => {
     setIsLoading(true)
-    const response = await fetch(`${adminApiBase}/harvest-bookings`, {
-      headers: { "X-Admin-Token": adminToken },
-    })
-    const payload = (await response.json()) as { data?: HarvestRow[] }
+    const payload = await fetchAdminApi<{ data?: HarvestRow[] }>("/harvest-bookings")
     const nextRows = payload.data ?? []
     setRows(nextRows)
     setSelectedId((current) => (current && nextRows.some((row) => row.id === current) ? current : (nextRows[0]?.id ?? "")))
@@ -86,28 +82,34 @@ export default function HarvestPage() {
   }, [selectedRow])
 
   async function updateStatus(id: string, status: string) {
-    const response = await fetch(`${adminApiBase}/harvest-bookings`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({ id, status }),
-    })
-    setMessage(response.ok ? "采摘状态已更新。" : "采摘状态更新失败。")
-    if (response.ok) await loadRows()
+    try {
+      await fetchAdminApi("/harvest-bookings", {
+        method: "PATCH",
+        body: JSON.stringify({ id, status }),
+      })
+      setMessage("采摘状态已更新。")
+      await loadRows()
+    } catch {
+      setMessage("采摘状态更新失败。")
+    }
   }
 
   async function updateDestination(row: HarvestRow, fruitDestination: string) {
-    const response = await fetch(`${adminApiBase}/harvest-bookings`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({
-        id: row.id,
-        status: row.status,
-        fruitDestination,
-        destinationNote: row.destinationNote ?? "",
-      }),
-    })
-    setMessage(response.ok ? "果实去向已更新。" : "果实去向更新失败。")
-    if (response.ok) await loadRows()
+    try {
+      await fetchAdminApi("/harvest-bookings", {
+        method: "PATCH",
+        body: JSON.stringify({
+          id: row.id,
+          status: row.status,
+          fruitDestination,
+          destinationNote: row.destinationNote ?? "",
+        }),
+      })
+      setMessage("果实去向已更新。")
+      await loadRows()
+    } catch {
+      setMessage("果实去向更新失败。")
+    }
   }
 
   async function saveShipment() {
@@ -123,15 +125,17 @@ export default function HarvestPage() {
       status: shipmentDraft.status,
     }
 
-    const response = await fetch(`${adminApiBase}/harvest-shipments`, {
-      method: selectedRow.shipment ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify(selectedRow.shipment ? { id: selectedRow.shipment.id, ...payload } : payload),
-    })
+    try {
+      await fetchAdminApi("/harvest-shipments", {
+        method: selectedRow.shipment ? "PATCH" : "POST",
+        body: JSON.stringify(selectedRow.shipment ? { id: selectedRow.shipment.id, ...payload } : payload),
+      })
 
-    const errorPayload = response.ok ? null : ((await response.json().catch(() => null)) as { error?: string } | null)
-    setMessage(response.ok ? "物流信息已保存。" : `物流保存失败：${errorPayload?.error ?? "请检查状态流转"}`)
-    if (response.ok) await loadRows()
+      setMessage("物流信息已保存。")
+      await loadRows()
+    } catch (error) {
+      setMessage(`物流保存失败：${error instanceof Error ? error.message : "请检查状态流转"}`)
+    }
   }
 
   const columns: Array<TableColumn<HarvestRow>> = [

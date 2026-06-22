@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, nodeDisplayName } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface ProductRow extends Record<string, unknown> {
@@ -26,8 +26,6 @@ interface NodeRow {
   slug: string
   nameKey: string
 }
-
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<ProductRow[]>([])
@@ -64,17 +62,20 @@ export default function ProductsPage() {
 
   async function saveProduct() {
     setMessage("")
-    const response = await fetch(`${adminApiBase}/products`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({
-        ...form,
-        price: form.price.trim() ? Number(form.price) : null,
-        nodeId: form.nodeId || null,
-      }),
-    })
-    setMessage(response.ok ? adminCopy.products.saved : adminCopy.products.saveFailed)
-    if (response.ok) await loadData()
+    try {
+      await fetchAdminApi("/products", {
+        method: "POST",
+        body: JSON.stringify({
+          ...form,
+          price: form.price.trim() ? Number(form.price) : null,
+          nodeId: form.nodeId || null,
+        }),
+      })
+      setMessage(adminCopy.products.saved)
+      await loadData()
+    } catch {
+      setMessage(adminCopy.products.saveFailed)
+    }
   }
 
   const columns = useMemo<Array<TableColumn<ProductRow>>>(

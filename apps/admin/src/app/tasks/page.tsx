@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, nodeDisplayName } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface NodeRow {
@@ -33,7 +33,6 @@ interface TaskRow extends Record<string, unknown> {
   node?: NodeRow | null
 }
 
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 const taskTypes = ["farming", "guiding", "logistics", "maintenance", "service"] as const
 const taskStatuses = ["pending", "accepted", "in_progress", "completed", "cancelled"] as const
 const nextStatusMap: Record<TaskRow["status"], TaskRow["status"] | null> = {
@@ -107,23 +106,23 @@ export default function TasksPage() {
   }
 
   async function saveTask(status?: TaskRow["status"]) {
-    const response = await fetch(`${adminApiBase}/tasks`, {
-      method: selected ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({
-        ...(selected ? { id: selected.id } : {}),
-        ...form,
-        status,
-        villagerId: form.villagerId || null,
-        nodeId: form.nodeId || null,
-        earnings: Number(form.earnings),
-      }),
-    })
-    const errorPayload = response.ok ? null : ((await response.json().catch(() => null)) as { error?: string } | null)
-    setMessage(response.ok ? adminCopy.tasks.saved : `${adminCopy.tasks.saveFailed}: ${errorPayload?.error ?? ""}`)
-    if (response.ok) {
+    try {
+      await fetchAdminApi("/tasks", {
+        method: selected ? "PATCH" : "POST",
+        body: JSON.stringify({
+          ...(selected ? { id: selected.id } : {}),
+          ...form,
+          status,
+          villagerId: form.villagerId || null,
+          nodeId: form.nodeId || null,
+          earnings: Number(form.earnings),
+        }),
+      })
+      setMessage(adminCopy.tasks.saved)
       await loadData()
       resetForm()
+    } catch (error) {
+      setMessage(`${adminCopy.tasks.saveFailed}: ${error instanceof Error ? error.message : ""}`)
     }
   }
 

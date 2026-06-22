@@ -1,13 +1,23 @@
 import { prisma } from "../src/index"
 
-const legacyCenter = { lat: 29.8512, lng: 106.321 }
-const zoumaVillageCenter = { lat: 29.8255, lng: 107.067 }
-
-function relocateToChangshou(lat: number, lng: number) {
-  return {
-    lat: Number((lat + zoumaVillageCenter.lat - legacyCenter.lat).toFixed(6)),
-    lng: Number((lng + zoumaVillageCenter.lng - legacyCenter.lng).toFixed(6)),
-  }
+const nodePositionsInZoumaRange: Record<string, { lat: number; lng: number }> = {
+  "visitor-center": { lat: 29.8062, lng: 107.102 },
+  taojiawan: { lat: 29.8075, lng: 107.1038 },
+  "ancient-road": { lat: 29.8087, lng: 107.106 },
+  "indoor-story": { lat: 29.8099, lng: 107.1082 },
+  "shaded-ancient-road": { lat: 29.811, lng: 107.1105 },
+  "lychee-garden": { lat: 29.807, lng: 107.1096 },
+  "food-classroom": { lat: 29.8049, lng: 107.1081 },
+  "tree-adoption": { lat: 29.8033, lng: 107.1066 },
+  "waterfront-rest": { lat: 29.8014, lng: 107.1052 },
+  "resilience-workshop": { lat: 29.7996, lng: 107.104 },
+  "ridge-courtyard": { lat: 29.8061, lng: 107.1125 },
+  "village-meal": { lat: 29.8043, lng: 107.114 },
+  "morning-farm": { lat: 29.8026, lng: 107.1152 },
+  "ancient-road-core": { lat: 29.8081, lng: 107.105 },
+  "lychee-field-core": { lat: 29.8054, lng: 107.107 },
+  "resilience-valley-core": { lat: 29.8008, lng: 107.1054 },
+  "ridge-dwelling-core": { lat: 29.8053, lng: 107.1133 },
 }
 
 const nodes = [
@@ -200,7 +210,7 @@ const nodes = [
   },
 ].map((node) => ({
   ...node,
-  ...relocateToChangshou(node.lat, node.lng),
+  ...nodePositionsInZoumaRange[node.slug],
 }))
 
 export async function seedNodes() {

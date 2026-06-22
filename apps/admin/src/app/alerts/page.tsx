@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
-import { adminApiBase } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface AlertRow extends Record<string, unknown> {
@@ -69,13 +69,16 @@ export default function AlertsPage() {
   }, [loadRows])
 
   async function updateStatus(id: string, nextStatus: string) {
-    const response = await fetch(`${adminApiBase}/alerts`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, status: nextStatus }),
-    })
-    setMessage(response.ok ? "告警状态已更新。" : "告警状态更新失败。")
-    if (response.ok) await loadRows()
+    try {
+      await fetchAdminApi("/alerts", {
+        method: "PATCH",
+        body: JSON.stringify({ id, status: nextStatus }),
+      })
+      setMessage("告警状态已更新。")
+      await loadRows()
+    } catch {
+      setMessage("告警状态更新失败。")
+    }
   }
 
   const columns: Array<TableColumn<AlertRow>> = [

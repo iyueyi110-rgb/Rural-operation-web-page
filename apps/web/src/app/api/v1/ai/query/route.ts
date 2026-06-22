@@ -2,14 +2,17 @@ import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { answerOperationalQuestion } from "@web/lib/ai-query"
 import { requireBearerAuth } from "@web/lib/api-auth"
 import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
+import { isAdminRequest } from "@web/lib/tree-records"
 
 export async function OPTIONS(request: Request) {
   return optionsResponse(request)
 }
 
 export async function POST(request: Request) {
-  const auth = await requireBearerAuth(request)
-  if (!auth.authorized) return auth.response
+  if (!isAdminRequest(request)) {
+    const auth = await requireBearerAuth(request)
+    if (!auth.authorized) return auth.response
+  }
 
   const rateLimit = await checkRateLimit(getRateLimitKey(request, "ai-query"), 10, 60)
   if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)

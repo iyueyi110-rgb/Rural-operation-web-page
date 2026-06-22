@@ -4,11 +4,11 @@ import { AlertTriangle, CheckCircle2, RefreshCw, SendHorizontal } from "lucide-r
 import { useEffect, useMemo, useState, type ReactNode } from "react"
 
 import { adminCopy } from "@admin/lib/admin-copy"
+import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import type { Feedback, FeedbackRecord } from "@zouma/contracts"
 
 type FeedbackStatus = Feedback["status"]
 
-const apiBase = process.env.NEXT_PUBLIC_WEB_API_BASE ?? "http://localhost:3000/api/v1"
 const statusOrder: FeedbackStatus[] = ["submitted", "assigned", "processing", "resolved", "closed"]
 
 const statusTone: Record<FeedbackStatus, string> = {
@@ -69,7 +69,7 @@ export function FeedbackContent() {
     setError("")
 
     try {
-      const response = await fetch(`${apiBase}/feedback`, { cache: "no-store" })
+      const response = await fetch(`${adminApiBase}/feedback`, { cache: "no-store" })
 
       if (!response.ok) {
         throw new Error("load failed")
@@ -94,11 +94,8 @@ export function FeedbackContent() {
     setError("")
 
     try {
-      const response = await fetch(`${apiBase}/feedback`, {
+      const result = await fetchAdminApi<{ data: FeedbackRecord }>("/feedback", {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           id: selectedRecord.id,
           status,
@@ -106,11 +103,6 @@ export function FeedbackContent() {
         }),
       })
 
-      if (!response.ok) {
-        throw new Error("update failed")
-      }
-
-      const result = (await response.json()) as { data: FeedbackRecord }
       setRecords((current) => current.map((record) => (record.id === result.data.id ? result.data : record)))
       setNote("")
     } catch {

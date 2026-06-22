@@ -42,7 +42,8 @@ export interface AdminMapProps {
 
 const mapCenter: LatLngExpression = zoumaVillageCenter
 const amapKey = process.env.NEXT_PUBLIC_AMAP_KEY ?? ""
-const tileUrl = `https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}${amapKey ? `&key=${amapKey}` : ""}`
+const satelliteTileUrl = `https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}${amapKey ? `&key=${amapKey}` : ""}`
+const labelTileUrl = `https://webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}${amapKey ? `&key=${amapKey}` : ""}`
 
 export function AdminMap({ activeLayer, metrics, nodes }: AdminMapProps) {
   const geoNodes = nodes.filter(
@@ -64,12 +65,17 @@ export function AdminMap({ activeLayer, metrics, nodes }: AdminMapProps) {
         className="h-[560px] w-full rounded-lg border border-stone shadow-soft"
         preferCanvas
         scrollWheelZoom
-        zoom={14}
+        zoom={15}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.amap.com/">高德地图</a>'
           subdomains={["1", "2", "3", "4"]}
-          url={tileUrl}
+          url={satelliteTileUrl}
+        />
+        <TileLayer
+          opacity={0.88}
+          subdomains={["1", "2", "3", "4"]}
+          url={labelTileUrl}
         />
         {geoNodes.map((node) => {
           const metric = metrics.get(node.id) ?? emptyMetric(node.id)
@@ -78,6 +84,7 @@ export function AdminMap({ activeLayer, metrics, nodes }: AdminMapProps) {
           const position = normalizeZoumaVillageCoordinate(
             node.lat as number,
             node.lng as number,
+            node.slug,
           )
 
           return (

@@ -4,7 +4,7 @@ import { AlertTriangle, Plus, RadioTower, RefreshCw } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, nodeDisplayName } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface DeviceRow {
@@ -25,8 +25,6 @@ interface NodeRow {
   slug: string
   nameKey: string
 }
-
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
 export default function DevicesPage() {
   const [devices, setDevices] = useState<DeviceRow[]>([])
@@ -61,13 +59,16 @@ export default function DevicesPage() {
 
   async function saveDevice() {
     setMessage("")
-    const response = await fetch(`${adminApiBase}/devices`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({ ...form, nodeId: form.nodeId || null }),
-    })
-    setMessage(response.ok ? adminCopy.devices.saved : adminCopy.devices.saveFailed)
-    if (response.ok) await loadData()
+    try {
+      await fetchAdminApi("/devices", {
+        method: "POST",
+        body: JSON.stringify({ ...form, nodeId: form.nodeId || null }),
+      })
+      setMessage(adminCopy.devices.saved)
+      await loadData()
+    } catch {
+      setMessage(adminCopy.devices.saveFailed)
+    }
   }
 
   const summary = useMemo(() => {

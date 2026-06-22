@@ -3,7 +3,7 @@
 import { Bot, Send } from "lucide-react"
 import { useState } from "react"
 
-import { adminApiBase } from "@admin/lib/admin-api"
+import { fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface ChatItem {
@@ -26,13 +26,11 @@ export default function AiAssistantPage() {
     setError("")
 
     try {
-      const response = await fetch(`${adminApiBase}/ai/query`, {
+      const payload = await fetchAdminApi<{ data?: { question: string; answer: string }; error?: string }>("/ai/query", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: trimmed }),
       })
-      const payload = (await response.json()) as { data?: { question: string; answer: string }; error?: string }
-      if (!response.ok || !payload.data) throw new Error(payload.error ?? adminCopy.aiAssistant.failed)
+      if (!payload.data) throw new Error(payload.error ?? adminCopy.aiAssistant.failed)
 
       const item: ChatItem = {
         id: `${Date.now()}`,

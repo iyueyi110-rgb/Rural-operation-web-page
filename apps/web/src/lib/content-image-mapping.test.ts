@@ -59,7 +59,7 @@ test("replaces the two mismatched courtyard photos", () => {
 
 test("centers AMap on Changshou Zouma Village and labels the village", () => {
   assert.match(realmMapSource, /const zoumaVillageCenter/)
-  assert.match(realmMapSource, /107\.067/)
-  assert.match(realmMapSource, /29\.8255/)
+  assert.match(realmMapSource, /107\.1055/)
+  assert.match(realmMapSource, /29\.8105/)
   assert.match(realmMapSource, /mapGateway\.locationLabel/)
 })

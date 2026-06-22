@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { CloudRain, Droplets, Gauge, Thermometer, Waves } from "lucide-react"
 
-import { adminApiBase } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface SensorReading {
@@ -33,8 +33,6 @@ const sensorMeta = {
   temperature: { label: "温度", icon: Thermometer },
   humidity: { label: "湿度", icon: Gauge },
 } as const
-
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
 export default function InfrastructurePage() {
   const [sensors, setSensors] = useState<SensorReading[]>([])
@@ -70,32 +68,43 @@ export default function InfrastructurePage() {
   async function runDecision() {
     setIsDeciding(true)
     setMessage("")
-    const response = await fetch(`${adminApiBase}/infrastructure/decide`, { method: "POST" })
-    setMessage(response.ok ? "设施调度建议已生成。" : "设施调度建议生成失败。")
-    setIsDeciding(false)
-    await loadData()
+    try {
+      await fetchAdminApi("/infrastructure/decide", { method: "POST" })
+      setMessage("设施调度建议已生成。")
+      await loadData()
+    } catch {
+      setMessage("设施调度建议生成失败。")
+    } finally {
+      setIsDeciding(false)
+    }
   }
 
   async function updateCommand(id: string, status: "approved" | "rejected" | "executed") {
-    const response = await fetch(`${adminApiBase}/infrastructure/commands`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({ id, status }),
-    })
-    setMessage(response.ok ? "控制指令状态已更新。" : "控制指令状态更新失败。")
-    if (response.ok) await loadData()
+    try {
+      await fetchAdminApi("/infrastructure/commands", {
+        method: "PATCH",
+        body: JSON.stringify({ id, status }),
+      })
+      setMessage("控制指令状态已更新。")
+      await loadData()
+    } catch {
+      setMessage("控制指令状态更新失败。")
+    }
   }
 
   async function submitManualReading() {
-    const response = await fetch(`${adminApiBase}/infrastructure/sensors`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({
-        readings: [{ ...manualReading, value: Number(manualReading.value), source: "manual" }],
-      }),
-    })
-    setMessage(response.ok ? "手动读数已录入。" : "手动读数录入失败。")
-    if (response.ok) await loadData()
+    try {
+      await fetchAdminApi("/infrastructure/sensors", {
+        method: "POST",
+        body: JSON.stringify({
+          readings: [{ ...manualReading, value: Number(manualReading.value), source: "manual" }],
+        }),
+      })
+      setMessage("手动读数已录入。")
+      await loadData()
+    } catch {
+      setMessage("手动读数录入失败。")
+    }
   }
 
   return (

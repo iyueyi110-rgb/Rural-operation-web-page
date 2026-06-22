@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, nodeDisplayName } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface VillagerRow extends Record<string, unknown> {
@@ -35,7 +35,6 @@ interface NodeRow {
   nameKey: string
 }
 
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 const skillOptions = ["cooking", "farming", "guiding", "handicraft", "logistics"] as const
 
 export default function VillagersPage() {
@@ -113,20 +112,17 @@ export default function VillagersPage() {
   async function saveVillager() {
     setMessage("")
     try {
-      const response = await fetch(`${adminApiBase}/villagers`, {
+      await fetchAdminApi("/villagers", {
         method: selected ? "PATCH" : "POST",
-        headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
         body: JSON.stringify({
           ...(selected ? { id: selected.id } : {}),
           ...form,
           nodeId: form.nodeId || null,
         }),
       })
-      setMessage(response.ok ? adminCopy.villagers.saved : adminCopy.villagers.saveFailed)
-      if (response.ok) {
-        await loadData()
-        resetForm()
-      }
+      setMessage(adminCopy.villagers.saved)
+      await loadData()
+      resetForm()
     } catch {
       setMessage(adminCopy.villagers.saveFailed)
     }

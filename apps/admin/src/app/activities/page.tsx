@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
-import { adminApiBase } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface ActivityRow extends Record<string, unknown> {
@@ -26,8 +26,6 @@ interface BookingRow extends Record<string, unknown> {
   status: string
   createdAt: string
 }
-
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
 export default function ActivitiesAdminPage() {
   const [activities, setActivities] = useState<ActivityRow[]>([])
@@ -70,26 +68,30 @@ export default function ActivitiesAdminPage() {
   }, [loadBookings, selectedActivityId])
 
   async function createActivity() {
-    const response = await fetch(`${adminApiBase}/activities`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({ ...form, maxCapacity: Number(form.maxCapacity), price: form.price ? Number(form.price) : null }),
-    })
-    setMessage(response.ok ? "活动已创建。" : "活动创建失败。")
-    if (response.ok) {
+    try {
+      await fetchAdminApi("/activities", {
+        method: "POST",
+        body: JSON.stringify({ ...form, maxCapacity: Number(form.maxCapacity), price: form.price ? Number(form.price) : null }),
+      })
+      setMessage("活动已创建。")
       setForm((current) => ({ ...current, title: "", description: "" }))
       await loadActivities()
+    } catch {
+      setMessage("活动创建失败。")
     }
   }
 
   async function updateStatus(id: string, status: string) {
-    const response = await fetch(`${adminApiBase}/activities`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", "X-Admin-Token": adminToken },
-      body: JSON.stringify({ id, status }),
-    })
-    setMessage(response.ok ? "活动状态已更新。" : "活动状态更新失败。")
-    if (response.ok) await loadActivities()
+    try {
+      await fetchAdminApi("/activities", {
+        method: "PATCH",
+        body: JSON.stringify({ id, status }),
+      })
+      setMessage("活动状态已更新。")
+      await loadActivities()
+    } catch {
+      setMessage("活动状态更新失败。")
+    }
   }
 
   const activityColumns: Array<TableColumn<ActivityRow>> = [

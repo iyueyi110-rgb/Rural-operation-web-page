@@ -4,7 +4,7 @@ import { Copy, WandSparkles } from "lucide-react"
 import { useState } from "react"
 
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase } from "@admin/lib/admin-api"
+import { fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 type ContentType = "narration" | "script" | "social"
@@ -28,14 +28,12 @@ export default function ContentFactoryPage() {
     setMessage("")
 
     try {
-      const response = await fetch(`${adminApiBase}/ai/generate-content`, {
+      const payload = await fetchAdminApi<{ data?: { content?: string }; error?: string }>("/ai/generate-content", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
-      const payload = (await response.json()) as { data?: { content?: string }; error?: string }
 
-      if (!response.ok || !payload.data?.content) {
+      if (!payload.data?.content) {
         throw new Error(payload.error ?? "AI content generation failed")
       }
 

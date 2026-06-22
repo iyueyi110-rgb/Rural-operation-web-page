@@ -3,7 +3,7 @@
 import { RefreshCw } from "lucide-react"
 import { useEffect, useState } from "react"
 
-import { adminApiBase } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface DailyReport {
@@ -45,12 +45,10 @@ export default function ReportsPage() {
     setError("")
 
     try {
-      const response = await fetch(`${adminApiBase}/reports`, {
+      await fetchAdminApi("/reports", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date }),
       })
-      if (!response.ok) throw new Error(adminCopy.common.error)
       await loadReports()
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : adminCopy.common.error)
