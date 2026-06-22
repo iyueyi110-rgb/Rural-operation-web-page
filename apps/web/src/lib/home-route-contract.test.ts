@@ -41,13 +41,17 @@ test("routes the primary homepage actions to dedicated destinations", () => {
   assert.equal(buildAdoptionHref("ja"), "/ja/trees")
 })
 
-test("keeps history on explore and uses a three-page homepage deck", () => {
+test("uses a four-page homepage deck with history after the hero", () => {
   assert.match(homePageSource, /HomeAdoptionFeature/)
   assert.match(homePageSource, /FullscreenPageDeck/)
-  assert.doesNotMatch(homePageSource, /HistoryScroll/)
+  assert.match(homePageSource, /HistoryScroll/)
   assert.match(homePageSource, /RealmMapGateway/)
   assert.ok(
     homePageSource.indexOf("<HeroScreen") <
+      homePageSource.indexOf("<HistoryScroll"),
+  )
+  assert.ok(
+    homePageSource.indexOf("<HistoryScroll") <
       homePageSource.indexOf("<RealmMapGateway"),
   )
   assert.ok(

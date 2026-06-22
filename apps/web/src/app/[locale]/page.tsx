@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { FullscreenPageDeck } from "@web/components/fullscreen-page-deck"
 import { HeroScreen } from "@web/components/hero-screen"
+import { HistoryScroll } from "@web/components/history-scroll"
 import { HomeAdoptionFeature } from "@web/components/home-adoption-feature"
 import { HomeHeader } from "@web/components/home-header"
 import { RealmMapGateway } from "@web/components/realm-map-gateway"
@@ -47,6 +48,7 @@ export default async function HomePage({
       <HomeHeader locale={params.locale} />
       <FullscreenPageDeck>
         <HeroScreen locale={params.locale} weather={weather} />
+        <HistoryScroll />
         <RealmMapGateway />
         <HomeAdoptionFeature locale={params.locale} />
       </FullscreenPageDeck>

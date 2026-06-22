@@ -114,7 +114,7 @@ if (-not $SkipDB) {
   $ErrorActionPreference = $prev
   if (-not $dockerOk) {
     Ok "Starting Docker Desktop..."
-    Start-Process "Docker Desktop" -WindowStyle Hidden
+    Start-Process "$env:ProgramFiles\Docker\Docker\Docker Desktop.exe" -WindowStyle Hidden
     for ($i = 0; $i -lt 60; $i++) {
       $prev = $ErrorActionPreference; $ErrorActionPreference = "Continue"
       docker info 2>&1 | Out-Null
