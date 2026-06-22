@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl"
 
 import type { Locale } from "@web/i18n/routing"
 import { previewStats } from "@web/lib/home-data"
-import { buildAdoptionHref, buildExploreHref } from "@web/lib/home-navigation"
+import { buildAdoptionHref } from "@web/lib/home-navigation"
 import type { WeatherSummary } from "@web/lib/weather"
 import { Section, StatusBadge } from "@ui/index"
 
@@ -85,13 +85,16 @@ export function HeroScreen({
               <Sprout aria-hidden="true" className="h-4 w-4" />
               {t("adoption.cta")}
             </Link>
-            <Link
+            <button
               className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-white/12 px-7 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-              href={buildExploreHref(locale)}
+              onClick={() => {
+                window.dispatchEvent(new Event("zouma:home-deck-next"))
+              }}
+              type="button"
             >
               {t("hero.startBrowsing")}
               <MoveRight aria-hidden="true" className="h-4 w-4" />
-            </Link>
+            </button>
           </div>
         </div>
 

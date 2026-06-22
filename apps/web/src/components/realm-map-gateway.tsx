@@ -36,12 +36,16 @@ declare global {
 }
 
 const legacyCenter: Coordinate = [106.321, 29.8512]
-const center: Coordinate = [107.067, 29.8255]
+const zoumaVillageCenter: Coordinate = [107.067, 29.8255]
 
 function relocateToChangshou([longitude, latitude]: Coordinate): Coordinate {
   return [
-    Number((longitude + center[0] - legacyCenter[0]).toFixed(6)),
-    Number((latitude + center[1] - legacyCenter[1]).toFixed(6)),
+    Number(
+      (longitude + zoumaVillageCenter[0] - legacyCenter[0]).toFixed(6),
+    ),
+    Number(
+      (latitude + zoumaVillageCenter[1] - legacyCenter[1]).toFixed(6),
+    ),
   ]
 }
 
@@ -170,7 +174,7 @@ export function RealmMapGateway() {
       const map = L.map(container, {
         scrollWheelZoom: false,
         zoomControl: true,
-      }).setView([center[1], center[0]], 15)
+      }).setView([zoumaVillageCenter[1], zoumaVillageCenter[0]], 15)
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
@@ -209,6 +213,23 @@ export function RealmMapGateway() {
           .bindTooltip(t(anchor.labelKey))
       })
 
+      L.circleMarker(
+        [zoumaVillageCenter[1], zoumaVillageCenter[0]],
+        {
+          color: "#ffffff",
+          fillColor: "#b93835",
+          fillOpacity: 1,
+          radius: 8,
+          weight: 3,
+        },
+      )
+        .addTo(map)
+        .bindTooltip(t("mapGateway.locationLabel"), {
+          className: "realm-map-label",
+          direction: "top",
+          permanent: true,
+        })
+
       setProvider("leaflet")
       return () => {
         map.remove()
@@ -221,7 +242,7 @@ export function RealmMapGateway() {
 
       container.innerHTML = ""
       const map = new AMap.Map(container, {
-        center,
+        center: zoumaVillageCenter,
         mapStyle: "amap://styles/whitesmoke",
         pitch: 48,
         viewMode: "3D",
@@ -249,6 +270,16 @@ export function RealmMapGateway() {
           new AMap.Marker({ content: label, position: anchor.position }),
         )
       })
+
+      const villageLabel = document.createElement("span")
+      villageLabel.className = "realm-anchor-label realm-village-label"
+      villageLabel.textContent = t("mapGateway.locationLabel")
+      overlays.push(
+        new AMap.Marker({
+          content: villageLabel,
+          position: zoumaVillageCenter,
+        }),
+      )
 
       map.add(overlays)
       setProvider("amap")
@@ -324,9 +355,9 @@ export function RealmMapGateway() {
               </Link>
             ))}
           </nav>
-          <div className="pointer-events-none absolute right-4 top-4 z-[500] hidden items-center gap-2 rounded-full bg-ink/78 px-3 py-1.5 text-xs text-white/78 backdrop-blur sm:flex">
+          <div className="pointer-events-none absolute right-4 top-4 z-[500] hidden items-center gap-2 rounded-full bg-ink/78 px-3 py-1.5 text-xs font-bold text-white/88 backdrop-blur sm:flex">
             <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
-            {t("mapGateway.anchorHint")}
+            {t("mapGateway.locationLabel")}
           </div>
         </div>
       </div>

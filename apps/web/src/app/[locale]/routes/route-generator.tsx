@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { AlertTriangle, Clock3, MapPinned, MoveRight, Route, Umbrella } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -14,7 +15,12 @@ import {
   type RouteWeather,
 } from "@web/lib/routes-data"
 import type { Locale } from "@web/i18n/routing"
-import { RouteSatelliteMap } from "./route-satellite-map"
+
+const RouteSatelliteMap = dynamic(
+  () =>
+    import("./route-satellite-map").then((module) => module.RouteSatelliteMap),
+  { ssr: false },
+)
 
 export function RouteGenerator({ locale }: { locale: Locale }) {
   const t = useTranslations("routes")

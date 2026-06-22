@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import test from "node:test"
 
 import {
@@ -22,17 +22,50 @@ const exploreExperienceSource = readFileSync(
   "utf8",
 )
 
+const heroSource = readFileSync(
+  new URL("../components/hero-screen.tsx", import.meta.url),
+  "utf8",
+)
+
+const pageDeckUrl = new URL(
+  "../components/fullscreen-page-deck.tsx",
+  import.meta.url,
+)
+const pageDeckSource = existsSync(pageDeckUrl)
+  ? readFileSync(pageDeckUrl, "utf8")
+  : ""
+
 test("routes the primary homepage actions to dedicated destinations", () => {
   assert.equal(buildExploreHref("zh-CN"), "/zh-CN/explore")
   assert.equal(buildExploreHref("en", "realms"), "/en/explore#realms")
   assert.equal(buildAdoptionHref("ja"), "/ja/trees")
 })
 
-test("keeps the complete three-stage flow and adoption on the homepage", () => {
+test("keeps history on explore and uses a three-page homepage deck", () => {
   assert.match(homePageSource, /HomeAdoptionFeature/)
-  assert.match(homePageSource, /HistoryScroll/)
+  assert.match(homePageSource, /FullscreenPageDeck/)
+  assert.doesNotMatch(homePageSource, /HistoryScroll/)
   assert.match(homePageSource, /RealmMapGateway/)
+  assert.ok(
+    homePageSource.indexOf("<HeroScreen") <
+      homePageSource.indexOf("<RealmMapGateway"),
+  )
+  assert.ok(
+    homePageSource.indexOf("<RealmMapGateway") <
+      homePageSource.indexOf("<HomeAdoptionFeature"),
+  )
   assert.match(explorePageSource, /ExploreExperience/)
   assert.match(exploreExperienceSource, /HistoryScroll/)
   assert.match(exploreExperienceSource, /RealmMapGateway/)
+})
+
+test("supports button, wheel, keyboard and touch page navigation", () => {
+  assert.match(heroSource, /zouma:home-deck-next/)
+  assert.match(pageDeckSource, /ArrowDown|PageDown/)
+  assert.match(pageDeckSource, /ArrowUp|PageUp/)
+  assert.match(pageDeckSource, /onWheel/)
+  assert.match(pageDeckSource, /onTouchStart/)
+  assert.match(pageDeckSource, /onTouchEnd/)
+  assert.match(pageDeckSource, /aria-current/)
+  assert.match(pageDeckSource, /overflow-clip/)
 })

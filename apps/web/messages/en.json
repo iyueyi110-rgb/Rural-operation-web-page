@@ -245,7 +245,7 @@
         "species": "Feizixiao lychee",
         "summary": "Stable and well documented.",
         "location": "North lychee orchard area, precise coordinates hidden.",
-        "imageAlt": "Yunli 018 lychee tree",
+        "imageAlt": "Yunli 018, a twelve-year-old Feizixiao lychee tree",
         "prices": {
           "seasonal": "¥399",
           "annual": "¥999"
@@ -256,7 +256,7 @@
         "species": "Guiwei lychee",
         "summary": "Good for family adoption and classes.",
         "location": "Central orchard area near class route.",
-        "imageAlt": "Yunli 026 lychee tree",
+        "imageAlt": "Yunli 026, an eight-year-old Guiwei lychee tree",
         "prices": {
           "seasonal": "¥359",
           "annual": "¥899"
@@ -267,7 +267,7 @@
         "species": "Old lychee tree",
         "summary": "Older tree under observation.",
         "location": "Southern old-tree area, coordinates internal only.",
-        "imageAlt": "Yunli 041 old lychee tree",
+        "imageAlt": "Yunli 041, a twenty-three-year-old lychee tree under observation",
         "prices": {
           "seasonal": "TBD",
           "annual": "TBD"
@@ -595,6 +595,7 @@
       "description": "Enter four rural experiences through the map. Select a realm polygon or its accessible link to continue to scenes, routes, bookings and adoption.",
       "mapAria": "Interactive map of Zouma Village's Four Realms",
       "legendAria": "Four Realms scene links",
+      "locationLabel": "Zouma Village, Changshou District, Chongqing",
       "anchorHint": "Guidepost, ancient tree and herbal courtyard",
       "provider": {
         "loading": "Loading map",
