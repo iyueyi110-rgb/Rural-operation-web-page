@@ -94,8 +94,8 @@ export function TicketFlow() {
             <Ticket aria-hidden="true" className="h-4 w-4" />
             {t("list.eyebrow")}
           </div>
-          <h2 className="mt-3 break-all text-3xl font-extrabold">{t("list.title")}</h2>
-          <p className="mt-3 break-all text-sm leading-7 text-ink/68">{t("list.body")}</p>
+          <h2 className="mt-3 break-words text-3xl font-extrabold">{t("list.title")}</h2>
+          <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("list.body")}</p>
 
           <div className="mt-6 grid gap-4">
             {ticketProducts.map((product) => {
@@ -115,7 +115,7 @@ export function TicketFlow() {
                       <div className="text-xs font-bold uppercase tracking-[0.16em] text-water">
                         {t(product.sceneKey)}
                       </div>
-                      <h3 className="mt-3 break-all text-2xl font-extrabold">{t(product.nameKey)}</h3>
+                      <h3 className="mt-3 break-words text-2xl font-extrabold">{t(product.nameKey)}</h3>
                     </div>
                     <div className="rounded-md bg-rice px-3 py-2 text-right">
                       <div className="text-lg font-extrabold text-lychee">{t(product.priceKey)}</div>
@@ -123,7 +123,7 @@ export function TicketFlow() {
                     </div>
                   </div>
 
-                  <p className="mt-3 break-all text-sm leading-7 text-ink/66">{t(product.summaryKey)}</p>
+                  <p className="mt-3 break-words text-sm leading-7 text-ink/66">{t(product.summaryKey)}</p>
 
                   <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
                     <div className="rounded-md bg-rice p-3">
@@ -154,7 +154,7 @@ export function TicketFlow() {
             <CalendarDays aria-hidden="true" className="h-4 w-4" />
             {t("form.eyebrow")}
           </div>
-          <h2 className="mt-3 break-all text-2xl font-extrabold">{t("form.title")}</h2>
+          <h2 className="mt-3 break-words text-2xl font-extrabold">{t("form.title")}</h2>
 
           <div className="mt-5 grid gap-4">
             <label className="grid gap-2 text-sm font-semibold">
@@ -223,7 +223,7 @@ export function TicketFlow() {
               <CircleAlert aria-hidden="true" className="h-4 w-4 text-water" />
               {t("notice.title")}
             </div>
-            <p className="mt-2 break-all text-sm leading-6 text-ink/66">{t("notice.body")}</p>
+            <p className="mt-2 break-words text-sm leading-6 text-ink/66">{t("notice.body")}</p>
           </div>
 
           {submitError ? (

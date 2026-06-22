@@ -76,8 +76,8 @@ export function FeedbackForm() {
           <MessageCircle aria-hidden="true" className="h-4 w-4" />
           {t("form.eyebrow")}
         </div>
-        <h2 className="mt-3 break-all text-3xl font-extrabold">{t("form.title")}</h2>
-        <p className="mt-3 break-all text-sm leading-7 text-ink/68">{t("form.body")}</p>
+        <h2 className="mt-3 break-words text-3xl font-extrabold">{t("form.title")}</h2>
+        <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("form.body")}</p>
 
         <div className="mt-6 grid gap-5">
           <label className="grid gap-2">
@@ -167,8 +167,8 @@ export function FeedbackForm() {
       </section>
 
       <aside className="min-w-0 rounded-lg border border-stone bg-ink p-5 text-white shadow-soft lg:sticky lg:top-20 lg:self-start">
-        <h2 className="break-all text-2xl font-extrabold">{t("result.title")}</h2>
-        <p className="mt-3 break-all text-sm leading-7 text-white/70">{t("result.body")}</p>
+        <h2 className="break-words text-2xl font-extrabold">{t("result.title")}</h2>
+        <p className="mt-3 break-words text-sm leading-7 text-white/70">{t("result.body")}</p>
 
         {submitted ? (
           <div className="mt-5 rounded-lg border border-white/12 bg-white/8 p-4">
@@ -179,7 +179,7 @@ export function FeedbackForm() {
             <div className="mt-4 grid gap-3 text-sm">
               <div className="rounded-md bg-white p-3 text-ink">
                 <div className="font-bold">{t("result.ticketId")}</div>
-                <div className="mt-1 break-all text-ink/64">{submitted.id}</div>
+                <div className="mt-1 break-words text-ink/64">{submitted.id}</div>
               </div>
               <div className="rounded-md bg-white p-3 text-ink">
                 <div className="font-bold">{t("result.status")}</div>

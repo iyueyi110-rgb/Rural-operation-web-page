@@ -1,13 +1,33 @@
 import Link from "next/link"
-import { MoveRight, Ticket, UserRound } from "lucide-react"
+import { ChevronDown, MoveRight, Ticket, UserRound } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 
+import { HomeMobileMenu } from "@web/components/home-mobile-menu"
 import type { Locale } from "@web/i18n/routing"
 import { buildExploreHref } from "@web/lib/home-navigation"
 import { Section } from "@ui/index"
 
 export async function HomeHeader({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: "home" })
+  const coreNavItems = [
+    { href: buildExploreHref(locale, "realms"), label: t("nav.realms") },
+    { href: `/${locale}/routes`, label: t("nav.routes") },
+    { href: `/${locale}/booking`, label: t("nav.booking") },
+    { href: `/${locale}/trees`, label: t("nav.adoption") },
+  ]
+  const moreNavItems = [
+    { href: `/${locale}/tickets`, label: t("quickActions.tickets") },
+    { href: `/${locale}/products`, label: t("nav.products") },
+    { href: `/${locale}/calendar`, label: t("nav.calendar") },
+    { href: `/${locale}/activities`, label: t("nav.activities") },
+    { href: buildExploreHref(locale, "weather"), label: t("nav.weather") },
+  ]
+  const accountItems = [
+    { href: `/${locale}/me`, label: t("quickActions.me") },
+    { href: `/${locale}/villager/login`, label: t("quickActions.villager") },
+    { href: `/${locale}/privacy`, label: t("quickActions.privacy") },
+  ]
+  const mobileItems = [...coreNavItems, ...moreNavItems, ...accountItems]
 
   return (
     <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-ink/75 text-white backdrop-blur-xl">
@@ -50,34 +70,40 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
           aria-label={t("nav.aria")}
           className="hidden items-center gap-5 text-sm text-white/78 md:flex"
         >
-          <Link className="transition hover:text-white" href={buildExploreHref(locale, "realms")}>
-            {t("nav.realms")}
-          </Link>
-          <Link className="transition hover:text-white" href={buildExploreHref(locale, "weather")}>
-            {t("nav.weather")}
-          </Link>
-          <Link className="transition hover:text-white" href={`/${locale}/routes`}>
-            {t("nav.routes")}
-          </Link>
-          <Link className="transition hover:text-white" href={`/${locale}/booking`}>
-            {t("nav.booking")}
-          </Link>
-          <Link className="transition hover:text-white" href={`/${locale}/calendar`}>
-            {t("nav.calendar")}
-          </Link>
-          <Link
-            className="inline-flex h-8 items-center gap-1.5 rounded-full bg-lychee px-3 text-xs font-bold text-white shadow-soft transition hover:bg-[#a8312f]"
-            href={`/${locale}/tickets`}
-          >
-            <Ticket aria-hidden="true" className="h-3.5 w-3.5" />
-            {t("quickActions.tickets")}
-          </Link>
-          <Link className="transition hover:text-white" href={`/${locale}/trees`}>
-            {t("nav.adoption")}
-          </Link>
-          <Link className="transition hover:text-white" href={`/${locale}/products`}>
-            {t("nav.products")}
-          </Link>
+          {coreNavItems.map((item) => (
+            <Link
+              className="transition hover:text-white"
+              href={item.href}
+              key={item.href}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <div className="group relative">
+            <button
+              className="inline-flex items-center gap-1.5 transition hover:text-white"
+              type="button"
+            >
+              {t("nav.more")}
+              <ChevronDown aria-hidden="true" className="h-3.5 w-3.5" />
+            </button>
+            <div className="invisible absolute right-0 top-full z-50 min-w-44 pt-3 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="grid gap-1 rounded-lg border border-white/12 bg-ink/95 p-2 shadow-soft backdrop-blur-xl">
+                {moreNavItems.map((item) => (
+                  <Link
+                    className="rounded-md px-3 py-2 text-sm font-semibold text-white/72 transition hover:bg-white/10 hover:text-white"
+                    href={item.href}
+                    key={item.href}
+                  >
+                    {item.href.includes("/tickets") ? (
+                      <Ticket aria-hidden="true" className="mr-2 inline h-3.5 w-3.5" />
+                    ) : null}
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -95,6 +121,11 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
             {t("nav.start")}
             <MoveRight aria-hidden="true" className="h-4 w-4" />
           </Link>
+          <HomeMobileMenu
+            closeLabel={t("nav.closeMenu")}
+            items={mobileItems}
+            menuLabel={t("nav.menu")}
+          />
         </div>
       </Section>
     </header>

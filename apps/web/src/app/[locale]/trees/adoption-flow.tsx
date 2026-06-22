@@ -99,8 +99,8 @@ export function AdoptionFlow() {
             <Sprout aria-hidden="true" className="h-4 w-4" />
             {t("list.eyebrow")}
           </div>
-          <h2 className="mt-3 break-all text-3xl font-extrabold">{t("list.title")}</h2>
-          <p className="mt-3 break-all text-sm leading-7 text-ink/68">{t("list.body")}</p>
+          <h2 className="mt-3 break-words text-3xl font-extrabold">{t("list.title")}</h2>
+          <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("list.body")}</p>
 
           <div className="mt-6 grid gap-4">
             {orchardTreeOptions.map((tree) => {
@@ -121,14 +121,14 @@ export function AdoptionFlow() {
                   <div className="min-w-0 p-5">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="min-w-0">
-                        <h3 className="break-all text-xl font-extrabold">{t(tree.nameKey)}</h3>
+                        <h3 className="break-words text-xl font-extrabold">{t(tree.nameKey)}</h3>
                         <p className="mt-1 text-sm font-semibold text-ink/58">{tree.treeCode}</p>
                       </div>
                       <span className={`rounded-full border px-3 py-1 text-xs font-bold ${availabilityTone[tree.availability]}`}>
                         {t(`availability.${tree.availability}`)}
                       </span>
                     </div>
-                    <p className="mt-3 break-all text-sm leading-6 text-ink/68">{t(tree.summaryKey)}</p>
+                    <p className="mt-3 break-words text-sm leading-6 text-ink/68">{t(tree.summaryKey)}</p>
 
                     <div className="mt-4 grid gap-3 sm:grid-cols-3">
                       <div className="rounded-md bg-rice p-3">
@@ -176,7 +176,7 @@ export function AdoptionFlow() {
             <Leaf aria-hidden="true" className="h-4 w-4" />
             {t("profile.eyebrow")}
           </div>
-          <h2 className="mt-3 break-all text-2xl font-extrabold">{t(selectedTree.nameKey)}</h2>
+          <h2 className="mt-3 break-words text-2xl font-extrabold">{t(selectedTree.nameKey)}</h2>
           <p className="mt-2 text-sm text-ink/58">{selectedTree.treeCode}</p>
 
           <div className="mt-5 rounded-md bg-rice p-4">
@@ -260,7 +260,7 @@ export function AdoptionFlow() {
                 <FileText aria-hidden="true" className="h-4 w-4" />
                 {t("agreement.title")}
               </span>
-              <span className="mt-2 block break-all text-sm leading-6 text-white/72">{t("agreement.body")}</span>
+              <span className="mt-2 block break-words text-sm leading-6 text-white/72">{t("agreement.body")}</span>
             </span>
           </label>
 

@@ -5,12 +5,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#20312b",
-        moss: "#51785f",
+        ink: "#19201b",
+        moss: "#46624a",
         lychee: "#b93835",
-        rice: "#f6f2e9",
-        stone: "#ded6c8",
-        water: "#507184",
+        rice: "#f5f0e4",
+        stone: "#ded5c4",
+        water: "#2f7686",
       },
       boxShadow: {
         soft: "0 18px 50px rgba(32, 49, 43, 0.10)",

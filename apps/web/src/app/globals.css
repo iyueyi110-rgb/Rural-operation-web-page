@@ -19,9 +19,11 @@ html {
 body {
   min-width: 320px;
   background:
-    radial-gradient(circle at 20% 10%, rgba(185, 56, 53, 0.1), transparent 28rem),
+    radial-gradient(circle at 20% 10%, rgba(70, 98, 74, 0.05), transparent 28rem),
+    radial-gradient(circle at 80% 90%, rgba(47, 118, 134, 0.035), transparent 24rem),
     linear-gradient(180deg, #f7f3e8 0%, #efe7d6 55%, #f9f5eb 100%);
   color: var(--foreground);
+  font-family: var(--font-sans), "Noto Sans SC", system-ui, sans-serif;
 }
 
 a {
@@ -34,7 +36,7 @@ a {
 }
 
 .hero-serif {
-  font-family: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  font-family: var(--font-serif), "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
 }
 
 .hero-grain {
@@ -104,4 +106,93 @@ a {
 
 .tree-growth-pulse {
   animation: treeGrowthPulse 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@layer components {
+  .card-primary {
+    @apply rounded-xl border border-stone bg-white shadow-soft;
+  }
+
+  .card-secondary {
+    @apply rounded-lg border border-stone/60 bg-white/70;
+  }
+
+  .card-tertiary {
+    @apply rounded-lg bg-rice/70;
+  }
+
+  .card-dark {
+    @apply rounded-xl border border-white/10 bg-ink text-white shadow-soft;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 ease-out motion-reduce:transition-none;
+  }
+
+  .card-hover:hover {
+    @apply -translate-y-1 shadow-lg motion-reduce:translate-y-0;
+  }
+
+  .btn-primary {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-full bg-lychee px-6 text-sm font-bold text-white shadow-soft transition hover:bg-[#a8312f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100;
+  }
+
+  .btn-secondary {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-full border border-stone bg-white px-6 text-sm font-bold text-ink transition hover:bg-rice focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100;
+  }
+
+  .btn-ghost {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100;
+  }
+
+  .btn-sm {
+    @apply h-9 px-4 text-xs;
+  }
+}
+
+@keyframes heroVideoDrift {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes ctaAura {
+  0%,
+  100% {
+    box-shadow: 0 18px 48px rgba(185, 56, 53, 0.22);
+  }
+  50% {
+    box-shadow: 0 18px 58px rgba(185, 56, 53, 0.42);
+  }
+}
+
+@keyframes scrollHintFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  22%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.hero-video-drift {
+  animation: heroVideoDrift 20s ease-in-out infinite;
+}
+
+.cta-aura {
+  animation: ctaAura 2.8s ease-in-out 1.5s infinite;
+}
+
+.scroll-hint-float {
+  animation: scrollHintFloat 3s ease-out 1.5s both;
 }

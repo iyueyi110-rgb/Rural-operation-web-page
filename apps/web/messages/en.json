@@ -464,7 +464,11 @@
       "login": "Login",
       "start": "Start",
       "products": "Products",
-      "calendar": "Calendar"
+      "calendar": "Calendar",
+      "more": "More",
+      "menu": "Open navigation menu",
+      "closeMenu": "Close navigation menu",
+      "activities": "Activities"
     },
     "hero": {
       "badge": "AIGC-enabled resilient mountain village",
@@ -474,7 +478,20 @@
       "secondaryCta": "Today",
       "imageAlt": "Aerial view of Zouma Village",
       "startBrowsing": "Start exploring",
-      "videoAlt": "Aerial view of the Longxi River, mountain ridges and Zouma Village"
+      "videoAlt": "Aerial view of the Longxi River, mountain ridges and Zouma Village",
+      "tagline1": "Mountain village - AIGC resilient renewal",
+      "tagline2": "Four operable realm experiences",
+      "tagline3": "Browse · Book · Adopt · Return",
+      "systemLogic": "AIGC cloud brain · five-flow operations",
+      "location": "Zouma Village, Fengcheng, Changshou, Chongqing",
+      "narrative": "Problem -> System -> Scene -> Operation -> Revenue",
+      "metricAbout": "About",
+      "metricUnits": {
+        "0": "km?",
+        "1": "mu",
+        "2": "mu"
+      },
+      "scrollHint": "Scroll to the next screen"
     },
     "history": {
       "eyebrow": "Layers of history",
@@ -637,6 +654,12 @@
           "body": "Events, harvest and certificate."
         }
       }
+    },
+    "deck": {
+      "page1": "Project Overview",
+      "page2": "Historical Depth",
+      "page3": "Four Realms",
+      "page4": "Participation"
     }
   },
   "booking": {
@@ -822,7 +845,9 @@
     "hero": {
       "eyebrow": "Route Generator",
       "title": "Generate explainable routes by duration, audience and weather",
-      "body": "The first version uses rule-based templates and does not call AI or map APIs."
+      "body": "The first version uses rule-based templates and does not call AI or map APIs.",
+      "summaryTime": "Estimated 3-minute browse",
+      "summaryLocation": "Changshou, Chongqing · Zouma Village"
     },
     "form": {
       "eyebrow": "Inputs",
@@ -1206,7 +1231,9 @@
     "hero": {
       "eyebrow": "Farming Calendar",
       "title": "Follow Zouma Village through the seasonal farming calendar",
-      "body": "View pruning, fertilizing, harvest, processing and seasonal events on one clear timeline."
+      "body": "View pruning, fertilizing, harvest, processing and seasonal events on one clear timeline.",
+      "summaryTime": "Estimated 3-minute browse",
+      "summaryLocation": "Changshou, Chongqing · Zouma Village"
     },
     "filters": {
       "title": "Filters",
@@ -1241,40 +1268,149 @@
     }
   },
   "villagerSystem": {
-    "common": { "loading": "Loading", "error": "This page is temporarily unavailable", "retry": "Try again", "refresh": "Refresh", "saving": "Saving" },
-    "nav": { "dashboard": "Dashboard", "tasks": "Tasks", "earnings": "Earnings", "notifications": "Alerts", "logout": "Log out" },
+    "common": {
+      "loading": "Loading",
+      "error": "This page is temporarily unavailable",
+      "retry": "Try again",
+      "refresh": "Refresh",
+      "saving": "Saving"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "tasks": "Tasks",
+      "earnings": "Earnings",
+      "notifications": "Alerts",
+      "logout": "Log out"
+    },
     "login": {
-      "eyebrow": "Villager portal", "title": "Villager sign in", "body": "Use your registered phone number to access tasks and earnings.",
-      "phone": "Phone", "phonePlaceholder": "Registered phone number", "otp": "Verification code", "otpPlaceholder": "6-digit code",
-      "request": "Get code", "requesting": "Generating", "verify": "Sign in", "verifying": "Verifying",
-      "developmentOtp": "Pilot code: {otp}", "requestError": "No active villager matches this phone", "verifyError": "The code is invalid or expired"
+      "eyebrow": "Villager portal",
+      "title": "Villager sign in",
+      "body": "Use your registered phone number to access tasks and earnings.",
+      "phone": "Phone",
+      "phonePlaceholder": "Registered phone number",
+      "otp": "Verification code",
+      "otpPlaceholder": "6-digit code",
+      "request": "Get code",
+      "requesting": "Generating",
+      "verify": "Sign in",
+      "verifying": "Verifying",
+      "developmentOtp": "Pilot code: {otp}",
+      "requestError": "No active villager matches this phone",
+      "verifyError": "The code is invalid or expired"
     },
-    "dashboard": { "eyebrow": "Today's work", "greeting": "Hello, {name}", "monthlyCompleted": "Done this month", "monthlyEarnings": "Monthly earnings", "pendingTasks": "To do", "latestTasks": "Recent tasks", "latestNotifications": "Latest alerts" },
+    "dashboard": {
+      "eyebrow": "Today's work",
+      "greeting": "Hello, {name}",
+      "monthlyCompleted": "Done this month",
+      "monthlyEarnings": "Monthly earnings",
+      "pendingTasks": "To do",
+      "latestTasks": "Recent tasks",
+      "latestNotifications": "Latest alerts"
+    },
     "tasks": {
-      "eyebrow": "Task collaboration", "title": "My tasks", "empty": "No tasks here", "noNode": "No location", "noDescription": "No task description", "noDeadline": "No due date",
-      "filters": { "pending": "Available", "active": "In progress", "completed": "Completed" },
-      "actions": { "pending": "Accept task", "accepted": "Start task", "in_progress": "Complete task" }
+      "eyebrow": "Task collaboration",
+      "title": "My tasks",
+      "empty": "No tasks here",
+      "noNode": "No location",
+      "noDescription": "No task description",
+      "noDeadline": "No due date",
+      "filters": {
+        "pending": "Available",
+        "active": "In progress",
+        "completed": "Completed"
+      },
+      "actions": {
+        "pending": "Accept task",
+        "accepted": "Start task",
+        "in_progress": "Complete task"
+      }
     },
-    "earnings": { "eyebrow": "Work earnings", "title": "My earnings", "total": "Total earnings", "monthly": "This month", "trend": "Recent earnings", "completedTasks": "Completed tasks", "empty": "Earnings will appear after tasks are completed" },
-    "notifications": { "eyebrow": "Message center", "title": "My alerts", "markAll": "Mark all as read", "empty": "No notifications" },
+    "earnings": {
+      "eyebrow": "Work earnings",
+      "title": "My earnings",
+      "total": "Total earnings",
+      "monthly": "This month",
+      "trend": "Recent earnings",
+      "completedTasks": "Completed tasks",
+      "empty": "Earnings will appear after tasks are completed"
+    },
+    "notifications": {
+      "eyebrow": "Message center",
+      "title": "My alerts",
+      "markAll": "Mark all as read",
+      "empty": "No notifications"
+    },
     "touristNotifications": {
-      "open": "Open notifications", "eyebrow": "Orchard updates", "title": "Notification center", "body": "See the latest tree and activity updates.", "noIdentity": "Leave your phone number during adoption, booking, or ticket purchase to receive updates.",
-      "categories": { "all": "All", "tree": "Trees", "activity": "Activities" }
+      "open": "Open notifications",
+      "eyebrow": "Orchard updates",
+      "title": "Notification center",
+      "body": "See the latest tree and activity updates.",
+      "noIdentity": "Leave your phone number during adoption, booking, or ticket purchase to receive updates.",
+      "categories": {
+        "all": "All",
+        "tree": "Trees",
+        "activity": "Activities"
+      }
     },
-    "touristIdentity": { "phone": "Contact phone", "phonePlaceholder": "11-digit mobile number" },
+    "touristIdentity": {
+      "phone": "Contact phone",
+      "phonePlaceholder": "11-digit mobile number"
+    },
     "interactions": {
-      "eyebrow": "Adoption activities", "title": "My interactions", "body": "Complete orchard activities and keep your care record.", "empty": "No pending interaction tasks", "notePlaceholder": "Optional care note", "upload": "Upload photo and complete", "shareText": "I adopted tree {treeCode} in Zouma Village. Follow its growth with me.",
-      "points": { "watering": "10 pts", "fertilizing": "10 pts", "photo_upload": "15 pts", "diary": "20 pts", "share": "15 pts" },
-      "descriptions": { "watering": "Water your adopted tree", "fertilizing": "Record a fertilizing session", "photo_upload": "Upload a recent growth photo", "diary": "Write a care observation", "share": "Share the tree's progress" },
-      "actions": { "watering": "Finish watering", "fertilizing": "Finish fertilizing", "photo_upload": "Upload photo", "diary": "Submit diary", "share": "Copy and complete" }
+      "eyebrow": "Adoption activities",
+      "title": "My interactions",
+      "body": "Complete orchard activities and keep your care record.",
+      "empty": "No pending interaction tasks",
+      "notePlaceholder": "Optional care note",
+      "upload": "Upload photo and complete",
+      "shareText": "I adopted tree {treeCode} in Zouma Village. Follow its growth with me.",
+      "points": {
+        "watering": "10 pts",
+        "fertilizing": "10 pts",
+        "photo_upload": "15 pts",
+        "diary": "20 pts",
+        "share": "15 pts"
+      },
+      "descriptions": {
+        "watering": "Water your adopted tree",
+        "fertilizing": "Record a fertilizing session",
+        "photo_upload": "Upload a recent growth photo",
+        "diary": "Write a care observation",
+        "share": "Share the tree's progress"
+      },
+      "actions": {
+        "watering": "Finish watering",
+        "fertilizing": "Finish fertilizing",
+        "photo_upload": "Upload photo",
+        "diary": "Submit diary",
+        "share": "Copy and complete"
+      }
     },
     "metadata": {
-      "login": { "title": "Villager sign in | Zouma Village", "description": "Sign in to the villager portal" },
-      "dashboard": { "title": "Villager dashboard | Zouma Village", "description": "View tasks, earnings, and alerts" },
-      "tasks": { "title": "Villager tasks | Zouma Village", "description": "Manage villager task progress" },
-      "earnings": { "title": "Villager earnings | Zouma Village", "description": "View villager work earnings" },
-      "notifications": { "title": "Villager alerts | Zouma Village", "description": "View villager task alerts" },
-      "touristNotifications": { "title": "Notifications | Zouma Village", "description": "View tree and activity updates" }
+      "login": {
+        "title": "Villager sign in | Zouma Village",
+        "description": "Sign in to the villager portal"
+      },
+      "dashboard": {
+        "title": "Villager dashboard | Zouma Village",
+        "description": "View tasks, earnings, and alerts"
+      },
+      "tasks": {
+        "title": "Villager tasks | Zouma Village",
+        "description": "Manage villager task progress"
+      },
+      "earnings": {
+        "title": "Villager earnings | Zouma Village",
+        "description": "View villager work earnings"
+      },
+      "notifications": {
+        "title": "Villager alerts | Zouma Village",
+        "description": "View villager task alerts"
+      },
+      "touristNotifications": {
+        "title": "Notifications | Zouma Village",
+        "description": "View tree and activity updates"
+      }
     }
   }
 }

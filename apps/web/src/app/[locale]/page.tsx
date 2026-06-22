@@ -42,11 +42,19 @@ export default async function HomePage({
 }) {
   setRequestLocale(params.locale)
   const weather = await getWeatherSummary()
+  const t = await getTranslations("home")
 
   return (
     <main className="overflow-hidden text-ink">
       <HomeHeader locale={params.locale} />
-      <FullscreenPageDeck>
+      <FullscreenPageDeck
+        pageLabels={[
+          t("deck.page1"),
+          t("deck.page2"),
+          t("deck.page3"),
+          t("deck.page4"),
+        ]}
+      >
         <HeroScreen locale={params.locale} weather={weather} />
         <HistoryScroll />
         <RealmMapGateway />

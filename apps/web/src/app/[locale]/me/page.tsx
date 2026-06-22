@@ -30,7 +30,7 @@ export default async function MePage({ params }: { params: { locale: Locale } })
           <UserRound aria-hidden="true" className="h-4 w-4" />
           {t("hero.eyebrow")}
         </p>
-        <h1 className="mt-3 max-w-3xl break-all text-3xl font-extrabold leading-tight sm:text-5xl">{t("hero.title")}</h1>
+        <h1 className="mt-3 max-w-3xl break-words text-3xl font-extrabold leading-tight sm:text-5xl">{t("hero.title")}</h1>
         <p className="mt-5 max-w-3xl text-base leading-8 text-ink/68">{t("hero.body")}</p>
 
         <div className="mt-8 rounded-lg border border-moss/20 bg-moss/10 p-5 shadow-soft">

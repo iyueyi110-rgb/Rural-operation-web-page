@@ -43,17 +43,17 @@ export default async function BookingPage({ params }: { params: { locale: Locale
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.78fr)_minmax(280px,0.42fr)] lg:items-end">
           <div className="max-w-3xl min-w-0">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-lychee">{t("hero.eyebrow")}</p>
-            <h1 className="mt-3 break-all text-3xl font-extrabold leading-tight tracking-normal sm:text-5xl">
+            <h1 className="mt-3 break-words text-3xl font-extrabold leading-tight tracking-normal sm:text-5xl">
               {t("hero.title")}
             </h1>
-            <p className="mt-5 break-all text-base leading-8 text-ink/68">{t("hero.body")}</p>
+            <p className="mt-5 break-words text-base leading-8 text-ink/68">{t("hero.body")}</p>
           </div>
           <div className="rounded-lg border border-stone bg-white p-5 shadow-soft">
             <div className="flex items-center gap-2 text-sm font-bold text-moss">
               <ShieldCheck aria-hidden="true" className="h-4 w-4" />
               {t("guardrail.title")}
             </div>
-            <p className="mt-3 break-all text-sm leading-6 text-ink/68">{t("guardrail.body")}</p>
+            <p className="mt-3 break-words text-sm leading-6 text-ink/68">{t("guardrail.body")}</p>
           </div>
         </div>
       </Section>

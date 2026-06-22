@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Clock, MapPin } from "lucide-react"
 import { setRequestLocale } from "next-intl/server"
 
 import { ActivitiesClient } from "./activities-client"
@@ -26,10 +26,20 @@ export default function ActivitiesPage({ params }: { params: { locale: Locale } 
       />
       <Section className="pt-12">
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-lychee">Activities</p>
-        <h1 className="mt-3 max-w-3xl break-all text-3xl font-extrabold leading-tight sm:text-5xl">院落活动与研学工坊</h1>
+        <h1 className="mt-3 max-w-3xl break-words text-3xl font-extrabold leading-tight sm:text-5xl">院落活动与研学工坊</h1>
         <p className="mt-5 max-w-3xl text-base leading-8 text-ink/68">
           按类型和日期筛选活动，开放活动可提交预约；已满或已取消活动不可预约。
         </p>
+        <div className="mt-5 flex flex-wrap items-center gap-3 text-xs font-semibold text-ink/45">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/60 px-3 py-1.5">
+            <Clock aria-hidden="true" className="h-3 w-3" />
+            预计浏览 3 分钟
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/60 px-3 py-1.5">
+            <MapPin aria-hidden="true" className="h-3 w-3" />
+            重庆长寿区 · 走马村
+          </span>
+        </div>
       </Section>
       <Section className="pt-9">
         <ActivitiesClient />

@@ -72,8 +72,8 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
           <Route aria-hidden="true" className="h-4 w-4" />
           {t("form.eyebrow")}
         </div>
-        <h2 className="mt-3 break-all text-2xl font-extrabold">{t("form.title")}</h2>
-        <p className="mt-2 break-all text-sm leading-6 text-ink/68">{t("form.body")}</p>
+        <h2 className="mt-3 break-words text-2xl font-extrabold">{t("form.title")}</h2>
+        <p className="mt-2 break-words text-sm leading-6 text-ink/68">{t("form.body")}</p>
 
         <div className="mt-6 grid gap-4">
           <label className="grid gap-2 text-sm font-semibold text-ink">
@@ -139,7 +139,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
         <div className="flex flex-wrap items-start justify-between gap-3 border-b border-stone p-4 sm:items-center">
           <div className="min-w-0">
             <div className="text-sm font-bold text-water">{t("map.eyebrow")}</div>
-            <h2 className="mt-1 break-all text-xl font-extrabold">{t("map.title")}</h2>
+            <h2 className="mt-1 break-words text-xl font-extrabold">{t("map.title")}</h2>
           </div>
           <div className="grid w-full grid-cols-2 rounded-full border border-stone bg-rice p-1 sm:inline-flex sm:w-auto sm:shrink-0">
             <button
@@ -188,8 +188,8 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
               <MapPinned aria-hidden="true" className="h-4 w-4" />
               {t("result.eyebrow")}
             </div>
-            <h2 className="mt-3 break-all text-3xl font-extrabold">{t(selectedRoute.titleKey)}</h2>
-            <p className="mt-3 break-all text-sm leading-7 text-ink/68">{t(selectedRoute.summaryKey)}</p>
+            <h2 className="mt-3 break-words text-3xl font-extrabold">{t(selectedRoute.titleKey)}</h2>
+            <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t(selectedRoute.summaryKey)}</p>
             {provider === "configuration-required" ? (
               <div className="mt-4 inline-flex rounded-full border border-[#d8bd73] bg-[#fff7d6] px-3 py-1 text-xs font-bold text-[#7a5b12]">
                 {t("result.providerFallback")}

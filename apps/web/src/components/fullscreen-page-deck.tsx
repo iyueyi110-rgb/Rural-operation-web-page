@@ -17,11 +17,13 @@ const SWIPE_THRESHOLD = 52
 interface FullscreenPageDeckProps {
   children: ReactNode
   onPageChange?: (index: number) => void
+  pageLabels?: string[]
 }
 
 export function FullscreenPageDeck({
   children,
   onPageChange,
+  pageLabels,
 }: FullscreenPageDeckProps) {
   const pages = Children.toArray(children)
   const [current, setCurrent] = useState(0)
@@ -172,7 +174,7 @@ export function FullscreenPageDeck({
       {pages.map((page, index) => (
         <div
           aria-hidden={index !== current}
-          className="absolute inset-0 overflow-y-auto overscroll-contain transition-transform duration-500 ease-in-out motion-reduce:transition-none"
+          className="absolute inset-0 overflow-y-auto overscroll-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
           data-home-deck-page={index}
           key={index}
           ref={(element) => {
@@ -203,20 +205,35 @@ export function FullscreenPageDeck({
           </button>
         ) : null}
 
-        {pages.map((_, index) => (
-          <button
-            aria-current={index === current ? "page" : undefined}
-            aria-label={`Page ${index + 1}`}
-            className={
-              index === current
-                ? "h-2 w-7 rounded-full bg-lychee transition-all"
-                : "h-2 w-2 rounded-full bg-white/38 transition hover:bg-white/68"
-            }
-            key={index}
-            onClick={() => goTo(index)}
-            type="button"
-          />
-        ))}
+        <div className="flex items-center gap-2">
+          {pages.map((_, index) => (
+            <button
+              aria-current={index === current ? "page" : undefined}
+              aria-label={pageLabels?.[index] ?? `Page ${index + 1}`}
+              className={
+                index === current
+                  ? "flex h-8 items-center gap-2 rounded-full bg-white/12 px-2.5 text-xs font-bold text-white transition-all"
+                  : "h-2 w-2 rounded-full bg-white/38 transition hover:bg-white/68"
+              }
+              key={index}
+              onClick={() => goTo(index)}
+              type="button"
+            >
+              <span
+                className={
+                  index === current
+                    ? "h-2 w-4 rounded-full bg-lychee"
+                    : "sr-only"
+                }
+              />
+              {index === current && pageLabels?.[index] ? (
+                <span className="hidden whitespace-nowrap sm:inline">
+                  {pageLabels[index]}
+                </span>
+              ) : null}
+            </button>
+          ))}
+        </div>
 
         {current < pages.length - 1 ? (
           <button

@@ -26,7 +26,7 @@ export async function HistoryScroll() {
       <div>
         {historySections.map((section, index) => (
           <article
-            className="relative flex min-h-[72svh] items-center overflow-hidden bg-cover bg-center bg-fixed py-20 text-white"
+            className="relative flex min-h-[72svh] items-center overflow-hidden bg-cover bg-center bg-local py-20 text-white md:bg-fixed"
             id={`history-${section.id}`}
             key={section.id}
             style={{ backgroundImage: `url(${section.imageUrl})` }}

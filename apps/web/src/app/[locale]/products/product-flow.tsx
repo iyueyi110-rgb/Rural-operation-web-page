@@ -111,8 +111,8 @@ export function ProductFlow() {
             <Store aria-hidden="true" className="h-4 w-4" />
             {t("list.eyebrow")}
           </div>
-          <h2 className="mt-3 break-all text-3xl font-extrabold">{t("list.title")}</h2>
-          <p className="mt-3 break-all text-sm leading-7 text-ink/68">{t("list.body")}</p>
+          <h2 className="mt-3 break-words text-3xl font-extrabold">{t("list.title")}</h2>
+          <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("list.body")}</p>
 
           <div className="mt-6 grid gap-4">
             {isLoading ? <p className="rounded-lg border border-stone bg-white p-5 text-sm font-bold text-ink/54">{t("messages.loading")}</p> : null}
@@ -124,14 +124,14 @@ export function ProductFlow() {
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <div className="text-xs font-bold uppercase tracking-[0.16em] text-water">{product.category}</div>
-                      <h3 className="mt-3 break-all text-2xl font-extrabold">{product.name}</h3>
+                      <h3 className="mt-3 break-words text-2xl font-extrabold">{product.name}</h3>
                     </div>
                     <div className="rounded-md bg-rice px-3 py-2 text-right">
                       <div className="text-lg font-extrabold text-lychee">{formatPrice(product, t("list.negotiable"))}</div>
                       <div className="text-xs text-ink/52">{product.stockStatus}</div>
                     </div>
                   </div>
-                  <p className="mt-3 break-all text-sm leading-7 text-ink/66">{product.description}</p>
+                  <p className="mt-3 break-words text-sm leading-7 text-ink/66">{product.description}</p>
                   <button className={active ? "mt-5 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white" : "mt-5 h-10 rounded-full border border-stone px-5 text-sm font-bold text-ink"} onClick={() => { setSelectedId(product.id); setOrder(null); setError("") }} type="button">
                     {active ? t("list.selected") : t("list.select")}
                   </button>
@@ -147,7 +147,7 @@ export function ProductFlow() {
             <PackageCheck aria-hidden="true" className="h-4 w-4" />
             {t("form.eyebrow")}
           </div>
-          <h2 className="mt-3 break-all text-2xl font-extrabold">{t("form.title")}</h2>
+          <h2 className="mt-3 break-words text-2xl font-extrabold">{t("form.title")}</h2>
 
           <div className="mt-5 grid gap-4">
             <label className="grid gap-2 text-sm font-semibold">
@@ -180,7 +180,7 @@ export function ProductFlow() {
               <CircleAlert aria-hidden="true" className="h-4 w-4 text-water" />
               {t("notice.title")}
             </div>
-            <p className="mt-2 break-all text-sm leading-6 text-ink/66">{t("notice.body")}</p>
+            <p className="mt-2 break-words text-sm leading-6 text-ink/66">{t("notice.body")}</p>
           </div>
 
           {error ? <p className="mt-4 rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">{error}</p> : null}

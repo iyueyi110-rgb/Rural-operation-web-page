@@ -56,9 +56,9 @@ export default async function TreeDetailPage({ params }: { params: { locale: Loc
               <Sprout aria-hidden="true" className="h-4 w-4" />
               {t("profile.eyebrow")}
             </p>
-            <h1 className="mt-3 break-all text-3xl font-extrabold leading-tight sm:text-5xl">{t(tree.nameKey)}</h1>
+            <h1 className="mt-3 break-words text-3xl font-extrabold leading-tight sm:text-5xl">{t(tree.nameKey)}</h1>
             <p className="mt-4 text-sm font-bold text-water">{tree.treeCode}</p>
-            <p className="mt-5 break-all text-base leading-8 text-ink/68">{t(tree.summaryKey)}</p>
+            <p className="mt-5 break-words text-base leading-8 text-ink/68">{t(tree.summaryKey)}</p>
 
             <div className="mt-7 grid gap-4 sm:grid-cols-3">
               <div className="rounded-lg border border-stone bg-white p-4 shadow-soft">

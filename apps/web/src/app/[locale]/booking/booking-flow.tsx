@@ -146,8 +146,8 @@ export function BookingFlow() {
           <BedDouble aria-hidden="true" className="h-4 w-4" />
           {t("list.eyebrow")}
         </div>
-        <h2 className="mt-3 break-all text-3xl font-extrabold">{t("list.title")}</h2>
-        <p className="mt-3 break-all text-sm leading-7 text-ink/68">{t("list.body")}</p>
+        <h2 className="mt-3 break-words text-3xl font-extrabold">{t("list.title")}</h2>
+        <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("list.body")}</p>
 
         <div className="mt-6 grid gap-4">
           {courtyardOptions.map((courtyard) => {
@@ -175,7 +175,7 @@ export function BookingFlow() {
                 <div className="min-w-0 p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <h3 className="break-all text-xl font-extrabold">{t(courtyard.nameKey)}</h3>
+                      <h3 className="break-words text-xl font-extrabold">{t(courtyard.nameKey)}</h3>
                       <p className="mt-1 text-sm text-ink/58">{t(courtyard.locationKey)}</p>
                     </div>
                     <span className={`rounded-full border px-3 py-1 text-xs font-bold ${statusTone[status]}`}>
@@ -183,7 +183,7 @@ export function BookingFlow() {
                     </span>
                   </div>
 
-                  <p className="mt-3 break-all text-sm leading-6 text-ink/68">{t(courtyard.summaryKey)}</p>
+                  <p className="mt-3 break-words text-sm leading-6 text-ink/68">{t(courtyard.summaryKey)}</p>
 
                   <div className="mt-4 flex flex-wrap gap-2">
                     {courtyard.amenities.map((amenity) => (
@@ -232,7 +232,7 @@ export function BookingFlow() {
           <CalendarDays aria-hidden="true" className="h-4 w-4" />
           {t("form.eyebrow")}
         </div>
-        <h2 className="mt-3 break-all text-2xl font-extrabold">{t("form.title")}</h2>
+        <h2 className="mt-3 break-words text-2xl font-extrabold">{t("form.title")}</h2>
 
         <div className="mt-5 grid gap-4">
           <label className="grid gap-2 text-sm font-semibold">
@@ -337,7 +337,7 @@ export function BookingFlow() {
             <CircleAlert aria-hidden="true" className="h-4 w-4 text-water" />
             {t("notice.title")}
           </div>
-          <p className="mt-2 break-all text-sm leading-6 text-ink/66">{t(selectedCourtyard.bookingNotice)}</p>
+          <p className="mt-2 break-words text-sm leading-6 text-ink/66">{t(selectedCourtyard.bookingNotice)}</p>
         </div>
 
         <div className="mt-5 rounded-md border border-stone p-4">

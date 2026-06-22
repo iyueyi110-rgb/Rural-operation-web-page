@@ -110,8 +110,8 @@ export function FarmingCalendar() {
                     <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-lychee">{t(`statuses.${row.status}`)}</span>
                     {row.treeSpecies ? <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-water">{t(`species.${row.treeSpecies}`)}</span> : null}
                   </div>
-                  <h2 className="mt-3 break-all text-2xl font-extrabold">{row.title}</h2>
-                  <p className="mt-3 break-all text-sm leading-7 text-ink/66">{row.description}</p>
+                  <h2 className="mt-3 break-words text-2xl font-extrabold">{row.title}</h2>
+                  <p className="mt-3 break-words text-sm leading-7 text-ink/66">{row.description}</p>
                 </div>
               </article>
             ))}
