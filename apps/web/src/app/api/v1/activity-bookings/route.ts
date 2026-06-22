@@ -54,6 +54,7 @@ export async function POST(request: Request) {
 
   try {
     const record = await prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT 1 FROM "courtyard_activity" WHERE "id" = ${activityId} FOR UPDATE`
       const activity = await tx.courtyardActivity.findUnique({ where: { id: activityId } })
       if (!activity || activity.status !== "open") throw new Error("UNAVAILABLE")
 

@@ -1,4 +1,6 @@
 import { prisma } from "@zouma/database"
+import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
+import { isAdminRequest } from "@web/lib/tree-records"
 
 import { getChinaDateString, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { generateDailyReport } from "@web/lib/report-generator"
@@ -34,6 +36,13 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  if (!isAdminRequest(request)) {
+    return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
+  }
+
+  const rateLimit = await checkRateLimit(getRateLimitKey(request, "reports"), 3, 300)
+  if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)
+
   const body = await request.json().catch(() => null)
   const date = typeof body?.date === "string" && body.date ? body.date : getChinaDateString()
 

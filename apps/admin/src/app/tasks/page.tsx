@@ -33,7 +33,7 @@ interface TaskRow extends Record<string, unknown> {
   node?: NodeRow | null
 }
 
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? "dev-admin-token"
+const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 const taskTypes = ["farming", "guiding", "logistics", "maintenance", "service"] as const
 const taskStatuses = ["pending", "accepted", "in_progress", "completed", "cancelled"] as const
 const nextStatusMap: Record<TaskRow["status"], TaskRow["status"] | null> = {

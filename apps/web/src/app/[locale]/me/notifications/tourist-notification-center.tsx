@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useCallback, useEffect, useState } from "react"
 
+import { fetchWithAuth } from "@web/lib/auth-client"
 import type { AppNotification } from "@web/lib/villager-portal"
 
 const categories = ["all", "tree", "activity"] as const
@@ -19,7 +20,7 @@ export function TouristNotificationCenter() {
 
   const load = useCallback(async (currentPhone = phone) => {
     if (!currentPhone) return
-    const response = await fetch(`/api/v1/notifications?recipientType=tourist&recipientId=${encodeURIComponent(currentPhone)}&category=tree&category=activity`)
+    const response = await fetchWithAuth(`/api/v1/notifications?recipientType=tourist&recipientId=${encodeURIComponent(currentPhone)}&category=tree&category=activity`)
     if (response.ok) {
       const result = (await response.json()) as { data: AppNotification[] }
       setNotifications(result.data)
@@ -34,12 +35,12 @@ export function TouristNotificationCenter() {
 
   async function markAll() {
     if (!phone) return
-    await fetch("/api/v1/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ markAllRead: true, recipientType: "tourist", recipientId: phone }) })
+    await fetchWithAuth("/api/v1/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ markAllRead: true, recipientType: "tourist", recipientId: phone }) })
     await load()
   }
 
   async function open(notification: AppNotification) {
-    if (!notification.isRead) await fetch("/api/v1/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: notification.id, isRead: true }) })
+    if (!notification.isRead) await fetchWithAuth("/api/v1/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: notification.id, isRead: true }) })
     if (notification.refType === "tree_adoption" && notification.refId) router.push(`/${locale}/trees/${notification.refId}`)
     else await load()
   }

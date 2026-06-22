@@ -35,7 +35,7 @@ interface NodeRow {
   nameKey: string
 }
 
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? "dev-admin-token"
+const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 const skillOptions = ["cooking", "farming", "guiding", "handicraft", "logistics"] as const
 
 export default function VillagersPage() {

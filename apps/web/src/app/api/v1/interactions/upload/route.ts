@@ -4,6 +4,7 @@ import path from "node:path"
 import { prisma } from "@zouma/database"
 
 import { jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { validateFileMagicNumber } from "@web/lib/upload-security"
 import { maskPhone } from "@web/lib/tree-records"
 
 const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"])
@@ -40,6 +41,11 @@ export async function POST(request: Request) {
   }
   if (!allowedTypes.has(file.type)) {
     return jsonResponse(request, { error: "Only jpeg, png and webp files are allowed" }, { status: 400 })
+  }
+
+  const isValidMagic = await validateFileMagicNumber(file)
+  if (!isValidMagic) {
+    return jsonResponse(request, { error: "文件内容与类型不匹配" }, { status: 400 })
   }
   if (file.size > maxFileSize) {
     return jsonResponse(request, { error: "File must be smaller than 5MB" }, { status: 400 })

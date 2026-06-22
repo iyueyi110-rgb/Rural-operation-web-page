@@ -1,7 +1,9 @@
 import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { requireTouristRecipient, requireVillagerRecipient } from "@web/lib/api-auth"
 import { sendSms } from "@web/lib/sms-provider"
+import { isAdminRequest } from "@web/lib/tree-records"
 import { maskPhone } from "@web/lib/tree-records"
 
 const recipientTypes = ["villager", "tourist", "operator"] as const
@@ -31,6 +33,11 @@ export async function GET(request: Request) {
     return jsonResponse(request, { error: "Invalid isRead" }, { status: 400 })
   }
 
+  if (recipientType === "tourist" && recipientId) {
+    const auth = await requireTouristRecipient(request, recipientId)
+    if (!auth.authorized) return auth.response
+  }
+
   const validRecipientType = isRecipientType(recipientType) ? recipientType : undefined
   const validCategories = rawCategories.filter(isNotificationCategory)
   const recipientIds =
@@ -58,6 +65,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  if (!isAdminRequest(request)) {
+    return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
+  }
+
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body)) {
     return jsonResponse(request, { error: "Invalid notification payload" }, { status: 400 })
@@ -108,6 +119,8 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const isAdmin = isAdminRequest(request)
+
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body)) {
     return jsonResponse(request, { error: "Invalid notification update" }, { status: 400 })
@@ -121,6 +134,16 @@ export async function PATCH(request: Request) {
         : ""
     if (!recipientType || !rawRecipientId) {
       return jsonResponse(request, { error: "recipientType and recipientId are required" }, { status: 400 })
+    }
+
+    if (!isAdmin) {
+      const auth =
+        recipientType === "tourist"
+          ? await requireTouristRecipient(request, rawRecipientId)
+          : recipientType === "villager"
+            ? requireVillagerRecipient(request, rawRecipientId)
+            : { authorized: false as const, response: jsonResponse(request, { error: "Unauthorized" }, { status: 401 }) }
+      if (!auth.authorized) return auth.response
     }
 
     const recipientIds = await resolveRecipientIds(recipientType, rawRecipientId)
@@ -139,6 +162,15 @@ export async function PATCH(request: Request) {
   const existing = await prisma.notification.findUnique({ where: { id: body.id.trim() } })
   if (!existing) {
     return jsonResponse(request, { error: "Notification not found" }, { status: 404 })
+  }
+  if (!isAdmin) {
+    const auth =
+      existing.recipientType === "tourist"
+        ? await requireTouristRecipient(request, existing.recipientId)
+        : existing.recipientType === "villager"
+          ? requireVillagerRecipient(request, existing.recipientId)
+          : { authorized: false as const, response: jsonResponse(request, { error: "Unauthorized" }, { status: 401 }) }
+    if (!auth.authorized) return auth.response
   }
   const data = await prisma.notification.update({
     where: { id: existing.id },

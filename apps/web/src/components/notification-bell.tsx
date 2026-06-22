@@ -24,7 +24,7 @@ export function NotificationBell() {
     let timer: number | undefined
 
     async function refresh(effectiveId: string) {
-      const response = await fetch(`/api/v1/notifications?recipientType=tourist&recipientId=${encodeURIComponent(effectiveId)}&isRead=false`)
+      const response = await fetchWithAuth(`/api/v1/notifications?recipientType=tourist&recipientId=${encodeURIComponent(effectiveId)}&isRead=false`)
       if (!response.ok || cancelled) return
       const result = (await response.json()) as { meta?: { total?: number } }
       setUnread(result.meta?.total ?? 0)

@@ -1,11 +1,19 @@
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { answerOperationalQuestion } from "@web/lib/ai-query"
+import { requireBearerAuth } from "@web/lib/api-auth"
+import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
 
 export async function OPTIONS(request: Request) {
   return optionsResponse(request)
 }
 
 export async function POST(request: Request) {
+  const auth = await requireBearerAuth(request)
+  if (!auth.authorized) return auth.response
+
+  const rateLimit = await checkRateLimit(getRateLimitKey(request, "ai-query"), 10, 60)
+  if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)
+
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body) || typeof body.question !== "string") {
     return jsonResponse(request, { error: "Invalid AI query payload" }, { status: 400 })

@@ -1,5 +1,6 @@
 import { prisma } from "@zouma/database"
 import { ModelProviderAdapter } from "@zouma/utils"
+import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
 
 import {
   routeOptions,
@@ -55,6 +56,9 @@ export function OPTIONS(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const rateLimit = await checkRateLimit(getRateLimitKey(request, "routes-generate"), 10, 60)
+  if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)
+
   const body = await request.json().catch(() => null)
 
   if (!body || !isRouteDuration(body.duration) || !isRouteAudience(body.audience) || !isRouteWeather(body.weather)) {

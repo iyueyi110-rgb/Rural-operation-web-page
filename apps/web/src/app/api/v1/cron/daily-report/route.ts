@@ -7,6 +7,10 @@ export function OPTIONS(request: Request) {
 }
 
 export async function GET(request: Request) {
+  return jsonResponse(request, { error: "Method Not Allowed" }, { status: 405 })
+}
+
+export async function POST(request: Request) {
   const url = new URL(request.url)
   const secret = url.searchParams.get("secret")
 

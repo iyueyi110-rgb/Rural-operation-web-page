@@ -130,18 +130,18 @@ async function executeActionTriggers(
   request: Request,
   triggers: ActionTrigger[],
 ) {
-  const adminToken = request.headers.get("x-admin-token")
-
   return Promise.all(
     triggers.map(async (trigger) => {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 5_000)
       try {
         const response = await fetch(new URL(trigger.endpoint, request.url), {
           method: trigger.method,
           headers: {
             "Content-Type": "application/json",
-            ...(adminToken ? { "X-Admin-Token": adminToken } : {}),
           },
           body: JSON.stringify(trigger.payload),
+          signal: controller.signal,
         })
         return {
           endpoint: trigger.endpoint,
@@ -155,6 +155,8 @@ async function executeActionTriggers(
           error,
         })
         return { endpoint: trigger.endpoint, ok: false, status: 0 }
+      } finally {
+        clearTimeout(timeout)
       }
     }),
   )

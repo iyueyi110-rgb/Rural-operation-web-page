@@ -33,7 +33,10 @@ export function fetchWithAuth(input: RequestInfo | URL, init: RequestInit = {}) 
 
 export function rememberTouristIdentity(phone: string) {
   const normalizedPhone = phone.trim()
-  window.localStorage.setItem("tourist_phone", normalizedPhone)
+  const masked = normalizedPhone.length >= 11
+    ? `${normalizedPhone.slice(0, 3)}****${normalizedPhone.slice(7)}`
+    : normalizedPhone
+  window.localStorage.setItem("tourist_phone", masked)
   const token = getAuthToken()
   if (token) window.localStorage.setItem(AUTH_TOKEN_KEY, token)
 }

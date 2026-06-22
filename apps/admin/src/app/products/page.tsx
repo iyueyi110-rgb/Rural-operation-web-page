@@ -27,7 +27,7 @@ interface NodeRow {
   nameKey: string
 }
 
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? "dev-admin-token"
+const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<ProductRow[]>([])

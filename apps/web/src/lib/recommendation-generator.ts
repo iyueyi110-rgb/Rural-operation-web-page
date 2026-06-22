@@ -152,7 +152,11 @@ export function normalizeRecommendationPayload(
 }
 
 export function isAllowedRecommendationEndpoint(endpoint: string) {
-  return allowedActionEndpoints.has(endpoint)
+  if (endpoint.startsWith("http://") || endpoint.startsWith("https://")) return false
+  if (endpoint.includes("..")) return false
+
+  const path = endpoint.split("?")[0]
+  return allowedActionEndpoints.has(path)
 }
 
 export function isValidRecommendationDate(value: string) {

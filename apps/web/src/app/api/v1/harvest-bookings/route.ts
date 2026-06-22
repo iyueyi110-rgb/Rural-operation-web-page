@@ -47,34 +47,43 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Tree not found" }, { status: 404 })
   }
 
-  const existing = await prisma.harvestBooking.findFirst({
-    where: {
-      treeId: tree.id,
-      scheduledDate,
-      timeSlot,
-      status: { in: ["pending", "confirmed"] },
-    },
-  })
+  try {
+    const record = await prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT 1 FROM "orchard_tree" WHERE "id" = ${tree.id} FOR UPDATE`
 
-  if (existing) {
-    return jsonResponse(request, { error: "Harvest slot already booked" }, { status: 409 })
+      const conflict = await tx.harvestBooking.findFirst({
+        where: {
+          treeId: tree.id,
+          scheduledDate,
+          timeSlot,
+          status: { in: ["pending", "confirmed"] },
+        },
+      })
+      if (conflict) throw new Error("TIMESLOT_CONFLICT")
+
+      return tx.harvestBooking.create({
+        data: {
+          treeId: tree.id,
+          scheduledDate,
+          timeSlot,
+          guestCount,
+          guestName: typeof body.guestName === "string" ? body.guestName.trim() : null,
+          guestPhone: maskPhone(typeof body.guestPhone === "string" ? body.guestPhone : undefined),
+          fruitDestination: typeof body.fruitDestination === "string" ? body.fruitDestination.trim() : null,
+          destinationNote: typeof body.destinationNote === "string" ? body.destinationNote.trim() : null,
+          status: "pending",
+        },
+      })
+    })
+
+    return jsonResponse(request, { data: mapHarvestBooking(record) }, { status: 201 })
+  } catch (caughtError) {
+    const message = caughtError instanceof Error ? caughtError.message : "BOOKING_FAILED"
+    if (message === "TIMESLOT_CONFLICT") {
+      return jsonResponse(request, { error: "Harvest slot already booked" }, { status: 409 })
+    }
+    throw caughtError
   }
-
-  const record = await prisma.harvestBooking.create({
-    data: {
-      treeId: tree.id,
-      scheduledDate,
-      timeSlot,
-      guestCount,
-      guestName: typeof body.guestName === "string" ? body.guestName.trim() : null,
-      guestPhone: maskPhone(typeof body.guestPhone === "string" ? body.guestPhone : undefined),
-      fruitDestination: typeof body.fruitDestination === "string" ? body.fruitDestination.trim() : null,
-      destinationNote: typeof body.destinationNote === "string" ? body.destinationNote.trim() : null,
-      status: "pending",
-    },
-  })
-
-  return jsonResponse(request, { data: mapHarvestBooking(record) }, { status: 201 })
 }
 
 export async function PATCH(request: Request) {

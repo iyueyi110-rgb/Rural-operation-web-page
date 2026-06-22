@@ -32,7 +32,7 @@ interface HarvestRow extends Record<string, unknown> {
   shipment?: ShipmentRow
 }
 
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? "dev-admin-token"
+const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 const shipmentStatuses: ShipmentRow["status"][] = ["pending", "picking", "shipping", "delivered"]
 
 function getNextShipmentStatus(status?: ShipmentRow["status"]) {

@@ -9,7 +9,7 @@ import {
 } from "@web/lib/adoption-lock"
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { generateInteractionTasks } from "@web/lib/interaction-generator"
-import { listTreeAdoptions, maskPhone } from "@web/lib/tree-records"
+import { isAdminRequest, listTreeAdoptions, maskPhone } from "@web/lib/tree-records"
 
 interface TreeAdoptionRequest {
   treeId?: string
@@ -154,6 +154,10 @@ export async function POST(request: Request) {
 class AdoptionConflictError extends Error {}
 
 export async function PATCH(request: Request) {
+  if (!isAdminRequest(request)) {
+    return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
+  }
+
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body) || typeof body.id !== "string") {
     return jsonResponse(request, { error: "Invalid update" }, { status: 400 })

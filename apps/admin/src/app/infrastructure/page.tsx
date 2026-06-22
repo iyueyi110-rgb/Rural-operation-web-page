@@ -34,7 +34,7 @@ const sensorMeta = {
   humidity: { label: "湿度", icon: Gauge },
 } as const
 
-const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? "dev-admin-token"
+const adminToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
 export default function InfrastructurePage() {
   const [sensors, setSensors] = useState<SensorReading[]>([])

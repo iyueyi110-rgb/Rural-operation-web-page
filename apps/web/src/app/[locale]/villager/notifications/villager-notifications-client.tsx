@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useCallback, useEffect, useState } from "react"
 
-import { getVillagerSession } from "@web/lib/villager-auth-client"
+import { fetchWithVillagerAuth, getVillagerSession } from "@web/lib/villager-auth-client"
 import type { AppNotification } from "@web/lib/villager-portal"
 
 export function VillagerNotificationsClient() {
@@ -17,7 +17,7 @@ export function VillagerNotificationsClient() {
 
   const load = useCallback(async () => {
     if (!sessionId) return
-    const response = await fetch(`/api/v1/notifications?recipientType=villager&recipientId=${encodeURIComponent(sessionId)}`)
+    const response = await fetchWithVillagerAuth(`/api/v1/notifications?recipientType=villager&recipientId=${encodeURIComponent(sessionId)}`)
     if (response.ok) setNotifications(((await response.json()) as { data: AppNotification[] }).data)
   }, [sessionId])
 
@@ -25,12 +25,12 @@ export function VillagerNotificationsClient() {
 
   async function markAll() {
     if (!sessionId) return
-    await fetch("/api/v1/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ markAllRead: true, recipientType: "villager", recipientId: sessionId }) })
+    await fetchWithVillagerAuth("/api/v1/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ markAllRead: true, recipientType: "villager", recipientId: sessionId }) })
     await load()
   }
 
   async function open(notification: AppNotification) {
-    if (!notification.isRead) await fetch("/api/v1/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: notification.id, isRead: true }) })
+    if (!notification.isRead) await fetchWithVillagerAuth("/api/v1/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: notification.id, isRead: true }) })
     if (notification.refType === "task") router.push(`/${locale}/villager/tasks`)
     else await load()
   }

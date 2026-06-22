@@ -1,5 +1,7 @@
 import { buildContentFactoryPrompt, CONTENT_FACTORY_SYSTEM_PROMPTS, type ContentFactoryType } from "@zouma/prompts/content-factory"
 import { ModelProviderAdapter } from "@zouma/utils"
+import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
+import { isAdminRequest } from "@web/lib/tree-records"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 
@@ -10,6 +12,13 @@ export async function OPTIONS(request: Request) {
 }
 
 export async function POST(request: Request) {
+  if (!isAdminRequest(request)) {
+    return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
+  }
+
+  const rateLimit = await checkRateLimit(getRateLimitKey(request, "ai-generate-content"), 5, 60)
+  if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)
+
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body)) {
     return jsonResponse(request, { error: "Invalid content generation payload" }, { status: 400 })

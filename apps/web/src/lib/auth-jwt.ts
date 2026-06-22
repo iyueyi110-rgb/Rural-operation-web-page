@@ -3,7 +3,13 @@ import { jwtVerify, SignJWT } from "jose"
 const TOKEN_MAX_AGE_SECONDS = 7 * 24 * 60 * 60
 
 function jwtSecret() {
-  return new TextEncoder().encode(process.env.JWT_SECRET ?? "zouma_dev_jwt_secret")
+  const secret = process.env.JWT_SECRET
+  if (!secret) {
+    throw new Error(
+      'JWT_SECRET environment variable is required. Generate one with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"',
+    )
+  }
+  return new TextEncoder().encode(secret)
 }
 
 export async function createJWT(

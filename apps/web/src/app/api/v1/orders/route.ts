@@ -1,6 +1,7 @@
 import { prisma } from "@zouma/database"
 
 import { getChinaDayRange, isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { requireBearerAuth } from "@web/lib/api-auth"
 
 const orderTypes = ["courtyard_booking", "tree_adoption", "ticket_order", "activity_booking", "product_order"] as const
 
@@ -53,6 +54,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const auth = await requireBearerAuth(request)
+  if (!auth.authorized) return auth.response
+
   const body = await request.json().catch(() => null)
 
   if (!body || !isOrderType(body.orderType)) {

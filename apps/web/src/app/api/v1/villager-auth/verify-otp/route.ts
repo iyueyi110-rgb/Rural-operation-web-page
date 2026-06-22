@@ -19,8 +19,16 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "phone and otp are required" }, { status: 400 })
   }
 
-  const villager = await prisma.villager.findFirst({
-    where: { phone, otpCode: otp, otpExpiry: { gt: new Date() }, status: "active" },
+  const villager = await prisma.$transaction(async (tx) => {
+    const found = await tx.villager.findFirst({
+      where: { phone, otpCode: otp, otpExpiry: { gt: new Date() }, status: "active" },
+    })
+    if (!found) return null
+
+    return tx.villager.update({
+      where: { id: found.id },
+      data: { otpCode: null, otpExpiry: null },
+    })
   })
   if (!villager) {
     return jsonResponse(request, { error: "验证码无效或已过期" }, { status: 401 })

@@ -13,8 +13,8 @@ export async function POST(request: Request) {
   }
 
   const phone = typeof body.phone === "string" ? body.phone.trim() : ""
-  if (!phone) {
-    return jsonResponse(request, { error: "phone is required" }, { status: 400 })
+  if (!/^1[3-9]\d{9}$/.test(phone)) {
+    return jsonResponse(request, { error: "有效的手机号是必填项" }, { status: 400 })
   }
 
   const villager = await prisma.villager.findFirst({ where: { phone, status: "active" } })
@@ -28,5 +28,9 @@ export async function POST(request: Request) {
     data: { otpCode: otp, otpExpiry: new Date(Date.now() + 5 * 60 * 1000) },
   })
 
-  return jsonResponse(request, { success: true, message: "验证码已生成", otp })
+  if (process.env.NODE_ENV === "development") {
+    console.log("[DEV] Villager OTP code:", otp)
+  }
+
+  return jsonResponse(request, { success: true, message: "验证码已发送" })
 }

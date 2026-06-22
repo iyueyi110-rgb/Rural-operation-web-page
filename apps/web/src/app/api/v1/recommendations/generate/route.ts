@@ -4,6 +4,7 @@ import {
   jsonResponse,
   optionsResponse,
 } from "@web/lib/aigc-api"
+import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
 import {
   generateRecommendations,
   isValidRecommendationDate,
@@ -18,6 +19,9 @@ export async function POST(request: Request) {
   if (!isAdminRequest(request)) {
     return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
   }
+
+  const rateLimit = await checkRateLimit(getRateLimitKey(request, "recommendations-generate"), 5, 300)
+  if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)
 
   const rawBody = await request.text()
   let body: unknown = {}

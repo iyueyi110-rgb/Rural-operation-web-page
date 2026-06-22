@@ -1,7 +1,7 @@
 import { adminCopy } from "@admin/lib/admin-copy"
 
 export const adminApiBase = process.env.NEXT_PUBLIC_WEB_API_BASE ?? "http://localhost:3000/api/v1"
-export const adminApiToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? "dev-admin-token"
+export const adminApiToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
 export async function fetchAdminApi<T>(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers)
