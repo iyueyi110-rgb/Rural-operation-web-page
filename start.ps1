@@ -27,9 +27,14 @@ $ErrorActionPreference = "Stop"
 $RootDir = $PSScriptRoot
 Set-Location $RootDir
 
-$FrontendUrl = "http://localhost:3000"
-$AdminUrl    = "http://localhost:3001"
+$Host.UI.RawUI.WindowTitle = "Zouma Village Cloud Brain Startup"
+
+$FrontendUrl = "http://localhost:3000/zh-CN"
+$AdminUrl    = "http://localhost:3001/dashboard"
+$FrontendHealthUrl = "http://localhost:3000"
+$AdminHealthUrl    = "http://localhost:3001/dashboard"
 $ComposeFile = "infra/docker/docker-compose.dev.yml"
+$DevCommand = "pnpm turbo dev --filter=@zouma/web --filter=@zouma/admin"
 
 # ---- helpers ----
 function Step([string]$msg)  { Write-Host "`n---- $msg ----" -ForegroundColor Cyan }
@@ -44,6 +49,24 @@ function Invoke-Native([string]$cmd) {
   $ok = ($LASTEXITCODE -eq 0)
   $ErrorActionPreference = $prev
   return $ok
+}
+
+function Get-PortUsage([int]$port) {
+  $line = netstat -ano 2>&1 | Select-String ":$port\b" | Select-String "LISTENING" | Select-Object -First 1
+  if (-not $line) { return $null }
+
+  $parts = ($line.ToString().Trim() -split "\s+")
+  $pidValue = $parts[-1]
+  $processName = "unknown"
+  try {
+    $processName = (Get-Process -Id ([int]$pidValue) -ErrorAction Stop).ProcessName
+  } catch { }
+
+  return [pscustomobject]@{
+    Port = $port
+    PID = $pidValue
+    Process = $processName
+  }
 }
 
 # ============================================================
@@ -73,9 +96,12 @@ if (-not (Test-Path ".env.local")) {
   Warn "Edit .env.local and set DEEPSEEK_API_KEY / QWEATHER_API_KEY for AI + weather features"
 }
 
-foreach ($p in @(3000, 3001)) {
-  $portLine = netstat -ano 2>&1 | Select-String ":$p\b" | Select-String "LISTENING" | Select-Object -First 1
-  if ($portLine) { Fail "Port $p is already in use. Stop the existing process first." }
+$usedPorts = @(3000, 3001) | ForEach-Object { Get-PortUsage $_ } | Where-Object { $_ }
+if ($usedPorts.Count -gt 0) {
+  foreach ($portInfo in $usedPorts) {
+    Warn "Port $($portInfo.Port) is already used by PID $($portInfo.PID) ($($portInfo.Process))."
+  }
+  Fail "Close the existing Zouma window or stop the listed process, then run this shortcut again."
 }
 Ok "Ports 3000/3001 available"
 
@@ -164,11 +190,12 @@ Step "Starting dev servers"
 
 Write-Host "  Frontend  $FrontendUrl" -ForegroundColor White
 Write-Host "  Admin     $AdminUrl" -ForegroundColor White
+Write-Host "  Command   $DevCommand" -ForegroundColor DarkGray
 Write-Host "  Press Ctrl+C to stop all servers`n"
 
 # Start dev servers in background via cmd (pnpm is a .cmd wrapper, needs shell)
 $process = Start-Process -FilePath "cmd" `
-  -ArgumentList "/c","pnpm turbo dev --filter=@zouma/web --filter=@zouma/admin" `
+  -ArgumentList "/c",$DevCommand `
   -WorkingDirectory $RootDir `
   -NoNewWindow `
   -PassThru
@@ -183,11 +210,11 @@ function Wait-ForUrl($url, $label, $seconds = 90) {
   return $false
 }
 
-if (-not (Wait-ForUrl $FrontendUrl "Frontend")) {
+if (-not (Wait-ForUrl $FrontendHealthUrl "Frontend")) {
   Invoke-Native "taskkill /PID $($process.Id) /T /F" | Out-Null
   Fail "Frontend health check failed"
 }
-if (-not (Wait-ForUrl $AdminUrl "Admin")) {
+if (-not (Wait-ForUrl $AdminHealthUrl "Admin")) {
   Invoke-Native "taskkill /PID $($process.Id) /T /F" | Out-Null
   Fail "Admin health check failed"
 }

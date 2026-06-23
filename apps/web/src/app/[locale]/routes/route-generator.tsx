@@ -29,7 +29,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
   const [weather, setWeather] = useState<RouteWeather>("sunny")
   const [mapMode, setMapMode] = useState<"scope" | "satellite">("scope")
   const [selectedRoute, setSelectedRoute] = useState<RouteOption>(() => selectRouteOption({ duration, audience, weather }))
-  const [provider, setProvider] = useState("configuration-required")
+  const [provider, setProvider] = useState("preview")
   const [isGenerating, setIsGenerating] = useState(false)
 
   async function generateRoute() {
@@ -173,7 +173,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
               className="object-cover"
               fill
               sizes="(min-width: 1024px) 58vw, 100vw"
-              src="/images/routes/zouma-scope-map.png"
+              src="/images/routes/zouma-route-scope-user.jpg"
             />
           ) : (
             <RouteSatelliteMap />
@@ -190,7 +190,11 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
             </div>
             <h2 className="mt-3 break-words text-3xl font-extrabold">{t(selectedRoute.titleKey)}</h2>
             <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t(selectedRoute.summaryKey)}</p>
-            {provider === "configuration-required" ? (
+            {provider === "preview" ? (
+              <div className="mt-4 inline-flex rounded-full border border-water/20 bg-water/10 px-3 py-1 text-xs font-bold text-water">
+                {t("result.providerPreview")}
+              </div>
+            ) : provider === "configuration-required" ? (
               <div className="mt-4 inline-flex rounded-full border border-[#d8bd73] bg-[#fff7d6] px-3 py-1 text-xs font-bold text-[#7a5b12]">
                 {t("result.providerFallback")}
               </div>

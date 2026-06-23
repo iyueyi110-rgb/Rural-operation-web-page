@@ -872,7 +872,7 @@
         "hot": "高温"
       },
       "ruleTitle": "通过后端模型适配层生成",
-      "ruleBody": "前端只提交时长、人群和天气标签到 /api/v1/routes/generate；后端通过 ModelProviderAdapter 调用模型，缺少密钥时返回配置提示。",
+      "ruleBody": "前端只提交时长、人群和天气标签到 /api/v1/routes/generate；后端通过 ModelProviderAdapter 调用 DeepSeek 模型返回推荐路线。",
       "generate": "生成路线",
       "generating": "正在生成"
     },
@@ -895,8 +895,9 @@
       "notice": "出行提示",
       "bookingCta": "查看可预约节点",
       "provider": "生成来源：{provider}",
-      "providerFallback": "AI 服务未配置，当前为本地推荐路线",
-      "providerOnline": "AI 推荐 · {provider}"
+      "providerFallback": "AI 调用暂不可用，已临时切换为本地推荐路线",
+      "providerOnline": "AI 推荐 · {provider}",
+      "providerPreview": "AI 已接入，点击生成路线获取模型推荐"
     },
     "waypoints": {
       "visitorCenter": "游客中心",
@@ -911,7 +912,19 @@
       "indoorStory": "室内古道故事点",
       "shadedAncientRoad": "树荫古道短线",
       "villageMeal": "村宴与农产品展销点",
-      "morningFarm": "晨间农事体验点"
+      "morningFarm": "晨间农事体验点",
+      "xikouStation": "溪口驿站",
+      "lingwangTeaRoom": "岭望茶室",
+      "lijingCoCreationCenter": "荔晶共创中心",
+      "zoumaCultureCenter": "走马文化中心",
+      "integratedServiceCenter": "综合服务中心",
+      "researchCenter": "研学中心",
+      "ecologicalDemoCenter": "生态示范中心",
+      "ancientLycheePavilion": "古荔亭",
+      "experienceField": "体验田",
+      "viewingPlatform": "观景台",
+      "researchWorkshop": "研学工坊",
+      "homestayCluster": "民宿组团"
     },
     "reservationNodes": {
       "audioGuide": "声音导览设备",
@@ -923,7 +936,13 @@
       "indoorWorkshop": "室内研学工坊",
       "rainGear": "雨具与防滑提示",
       "coolRest": "避暑休息点",
-      "courtyardStay": "岭上院落住宿"
+      "courtyardStay": "岭上院落住宿",
+      "xikouParking": "溪口驿站集散与停车",
+      "teaRoom": "岭望茶室接待",
+      "lycheeWorkshop": "荔枝加工与认养讲解",
+      "serviceCenterMeal": "综合服务中心餐厅席位",
+      "serviceCenterStay": "综合服务中心住宿与停车",
+      "researchWorkshop": "研学中心课程与工坊"
     },
     "plans": {
       "gentleAncientRoad": {

@@ -21,7 +21,7 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      images: ["/images/routes/zouma-scope-map.png"],
+      images: ["/images/routes/zouma-route-scope-user.jpg"],
     },
   }
 }

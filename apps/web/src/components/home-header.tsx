@@ -1,7 +1,8 @@
 import Link from "next/link"
-import { ChevronDown, MoveRight, Ticket, UserRound } from "lucide-react"
+import { MoveRight, UserRound } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 
+import { HomeMoreMenu } from "@web/components/home-more-menu"
 import { HomeMobileMenu } from "@web/components/home-mobile-menu"
 import type { Locale } from "@web/i18n/routing"
 import { buildExploreHref } from "@web/lib/home-navigation"
@@ -79,31 +80,7 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
               {item.label}
             </Link>
           ))}
-          <div className="group relative">
-            <button
-              className="inline-flex items-center gap-1.5 transition hover:text-white"
-              type="button"
-            >
-              {t("nav.more")}
-              <ChevronDown aria-hidden="true" className="h-3.5 w-3.5" />
-            </button>
-            <div className="invisible absolute right-0 top-full z-50 min-w-44 pt-3 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-              <div className="grid gap-1 rounded-lg border border-white/12 bg-ink/95 p-2 shadow-soft backdrop-blur-xl">
-                {moreNavItems.map((item) => (
-                  <Link
-                    className="rounded-md px-3 py-2 text-sm font-semibold text-white/72 transition hover:bg-white/10 hover:text-white"
-                    href={item.href}
-                    key={item.href}
-                  >
-                    {item.href.includes("/tickets") ? (
-                      <Ticket aria-hidden="true" className="mr-2 inline h-3.5 w-3.5" />
-                    ) : null}
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+          <HomeMoreMenu items={moreNavItems} label={t("nav.more")} />
         </nav>
 
         <div className="flex items-center gap-2">

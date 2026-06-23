@@ -872,7 +872,7 @@
         "hot": "高温"
       },
       "ruleTitle": "バックエンド適配層で生成",
-      "ruleBody": "フロントは滞在時間、来訪者、天気タグのみを /api/v1/routes/generate に送信し、バックエンドが ModelProviderAdapter を使います。",
+      "ruleBody": "フロントは滞在時間、来訪者、天気タグを /api/v1/routes/generate に送信し、バックエンドが ModelProviderAdapter 経由で DeepSeek モデルを呼び出して推奨ルートを返します。",
       "generate": "ルート生成",
       "generating": "生成中"
     },
@@ -895,8 +895,9 @@
       "notice": "移動メモ",
       "bookingCta": "予約可能ノードを見る",
       "provider": "生成元：{provider}",
-      "providerFallback": "AI サービス未設定のため、現在はローカル推薦ルートです",
-      "providerOnline": "AI 推薦 · {provider}"
+      "providerFallback": "AI 呼び出しが一時的に利用できません。ローカル推奨ルートを表示しています。",
+      "providerOnline": "AI 推薦 · {provider}",
+      "providerPreview": "AI は接続済みです。ルート生成でモデル推奨を取得します。"
     },
     "waypoints": {
       "visitorCenter": "ビジターセンター",
@@ -911,7 +912,19 @@
       "indoorStory": "屋内古道ストーリー点",
       "shadedAncientRoad": "木陰の古道短線",
       "villageMeal": "村宴と農産品展示販売点",
-      "morningFarm": "朝の農事体験点"
+      "morningFarm": "朝の農事体験点",
+      "xikouStation": "溪口駅舎",
+      "lingwangTeaRoom": "岭望茶室",
+      "lijingCoCreationCenter": "荔晶共創センター",
+      "zoumaCultureCenter": "走馬文化センター",
+      "integratedServiceCenter": "総合サービスセンター",
+      "researchCenter": "研学センター",
+      "ecologicalDemoCenter": "生態モデルセンター",
+      "ancientLycheePavilion": "古荔亭",
+      "experienceField": "体験田",
+      "viewingPlatform": "展望台",
+      "researchWorkshop": "研学工房",
+      "homestayCluster": "民宿エリア"
     },
     "reservationNodes": {
       "audioGuide": "音声ガイド機器",
@@ -923,7 +936,13 @@
       "indoorWorkshop": "屋内研学工房",
       "rainGear": "雨具と防滑案内",
       "coolRest": "避暑休憩点",
-      "courtyardStay": "岭上中庭宿泊"
+      "courtyardStay": "岭上中庭宿泊",
+      "xikouParking": "溪口駅舎の集散と駐車",
+      "teaRoom": "岭望茶室の受付",
+      "lycheeWorkshop": "ライチ加工と里親説明",
+      "serviceCenterMeal": "総合サービスセンターの食事席",
+      "serviceCenterStay": "総合サービスセンター宿泊と駐車",
+      "researchWorkshop": "研学センター講座と工房"
     },
     "plans": {
       "gentleAncientRoad": {

@@ -872,7 +872,7 @@
         "hot": "Hot"
       },
       "ruleTitle": "Generated through backend adapter",
-      "ruleBody": "The frontend sends duration, audience and weather tags to /api/v1/routes/generate. The backend calls ModelProviderAdapter when a key is configured.",
+      "ruleBody": "The frontend sends duration, audience and weather tags to /api/v1/routes/generate. The backend calls DeepSeek through ModelProviderAdapter and returns the recommended route.",
       "generate": "Generate route",
       "generating": "Generating"
     },
@@ -895,8 +895,9 @@
       "notice": "Trip notice",
       "bookingCta": "View reservable nodes",
       "provider": "Source: {provider}",
-      "providerFallback": "AI service is not configured. Showing local route recommendation.",
-      "providerOnline": "AI recommendation ? {provider}"
+      "providerFallback": "AI call is temporarily unavailable. Showing the local route recommendation.",
+      "providerOnline": "AI recommendation ? {provider}",
+      "providerPreview": "AI is connected. Generate a route to get a model recommendation."
     },
     "waypoints": {
       "visitorCenter": "Visitor Center",
@@ -911,7 +912,19 @@
       "indoorStory": "Indoor ancient road story",
       "shadedAncientRoad": "Shaded short ancient road",
       "villageMeal": "Village meal and product display",
-      "morningFarm": "Morning farm activity"
+      "morningFarm": "Morning farm activity",
+      "xikouStation": "Xikou relay station",
+      "lingwangTeaRoom": "Lingwang tea room",
+      "lijingCoCreationCenter": "Lijing co-creation center",
+      "zoumaCultureCenter": "Zouma culture center",
+      "integratedServiceCenter": "Integrated service center",
+      "researchCenter": "Study center",
+      "ecologicalDemoCenter": "Ecological demonstration center",
+      "ancientLycheePavilion": "Ancient lychee pavilion",
+      "experienceField": "Experience field",
+      "viewingPlatform": "Viewing platform",
+      "researchWorkshop": "Study workshop",
+      "homestayCluster": "Homestay cluster"
     },
     "reservationNodes": {
       "audioGuide": "Audio guide device",
@@ -923,7 +936,13 @@
       "indoorWorkshop": "Indoor study workshop",
       "rainGear": "Rain gear and anti-slip notice",
       "coolRest": "Cooling rest point",
-      "courtyardStay": "Ridge courtyard stay"
+      "courtyardStay": "Ridge courtyard stay",
+      "xikouParking": "Xikou arrival and parking",
+      "teaRoom": "Lingwang tea room reception",
+      "lycheeWorkshop": "Lychee processing and adoption briefing",
+      "serviceCenterMeal": "Integrated service center dining seats",
+      "serviceCenterStay": "Integrated service center stay and parking",
+      "researchWorkshop": "Study center course and workshop"
     },
     "plans": {
       "gentleAncientRoad": {
