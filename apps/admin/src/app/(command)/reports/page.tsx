@@ -3,6 +3,7 @@
 import { RefreshCw } from "lucide-react"
 import { useEffect, useState } from "react"
 
+import { AdminNotice, AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
 import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
@@ -64,13 +65,12 @@ export default function ReportsPage() {
   const selected = reports.find((report) => report.id === selectedId) ?? reports[0] ?? null
 
   return (
-    <div className="grid gap-5">
-      <header>
-        <p className="text-sm font-bold text-water">{adminCopy.shell.subtitle}</p>
-        <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.reports.title}</h1>
-      </header>
-
-      <div className="flex flex-wrap items-end gap-3 rounded-lg border border-stone bg-white p-4 shadow-soft">
+    <AdminPageShell
+      description="沉淀每日运营摘要、行动建议和后续跟进项。"
+      eyebrow={adminCopy.shell.subtitle}
+      title={adminCopy.reports.title}
+    >
+      <AdminPanel className="flex flex-wrap items-end gap-3 p-4">
         <label className="grid gap-1 text-sm font-bold">
           {adminCopy.reports.selectDate}
           <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setDate(event.target.value)} type="date" value={date} />
@@ -84,12 +84,12 @@ export default function ReportsPage() {
           <RefreshCw className={`h-4 w-4 ${isGenerating ? "animate-spin" : ""}`} />
           {isGenerating ? adminCopy.reports.generating : adminCopy.reports.generate}
         </button>
-      </div>
+      </AdminPanel>
 
-      {error ? <div className="rounded-md bg-lychee/10 p-3 text-sm font-bold text-lychee">{error}</div> : null}
+      {error ? <AdminNotice tone="error">{error}</AdminNotice> : null}
 
       <div className="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)]">
-        <aside className="rounded-lg border border-stone bg-white p-4 shadow-soft">
+        <AdminPanel className="p-4">
           {isLoading ? <p className="text-sm font-semibold text-ink/54">{adminCopy.common.loading}</p> : null}
           {!isLoading && reports.length === 0 ? <p className="text-sm font-semibold text-ink/54">{adminCopy.reports.noData}</p> : null}
           <div className="grid gap-2">
@@ -105,9 +105,9 @@ export default function ReportsPage() {
               </button>
             ))}
           </div>
-        </aside>
+        </AdminPanel>
 
-        <main className="rounded-lg border border-stone bg-white p-5 shadow-soft">
+        <AdminPanel>
           {selected ? (
             <div>
               <p className="text-sm font-bold text-water">{selected.date}</p>
@@ -135,9 +135,9 @@ export default function ReportsPage() {
           ) : (
             <p className="text-sm font-semibold text-ink/54">{adminCopy.reports.noData}</p>
           )}
-        </main>
+        </AdminPanel>
       </div>
-    </div>
+    </AdminPageShell>
   )
 }
 

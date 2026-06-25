@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
+import { AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
 import { adminApiBase } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
@@ -71,27 +72,27 @@ export default function AnalyticsPage() {
   )
 
   return (
-    <div className="grid gap-5">
-      <header>
-        <p className="text-sm font-bold text-water">{adminCopy.shell.subtitle}</p>
-        <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.analytics.title}</h1>
-      </header>
-      <div className="grid gap-3 rounded-xl border border-line bg-surface p-4 shadow-soft md:grid-cols-2">
+    <AdminPageShell
+      description="对照节点客流、消费收入和路线生成记录，定位转化效率变化。"
+      eyebrow={adminCopy.shell.subtitle}
+      title={adminCopy.analytics.title}
+    >
+      <AdminPanel className="grid gap-3 p-4 md:grid-cols-2">
         <input className="h-10 rounded-md border border-line bg-rice px-3 outline-none transition focus:border-water focus:bg-white" onChange={(event) => setDate(event.target.value)} type="date" value={date} />
         <select className="h-10 rounded-md border border-line bg-rice px-3 outline-none transition focus:border-water focus:bg-white" onChange={(event) => setSortKey(event.target.value as SortKey)} value={sortKey}>
           <option value="conversionRate">按转化率</option>
           <option value="revenue">按收入</option>
           <option value="peopleCount">按客流</option>
         </select>
-      </div>
+      </AdminPanel>
       <AdminDataTable columns={columns} emptyLabel={adminCopy.analytics.noData} isLoading={isLoading} rows={sortedRows} />
-      <section className="rounded-xl border border-line bg-surface p-5 shadow-soft">
+      <AdminPanel>
         <h2 className="text-lg font-extrabold">路线生成热度排行</h2>
         <div className="mt-4">
           <AdminDataTable columns={routeColumns} emptyLabel="暂无路线生成记录。" isLoading={isLoading} rows={routeRows} />
         </div>
-      </section>
-    </div>
+      </AdminPanel>
+    </AdminPageShell>
   )
 }
 

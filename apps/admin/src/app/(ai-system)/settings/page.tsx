@@ -1,5 +1,6 @@
 "use client"
 
+import { AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
 import { adminApiBase } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
@@ -10,18 +11,17 @@ const envItems = [
 
 export default function SettingsPage() {
   return (
-    <div className="grid gap-5">
-      <header>
-        <p className="text-sm font-bold text-water">{adminCopy.shell.subtitle}</p>
-        <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.settings.title}</h1>
-      </header>
-
-      <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
+    <AdminPageShell
+      description="集中查看后台 API、数据库和运行环境配置状态。"
+      eyebrow={adminCopy.shell.subtitle}
+      title={adminCopy.settings.title}
+    >
+      <AdminPanel>
         <h2 className="text-lg font-extrabold">{adminCopy.settings.apiBase}</h2>
         <p className="mt-3 rounded-md bg-rice p-3 text-sm font-bold text-ink/70">{adminApiBase}</p>
-      </section>
+      </AdminPanel>
 
-      <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
+      <AdminPanel>
         <h2 className="text-lg font-extrabold">{adminCopy.settings.envStatus}</h2>
         <div className="mt-4 grid gap-3">
           {envItems.map((item) => (
@@ -37,7 +37,7 @@ export default function SettingsPage() {
             <span className="text-moss">{adminCopy.settings.dbConnected}</span>
           </div>
         </div>
-      </section>
-    </div>
+      </AdminPanel>
+    </AdminPageShell>
   )
 }

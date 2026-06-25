@@ -3,6 +3,7 @@
 import { AlertTriangle, CheckCircle2, RefreshCw, SendHorizontal } from "lucide-react"
 import { useEffect, useMemo, useState, type ReactNode } from "react"
 
+import { AdminNotice, AdminPageShell } from "@admin/components/admin-page-shell"
 import { adminCopy } from "@admin/lib/admin-copy"
 import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import type { Feedback, FeedbackRecord } from "@zouma/contracts"
@@ -117,13 +118,11 @@ export function FeedbackContent() {
   }, [])
 
   return (
-    <div className="min-w-0">
-      <header>
-        <div>
-          <p className="text-sm font-bold text-water">{adminCopy.shell.activeModule}</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-normal sm:text-3xl">{adminCopy.table.title}</h1>
-        </div>
-      </header>
+    <AdminPageShell
+      description="集中处理游客、服务、设施和支付相关反馈工单。"
+      eyebrow={adminCopy.shell.activeModule}
+      title={adminCopy.table.title}
+    >
 
       <div className="mt-4 grid gap-3 sm:grid-cols-4">
         <Stat label={adminCopy.stats.total} value={String(stats.total)} />
@@ -132,15 +131,13 @@ export function FeedbackContent() {
         <Stat label={adminCopy.stats.rating} value={stats.average} />
       </div>
 
-      <p className="mt-4 rounded-md border border-stone bg-white px-4 py-3 text-sm font-semibold text-ink/58 shadow-soft">
-        {adminCopy.shell.apiHint}
-      </p>
+      <AdminNotice>{adminCopy.shell.apiHint}</AdminNotice>
 
       {error ? (
-        <div className="mt-4 flex items-center gap-2 rounded-md bg-lychee/10 px-4 py-3 text-sm font-semibold text-lychee">
+        <AdminNotice className="flex items-center gap-2" tone="error">
           <AlertTriangle aria-hidden="true" className="h-4 w-4" />
           {error}
-        </div>
+        </AdminNotice>
       ) : null}
 
       <div className="mt-5 grid min-w-0 gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
@@ -274,7 +271,7 @@ export function FeedbackContent() {
           )}
         </aside>
       </div>
-    </div>
+    </AdminPageShell>
   )
 }
 

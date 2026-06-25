@@ -1,4 +1,4 @@
-import { FeedbackContent } from "../feedback-admin"
+import { FeedbackContent } from "@admin/app/feedback-admin"
 
 export default function FeedbackPage() {
   return <FeedbackContent />

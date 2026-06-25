@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
+import { AdminNotice, AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
 import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
@@ -101,13 +102,13 @@ export default function AlertsPage() {
   ]
 
   return (
-    <div className="grid gap-5">
-      <header>
-        <p className="text-sm font-bold text-water">{adminCopy.shell.subtitle}</p>
-        <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.alerts.title}</h1>
-      </header>
-      {message ? <div className="rounded-md bg-rice p-3 text-sm font-bold text-ink/70">{message}</div> : null}
-      <div className="grid gap-3 rounded-lg border border-stone bg-white p-4 shadow-soft md:grid-cols-2">
+    <AdminPageShell
+      description="聚合行为、传感器和天气告警，支持现场确认与闭环。"
+      eyebrow={adminCopy.shell.subtitle}
+      title={adminCopy.alerts.title}
+    >
+      {message ? <AdminNotice>{message}</AdminNotice> : null}
+      <AdminPanel className="grid gap-3 p-4 md:grid-cols-2">
         <select className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setType(event.target.value)} value={type}>
           <option value="">全部类型</option>
           {Object.entries(adminCopy.alerts.types).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
@@ -117,9 +118,9 @@ export default function AlertsPage() {
           <option value="acknowledged">acknowledged</option>
           <option value="resolved">resolved</option>
         </select>
-      </div>
+      </AdminPanel>
       <AdminDataTable columns={columns} emptyLabel={adminCopy.alerts.noData} isLoading={isLoading} rows={rows} />
-    </div>
+    </AdminPageShell>
   )
 }
 
