@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import {
   CalendarDays,
@@ -22,6 +23,13 @@ import { Section } from "@ui/index"
 
 const heroVideoUrl = process.env.NEXT_PUBLIC_HOME_HERO_VIDEO_URL?.trim()
 const heroMetricValues = [1.8, 3107, 2383] as const
+const activityShowcaseImages = [
+  "/images/home/activity-showcase-picking.png",
+  "/images/home/activity-showcase-classroom.png",
+  "/images/home/activity-showcase-feast.png",
+  "/images/home/activity-showcase-return.png",
+] as const
+const activityOverviewImage = "/images/home/activity-showcase-overview.png"
 
 export function HeroScreen({
   locale,
@@ -33,11 +41,20 @@ export function HeroScreen({
   const t = useTranslations("home")
   const videoRef = useRef<HTMLVideoElement>(null)
   const [reduceMotion, setReduceMotion] = useState(false)
+  const [activeActivityIndex, setActiveActivityIndex] = useState(-1)
   const weatherIsLive = weather.source === "qweather"
   const heroTitle = t("hero.title")
   const activityHighlights = [0, 1, 2, 3].map((index) =>
     t(`hero.activityShowcase.highlights.${index}`),
   )
+  const activeActivityImage =
+    activeActivityIndex >= 0
+      ? activityShowcaseImages[activeActivityIndex]
+      : activityOverviewImage
+  const activeActivityLabel =
+    activeActivityIndex >= 0
+      ? activityHighlights[activeActivityIndex]
+      : t("hero.activityShowcase.name")
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -163,9 +180,16 @@ export function HeroScreen({
           <div className="absolute -right-8 bottom-10 h-52 w-52 rounded-full bg-water/20 blur-3xl" />
           <div className="relative overflow-hidden rounded-xl border border-white/14 bg-white/[0.075] p-3 shadow-panel backdrop-blur-xl">
             <div className="relative min-h-[340px] overflow-hidden rounded-lg border border-white/10 bg-ink/45 sm:min-h-[420px]">
-              <div className="absolute inset-0 bg-[url('/images/home/lychee-field.webp')] bg-cover bg-center opacity-90" />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(25,32,27,0.18),rgba(25,32,27,0.34)_42%,rgba(25,32,27,0.9))]" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_18%,rgba(215,181,109,0.26),transparent_30%),radial-gradient(circle_at_78%_24%,rgba(89,148,133,0.25),transparent_28%)]" />
+              <Image
+                alt={activeActivityLabel}
+                className="object-cover transition-opacity duration-200"
+                fill
+                priority
+                quality={92}
+                sizes="(min-width: 1024px) 48vw, 100vw"
+                src={activeActivityImage}
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(25,32,27,0.12),rgba(25,32,27,0.26)_42%,rgba(25,32,27,0.82))]" />
               <div className="contour-field absolute inset-0 opacity-50" />
               <div className="terrain-grid absolute inset-0 opacity-60" />
               <div className="absolute left-5 top-5 max-w-[12rem] rounded-lg border border-white/14 bg-ink/46 px-4 py-3 backdrop-blur-md sm:left-8 sm:top-8 sm:max-w-xs">
@@ -195,22 +219,51 @@ export function HeroScreen({
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  {activityHighlights.map((highlight, index) => (
-                    <div
-                      className="rounded-lg border border-white/12 bg-ink/56 p-3 backdrop-blur"
-                      key={highlight}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[11px] font-bold tabular-nums text-white/40">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#d7b56d]" />
-                      </div>
-                      <p className="mt-3 text-xs font-bold leading-5 text-white/82">
-                        {highlight}
-                      </p>
-                    </div>
-                  ))}
+                  {activityHighlights.map((highlight, index) => {
+                    const isActive = activeActivityIndex === index
+
+                    return (
+                      <button
+                        aria-pressed={isActive}
+                        className={
+                          isActive
+                            ? "rounded-lg border border-white bg-white/16 p-3 text-left backdrop-blur transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+                            : "rounded-lg border border-white/12 bg-ink/56 p-3 text-left backdrop-blur transition hover:border-white/38 hover:bg-ink/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+                        }
+                        key={highlight}
+                        onClick={() => setActiveActivityIndex(index)}
+                        type="button"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span
+                            className={
+                              isActive
+                                ? "text-[11px] font-extrabold tabular-nums text-white/72"
+                                : "text-[11px] font-bold tabular-nums text-white/40"
+                            }
+                          >
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <span
+                            className={
+                              isActive
+                                ? "h-1.5 w-1.5 rounded-full bg-white"
+                                : "h-1.5 w-1.5 rounded-full bg-[#d7b56d]"
+                            }
+                          />
+                        </div>
+                        <p
+                          className={
+                            isActive
+                              ? "mt-3 text-xs font-extrabold leading-5 text-white"
+                              : "mt-3 text-xs font-bold leading-5 text-white/82"
+                          }
+                        >
+                          {highlight}
+                        </p>
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             </div>
