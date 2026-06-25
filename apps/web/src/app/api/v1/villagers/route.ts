@@ -1,6 +1,7 @@
 import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { isMainlandMobile, normalizeMainlandMobile } from "@web/lib/phone"
 import { summarizeTasks } from "@web/lib/task-records"
 import { isAdminRequest, maskPhone } from "@web/lib/tree-records"
 
@@ -46,12 +47,12 @@ export async function POST(request: Request) {
   }
 
   const name = typeof body.name === "string" ? body.name.trim() : ""
-  const phone = typeof body.phone === "string" ? body.phone.trim() : ""
+  const phone = normalizeMainlandMobile(body.phone)
   const skills = parseSkills(body.skills)
   const nodeId = typeof body.nodeId === "string" && body.nodeId.trim() ? body.nodeId.trim() : null
   const status = isVillagerStatus(body.status) ? body.status : "active"
 
-  if (!name || !phone || skills.length === 0) {
+  if (!name || !isMainlandMobile(phone) || skills.length === 0) {
     return jsonResponse(request, { error: "name, phone and skills are required" }, { status: 400 })
   }
 
@@ -81,6 +82,11 @@ export async function PATCH(request: Request) {
   }
 
   const nodeId = typeof body.nodeId === "string" && body.nodeId.trim() ? body.nodeId.trim() : null
+  const phone = typeof body.phone === "string" ? normalizeMainlandMobile(body.phone) : undefined
+  if (phone !== undefined && !isMainlandMobile(phone)) {
+    return jsonResponse(request, { error: "A valid phone is required" }, { status: 400 })
+  }
+
   if (nodeId) {
     const node = await prisma.spaceNode.findUnique({ where: { id: nodeId }, select: { id: true } })
     if (!node) {
@@ -92,7 +98,7 @@ export async function PATCH(request: Request) {
     where: { id: body.id },
     data: {
       ...(typeof body.name === "string" ? { name: body.name.trim() } : {}),
-      ...(typeof body.phone === "string" ? { phone: body.phone.trim() } : {}),
+      ...(phone !== undefined ? { phone } : {}),
       ...(Array.isArray(body.skills) ? { skills: parseSkills(body.skills) } : {}),
       ...(typeof body.nodeId === "string" ? { nodeId } : {}),
       ...(isVillagerStatus(body.status) ? { status: body.status } : {}),

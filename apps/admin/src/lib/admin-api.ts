@@ -5,8 +5,7 @@ export const adminApiToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
 export async function fetchAdminApi<T>(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers)
-  const method = (init.method ?? "GET").toUpperCase()
-  if (method !== "GET" && method !== "HEAD") {
+  if (adminApiToken) {
     headers.set("X-Admin-Token", adminApiToken)
   }
   if (init.body && !headers.has("Content-Type")) {
@@ -14,10 +13,10 @@ export async function fetchAdminApi<T>(path: string, init: RequestInit = {}) {
   }
 
   const response = await fetch(`${adminApiBase}${path}`, { ...init, headers })
-  const payload = (await response.json().catch(() => null)) as T | null
+  const payload = (await response.json().catch(() => null)) as (T & { error?: string }) | null
 
   if (!response.ok || payload === null) {
-    throw new Error(`API ${response.status}: ${path}`)
+    throw new Error(payload?.error?.trim() || `API ${response.status}: ${path}`)
   }
 
   return payload

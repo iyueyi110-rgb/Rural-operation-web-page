@@ -25,11 +25,11 @@ export function VillagerLoginClient() {
       const response = await fetch("/api/v1/villager-auth/request-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone: phone.trim() }),
+        body: JSON.stringify({ phone: normalizedPhone }),
       })
       const result = (await response.json()) as { otp?: string; error?: string }
-      if (!response.ok || !result.otp) throw new Error(result.error)
-      setDevelopmentOtp(result.otp)
+      if (!response.ok) throw new Error(result.error)
+      setDevelopmentOtp(result.otp ?? "")
     } catch {
       setError(t("login.requestError"))
     } finally {
@@ -44,7 +44,7 @@ export function VillagerLoginClient() {
       const response = await fetch("/api/v1/villager-auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone: phone.trim(), otp: otp.trim() }),
+        body: JSON.stringify({ phone: normalizedPhone, otp: otp.trim() }),
       })
       const result = (await response.json()) as { token?: string }
       if (!response.ok || !result.token) throw new Error("invalid otp")
@@ -57,7 +57,8 @@ export function VillagerLoginClient() {
     }
   }
 
-  const validPhone = /^1[3-9]\d{9}$/.test(phone.trim())
+  const normalizedPhone = phone.replace(/\D/g, "")
+  const validPhone = /^1[3-9]\d{9}$/.test(normalizedPhone)
 
   return (
     <main className="grid min-h-screen place-items-center bg-[linear-gradient(135deg,#f5f0e6_0%,#e8dfcf_52%,#f8f5ee_100%)] p-5 text-ink">

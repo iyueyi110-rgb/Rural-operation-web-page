@@ -1,6 +1,7 @@
 import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { isMainlandMobile, normalizeMainlandMobile } from "@web/lib/phone"
 
 export function OPTIONS(request: Request) {
   return optionsResponse(request)
@@ -12,8 +13,8 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Invalid OTP request" }, { status: 400 })
   }
 
-  const phone = typeof body.phone === "string" ? body.phone.trim() : ""
-  if (!/^1[3-9]\d{9}$/.test(phone)) {
+  const phone = normalizeMainlandMobile(body.phone)
+  if (!isMainlandMobile(phone)) {
     return jsonResponse(request, { error: "有效的手机号是必填项" }, { status: 400 })
   }
 
@@ -30,6 +31,11 @@ export async function POST(request: Request) {
 
   if (process.env.NODE_ENV === "development") {
     console.log("[DEV] Villager OTP code:", otp)
+    return jsonResponse(request, {
+      success: true,
+      message: "验证码已发送",
+      otp,
+    })
   }
 
   return jsonResponse(request, { success: true, message: "验证码已发送" })

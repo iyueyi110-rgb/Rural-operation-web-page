@@ -1,6 +1,7 @@
 import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { isMainlandMobile, normalizeMainlandMobile } from "@web/lib/phone"
 import { createVillagerToken } from "@web/lib/villager-auth"
 
 export function OPTIONS(request: Request) {
@@ -13,9 +14,9 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Invalid OTP verification" }, { status: 400 })
   }
 
-  const phone = typeof body.phone === "string" ? body.phone.trim() : ""
+  const phone = normalizeMainlandMobile(body.phone)
   const otp = typeof body.otp === "string" ? body.otp.trim() : ""
-  if (!phone || !otp) {
+  if (!isMainlandMobile(phone) || !otp) {
     return jsonResponse(request, { error: "phone and otp are required" }, { status: 400 })
   }
 

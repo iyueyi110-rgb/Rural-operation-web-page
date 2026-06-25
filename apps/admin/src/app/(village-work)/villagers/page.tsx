@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
+import { fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface VillagerRow extends Record<string, unknown> {
@@ -57,17 +57,10 @@ export default function VillagersPage() {
     setError("")
 
     try {
-      const [villagerResponse, nodeResponse] = await Promise.all([
-        fetch(`${adminApiBase}/villagers`),
-        fetch(`${adminApiBase}/nodes`),
+      const [villagerPayload, nodePayload] = await Promise.all([
+        fetchAdminApi<{ data?: VillagerRow[] }>("/villagers"),
+        fetchAdminApi<{ data?: NodeRow[] }>("/nodes"),
       ])
-
-      if (!villagerResponse.ok || !nodeResponse.ok) {
-        throw new Error(adminCopy.common.error)
-      }
-
-      const villagerPayload = (await villagerResponse.json()) as { data?: VillagerRow[] }
-      const nodePayload = (await nodeResponse.json()) as { data?: NodeRow[] }
       setVillagers(villagerPayload.data ?? [])
       setNodes(nodePayload.data ?? [])
     } catch (caughtError) {
@@ -123,8 +116,8 @@ export default function VillagersPage() {
       setMessage(adminCopy.villagers.saved)
       await loadData()
       resetForm()
-    } catch {
-      setMessage(adminCopy.villagers.saveFailed)
+    } catch (error) {
+      setMessage(`${adminCopy.villagers.saveFailed}: ${error instanceof Error ? error.message : ""}`)
     }
   }
 

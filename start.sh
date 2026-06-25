@@ -25,6 +25,32 @@ warn()  { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 err()   { echo -e "${RED}[ERR]${NC}   $*" >&2; }
 step()  { echo -e "\n${CYAN}━━━ $* ━━━${NC}"; }
 
+url_ready() {
+  local url="$1"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsS "$url" >/dev/null 2>&1
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q --spider "$url" >/dev/null 2>&1
+  else
+    return 1
+  fi
+}
+
+open_sites() {
+  if [ "$SKIP_BROWSER" = "1" ]; then return 0; fi
+
+  case "${OSTYPE:-}" in
+    darwin*)
+      open "$FRONTEND_URL" >/dev/null 2>&1 || true
+      open "$ADMIN_URL" >/dev/null 2>&1 || true
+      ;;
+    msys*|cygwin*|win32*)
+      cmd.exe /c start "" "$FRONTEND_URL" >/dev/null 2>&1 || true
+      cmd.exe /c start "" "$ADMIN_URL" >/dev/null 2>&1 || true
+      ;;
+  esac
+}
+
 # ---- 清理 ----
 cleanup() {
   echo
@@ -100,6 +126,12 @@ port_in_use() {
     return 1
   fi
 }
+
+if url_ready "$FRONTEND_URL" && url_ready "$ADMIN_URL"; then
+  ok "系统已经在运行，直接打开页面。"
+  open_sites
+  exit 0
+fi
 
 for port in 3000 3001; do
   if port_in_use "$port"; then
@@ -241,15 +273,15 @@ step "6/6 等待服务就绪"
 wait_for_url() {
   local url="$1" label="$2" attempts=60
   while [ "$attempts" -gt 0 ]; do
-    if command -v curl >/dev/null 2>&1; then
-      if curl -fsS "$url" >/dev/null 2>&1; then return 0; fi
-    elif command -v wget >/dev/null 2>&1; then
-      if wget -q --spider "$url" >/dev/null 2>&1; then return 0; fi
+    if url_ready "$url"; then
+      return 0
+    elif ! command -v curl >/dev/null 2>&1 && ! command -v wget >/dev/null 2>&1; then
+      warn "未找到 curl/wget，跳过 ${label} HTTP 就绪检查"
+      return 0
     else
-      sleep 8; return 0
+      sleep 2
     fi
     attempts=$((attempts - 1))
-    sleep 2
   done
   warn "${label} 启动超时，请检查终端输出"
   return 1
@@ -269,17 +301,6 @@ ok "━━━━━━━━━━━━━━━━━━━━━━━━━�
 # ============================================================
 #  打开浏览器
 # ============================================================
-if [ "$SKIP_BROWSER" != "1" ]; then
-  case "${OSTYPE:-}" in
-    darwin*)
-      open "$FRONTEND_URL" >/dev/null 2>&1 || true
-      open "$ADMIN_URL" >/dev/null 2>&1 || true
-      ;;
-    msys*|cygwin*|win32*)
-      cmd.exe /c start "" "$FRONTEND_URL" >/dev/null 2>&1 || true
-      cmd.exe /c start "" "$ADMIN_URL" >/dev/null 2>&1 || true
-      ;;
-  esac
-fi
+open_sites
 
 wait "$DEV_PID"
