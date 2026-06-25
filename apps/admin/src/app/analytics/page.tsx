@@ -76,16 +76,16 @@ export default function AnalyticsPage() {
         <p className="text-sm font-bold text-water">{adminCopy.shell.subtitle}</p>
         <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.analytics.title}</h1>
       </header>
-      <div className="grid gap-3 rounded-lg border border-stone bg-white p-4 shadow-soft md:grid-cols-2">
-        <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setDate(event.target.value)} type="date" value={date} />
-        <select className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setSortKey(event.target.value as SortKey)} value={sortKey}>
+      <div className="grid gap-3 rounded-xl border border-line bg-surface p-4 shadow-soft md:grid-cols-2">
+        <input className="h-10 rounded-md border border-line bg-rice px-3 outline-none transition focus:border-water focus:bg-white" onChange={(event) => setDate(event.target.value)} type="date" value={date} />
+        <select className="h-10 rounded-md border border-line bg-rice px-3 outline-none transition focus:border-water focus:bg-white" onChange={(event) => setSortKey(event.target.value as SortKey)} value={sortKey}>
           <option value="conversionRate">按转化率</option>
           <option value="revenue">按收入</option>
           <option value="peopleCount">按客流</option>
         </select>
       </div>
       <AdminDataTable columns={columns} emptyLabel={adminCopy.analytics.noData} isLoading={isLoading} rows={sortedRows} />
-      <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
+      <section className="rounded-xl border border-line bg-surface p-5 shadow-soft">
         <h2 className="text-lg font-extrabold">路线生成热度排行</h2>
         <div className="mt-4">
           <AdminDataTable columns={routeColumns} emptyLabel="暂无路线生成记录。" isLoading={isLoading} rows={routeRows} />

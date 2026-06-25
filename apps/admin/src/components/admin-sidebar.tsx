@@ -82,16 +82,16 @@ export function AdminSidebar({ onRefresh }: { onRefresh?: () => void }) {
   const pathname = usePathname()
 
   return (
-    <aside className="border-b border-stone bg-ink p-4 text-white lg:border-b-0 lg:border-r lg:border-white/10">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-lychee text-lg font-extrabold">走</div>
+    <aside className="border-b border-white/10 bg-[#111b18] p-4 text-white lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:border-b-0 lg:border-r lg:p-5">
+      <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.045] p-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-lychee text-lg font-extrabold shadow-[0_10px_24px_rgba(185,56,53,0.26)]">走</div>
         <div className="min-w-0">
           <div className="truncate text-sm font-extrabold">{adminCopy.shell.brand}</div>
           <div className="text-xs font-semibold text-white/52">{adminCopy.shell.subtitle}</div>
         </div>
       </div>
 
-      <nav className="mt-6 grid gap-2">
+      <nav className="mt-5 grid gap-1.5 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
         {adminCopy.menu.map((item) => {
           const Icon = menuIcons[item.key]
           const href = menuHrefs[item.key]
@@ -102,8 +102,8 @@ export function AdminSidebar({ onRefresh }: { onRefresh?: () => void }) {
             <Link
               className={
                 isActive
-                  ? "flex h-11 items-center justify-between rounded-md bg-white px-3 text-sm font-bold text-ink"
-                  : "flex h-11 items-center justify-between rounded-md px-3 text-sm font-semibold text-white/62 transition hover:bg-white/10 hover:text-white"
+                  ? "flex h-10 items-center justify-between rounded-lg bg-white px-3 text-sm font-bold text-ink"
+                  : "flex h-10 items-center justify-between rounded-lg px-3 text-sm font-semibold text-white/58 transition hover:bg-white/8 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/70"
               }
               href={href}
               key={item.key}
@@ -119,7 +119,7 @@ export function AdminSidebar({ onRefresh }: { onRefresh?: () => void }) {
 
       {onRefresh ? (
         <button
-          className="mt-6 flex h-10 w-full items-center justify-center gap-2 rounded-full border border-white/15 px-4 text-sm font-bold text-white/72 transition hover:border-white/30 hover:text-white"
+          className="mt-5 flex h-10 w-full items-center justify-center gap-2 rounded-full border border-white/15 px-4 text-sm font-bold text-white/72 transition hover:border-white/30 hover:bg-white/8 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/70"
           onClick={onRefresh}
           type="button"
         >

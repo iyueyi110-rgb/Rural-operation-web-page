@@ -79,11 +79,11 @@ export default function DashboardPage() {
   const recommendations = useModuleData(loadRecommendations, ONE_DAY)
 
   return (
-    <div className="-m-4 min-h-screen bg-[#0b1411] p-4 text-white sm:-m-6 sm:p-6">
+    <div className="-m-4 min-h-screen bg-[#0d1714] p-4 text-white sm:-m-6 sm:p-6 lg:-m-7 lg:p-7">
       <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-emerald-300">
-            <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.9)]" />
+          <div className="flex items-center gap-2 text-xs font-extrabold text-[#d7b56d]">
+            <span className="h-2 w-2 rounded-full bg-[#d7b56d]" />
             AIGC Cloud Brain
           </div>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight">
@@ -93,7 +93,7 @@ export default function DashboardPage() {
             生产、游客、生态、产品反馈与智策卡在同一屏协同，数据按业务节奏自动更新。
           </p>
         </div>
-        <div className="rounded-full bg-white/5 px-4 py-2 text-xs font-bold text-white/50">
+        <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-white/50">
           上海时区 · 模块独立刷新
         </div>
       </header>
@@ -160,11 +160,11 @@ export default function DashboardPage() {
           <ModuleError message={ecology.error} />
           <div className="mb-4 grid grid-cols-3 gap-2">
             {(ecology.data?.sensors ?? []).slice(0, 3).map((sensor) => (
-              <div className="rounded-lg bg-white/[0.035] p-3" key={sensor.id}>
+              <div className="rounded-lg border border-white/8 bg-white/[0.045] p-3" key={sensor.id}>
                 <div className="truncate text-[11px] font-bold text-white/40">
                   {sensorTypeLabel(sensor.type)}
                 </div>
-                <div className="mt-1 text-lg font-extrabold text-emerald-200">
+                <div className="mt-1 text-lg font-extrabold text-[#d7b56d]">
                   {sensor.value}
                   <span className="ml-1 text-xs text-white/40">
                     {sensor.unit}
@@ -309,7 +309,7 @@ async function loadRecommendations() {
 
 function Metric({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-lg bg-white/[0.035] p-3">
+    <div className="rounded-lg border border-white/8 bg-white/[0.045] p-3">
       <div className="text-[11px] font-bold text-white/38">{label}</div>
       <div className="mt-1 text-xl font-extrabold tracking-tight text-white">
         {value}
@@ -346,17 +346,16 @@ function Sparkline({ label, values }: { label: string; values: number[] }) {
     context.lineCap = "round"
     context.lineJoin = "round"
     context.lineWidth = 3
-    context.strokeStyle = "#72d49a"
-    context.fillStyle = "#72d49a"
-    context.shadowBlur = 12
-    context.shadowColor = "rgba(114, 212, 154, 0.35)"
+    context.strokeStyle = "#d7b56d"
+    context.fillStyle = "#d7b56d"
+    context.shadowBlur = 0
     if (points.length === 1) context.fill()
     else context.stroke()
     context.restore()
   }, [path])
 
   return (
-    <figure className="mt-4 rounded-lg bg-black/10 p-3">
+    <figure className="mt-4 rounded-lg border border-white/8 bg-black/10 p-3">
       <figcaption className="mb-2 text-[11px] font-bold text-white/38">
         {label}
       </figcaption>
@@ -380,7 +379,7 @@ function Sparkline({ label, values }: { label: string; values: number[] }) {
 
 function Freshness({ icon, label }: { icon: ReactNode; label: string }) {
   return (
-    <div className="mt-4 flex items-center gap-2 text-xs font-bold text-emerald-200/60">
+    <div className="mt-4 flex items-center gap-2 text-xs font-bold text-[#d7b56d]/70">
       {icon}
       {label}
     </div>

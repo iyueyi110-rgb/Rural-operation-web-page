@@ -7,6 +7,8 @@ import { HistoryScroll } from "@web/components/history-scroll"
 import { HomeAdoptionFeature } from "@web/components/home-adoption-feature"
 import { HomeHeader } from "@web/components/home-header"
 import { RealmMapGateway } from "@web/components/realm-map-gateway"
+import { SystemModulesSection } from "@web/components/system-modules-section"
+import { VillageFlowSection } from "@web/components/village-flow-section"
 import type { Locale } from "@web/i18n/routing"
 import { getSiteUrl } from "@web/lib/site-url"
 import { getWeatherSummary } from "@web/lib/weather"
@@ -56,8 +58,14 @@ export default async function HomePage({
         ]}
       >
         <HeroScreen locale={params.locale} weather={weather} />
-        <HistoryScroll />
-        <RealmMapGateway />
+        <div>
+          <SystemModulesSection locale={params.locale} />
+          <VillageFlowSection />
+        </div>
+        <div>
+          <HistoryScroll />
+          <RealmMapGateway />
+        </div>
         <HomeAdoptionFeature locale={params.locale} />
       </FullscreenPageDeck>
     </main>

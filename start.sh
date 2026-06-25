@@ -80,6 +80,14 @@ if [ ! -f ".env.local" ]; then
   fi
 fi
 
+if [ -f ".env.local" ]; then
+  set -a
+  # shellcheck disable=SC1091
+  source ".env.local"
+  set +a
+  ok "环境变量已加载"
+fi
+
 # 端口检查
 port_in_use() {
   if command -v lsof >/dev/null 2>&1; then
@@ -198,11 +206,11 @@ step "4/6 数据库迁移与种子"
 if [ "$SKIP_DB" != "1" ]; then
   cd "$ROOT_DIR/packages/database"
 
-  if ! npx prisma migrate deploy; then
-    err "数据库迁移失败"
+  if ! npx prisma db push --accept-data-loss; then
+    err "数据库结构同步失败"
     exit 1
   fi
-  info "已应用数据库迁移"
+  info "已同步数据库结构"
 
   # 种子数据
   info "写入种子数据..."

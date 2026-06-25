@@ -28,55 +28,59 @@ export function AdminDataTable<T extends Record<string, unknown>>({
   const gridTemplateColumns = columns.map(() => "minmax(0,1fr)").join(" ")
 
   if (isLoading) {
-    return <div className="rounded-lg border border-stone bg-white p-5 text-sm font-semibold text-ink/54 shadow-soft">{adminCopy.common.loading}</div>
+    return <div className="rounded-xl border border-line bg-surface p-5 text-sm font-semibold text-ink/54 shadow-soft">{adminCopy.common.loading}</div>
   }
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-lg border border-stone bg-white p-5 text-sm font-semibold text-ink/54 shadow-soft">
+      <div className="rounded-xl border border-line bg-surface p-5 text-sm font-semibold text-ink/54 shadow-soft">
         {emptyLabel ?? adminCopy.common.noSelection}
       </div>
     )
   }
 
   return (
-    <div className="min-w-0 overflow-hidden rounded-lg border border-stone bg-white shadow-soft">
-      <div
-        className="grid gap-3 border-b border-stone bg-ink px-4 py-3 text-xs font-bold text-white/72"
-        style={{ gridTemplateColumns }}
-      >
-        {columns.map((column) => (
-          <div key={column.key}>{column.label}</div>
-        ))}
-      </div>
+    <div className="min-w-0 overflow-hidden rounded-xl border border-line bg-surface shadow-soft">
+      <div className="overflow-x-auto">
+        <div className="min-w-[720px]">
+          <div
+            className="grid gap-3 border-b border-line bg-canopy px-4 py-3 text-xs font-bold text-white/72"
+            style={{ gridTemplateColumns }}
+          >
+            {columns.map((column) => (
+              <div key={column.key}>{column.label}</div>
+            ))}
+          </div>
 
-      <div className="divide-y divide-stone">
-        {rows.map((row, index) => {
-          const id = String(row.id ?? index)
-          const isSelected = selectedId === id
+          <div className="divide-y divide-line/80">
+            {rows.map((row, index) => {
+              const id = String(row.id ?? index)
+              const isSelected = selectedId === id
 
-          return (
-            <button
-              className={
-                isSelected
-                  ? "grid w-full gap-3 bg-rice px-4 py-4 text-left"
-                  : onRowClick
-                    ? "grid w-full gap-3 px-4 py-4 text-left transition hover:bg-rice"
-                    : "grid w-full cursor-default gap-3 px-4 py-4 text-left"
-              }
-              key={id}
-              onClick={() => onRowClick?.(row)}
-              style={{ gridTemplateColumns }}
-              type="button"
-            >
-              {columns.map((column) => (
-                <div className="min-w-0 truncate text-xs font-semibold text-ink/62" key={column.key}>
-                  {column.render ? column.render(row[column.key], row) : String(row[column.key] ?? "")}
-                </div>
-              ))}
-            </button>
-          )
-        })}
+              return (
+                <button
+                  className={
+                    isSelected
+                      ? "grid w-full gap-3 bg-rice px-4 py-4 text-left"
+                      : onRowClick
+                        ? "grid w-full gap-3 px-4 py-4 text-left transition hover:bg-rice focus-visible:outline focus-visible:outline-2 focus-visible:outline-water"
+                        : "grid w-full cursor-default gap-3 px-4 py-4 text-left"
+                  }
+                  key={id}
+                  onClick={() => onRowClick?.(row)}
+                  style={{ gridTemplateColumns }}
+                  type="button"
+                >
+                  {columns.map((column) => (
+                    <div className="min-w-0 truncate text-xs font-semibold text-ink/62" key={column.key}>
+                      {column.render ? column.render(row[column.key], row) : String(row[column.key] ?? "")}
+                    </div>
+                  ))}
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </div>
   )

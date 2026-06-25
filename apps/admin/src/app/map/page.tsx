@@ -143,7 +143,7 @@ export default function MapPage() {
           <p className="mt-1 text-xs font-semibold text-ink/54">{zoumaVillageLabel}</p>
         </div>
         <button
-          className="flex h-10 items-center justify-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold text-ink disabled:opacity-50"
+          className="flex h-10 items-center justify-center gap-2 rounded-full border border-line bg-surface px-4 text-sm font-bold text-ink transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-water disabled:opacity-50"
           disabled={isLoading}
           onClick={loadMapData}
           type="button"
@@ -154,7 +154,7 @@ export default function MapPage() {
       </header>
 
       {error ? (
-        <div className="flex items-center gap-2 rounded-md bg-lychee/10 px-4 py-3 text-sm font-semibold text-lychee">
+        <div className="flex items-center gap-2 rounded-lg border border-lychee/15 bg-lychee/10 px-4 py-3 text-sm font-semibold text-lychee">
           <AlertTriangle className="h-4 w-4" />
           {error}
         </div>
@@ -167,7 +167,7 @@ export default function MapPage() {
         <AdminStatCard icon={<ShoppingCart className="h-4 w-4" />} label={adminCopy.map.totalRevenue} value={isLoading ? "..." : `¥${summary.revenue.toFixed(0)}`} />
       </div>
 
-      <section className="grid gap-4 rounded-lg border border-stone bg-white p-4 shadow-soft">
+      <section className="grid gap-4 rounded-xl border border-line bg-surface p-4 shadow-soft">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-sm font-extrabold text-ink">
             <Layers className="h-4 w-4 text-water" />
@@ -178,8 +178,8 @@ export default function MapPage() {
               <button
                 className={
                   activeLayer === item.key
-                    ? "rounded-full bg-ink px-3 py-2 text-xs font-bold text-white"
-                    : "rounded-full px-3 py-2 text-xs font-bold text-ink/58 transition hover:bg-white"
+                    ? "rounded-full bg-canopy px-3 py-2 text-xs font-bold text-white"
+                    : "rounded-full px-3 py-2 text-xs font-bold text-ink/58 transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-water"
                 }
                 key={item.key}
                 onClick={() => setActiveLayer(item.key)}

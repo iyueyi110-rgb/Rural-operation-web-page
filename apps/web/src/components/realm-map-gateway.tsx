@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
 import type { Locale } from "@web/i18n/routing"
+import { SectionHeader } from "@web/components/section-header"
 
 type Coordinate = [longitude: number, latitude: number]
 type MapProvider = "loading" | "amap" | "leaflet"
@@ -222,23 +223,15 @@ export function RealmMapGateway() {
   }, [locale, router, t])
 
   return (
-    <section className="bg-rice py-20 sm:py-28" id="realms">
+    <section className="bg-rice py-16 sm:py-24" id="realms">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
-        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.28em] text-lychee">
-              {t("mapGateway.eyebrow")}
-            </p>
-            <h2 className="hero-serif mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">
-              {t("mapGateway.title")}
-            </h2>
-          </div>
-          <p className="max-w-md text-sm leading-7 text-ink/64">
-            {t("mapGateway.description")}
-          </p>
-        </div>
+        <SectionHeader
+          body={t("mapGateway.description")}
+          kicker={t("mapGateway.eyebrow")}
+          title={t("mapGateway.title")}
+        />
 
-        <div className="relative mt-9 overflow-hidden rounded-lg border border-stone bg-[#dce4d8] shadow-soft">
+        <div className="relative mt-9 overflow-hidden rounded-xl border border-line bg-[#dce4d8] shadow-panel">
           <div
             aria-label={t("mapGateway.mapAria")}
             className="h-[68svh] min-h-[520px] w-full"

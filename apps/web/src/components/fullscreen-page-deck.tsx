@@ -27,6 +27,7 @@ export function FullscreenPageDeck({
 }: FullscreenPageDeckProps) {
   const pages = Children.toArray(children)
   const [current, setCurrent] = useState(0)
+  const [isDeckMode, setIsDeckMode] = useState(false)
   const pageRefs = useRef<Array<HTMLDivElement | null>>([])
   const transitionTimer = useRef<number | undefined>(undefined)
   const isTransitioning = useRef(false)
@@ -34,6 +35,7 @@ export function FullscreenPageDeck({
 
   const goTo = useCallback(
     (index: number) => {
+      if (!isDeckMode) return
       if (
         isTransitioning.current ||
         index < 0 ||
@@ -51,7 +53,7 @@ export function FullscreenPageDeck({
         isTransitioning.current = false
       }, TRANSITION_MS)
     },
-    [current, onPageChange, pages.length],
+    [current, isDeckMode, onPageChange, pages.length],
   )
 
   const goNext = useCallback(() => goTo(current + 1), [current, goTo])
@@ -72,6 +74,16 @@ export function FullscreenPageDeck({
   )
 
   useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)")
+    const syncMode = () => setIsDeckMode(media.matches)
+    syncMode()
+    media.addEventListener("change", syncMode)
+    return () => media.removeEventListener("change", syncMode)
+  }, [])
+
+  useEffect(() => {
+    if (!isDeckMode) return undefined
+
     const htmlOverflow = document.documentElement.style.overflow
     const bodyOverflow = document.body.style.overflow
     document.documentElement.style.overflow = "hidden"
@@ -82,7 +94,7 @@ export function FullscreenPageDeck({
       document.body.style.overflow = bodyOverflow
       window.clearTimeout(transitionTimer.current)
     }
-  }, [])
+  }, [isDeckMode])
 
   useEffect(() => {
     const handleKeyboard = (event: KeyboardEvent) => {
@@ -121,6 +133,7 @@ export function FullscreenPageDeck({
 
   const handleWheel = useCallback(
     (event: React.WheelEvent<HTMLDivElement>) => {
+      if (!isDeckMode) return
       if (Math.abs(event.deltaY) < 36) return
 
       const direction = event.deltaY > 0 ? "next" : "previous"
@@ -130,7 +143,7 @@ export function FullscreenPageDeck({
       if (direction === "next") goNext()
       else goPrevious()
     },
-    [canLeaveCurrentPage, goNext, goPrevious],
+    [canLeaveCurrentPage, goNext, goPrevious, isDeckMode],
   )
 
   const handleTouchStart = useCallback(
@@ -165,7 +178,7 @@ export function FullscreenPageDeck({
 
   return (
     <div
-      className="relative h-[100svh] w-full overflow-clip bg-ink"
+      className="relative w-full bg-ink md:h-[100svh] md:overflow-clip"
       data-current-page={current}
       onTouchEnd={handleTouchEnd}
       onTouchStart={handleTouchStart}
@@ -173,15 +186,17 @@ export function FullscreenPageDeck({
     >
       {pages.map((page, index) => (
         <div
-          aria-hidden={index !== current}
-          className="absolute inset-0 overflow-y-auto overscroll-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+          aria-hidden={isDeckMode && index !== current}
+          className="relative overflow-y-visible overscroll-contain md:absolute md:inset-0 md:overflow-y-auto md:transition-transform md:duration-700 md:ease-[cubic-bezier(0.22,1,0.36,1)] md:motion-reduce:transition-none"
           data-home-deck-page={index}
           key={index}
           ref={(element) => {
             pageRefs.current[index] = element
           }}
           style={{
-            transform: `translateY(${(index - current) * 100}%)`,
+            transform: isDeckMode
+              ? `translateY(${(index - current) * 100}%)`
+              : undefined,
             zIndex: index === current ? 1 : 0,
           }}
         >
@@ -193,7 +208,7 @@ export function FullscreenPageDeck({
         {`Page ${current + 1} of ${pages.length}`}
       </p>
 
-      <div className="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/15 bg-ink/75 px-3 py-2 shadow-soft backdrop-blur-xl">
+      <div className="absolute bottom-5 left-1/2 z-30 hidden -translate-x-1/2 items-center gap-2 rounded-full border border-white/15 bg-ink/75 px-3 py-2 shadow-soft backdrop-blur-xl md:flex">
         {current > 0 ? (
           <button
             aria-label="Previous page"

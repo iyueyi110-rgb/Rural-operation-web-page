@@ -32,8 +32,8 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
 
   return (
     <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-ink/75 text-white backdrop-blur-xl">
-      <Section className="flex h-16 items-center justify-between gap-4">
-        <div className="flex min-w-0 items-center gap-4">
+      <Section className="flex h-16 min-w-0 items-center justify-between gap-3 sm:gap-4">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           <Link
             aria-label={t("nav.homeAria")}
             className="flex shrink-0 items-center gap-3"
@@ -42,7 +42,7 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
             <span className="grid h-9 w-9 place-items-center rounded-md bg-lychee text-sm font-extrabold">
               {t("nav.mark")}
             </span>
-            <span className="text-sm font-semibold tracking-normal">
+            <span className="max-w-[8.5rem] truncate text-sm font-semibold tracking-normal sm:max-w-none">
               {t("nav.brand")}
             </span>
           </Link>
@@ -83,9 +83,9 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
           <HomeMoreMenu items={moreNavItems} label={t("nav.more")} />
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Link
-            className="inline-flex h-10 items-center gap-2 rounded-full border border-white/18 px-3 text-sm font-semibold text-white transition hover:bg-white/10 sm:px-4"
+            className="hidden h-10 items-center gap-2 rounded-full border border-white/18 px-3 text-sm font-semibold text-white transition hover:bg-white/10 sm:inline-flex sm:px-4"
             href={`/${locale}#top`}
           >
             <UserRound aria-hidden="true" className="h-4 w-4" />

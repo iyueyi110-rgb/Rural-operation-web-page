@@ -473,7 +473,7 @@
     "hero": {
       "badge": "AIGC-enabled resilient mountain village",
       "title": "Cloud Veins, Lychee Waters, Zouma",
-      "subtitle": "A lightweight village portal connecting stories, routes, courtyards, tree adoption and repeat visits.",
+      "subtitle": "Start with one adopted tree, then connect visitors, villagers, operations and spatial renewal to one village cloud brain.",
       "primaryCta": "View realms",
       "secondaryCta": "Today",
       "imageAlt": "Aerial view of Zouma Village",
@@ -484,14 +484,35 @@
       "tagline3": "Browse · Book · Adopt · Return",
       "systemLogic": "AIGC cloud brain · five-flow operations",
       "location": "Zouma Village, Fengcheng, Changshou, Chongqing",
-      "narrative": "Problem -> System -> Scene -> Operation -> Revenue",
+      "narrative": "Adoption relationship -> villager tasks -> operation advice -> spatial renewal",
       "metricAbout": "About",
       "metricUnits": {
         "0": "km?",
         "1": "mu",
         "2": "mu"
       },
-      "scrollHint": "Scroll to the next screen"
+      "scrollHint": "Scroll to the next screen",
+      "positioning": "A reporting-ready and pilot-ready rural operating system: the front end builds long-term relationships, while the back office turns them into tasks, data and spatial decisions.",
+      "spatialSystem": "Mountain village operation section",
+      "nodes": {
+        "0": "Visitor adoption entry",
+        "1": "Villager care tasks",
+        "2": "Operator review loop",
+        "3": "Architectural renewal"
+      },
+      "activityShowcase": {
+        "name": "Lychee Harvest Day",
+        "kicker": "Village activity feature",
+        "summary": "A weekend village program connecting orchard picking, food education, ridge meals and adopted-tree visits.",
+        "date": "Jun 28, Sun 09:30",
+        "location": "Lychee co-living realm",
+        "highlights": {
+          "0": "Family picking",
+          "1": "Lychee food class",
+          "2": "Ridge village meal",
+          "3": "Adopted-tree visit"
+        }
+      }
     },
     "history": {
       "eyebrow": "Layers of history",
@@ -656,10 +677,107 @@
       }
     },
     "deck": {
-      "page1": "Project Overview",
-      "page2": "Historical Depth",
-      "page3": "Four Realms",
-      "page4": "Participation"
+      "page1": "Cloud Brain",
+      "page2": "Operating Logic",
+      "page3": "History and Realms",
+      "page4": "Adoption Entry"
+    },
+    "systemModules": {
+      "kicker": "System modules",
+      "title": "Not a showcase site, a rural operating system",
+      "body": "Every visit, adoption, booking and feedback event on the front end becomes evidence for back-office decisions on space, tasks, activities and local industry.",
+      "items": {
+        "0": {
+          "tag": "Relationship entry",
+          "title": "Lychee tree adoption",
+          "body": "Tree profiles, rights, growth records and harvest fulfillment turn one visit into a year-long return relationship.",
+          "status": "Connected"
+        },
+        "1": {
+          "tag": "Visitor service",
+          "title": "Route recommendation",
+          "body": "Weather, audience, duration and node capacity combine into explainable mountain-village routes.",
+          "status": "Available"
+        },
+        "2": {
+          "tag": "Spatial business",
+          "title": "Courtyard booking",
+          "body": "Ridge courtyards, food classrooms and ancient-road stations become bookable operation units.",
+          "status": "MVP"
+        },
+        "3": {
+          "tag": "Collaboration network",
+          "title": "Villager tasks",
+          "body": "Adoption, activities and feedback create low-training tasks for care, guiding, meals and logistics.",
+          "status": "Linked"
+        },
+        "4": {
+          "tag": "Cloud decision",
+          "title": "Operation advice",
+          "body": "Visitor flow, spending, feedback, ecology and production data become reviewable action cards.",
+          "status": "Back office live"
+        },
+        "5": {
+          "tag": "Architectural result",
+          "title": "Spatial renewal",
+          "body": "Dwell time, risk and industry demand guide priorities for stations, courtyards, workshops and waterfront repair.",
+          "status": "Planning input"
+        }
+      }
+    },
+    "cloudPreview": {
+      "kicker": "AIGC Cloud Brain",
+      "title": "Five-flow operation view",
+      "cards": {
+        "0": {
+          "label": "Visitor relationship",
+          "value": "Adoption return",
+          "body": "Tree profiles, events, notifications and orders form long-term reach."
+        },
+        "1": {
+          "label": "Field collaboration",
+          "value": "Task dispatch",
+          "body": "Villagers, nodes, earnings and care records close the loop in the back office."
+        },
+        "2": {
+          "label": "Spatial decision",
+          "value": "Renewal evidence",
+          "body": "Visitor flow, risk and feedback set priorities for architectural nodes."
+        }
+      }
+    },
+    "operationFlow": {
+      "kicker": "Operation logic",
+      "title": "How one tree moves the whole village system",
+      "body": "Adoption is not the end of a page. It starts visitor relationships, villager collaboration, operational review and architectural renewal.",
+      "steps": {
+        "0": {
+          "label": "Visitor side",
+          "title": "Adopt one tree",
+          "body": "The user enters a tree profile, confirms rights and growth records, and leaves a year-long return relationship."
+        },
+        "1": {
+          "label": "Villager side",
+          "title": "Create care tasks",
+          "body": "Watering, pruning, photos, guiding, picking and logistics become executable tasks."
+        },
+        "2": {
+          "label": "Operator side",
+          "title": "Collect orders and feedback",
+          "body": "Bookings, spending, activities, satisfaction and field issues enter one operation view."
+        },
+        "3": {
+          "label": "Cloud brain",
+          "title": "Generate advice cards",
+          "body": "AIGC summarizes five-flow data and proposes route, activity, facility and risk actions."
+        },
+        "4": {
+          "label": "Built space",
+          "title": "Guide renewal nodes",
+          "body": "High-frequency stays, industry needs and risk points guide courtyard, station, workshop and waterfront updates."
+        }
+      },
+      "result": "Architectural space is not scenic decoration in advance. It appears from continuous operation: where people gather, tasks happen and risks emerge, renewal becomes necessary."
     }
   },
   "booking": {

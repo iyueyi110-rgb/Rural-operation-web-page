@@ -52,7 +52,7 @@ export function AdminMap({ activeLayer, metrics, nodes }: AdminMapProps) {
 
   if (!geoNodes.length) {
     return (
-      <div className="flex h-[560px] items-center justify-center rounded-lg border border-stone bg-white text-sm font-bold text-ink/54">
+      <div className="flex h-[560px] items-center justify-center rounded-xl border border-line bg-surface text-sm font-bold text-ink/54">
         {adminCopy.map.noGeoData}
       </div>
     )
@@ -62,7 +62,7 @@ export function AdminMap({ activeLayer, metrics, nodes }: AdminMapProps) {
     <div className="relative">
       <MapContainer
         center={mapCenter}
-        className="h-[560px] w-full rounded-lg border border-stone shadow-soft"
+        className="h-[560px] w-full rounded-xl border border-line shadow-soft"
         preferCanvas
         scrollWheelZoom
         zoom={15}
