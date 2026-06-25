@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl"
 import { useCallback, useEffect, useState } from "react"
 
 import { fetchWithAuth } from "@web/lib/auth-client"
+import { EmptyState, PanelTitle, SegmentedControl, SurfacePanel } from "@web/components/subpage-ui"
 import type { AppNotification } from "@web/lib/villager-portal"
 
 const categories = ["all", "tree", "activity"] as const
@@ -50,10 +51,31 @@ export function TouristNotificationCenter() {
   return (
     <main className="min-h-screen bg-rice p-5 text-ink sm:p-8">
       <div className="mx-auto max-w-2xl">
-        <div className="flex items-start justify-between gap-4"><div><p className="text-sm font-bold text-water">{t("touristNotifications.eyebrow")}</p><h1 className="mt-2 text-3xl font-extrabold">{t("touristNotifications.title")}</h1><p className="mt-2 text-sm text-ink/58">{t("touristNotifications.body")}</p></div><div className="flex gap-2"><button aria-label={t("common.refresh")} className="rounded-full border border-stone bg-white p-3" onClick={() => void load()} type="button"><RefreshCw className="h-4 w-4" /></button><button aria-label={t("notifications.markAll")} className="rounded-full bg-ink p-3 text-white" onClick={() => void markAll()} type="button"><CheckCheck className="h-4 w-4" /></button></div></div>
-        <div className="mt-6 grid grid-cols-3 rounded-full border border-stone bg-white p-1">{categories.map((item) => <button className={`h-10 rounded-full text-sm font-bold ${category === item ? "bg-ink text-white" : "text-ink/55"}`} key={item} onClick={() => setCategory(item)} type="button">{t(`touristNotifications.categories.${item}`)}</button>)}</div>
-        {!phone ? <p className="mt-6 rounded-lg border border-stone bg-white p-6 text-center text-sm text-ink/52">{t("touristNotifications.noIdentity")}</p> : null}
-        <div className="mt-5 grid gap-3">{phone && visible.length === 0 ? <p className="rounded-lg border border-stone bg-white p-6 text-center text-sm text-ink/48">{t("notifications.empty")}</p> : visible.map((notification) => <button className={`relative overflow-hidden rounded-lg border border-stone bg-white p-5 text-left shadow-soft ${notification.isRead ? "opacity-65" : ""}`} key={notification.id} onClick={() => void open(notification)} type="button">{!notification.isRead ? <span className="absolute inset-y-0 left-0 w-1 bg-water" /> : null}<div className="font-extrabold">{notification.title}</div><p className="mt-2 text-sm leading-6 text-ink/60">{notification.body}</p><time className="mt-3 block text-xs text-ink/38">{new Date(notification.createdAt).toLocaleString()}</time></button>)}</div>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <PanelTitle>{t("touristNotifications.eyebrow")}</PanelTitle>
+            <h1 className="mt-2 text-3xl font-extrabold">{t("touristNotifications.title")}</h1>
+            <p className="mt-2 text-sm text-ink/58">{t("touristNotifications.body")}</p>
+          </div>
+          <div className="flex gap-2">
+            <button aria-label={t("common.refresh")} className="rounded-full border border-line bg-surface p-3 transition hover:bg-rice" onClick={() => void load()} type="button"><RefreshCw className="h-4 w-4" /></button>
+            <button aria-label={t("notifications.markAll")} className="rounded-full bg-ink p-3 text-white transition hover:bg-moss" onClick={() => void markAll()} type="button"><CheckCheck className="h-4 w-4" /></button>
+          </div>
+        </div>
+        <SegmentedControl className="mt-6 grid-cols-3" labelFor={(item) => t(`touristNotifications.categories.${item}`)} onChange={setCategory} options={categories} value={category} />
+        {!phone ? <EmptyState className="mt-6" title={t("touristNotifications.noIdentity")} /> : null}
+        <div className="mt-5 grid gap-3">
+          {phone && visible.length === 0 ? <EmptyState title={t("notifications.empty")} /> : null}
+          {visible.map((notification) => (
+            <SurfacePanel className={notification.isRead ? "opacity-65" : ""} key={notification.id}>
+              <button className="w-full text-left" onClick={() => void open(notification)} type="button">
+                <div className="font-extrabold">{notification.title}</div>
+                <p className="mt-2 text-sm leading-6 text-ink/60">{notification.body}</p>
+                <time className="mt-3 block text-xs text-ink/38">{new Date(notification.createdAt).toLocaleString()}</time>
+              </button>
+            </SurfacePanel>
+          ))}
+        </div>
       </div>
     </main>
   )

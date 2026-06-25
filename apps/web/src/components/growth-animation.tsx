@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Flower2, PackageCheck, Sprout, SunMedium } from "lucide-react"
 import { useTranslations } from "next-intl"
 
+import { PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
 import { growthStages, type GrowthStage } from "@web/lib/tree-experience"
 
 const stageIcons = {
@@ -31,10 +32,8 @@ export function GrowthAnimation({
   }
 
   return (
-    <article className="overflow-hidden rounded-lg border border-stone bg-white p-5 shadow-soft sm:p-6">
-      <p className="text-xs font-bold uppercase tracking-[0.18em] text-lychee">
-        {t("eyebrow")}
-      </p>
+    <SurfacePanel className="overflow-hidden sm:p-6">
+      <PanelTitle tone="lychee">{t("eyebrow")}</PanelTitle>
       <h2 className="mt-2 text-2xl font-extrabold">{t("title")}</h2>
       <p className="mt-2 max-w-2xl text-sm leading-6 text-ink/58">
         {t("description")}
@@ -95,6 +94,6 @@ export function GrowthAnimation({
           </p>
         </div>
       </div>
-    </article>
+    </SurfacePanel>
   )
 }

@@ -12,16 +12,21 @@ export async function GET(request: Request) {
   const includeInactive = searchParams.get("includeInactive") === "true"
   const category = searchParams.get("category") ?? undefined
 
-  const data = await prisma.product.findMany({
-    where: {
-      ...(includeInactive ? {} : { status: "active" }),
-      ...(category ? { category } : {}),
-    },
-    include: { node: true },
-    orderBy: [{ category: "asc" }, { createdAt: "desc" }],
-  })
+  try {
+    const data = await prisma.product.findMany({
+      where: {
+        ...(includeInactive ? {} : { status: "active" }),
+        ...(category ? { category } : {}),
+      },
+      include: { node: true },
+      orderBy: [{ category: "asc" }, { createdAt: "desc" }],
+    })
 
-  return jsonResponse(request, { data, meta: { total: data.length } })
+    return jsonResponse(request, { data, meta: { total: data.length } })
+  } catch (caughtError) {
+    console.error("Products API fallback activated:", caughtError)
+    return jsonResponse(request, { data: [], meta: { total: 0 } })
+  }
 }
 
 export async function POST(request: Request) {

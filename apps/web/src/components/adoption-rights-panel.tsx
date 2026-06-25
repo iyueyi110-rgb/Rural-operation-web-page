@@ -39,10 +39,10 @@ export async function AdoptionRightsPanel({
   ] as const
 
   return (
-    <article className="rounded-lg border border-stone bg-ink p-5 text-white shadow-soft sm:p-6">
+    <article className="rounded-xl border border-white/10 bg-ink p-5 text-white shadow-[0_12px_28px_rgba(25,32,27,0.18)] sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/55">
+          <p className="text-sm font-bold text-white/55">
             {t("experience.rights.eyebrow")}
           </p>
           <h2 className="mt-2 text-2xl font-extrabold">
@@ -53,7 +53,7 @@ export async function AdoptionRightsPanel({
           </p>
         </div>
         <div className="rounded-full border border-white/14 bg-white/8 px-3 py-1.5 text-xs font-bold text-white/72">
-          {t(`plans.${normalizedPlan}.label`)} ·{" "}
+          {t(`plans.${normalizedPlan}.label`)} /{" "}
           {t(`experience.rights.state.${visualState}`)}
         </div>
       </div>

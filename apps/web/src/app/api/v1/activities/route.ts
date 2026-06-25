@@ -44,17 +44,22 @@ export async function GET(request: Request) {
   const date = searchParams.get("date") ?? undefined
   const activityType = searchParams.get("activityType") ?? undefined
 
-  const data = await prisma.courtyardActivity.findMany({
-    where: {
-      ...(courtyardId ? { courtyardId } : {}),
-      ...(date ? { scheduledDate: date } : {}),
-      ...(activityType ? { activityType } : {}),
-    },
-    include: { bookings: true },
-    orderBy: [{ scheduledDate: "asc" }, { scheduledTime: "asc" }],
-  })
+  try {
+    const data = await prisma.courtyardActivity.findMany({
+      where: {
+        ...(courtyardId ? { courtyardId } : {}),
+        ...(date ? { scheduledDate: date } : {}),
+        ...(activityType ? { activityType } : {}),
+      },
+      include: { bookings: true },
+      orderBy: [{ scheduledDate: "asc" }, { scheduledTime: "asc" }],
+    })
 
-  return jsonResponse(request, { data: data.map(mapActivity), meta: { total: data.length } })
+    return jsonResponse(request, { data: data.map(mapActivity), meta: { total: data.length } })
+  } catch (caughtError) {
+    console.error("Activities API fallback activated:", caughtError)
+    return jsonResponse(request, { data: [], meta: { total: 0 } })
+  }
 }
 
 export async function POST(request: Request) {

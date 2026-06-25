@@ -4,6 +4,8 @@ import { Camera, Droplets, Leaf, NotebookPen, Share2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useCallback, useEffect, useState } from "react"
 
+import { EmptyState, FieldLabel, PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
+
 interface InteractionTask {
   id: string
   adoptionId: string
@@ -68,9 +70,32 @@ export function InteractionPanel({ treeId, treeCode }: { treeId: string; treeCod
   }
 
   return (
-    <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
-      <p className="text-sm font-bold text-moss">{t("interactions.eyebrow")}</p><h2 className="mt-2 text-2xl font-extrabold">{t("interactions.title")}</h2><p className="mt-2 text-sm leading-6 text-ink/58">{t("interactions.body")}</p>
-      <div className="mt-5 grid gap-3">{tasks.length === 0 ? <p className="py-4 text-sm text-ink/48">{t("interactions.empty")}</p> : tasks.map((task) => { const Icon=icons[task.taskType]; return <article className="rounded-md border border-stone p-4" key={task.id}><div className="flex items-start gap-3"><div className="rounded-full bg-water/10 p-2 text-water"><Icon className="h-5 w-5" /></div><div className="min-w-0 flex-1"><div className="flex justify-between gap-3"><h3 className="font-extrabold">{task.title}</h3><span className="text-xs font-bold text-moss">+{task.points || t(`interactions.points.${task.taskType}`)}</span></div><p className="mt-1 text-sm leading-6 text-ink/55">{task.description || t(`interactions.descriptions.${task.taskType}`)}</p>{["watering","fertilizing","diary"].includes(task.taskType) ? <textarea className="mt-3 min-h-20 w-full rounded-md border border-stone bg-rice p-3 text-sm outline-none focus:border-water" onChange={(event) => setNotes((value) => ({...value,[task.id]:event.target.value}))} placeholder={t("interactions.notePlaceholder")} value={notes[task.id] ?? ""} /> : null}{task.taskType === "photo_upload" ? <label className="mt-3 flex h-10 cursor-pointer items-center justify-center rounded-full bg-ink px-4 text-sm font-bold text-white"><input accept="image/*" className="sr-only" disabled={busy===task.id} onChange={(event) => { const file=event.target.files?.[0]; if(file) void complete(task,file) }} type="file" />{t("interactions.upload")}</label> : <button className="mt-3 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white disabled:opacity-40" disabled={busy===task.id} onClick={() => void complete(task)} type="button">{busy===task.id?t("common.saving"):t(`interactions.actions.${task.taskType}`)}</button>}</div></div></article> })}</div>
-    </section>
+    <SurfacePanel>
+      <PanelTitle tone="moss">{t("interactions.eyebrow")}</PanelTitle>
+      <h2 className="mt-2 text-2xl font-extrabold">{t("interactions.title")}</h2>
+      <p className="mt-2 text-sm leading-6 text-ink/58">{t("interactions.body")}</p>
+      <div className="mt-5 grid gap-3">
+        {tasks.length === 0 ? <EmptyState title={t("interactions.empty")} /> : tasks.map((task) => {
+          const Icon = icons[task.taskType]
+          return (
+            <article className="rounded-lg border border-line p-4" key={task.id}>
+              <div className="flex items-start gap-3">
+                <div className="rounded-full bg-water/10 p-2 text-water"><Icon className="h-5 w-5" /></div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex justify-between gap-3"><h3 className="font-extrabold">{task.title}</h3><span className="text-xs font-bold text-moss">+{task.points || t(`interactions.points.${task.taskType}`)}</span></div>
+                  <p className="mt-1 text-sm leading-6 text-ink/55">{task.description || t(`interactions.descriptions.${task.taskType}`)}</p>
+                  {["watering", "fertilizing", "diary"].includes(task.taskType) ? (
+                    <FieldLabel className="mt-3" label={t("interactions.notePlaceholder")}>
+                      <textarea className="textarea-control min-h-20" onChange={(event) => setNotes((value) => ({ ...value, [task.id]: event.target.value }))} value={notes[task.id] ?? ""} />
+                    </FieldLabel>
+                  ) : null}
+                  {task.taskType === "photo_upload" ? <label className="btn-primary mt-3 h-10 cursor-pointer bg-ink px-4 hover:bg-moss"><input accept="image/*" className="sr-only" disabled={busy===task.id} onChange={(event) => { const file=event.target.files?.[0]; if(file) void complete(task,file) }} type="file" />{t("interactions.upload")}</label> : <button className="btn-primary mt-3 h-10 bg-ink px-5 hover:bg-moss" disabled={busy===task.id} onClick={() => void complete(task)} type="button">{busy===task.id?t("common.saving"):t(`interactions.actions.${task.taskType}`)}</button>}
+                </div>
+              </div>
+            </article>
+          )
+        })}
+      </div>
+    </SurfacePanel>
   )
 }

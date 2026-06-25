@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { saveVillagerToken } from "@web/lib/villager-auth-client"
+import { FieldLabel, InlineNotice, PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
 
 export function VillagerLoginClient() {
   const t = useTranslations("villagerSystem")
@@ -59,17 +60,18 @@ export function VillagerLoginClient() {
   const validPhone = /^1[3-9]\d{9}$/.test(phone.trim())
 
   return (
-    <main className="grid min-h-screen place-items-center bg-rice p-5 text-ink">
-      <section className="w-full max-w-md rounded-xl border border-stone bg-white p-6 shadow-soft sm:p-8">
+    <main className="grid min-h-screen place-items-center bg-[linear-gradient(135deg,#f5f0e6_0%,#e8dfcf_52%,#f8f5ee_100%)] p-5 text-ink">
+      <SurfacePanel className="w-full max-w-md sm:p-8">
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-moss/10 text-moss">
           <KeyRound aria-hidden="true" className="h-6 w-6" />
         </div>
-        <p className="mt-5 text-sm font-bold text-moss">{t("login.eyebrow")}</p>
+        <div className="mt-5">
+          <PanelTitle tone="moss">{t("login.eyebrow")}</PanelTitle>
+        </div>
         <h1 className="mt-2 text-3xl font-extrabold">{t("login.title")}</h1>
         <p className="mt-3 text-sm leading-7 text-ink/62">{t("login.body")}</p>
 
-        <label className="mt-6 grid gap-2 text-sm font-bold">
-          {t("login.phone")}
+        <FieldLabel className="mt-6" label={t("login.phone")}>
           <div className="flex rounded-md border border-stone bg-rice focus-within:border-water">
             <Smartphone aria-hidden="true" className="ml-3 mt-3.5 h-5 w-5 text-ink/40" />
             <input
@@ -80,7 +82,7 @@ export function VillagerLoginClient() {
               value={phone}
             />
           </div>
-        </label>
+        </FieldLabel>
         <button
           className="mt-3 h-11 w-full rounded-full border border-ink px-5 text-sm font-bold disabled:opacity-40"
           disabled={!validPhone || busy !== null}
@@ -91,23 +93,22 @@ export function VillagerLoginClient() {
         </button>
 
         {developmentOtp ? (
-          <p className="mt-4 rounded-md bg-water/10 p-3 text-sm font-semibold text-water">
+          <InlineNotice className="mt-4" tone="info">
             {t("login.developmentOtp", { otp: developmentOtp })}
-          </p>
+          </InlineNotice>
         ) : null}
 
-        <label className="mt-5 grid gap-2 text-sm font-bold">
-          {t("login.otp")}
+        <FieldLabel className="mt-5" label={t("login.otp")}>
           <input
-            className="h-12 rounded-md border border-stone bg-rice px-3 tracking-[0.35em] outline-none focus:border-water"
+            className="input-control tracking-[0.35em]"
             inputMode="numeric"
             maxLength={6}
             onChange={(event) => setOtp(event.target.value)}
             placeholder={t("login.otpPlaceholder")}
             value={otp}
           />
-        </label>
-        {error ? <p className="mt-4 text-sm font-semibold text-lychee">{error}</p> : null}
+        </FieldLabel>
+        {error ? <InlineNotice className="mt-4" tone="danger">{error}</InlineNotice> : null}
         <button
           className="mt-5 h-12 w-full rounded-full bg-ink px-5 text-sm font-bold text-white disabled:opacity-40"
           disabled={!validPhone || otp.trim().length !== 6 || busy !== null}
@@ -116,7 +117,7 @@ export function VillagerLoginClient() {
         >
           {busy === "verify" ? t("login.verifying") : t("login.verify")}
         </button>
-      </section>
+      </SurfacePanel>
     </main>
   )
 }

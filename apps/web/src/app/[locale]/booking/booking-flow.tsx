@@ -13,6 +13,7 @@ import {
   type PaymentMode,
   type CourtyardOption,
 } from "@web/lib/courtyards-data"
+import { FieldLabel, InlineNotice, MetricTile, PanelTitle, SegmentedControl } from "@web/components/subpage-ui"
 import { MasterDetailLayout } from "@ui/index"
 import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
 
@@ -86,7 +87,10 @@ export function BookingFlow() {
 
   useEffect(() => {
     fetch(`/api/v1/activities?courtyardId=${selectedCourtyard.id}`)
-      .then((response) => response.json())
+      .then(async (response) => {
+        if (!response.ok) return { data: [] }
+        return (await response.json().catch(() => ({ data: [] }))) as { data?: CourtyardActivity[] }
+      })
       .then((payload: { data?: CourtyardActivity[] }) => setActivities(payload.data ?? []))
       .catch((error) => {
         console.error("Courtyard activities failed:", error)
@@ -142,10 +146,7 @@ export function BookingFlow() {
     <MasterDetailLayout
       master={
         <>
-        <div className="flex items-center gap-2 text-sm font-bold text-water">
-          <BedDouble aria-hidden="true" className="h-4 w-4" />
-          {t("list.eyebrow")}
-        </div>
+        <PanelTitle icon={<BedDouble aria-hidden="true" className="h-4 w-4" />}>{t("list.eyebrow")}</PanelTitle>
         <h2 className="mt-3 break-words text-3xl font-extrabold">{t("list.title")}</h2>
         <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("list.body")}</p>
 
@@ -156,11 +157,7 @@ export function BookingFlow() {
 
             return (
               <article
-                className={
-                  active
-                    ? "grid overflow-hidden rounded-lg border-2 border-ink bg-white shadow-soft md:grid-cols-[220px_1fr]"
-                    : "grid overflow-hidden rounded-lg border border-stone bg-white shadow-soft md:grid-cols-[220px_1fr]"
-                }
+                className={active ? "choice-card choice-card-active grid overflow-hidden p-0 md:grid-cols-[220px_1fr]" : "choice-card grid overflow-hidden p-0 md:grid-cols-[220px_1fr]"}
                 key={courtyard.id}
               >
                 <div className="relative aspect-[4/3] md:aspect-auto">
@@ -194,26 +191,13 @@ export function BookingFlow() {
                   </div>
 
                   <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-md bg-rice p-3">
-                      <div className="text-lg font-extrabold">{courtyard.capacity}</div>
-                      <div className="text-xs text-ink/58">{t("list.capacity")}</div>
-                    </div>
-                    <div className="rounded-md bg-rice p-3">
-                      <div className="text-lg font-extrabold">{t(courtyard.priceLabel)}</div>
-                      <div className="text-xs text-ink/58">{t("list.price")}</div>
-                    </div>
-                    <div className="rounded-md bg-rice p-3">
-                      <div className="text-lg font-extrabold">{courtyard.minNights}</div>
-                      <div className="text-xs text-ink/58">{t("list.minNights")}</div>
-                    </div>
+                    <MetricTile label={t("list.capacity")} tone="muted" value={courtyard.capacity} />
+                    <MetricTile label={t("list.price")} tone="muted" value={t(courtyard.priceLabel)} />
+                    <MetricTile label={t("list.minNights")} tone="muted" value={courtyard.minNights} />
                   </div>
 
                   <button
-                    className={
-                      active
-                        ? "mt-5 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white"
-                        : "mt-5 h-10 rounded-full border border-stone px-5 text-sm font-bold text-ink transition hover:border-ink"
-                    }
+                    className={active ? "btn-primary mt-5 h-10 px-5 bg-ink hover:bg-moss" : "btn-secondary mt-5 h-10 px-5"}
                     onClick={() => handleCourtyardSelect(courtyard.id)}
                     type="button"
                   >
@@ -228,17 +212,13 @@ export function BookingFlow() {
       }
       detail={
         <>
-        <div className="flex items-center gap-2 text-sm font-bold text-lychee">
-          <CalendarDays aria-hidden="true" className="h-4 w-4" />
-          {t("form.eyebrow")}
-        </div>
+        <PanelTitle icon={<CalendarDays aria-hidden="true" className="h-4 w-4" />} tone="lychee">{t("form.eyebrow")}</PanelTitle>
         <h2 className="mt-3 break-words text-2xl font-extrabold">{t("form.title")}</h2>
 
         <div className="mt-5 grid gap-4">
-          <label className="grid gap-2 text-sm font-semibold">
-            {t("form.dateLabel")}
+          <FieldLabel label={t("form.dateLabel")}>
             <select
-              className="h-12 w-full rounded-md border border-stone bg-rice px-3 text-sm outline-none transition focus:border-water"
+              className="select-control w-full"
               onChange={(event) => {
                 setSelectedDate(event.target.value)
                 setOrder(null)
@@ -252,12 +232,11 @@ export function BookingFlow() {
                 </option>
               ))}
             </select>
-          </label>
+          </FieldLabel>
 
-          <label className="grid gap-2 text-sm font-semibold">
-            {t("form.guestsLabel")}
+          <FieldLabel label={t("form.guestsLabel")}>
             <select
-              className="h-12 w-full rounded-md border border-stone bg-rice px-3 text-sm outline-none transition focus:border-water"
+              className="select-control w-full"
               onChange={(event) => {
                 setGuestCount(Number(event.target.value))
                 setOrder(null)
@@ -271,36 +250,25 @@ export function BookingFlow() {
                 </option>
               ))}
             </select>
-          </label>
+          </FieldLabel>
 
           <div>
             <div className="text-sm font-semibold">{t("form.paymentModeLabel")}</div>
-            <div className="mt-2 grid grid-cols-2 rounded-full border border-stone bg-rice p-1">
-              {paymentModeOptions.map((option) => (
-                <button
-                  aria-pressed={paymentMode === option.value}
-                  className={
-                    paymentMode === option.value
-                      ? "h-10 rounded-full bg-ink px-3 text-sm font-bold text-white"
-                      : "h-10 rounded-full px-3 text-sm font-bold text-ink/64"
-                  }
-                  key={option.value}
-                  onClick={() => {
-                    setPaymentMode(option.value)
-                    setOrder(null)
-                    setSubmitError(false)
-                  }}
-                  type="button"
-                >
-                  {t(option.labelKey)}
-                </button>
-              ))}
-            </div>
+            <SegmentedControl
+              className="mt-2 grid-cols-2"
+              labelFor={(value) => t(paymentModeOptions.find((option) => option.value === value)?.labelKey ?? "paymentModes.deposit")}
+              onChange={(value) => {
+                setPaymentMode(value)
+                setOrder(null)
+                setSubmitError(false)
+              }}
+              options={paymentModeOptions.map((option) => option.value) as PaymentMode[]}
+              value={paymentMode}
+            />
           </div>
-          <label className="grid gap-2 text-sm font-semibold">
-            {systemT("touristIdentity.phone")}
-            <input className="h-12 rounded-md border border-stone bg-rice px-3 outline-none focus:border-water" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder={systemT("touristIdentity.phonePlaceholder")} value={phone} />
-          </label>
+          <FieldLabel label={systemT("touristIdentity.phone")}>
+            <input className="input-control" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder={systemT("touristIdentity.phonePlaceholder")} value={phone} />
+          </FieldLabel>
         </div>
 
         <div className="mt-5 rounded-md bg-rice p-4">
@@ -332,7 +300,7 @@ export function BookingFlow() {
           </dl>
         </div>
 
-        <div className="mt-5 rounded-md border border-stone p-4">
+        <div className="mt-5 rounded-lg border border-line p-4">
           <div className="flex items-center gap-2 text-sm font-bold">
             <CircleAlert aria-hidden="true" className="h-4 w-4 text-water" />
             {t("notice.title")}
@@ -340,39 +308,35 @@ export function BookingFlow() {
           <p className="mt-2 break-words text-sm leading-6 text-ink/66">{t(selectedCourtyard.bookingNotice)}</p>
         </div>
 
-        <div className="mt-5 rounded-md border border-stone p-4">
-          <div className="text-sm font-bold">近期活动</div>
+        <div className="mt-5 rounded-lg border border-line p-4">
+          <div className="text-sm font-bold">{t("notice.activitiesTitle")}</div>
           <div className="mt-3 grid gap-2">
             {activities.length > 0 ? (
               activities.slice(0, 3).map((activity) => (
                 <div className="rounded-md bg-rice p-3 text-sm" key={activity.id}>
                   <div className="font-extrabold">{activity.title}</div>
                   <div className="mt-1 text-ink/58">{activity.scheduledDate} {activity.scheduledTime}</div>
-                  <div className="mt-1 text-ink/58">{activity.bookedCount}/{activity.maxCapacity} · {activity.status}</div>
+                  <div className="mt-1 text-ink/58">{activity.bookedCount}/{activity.maxCapacity} / {activity.status}</div>
                 </div>
               ))
             ) : (
-              <p className="text-sm font-semibold text-ink/58">暂无该院落近期活动。</p>
+              <p className="text-sm font-semibold text-ink/58">{t("notice.activitiesEmpty")}</p>
             )}
           </div>
         </div>
 
         {capacityExceeded ? (
-          <p className="mt-4 rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">
-            {t("messages.capacityExceeded")}
-          </p>
+          <InlineNotice className="mt-4" tone="danger">{t("messages.capacityExceeded")}</InlineNotice>
         ) : null}
         {submitError ? (
-          <p className="mt-4 rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">
-            {t("messages.submitFailed")}
-          </p>
+          <InlineNotice className="mt-4" tone="danger">{t("messages.submitFailed")}</InlineNotice>
         ) : null}
 
         <button
           className={
             canConfirm && !isSubmitting
-              ? "mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white transition hover:bg-moss"
-              : "mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink/20 px-5 text-sm font-bold text-ink/46"
+              ? "btn-primary mt-5 w-full bg-ink hover:bg-moss"
+              : "btn-primary mt-5 w-full"
           }
           disabled={!canConfirm || isSubmitting}
           onClick={handleConfirm}

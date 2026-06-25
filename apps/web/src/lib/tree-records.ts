@@ -178,17 +178,22 @@ export async function getTreeProfile(code: string): Promise<TreeProfile | null> 
 export async function getTreeAdoptionRights(
   treeId: string,
 ): Promise<TreeAdoptionRightsSummary | null> {
-  const records = await prisma.treeAdoption.findMany({
-    where: { treeId, status: { in: ["active", "pending_payment"] } },
-    select: { plan: true, status: true, rightsJson: true },
-    orderBy: { createdAt: "desc" },
-    take: 10,
-  })
-  const record = records.find((item) => item.status === "active") ?? records[0]
+  try {
+    const records = await prisma.treeAdoption.findMany({
+      where: { treeId, status: { in: ["active", "pending_payment"] } },
+      select: { plan: true, status: true, rightsJson: true },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+    })
+    const record = records.find((item) => item.status === "active") ?? records[0]
 
-  return record
-    ? { plan: record.plan, status: record.status, rightsJson: record.rightsJson }
-    : null
+    return record
+      ? { plan: record.plan, status: record.status, rightsJson: record.rightsJson }
+      : null
+  } catch (caughtError) {
+    console.error("Tree adoption rights fallback activated:", caughtError)
+    return null
+  }
 }
 
 export async function listTreeAdoptions(adopterPhone?: string): Promise<TreeAdoptionData[]> {

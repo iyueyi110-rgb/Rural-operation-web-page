@@ -4,6 +4,8 @@ import { useState } from "react"
 import { PackageCheck } from "lucide-react"
 import { useTranslations } from "next-intl"
 
+import { FieldLabel, InlineNotice, PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
+
 const dateOptions = ["2026-06-21", "2026-06-28", "2026-07-05"]
 const timeSlotOptions = ["09:00-11:00", "14:00-16:00"]
 
@@ -70,11 +72,8 @@ export function HarvestShipmentForm({ treeCode }: { treeCode: string }) {
   const canSubmit = recipientName.trim() && recipientPhone.trim() && recipientAddress.trim() && !isSubmitting
 
   return (
-    <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
-      <div className="flex items-center gap-2 text-sm font-bold text-lychee">
-        <PackageCheck aria-hidden="true" className="h-4 w-4" />
-        {t("title")}
-      </div>
+    <SurfacePanel>
+      <PanelTitle icon={<PackageCheck aria-hidden="true" className="h-4 w-4" />} tone="lychee">{t("title")}</PanelTitle>
       <p className="mt-3 text-sm leading-7 text-ink/68">{t("body")}</p>
 
       <label className="mt-5 flex items-center gap-3 text-sm font-bold text-ink/78">
@@ -90,62 +89,56 @@ export function HarvestShipmentForm({ treeCode }: { treeCode: string }) {
       {enabled ? (
         <div className="mt-5 grid gap-4">
           <div className="grid gap-4 sm:grid-cols-3">
-            <label className="grid gap-2 text-sm font-bold text-ink/70">
-              {t("dateLabel")}
-              <select className="h-11 rounded-md border border-stone bg-rice px-3" onChange={(event) => setScheduledDate(event.target.value)} value={scheduledDate}>
+            <FieldLabel label={t("dateLabel")}>
+              <select className="select-control" onChange={(event) => setScheduledDate(event.target.value)} value={scheduledDate}>
                 {dateOptions.map((value) => (
                   <option key={value} value={value}>
                     {value}
                   </option>
                 ))}
               </select>
-            </label>
-            <label className="grid gap-2 text-sm font-bold text-ink/70">
-              {t("timeSlotLabel")}
-              <select className="h-11 rounded-md border border-stone bg-rice px-3" onChange={(event) => setTimeSlot(event.target.value)} value={timeSlot}>
+            </FieldLabel>
+            <FieldLabel label={t("timeSlotLabel")}>
+              <select className="select-control" onChange={(event) => setTimeSlot(event.target.value)} value={timeSlot}>
                 {timeSlotOptions.map((value) => (
                   <option key={value} value={value}>
                     {value}
                   </option>
                 ))}
               </select>
-            </label>
-            <label className="grid gap-2 text-sm font-bold text-ink/70">
-              {t("guestCountLabel")}
+            </FieldLabel>
+            <FieldLabel label={t("guestCountLabel")}>
               <input
-                className="h-11 rounded-md border border-stone bg-rice px-3"
+                className="input-control"
                 min={1}
                 onChange={(event) => setGuestCount(Number(event.target.value))}
                 type="number"
                 value={guestCount}
               />
-            </label>
+            </FieldLabel>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="grid gap-2 text-sm font-bold text-ink/70">
-              {t("recipientNameLabel")}
-              <input className="h-11 rounded-md border border-stone bg-rice px-3" onChange={(event) => setRecipientName(event.target.value)} value={recipientName} />
-            </label>
-            <label className="grid gap-2 text-sm font-bold text-ink/70">
-              {t("recipientPhoneLabel")}
-              <input className="h-11 rounded-md border border-stone bg-rice px-3" onChange={(event) => setRecipientPhone(event.target.value)} value={recipientPhone} />
-            </label>
+            <FieldLabel label={t("recipientNameLabel")}>
+              <input className="input-control" onChange={(event) => setRecipientName(event.target.value)} value={recipientName} />
+            </FieldLabel>
+            <FieldLabel label={t("recipientPhoneLabel")}>
+              <input className="input-control" onChange={(event) => setRecipientPhone(event.target.value)} value={recipientPhone} />
+            </FieldLabel>
           </div>
 
-          <label className="grid gap-2 text-sm font-bold text-ink/70">
-            {t("recipientAddressLabel")}
+          <FieldLabel label={t("recipientAddressLabel")}>
             <textarea
-              className="min-h-24 rounded-md border border-stone bg-rice px-3 py-2"
+              className="textarea-control min-h-24"
               onChange={(event) => setRecipientAddress(event.target.value)}
               value={recipientAddress}
             />
-          </label>
+          </FieldLabel>
 
-          {error ? <p className="text-sm font-bold text-lychee">{error}</p> : null}
-          {message ? <p className="rounded-md bg-moss/10 p-3 text-sm font-bold text-moss">{message}</p> : null}
+          {error ? <InlineNotice tone="danger">{error}</InlineNotice> : null}
+          {message ? <InlineNotice tone="success">{message}</InlineNotice> : null}
           <button
-            className="inline-flex h-11 w-fit items-center rounded-full bg-ink px-5 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="btn-primary w-fit bg-ink hover:bg-moss"
             disabled={!canSubmit}
             onClick={handleSubmit}
             type="button"
@@ -154,6 +147,6 @@ export function HarvestShipmentForm({ treeCode }: { treeCode: string }) {
           </button>
         </div>
       ) : null}
-    </section>
+    </SurfacePanel>
   )
 }

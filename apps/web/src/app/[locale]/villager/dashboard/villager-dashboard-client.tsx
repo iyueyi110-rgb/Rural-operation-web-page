@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 
 import { fetchWithVillagerAuth } from "@web/lib/villager-auth-client"
 import type { AppNotification, VillagerSummary, VillagerTask } from "@web/lib/villager-portal"
+import { EmptyState, MetricTile, PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
 
 export function VillagerDashboardClient() {
   const t = useTranslations("villagerSystem")
@@ -46,7 +47,7 @@ export function VillagerDashboardClient() {
   }, [])
 
   if (loading || !villager) {
-    return <main className="mx-auto max-w-2xl p-5">{t("common.loading")}</main>
+    return <main className="mx-auto max-w-2xl p-5"><SurfacePanel>{t("common.loading")}</SurfacePanel></main>
   }
 
   const pendingCount = tasks.filter((task) => ["pending", "accepted", "in_progress"].includes(task.status)).length
@@ -58,7 +59,7 @@ export function VillagerDashboardClient() {
 
   return (
     <main className="mx-auto max-w-2xl p-5 sm:p-8">
-      <p className="text-sm font-bold text-moss">{t("dashboard.eyebrow")}</p>
+      <PanelTitle tone="moss">{t("dashboard.eyebrow")}</PanelTitle>
       <h1 className="mt-2 text-3xl font-extrabold">{t("dashboard.greeting", { name: villager.name })}</h1>
       <div className="mt-3 flex flex-wrap gap-2">
         {villager.skills.map((skill) => (
@@ -66,13 +67,9 @@ export function VillagerDashboardClient() {
         ))}
       </div>
 
-      <div className="mt-7 grid grid-cols-3 gap-3">
+      <div className="mt-7 grid gap-3 sm:grid-cols-3">
         {stats.map(({ label, value, icon: Icon }) => (
-          <article className="rounded-lg border border-stone bg-white p-4 shadow-soft" key={label}>
-            <Icon aria-hidden="true" className="h-5 w-5 text-water" />
-            <div className="mt-3 text-2xl font-extrabold">{value}</div>
-            <div className="mt-1 text-xs font-semibold text-ink/52">{label}</div>
-          </article>
+          <MetricTile icon={<Icon aria-hidden="true" className="h-5 w-5" />} key={label} label={label} value={value} />
         ))}
       </div>
 
@@ -100,9 +97,9 @@ export function VillagerDashboardClient() {
 function DashboardList({ title, empty, icon, children }: { title: string; empty: string; icon?: React.ReactNode; children: React.ReactNode }) {
   const hasChildren = Array.isArray(children) ? children.length > 0 : Boolean(children)
   return (
-    <section className="mt-6 rounded-lg border border-stone bg-white p-5 shadow-soft">
+    <SurfacePanel className="mt-6">
       <h2 className="flex items-center gap-2 text-lg font-extrabold">{icon}{title}</h2>
-      <div className="mt-3">{hasChildren ? children : <p className="py-4 text-sm text-ink/48">{empty}</p>}</div>
-    </section>
+      <div className="mt-3">{hasChildren ? children : <EmptyState title={empty} />}</div>
+    </SurfacePanel>
   )
 }

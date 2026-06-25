@@ -61,13 +61,13 @@ export default function VillagerLayout({ children }: { children: ReactNode }) {
 
   if (isLogin) return children
   if (!validatedVillagerId) {
-    return <main className="min-h-screen bg-rice p-6 text-ink">{t("common.loading")}</main>
+    return <main className="min-h-screen bg-rice p-6 text-ink"><div className="mx-auto max-w-2xl rounded-xl border border-line bg-surface p-5 text-sm font-bold text-ink/62">{t("common.loading")}</div></main>
   }
 
   return (
-    <div className="min-h-screen bg-rice pb-24 text-ink">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#f5f0e6_0%,#ebe2d3_100%)] pb-24 text-ink">
       {children}
-      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-stone bg-white/95 backdrop-blur-xl">
+      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-surface/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-2xl items-center justify-around px-2 py-2">
           {tabs.map((tab) => {
             const href = `/${locale}/villager/${tab.href}`
@@ -75,7 +75,7 @@ export default function VillagerLayout({ children }: { children: ReactNode }) {
             const Icon = tab.icon
             return (
               <Link
-                className={`flex min-w-16 flex-col items-center gap-1 rounded-md px-3 py-2 text-xs font-bold ${active ? "bg-moss/10 text-moss" : "text-ink/55"}`}
+                className={`flex min-w-16 flex-col items-center gap-1 rounded-lg px-3 py-2 text-xs font-bold transition ${active ? "bg-moss/10 text-moss" : "text-ink/55 hover:bg-rice hover:text-ink"}`}
                 href={href}
                 key={tab.key}
               >
@@ -85,7 +85,7 @@ export default function VillagerLayout({ children }: { children: ReactNode }) {
             )
           })}
           <button
-            className="flex min-w-16 flex-col items-center gap-1 rounded-md px-3 py-2 text-xs font-bold text-ink/55"
+            className="flex min-w-16 flex-col items-center gap-1 rounded-lg px-3 py-2 text-xs font-bold text-ink/55 transition hover:bg-rice hover:text-ink"
             onClick={() => {
               clearVillagerToken()
               router.replace(`/${locale}/villager/login`)

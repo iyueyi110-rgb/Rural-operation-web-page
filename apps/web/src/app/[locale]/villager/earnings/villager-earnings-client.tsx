@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { fetchWithVillagerAuth } from "@web/lib/villager-auth-client"
 import type { VillagerTask } from "@web/lib/villager-portal"
+import { EmptyState, MetricTile, PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
 
 export function VillagerEarningsClient() {
   const t = useTranslations("villagerSystem")
@@ -28,24 +29,24 @@ export function VillagerEarningsClient() {
 
   return (
     <main className="mx-auto max-w-2xl p-5 sm:p-8">
-      <p className="text-sm font-bold text-moss">{t("earnings.eyebrow")}</p>
+      <PanelTitle tone="moss">{t("earnings.eyebrow")}</PanelTitle>
       <h1 className="mt-2 text-3xl font-extrabold">{t("earnings.title")}</h1>
       <div className="mt-6 grid grid-cols-2 gap-3">
-        <article className="rounded-lg bg-ink p-5 text-white shadow-soft"><WalletCards className="h-5 w-5 text-white/70" /><div className="mt-4 text-3xl font-extrabold">¥{total}</div><div className="mt-1 text-xs text-white/55">{t("earnings.total")}</div></article>
-        <article className="rounded-lg border border-stone bg-white p-5 shadow-soft"><TrendingUp className="h-5 w-5 text-moss" /><div className="mt-4 text-3xl font-extrabold">¥{monthly}</div><div className="mt-1 text-xs text-ink/48">{t("earnings.monthly")}</div></article>
+        <MetricTile icon={<WalletCards className="h-5 w-5" />} label={t("earnings.total")} tone="dark" value={`¥${total}`} />
+        <MetricTile icon={<TrendingUp className="h-5 w-5" />} label={t("earnings.monthly")} value={`¥${monthly}`} />
       </div>
-      <section className="mt-5 rounded-lg border border-stone bg-white p-5 shadow-soft">
+      <SurfacePanel className="mt-5">
         <h2 className="font-extrabold">{t("earnings.trend")}</h2>
         <div className="mt-5 flex h-32 items-end gap-3">
           {tasks.slice(0, 6).reverse().map((task) => <div className="flex flex-1 flex-col items-center gap-2" key={task.id}><div className="w-full rounded-t bg-water" style={{ height: `${Math.max(12, (task.earnings / max) * 100)}%` }} /><span className="text-[10px] text-ink/40">¥{task.earnings}</span></div>)}
         </div>
-      </section>
-      <section className="mt-5 rounded-lg border border-stone bg-white p-5 shadow-soft">
+      </SurfacePanel>
+      <SurfacePanel className="mt-5">
         <h2 className="font-extrabold">{t("earnings.completedTasks")}</h2>
         <div className="mt-3">
-          {tasks.length === 0 ? <p className="py-5 text-sm text-ink/48">{t("earnings.empty")}</p> : tasks.map((task) => <div className="flex justify-between gap-4 border-b border-stone/70 py-3 last:border-0" key={task.id}><div><div className="font-bold">{task.title}</div><div className="text-xs text-ink/45">{new Date(task.updatedAt).toLocaleDateString()}</div></div><span className="font-extrabold text-moss">+¥{task.earnings}</span></div>)}
+          {tasks.length === 0 ? <EmptyState title={t("earnings.empty")} /> : tasks.map((task) => <div className="flex justify-between gap-4 border-b border-line py-3 last:border-0" key={task.id}><div><div className="font-bold">{task.title}</div><div className="text-xs text-ink/45">{new Date(task.updatedAt).toLocaleDateString()}</div></div><span className="font-extrabold text-moss">+¥{task.earnings}</span></div>)}
         </div>
-      </section>
+      </SurfacePanel>
     </main>
   )
 }

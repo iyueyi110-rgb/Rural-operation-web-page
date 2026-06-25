@@ -4,6 +4,8 @@ import { CalendarDays, Filter, Sprout } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useState } from "react"
 
+import { EmptyState, FieldLabel, PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
+
 interface FarmingCalendarRow {
   id: string
   solarTerm: string
@@ -60,45 +62,38 @@ export function FarmingCalendar() {
 
   return (
     <div className="grid gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
-      <aside className="rounded-lg border border-stone bg-white p-5 shadow-soft">
-        <div className="flex items-center gap-2 text-sm font-bold text-water">
-          <Filter aria-hidden="true" className="h-4 w-4" />
-          {t("filters.title")}
-        </div>
+      <SurfacePanel>
+        <PanelTitle icon={<Filter aria-hidden="true" className="h-4 w-4" />}>{t("filters.title")}</PanelTitle>
         <div className="mt-5 grid gap-4">
-          <label className="grid gap-2 text-sm font-semibold">
-            {t("filters.activityType")}
-            <select className="h-12 rounded-md border border-stone bg-rice px-3" onChange={(event) => setActivityType(event.target.value as (typeof activityTypes)[number])} value={activityType}>
+          <FieldLabel label={t("filters.activityType")}>
+            <select className="select-control" onChange={(event) => setActivityType(event.target.value as (typeof activityTypes)[number])} value={activityType}>
               {activityTypes.map((type) => <option key={type} value={type}>{type === "all" ? t("filters.all") : t(`activityTypes.${type}`)}</option>)}
             </select>
-          </label>
-          <label className="grid gap-2 text-sm font-semibold">
-            {t("filters.status")}
-            <select className="h-12 rounded-md border border-stone bg-rice px-3" onChange={(event) => setStatus(event.target.value as (typeof statuses)[number])} value={status}>
+          </FieldLabel>
+          <FieldLabel label={t("filters.status")}>
+            <select className="select-control" onChange={(event) => setStatus(event.target.value as (typeof statuses)[number])} value={status}>
               {statuses.map((item) => <option key={item} value={item}>{item === "all" ? t("filters.all") : t(`statuses.${item}`)}</option>)}
             </select>
-          </label>
-          <label className="grid gap-2 text-sm font-semibold">
-            {t("filters.treeSpecies")}
-            <select className="h-12 rounded-md border border-stone bg-rice px-3" onChange={(event) => setTreeSpecies(event.target.value as (typeof speciesOptions)[number])} value={treeSpecies}>
+          </FieldLabel>
+          <FieldLabel label={t("filters.treeSpecies")}>
+            <select className="select-control" onChange={(event) => setTreeSpecies(event.target.value as (typeof speciesOptions)[number])} value={treeSpecies}>
               {speciesOptions.map((item) => <option key={item} value={item}>{item === "all" ? t("filters.all") : t(`species.${item}`)}</option>)}
             </select>
-          </label>
+          </FieldLabel>
         </div>
-      </aside>
+      </SurfacePanel>
 
-      <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
-        <div className="flex items-center gap-2 text-sm font-bold text-lychee">
-          <CalendarDays aria-hidden="true" className="h-4 w-4" />
+      <SurfacePanel>
+        <PanelTitle icon={<CalendarDays aria-hidden="true" className="h-4 w-4" />} tone="lychee">
           {t("timeline.title")}
-        </div>
+        </PanelTitle>
 
         {isLoading ? (
-          <div className="mt-6 rounded-md bg-rice p-5 text-sm font-semibold text-ink/54">{t("messages.loading")}</div>
+          <div className="mt-6 rounded-lg bg-rice p-5 text-sm font-semibold text-ink/54">{t("messages.loading")}</div>
         ) : filteredRows.length ? (
           <div className="mt-6 grid gap-4">
             {filteredRows.map((row) => (
-              <article className="grid gap-4 rounded-lg border border-stone bg-rice p-5 sm:grid-cols-[110px_minmax(0,1fr)]" key={row.id}>
+              <article className="grid gap-4 rounded-xl border border-line bg-rice p-5 sm:grid-cols-[110px_minmax(0,1fr)]" key={row.id}>
                 <div className="text-center sm:text-left">
                   <div className="text-2xl font-extrabold text-water">{row.solarTerm}</div>
                   <div className="mt-2 text-xs font-bold text-ink/52">{row.startDate}</div>
@@ -117,12 +112,9 @@ export function FarmingCalendar() {
             ))}
           </div>
         ) : (
-          <div className="mt-6 flex min-h-40 items-center justify-center rounded-md bg-rice text-sm font-bold text-ink/54">
-            <Sprout aria-hidden="true" className="mr-2 h-4 w-4" />
-            {t("messages.empty")}
-          </div>
+          <EmptyState className="mt-6" icon={<Sprout aria-hidden="true" className="h-5 w-5" />} title={t("messages.empty")} />
         )}
-      </section>
+      </SurfacePanel>
     </div>
   )
 }

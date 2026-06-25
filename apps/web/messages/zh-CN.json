@@ -43,6 +43,10 @@
     "calendar": {
       "title": "走马村农事日历｜节气与农事时间线",
       "description": "按节气查看走马村的荔枝、龙眼、采摘、加工和节庆农事安排。"
+    },
+    "activities": {
+      "title": "走马村活动宣传｜院落活动与研学工坊",
+      "description": "查看走马村荔枝采摘食育节、院落活动、研学工坊与共居体验预约。"
     }
   },
   "common": {
@@ -443,7 +447,9 @@
       "paymentMode": "支付方式"
     },
     "notice": {
-      "title": "预订须知"
+      "title": "预订须知",
+      "activitiesTitle": "近期活动",
+      "activitiesEmpty": "暂无该院落近期活动。"
     },
     "messages": {
       "capacityExceeded": "当前人数超过该院落接待上限，请减少人数或选择更大院落。",
@@ -600,7 +606,19 @@
     },
     "profile": {
       "eyebrow": "树档案",
-      "planTitle": "认养方案"
+      "planTitle": "认养方案",
+      "selectCta": "选择认养",
+      "fireMemoryTitle": "山火记忆",
+      "fireMemoryEmpty": "运营后台尚未录入山火记忆。",
+      "newShootsTitle": "新梢记录",
+      "newShootsEmpty": "运营后台尚未录入新梢记录。",
+      "growthPhotosTitle": "成长照片",
+      "growthPhotoAlt": "{name} 成长照片 {index}",
+      "growthPhotosEmpty": "暂无成长照片，后台上传后会在这里展示。",
+      "fruitDestinationTitle": "果实去向",
+      "fruitDestinationFallback": "运营后台已记录本次采摘果实去向。",
+      "fruitDestinationEmpty": "暂无果实去向记录，采摘完成后可在后台补充。",
+      "careLogsEmpty": "暂无养护日志，后台录入后会按时间倒序显示。"
     },
     "experience": {
       "environment": {
@@ -924,6 +942,33 @@
         "title": "雨洪韧性工坊 · 预购占位",
         "status": "未核销",
         "date": "待确认"
+      }
+    },
+    "reminder": {
+      "title": "荔枝采摘季提醒",
+      "body": "当前采用站内横幅提醒替代在线推送。认养用户可在采摘季前查看养护日志、活动预约和线下核销说明。"
+    },
+    "lookup": {
+      "title": "我的认养",
+      "initialMessage": "输入认养时预留的手机号，系统会按脱敏号码查询。",
+      "found": "已找到认养记录。",
+      "empty": "暂无匹配认养记录。",
+      "failed": "查询失败，请稍后重试。",
+      "phonePlaceholder": "请输入手机号",
+      "loading": "查询中",
+      "submit": "查询认养",
+      "tree": "树木",
+      "plan": "方案",
+      "status": "状态",
+      "noShipment": "暂无代摘物流。",
+      "shipmentTitle": "代摘物流",
+      "signed": "已签收",
+      "harvestBooking": "采摘预约：{date} / {status}",
+      "steps": {
+        "pending": "待采摘",
+        "picking": "采摘中",
+        "shipping": "运输中",
+        "delivered": "已送达"
       }
     }
   },
@@ -1402,6 +1447,76 @@
     "messages": {
       "loading": "正在加载农事日历",
       "empty": "暂无符合条件的农事条目"
+    }
+  },
+  "activities": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "村落活动宣传"
+    },
+    "hero": {
+      "eyebrow": "村落活动",
+      "title": "活动不是单次热闹，而是认养关系的现场化",
+      "body": "从果园采摘、食育课堂、岭上村宴到共居体验，把一棵树延展成可参与、可预约、可复访的村落运营事件。",
+      "summaryTime": "预计浏览 3 分钟",
+      "summaryLocation": "重庆长寿区 · 走马村"
+    },
+    "showcase": {
+      "label": "本期主活动",
+      "name": "荔枝采摘食育节",
+      "date": "6 月下旬 · 果园与岭上院落",
+      "body": "亲子采摘、食育课堂、果实分级、村宴预约和认养树回访共同组成一个周末活动单元。"
+    },
+    "filters": {
+      "title": "筛选活动",
+      "type": "活动类型",
+      "date": "活动日期",
+      "all": "全部类型"
+    },
+    "types": {
+      "village_feast": "岭上村宴",
+      "food_class": "食育课堂",
+      "study": "研学行程",
+      "workshop": "共创工坊",
+      "exhibition": "展陈导览",
+      "co_living": "共居体验"
+    },
+    "statuses": {
+      "open": "开放预约",
+      "full": "名额已满",
+      "cancelled": "已取消",
+      "draft": "筹备中",
+      "closed": "已结束"
+    },
+    "card": {
+      "capacity": "{booked}/{max} 人",
+      "offlinePrice": "线下确认"
+    },
+    "actions": {
+      "book": "预约活动",
+      "full": "已满",
+      "cancelled": "已取消",
+      "closed": "已结束",
+      "draft": "筹备中"
+    },
+    "form": {
+      "title": "预约信息",
+      "body": "留下联系人后即可为开放活动提交预约，运营端会继续确认人数和现场安排。",
+      "name": "姓名",
+      "phone": "手机号",
+      "guestCount": "参与人数",
+      "guestCountValue": "{count} 人",
+      "noteTitle": "运营提示",
+      "noteBody": "活动预约会进入统一运营后台，后续可生成村民协作任务、通知和现场接待安排。"
+    },
+    "messages": {
+      "bookingFailed": "预约失败，请检查姓名、手机号和人数。",
+      "bookingConfirmed": "活动预约已确认。",
+      "empty": "暂无符合条件的活动",
+      "emptyBody": "可以调整类型或日期，也可以回到本期主活动查看可预约节点。"
+    },
+    "order": {
+      "title": "预约已生成"
     }
   },
   "villagerSystem": {

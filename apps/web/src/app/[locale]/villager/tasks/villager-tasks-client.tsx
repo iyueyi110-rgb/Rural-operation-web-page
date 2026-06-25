@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 
 import { fetchWithVillagerAuth } from "@web/lib/villager-auth-client"
 import type { VillagerTask } from "@web/lib/villager-portal"
+import { EmptyState, PanelTitle, SegmentedControl, SurfacePanel } from "@web/components/subpage-ui"
 
 const filters = ["pending", "active", "completed"] as const
 
@@ -43,30 +44,26 @@ export function VillagerTasksClient() {
 
   return (
     <main className="mx-auto max-w-2xl p-5 sm:p-8">
-      <p className="text-sm font-bold text-moss">{t("tasks.eyebrow")}</p>
+      <PanelTitle tone="moss">{t("tasks.eyebrow")}</PanelTitle>
       <h1 className="mt-2 text-3xl font-extrabold">{t("tasks.title")}</h1>
-      <div className="mt-6 grid grid-cols-3 rounded-full border border-stone bg-white p-1">
-        {filters.map((item) => (
-          <button className={`h-10 rounded-full text-sm font-bold ${filter === item ? "bg-ink text-white" : "text-ink/55"}`} key={item} onClick={() => setFilter(item)} type="button">{t(`tasks.filters.${item}`)}</button>
-        ))}
-      </div>
+      <SegmentedControl className="mt-6 grid-cols-3" labelFor={(item) => t(`tasks.filters.${item}`)} onChange={setFilter} options={filters} value={filter} />
       <div className="mt-5 grid gap-3">
-        {loading ? <p>{t("common.loading")}</p> : null}
-        {!loading && visible.length === 0 ? <p className="rounded-lg border border-stone bg-white p-6 text-center text-sm text-ink/48">{t("tasks.empty")}</p> : null}
+        {loading ? <SurfacePanel>{t("common.loading")}</SurfacePanel> : null}
+        {!loading && visible.length === 0 ? <EmptyState title={t("tasks.empty")} /> : null}
         {visible.map((task) => (
-          <article className="rounded-lg border border-stone bg-white p-5 shadow-soft" key={task.id}>
+          <SurfacePanel key={task.id}>
             <button className="flex w-full items-start justify-between gap-4 text-left" onClick={() => setExpanded(expanded === task.id ? null : task.id)} type="button">
-              <div><div className="text-lg font-extrabold">{task.title}</div><div className="mt-1 text-xs font-semibold text-water">{task.taskType} · {task.node?.slug ?? t("tasks.noNode")}</div></div>
+              <div><div className="text-lg font-extrabold">{task.title}</div><div className="mt-1 text-xs font-semibold text-water">{task.taskType} / {task.node?.slug ?? t("tasks.noNode")}</div></div>
               <div className="flex items-center gap-2 font-bold text-moss">¥{task.earnings}<ChevronDown className={`h-4 w-4 transition ${expanded === task.id ? "rotate-180" : ""}`} /></div>
             </button>
             {expanded === task.id ? (
               <div className="mt-4 border-t border-stone pt-4">
                 <p className="text-sm leading-7 text-ink/62">{task.description || t("tasks.noDescription")}</p>
                 <p className="mt-2 text-xs text-ink/45">{task.scheduledDate || t("tasks.noDeadline")}</p>
-                {task.status !== "completed" ? <button className="mt-4 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white" onClick={() => void advance(task)} type="button">{t(`tasks.actions.${task.status}`)}</button> : null}
+                {task.status !== "completed" ? <button className="btn-primary mt-4 h-10 px-5 bg-ink hover:bg-moss" onClick={() => void advance(task)} type="button">{t(`tasks.actions.${task.status}`)}</button> : null}
               </div>
             ) : null}
-          </article>
+          </SurfacePanel>
         ))}
       </div>
     </main>

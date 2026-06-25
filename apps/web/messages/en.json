@@ -43,6 +43,10 @@
     "calendar": {
       "title": "Zouma Farming Calendar",
       "description": "View Zouma Village farming activities by solar term and season."
+    },
+    "activities": {
+      "title": "Zouma Village Activities",
+      "description": "Explore the lychee harvest learning festival, courtyard events, study workshops and co-living bookings."
     }
   },
   "trees": {
@@ -85,7 +89,19 @@
     },
     "profile": {
       "eyebrow": "Tree profile",
-      "planTitle": "Plan"
+      "planTitle": "Plan",
+      "selectCta": "Select adoption",
+      "fireMemoryTitle": "Fire memory",
+      "fireMemoryEmpty": "No fire memory has been entered by operations yet.",
+      "newShootsTitle": "New shoot record",
+      "newShootsEmpty": "No new shoot record has been entered by operations yet.",
+      "growthPhotosTitle": "Growth photos",
+      "growthPhotoAlt": "{name} growth photo {index}",
+      "growthPhotosEmpty": "No growth photos yet. They will appear after upload.",
+      "fruitDestinationTitle": "Fruit destination",
+      "fruitDestinationFallback": "Operations recorded the destination for this harvest.",
+      "fruitDestinationEmpty": "No fruit destination record yet. It can be added after harvest.",
+      "careLogsEmpty": "No care logs yet. New logs will appear in reverse chronological order."
     },
     "experience": {
       "environment": {
@@ -409,6 +425,33 @@
         "title": "Rainwater workshop · placeholder",
         "status": "Unused",
         "date": "TBD"
+      }
+    },
+    "reminder": {
+      "title": "Lychee harvest season reminder",
+      "body": "In-app banners stand in for push notifications for now. Adoption users can review care logs, activity bookings and offline redemption notes before harvest season."
+    },
+    "lookup": {
+      "title": "My adoptions",
+      "initialMessage": "Enter the phone number left during adoption. The system searches with masked identity data.",
+      "found": "Adoption records found.",
+      "empty": "No matching adoption records.",
+      "failed": "Lookup failed. Try again later.",
+      "phonePlaceholder": "Enter phone number",
+      "loading": "Searching",
+      "submit": "Search adoptions",
+      "tree": "Tree",
+      "plan": "Plan",
+      "status": "Status",
+      "noShipment": "No pick-and-ship logistics yet.",
+      "shipmentTitle": "Pick-and-ship logistics",
+      "signed": "Delivered",
+      "harvestBooking": "Harvest booking: {date} / {status}",
+      "steps": {
+        "pending": "Pending",
+        "picking": "Picking",
+        "shipping": "Shipping",
+        "delivered": "Delivered"
       }
     }
   },
@@ -838,7 +881,9 @@
       "paymentMode": "Payment mode"
     },
     "notice": {
-      "title": "Booking notice"
+      "title": "Booking notice",
+      "activitiesTitle": "Recent activities",
+      "activitiesEmpty": "No recent activities for this courtyard."
     },
     "messages": {
       "capacityExceeded": "The guest count exceeds this courtyard capacity. Reduce guests or choose a larger courtyard.",
@@ -1402,6 +1447,76 @@
     "messages": {
       "loading": "Loading farming calendar",
       "empty": "No farming calendar items match the filters"
+    }
+  },
+  "activities": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Village activity showcase"
+    },
+    "hero": {
+      "eyebrow": "Village activities",
+      "title": "Activities turn adoption into an on-site relationship",
+      "body": "Harvesting, food learning, courtyard meals and co-living experiences make one adopted tree part of a repeatable village operation.",
+      "summaryTime": "3 min preview",
+      "summaryLocation": "Zouma Village, Changshou"
+    },
+    "showcase": {
+      "label": "Featured event",
+      "name": "Lychee Harvest Learning Festival",
+      "date": "Late June · Orchards and ridge courtyards",
+      "body": "Family harvesting, food learning, fruit grading, village meals and adoption revisits form a compact weekend event."
+    },
+    "filters": {
+      "title": "Filter activities",
+      "type": "Activity type",
+      "date": "Activity date",
+      "all": "All types"
+    },
+    "types": {
+      "village_feast": "Ridge feast",
+      "food_class": "Food class",
+      "study": "Study tour",
+      "workshop": "Workshop",
+      "exhibition": "Exhibition walk",
+      "co_living": "Co-living"
+    },
+    "statuses": {
+      "open": "Open",
+      "full": "Full",
+      "cancelled": "Cancelled",
+      "draft": "Preparing",
+      "closed": "Closed"
+    },
+    "card": {
+      "capacity": "{booked}/{max} guests",
+      "offlinePrice": "Offline confirmation"
+    },
+    "actions": {
+      "book": "Book activity",
+      "full": "Full",
+      "cancelled": "Cancelled",
+      "closed": "Closed",
+      "draft": "Preparing"
+    },
+    "form": {
+      "title": "Booking details",
+      "body": "Leave a contact to submit an activity booking. Operations can confirm capacity and on-site arrangements.",
+      "name": "Name",
+      "phone": "Phone",
+      "guestCount": "Guests",
+      "guestCountValue": "{count} guests",
+      "noteTitle": "Operations note",
+      "noteBody": "Activity bookings enter the operations console and can become villager tasks, notifications and hosting plans."
+    },
+    "messages": {
+      "bookingFailed": "Booking failed. Check the name, phone and guest count.",
+      "bookingConfirmed": "Activity booking confirmed.",
+      "empty": "No matching activities",
+      "emptyBody": "Adjust the type or date, or return to the featured event for available booking nodes."
+    },
+    "order": {
+      "title": "Booking created"
     }
   },
   "villagerSystem": {

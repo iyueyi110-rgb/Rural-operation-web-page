@@ -136,7 +136,7 @@ a {
 
 @layer components {
   .card-primary {
-    @apply rounded-xl border border-line/80 bg-surface shadow-soft;
+    @apply rounded-xl border border-line/80 bg-surface shadow-[0_12px_28px_rgba(25,32,27,0.08)];
   }
 
   .card-secondary {
@@ -160,11 +160,11 @@ a {
   }
 
   .btn-primary {
-    @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-lychee px-6 text-sm font-bold text-white shadow-soft transition hover:bg-[#a8312f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100;
+    @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-lychee px-6 text-sm font-bold text-white transition hover:bg-[#a8312f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-[rgba(25,32,27,0.2)] disabled:text-[rgba(25,32,27,0.45)] motion-reduce:transition-none motion-reduce:active:scale-100;
   }
 
   .btn-secondary {
-    @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line bg-surface px-6 text-sm font-bold text-ink transition hover:bg-rice focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100;
+    @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line bg-surface px-6 text-sm font-bold text-ink transition hover:bg-rice focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:border-line/70 disabled:bg-muted/70 disabled:text-[rgba(25,32,27,0.38)] motion-reduce:transition-none motion-reduce:active:scale-100;
   }
 
   .btn-ghost {
@@ -173,6 +173,31 @@ a {
 
   .btn-sm {
     @apply h-9 px-4 text-xs;
+  }
+
+  .form-control {
+    @apply min-w-0 rounded-lg border border-line bg-surface px-3 text-sm font-semibold text-ink outline-none transition placeholder:text-[rgba(25,32,27,0.42)] focus:border-water focus:ring-2 focus:ring-water/15 disabled:cursor-not-allowed disabled:bg-muted/70 disabled:text-[rgba(25,32,27,0.4)] motion-reduce:transition-none;
+  }
+
+  .input-control,
+  .select-control {
+    @apply form-control h-12;
+  }
+
+  .textarea-control {
+    @apply form-control min-h-32 py-3 leading-7;
+  }
+
+  .choice-card {
+    @apply rounded-xl border border-line bg-surface p-5 transition hover:border-ink/35 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100;
+  }
+
+  .choice-card-active {
+    @apply border-ink bg-white shadow-[inset_0_0_0_1px_rgba(25,32,27,0.92)];
+  }
+
+  .status-chip {
+    @apply inline-flex items-center justify-center rounded-full border px-3 py-1 text-xs font-bold;
   }
 }
 

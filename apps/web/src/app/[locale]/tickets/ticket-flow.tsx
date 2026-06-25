@@ -4,6 +4,7 @@ import { CalendarDays, CheckCircle2, CircleAlert, CreditCard, Ticket } from "luc
 import { useTranslations } from "next-intl"
 import { useMemo, useState } from "react"
 
+import { FieldLabel, InlineNotice, PanelTitle } from "@web/components/subpage-ui"
 import {
   quantityOptions,
   ticketDateOptions,
@@ -90,10 +91,7 @@ export function TicketFlow() {
     <MasterDetailLayout
       master={
         <>
-          <div className="flex items-center gap-2 text-sm font-bold text-water">
-            <Ticket aria-hidden="true" className="h-4 w-4" />
-            {t("list.eyebrow")}
-          </div>
+          <PanelTitle icon={<Ticket aria-hidden="true" className="h-4 w-4" />}>{t("list.eyebrow")}</PanelTitle>
           <h2 className="mt-3 break-words text-3xl font-extrabold">{t("list.title")}</h2>
           <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("list.body")}</p>
 
@@ -103,16 +101,12 @@ export function TicketFlow() {
 
               return (
                 <article
-                  className={
-                    active
-                      ? "rounded-lg border-2 border-ink bg-white p-5 shadow-soft"
-                      : "rounded-lg border border-stone bg-white p-5 shadow-soft"
-                  }
+                  className={active ? "choice-card choice-card-active" : "choice-card"}
                   key={product.id}
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="text-xs font-bold uppercase tracking-[0.16em] text-water">
+                      <div className="text-sm font-bold text-water">
                         {t(product.sceneKey)}
                       </div>
                       <h3 className="mt-3 break-words text-2xl font-extrabold">{t(product.nameKey)}</h3>
@@ -133,8 +127,8 @@ export function TicketFlow() {
                     <button
                       className={
                         active
-                          ? "h-10 rounded-full bg-ink px-5 text-sm font-bold text-white"
-                          : "h-10 rounded-full border border-stone px-5 text-sm font-bold text-ink transition hover:border-ink"
+                          ? "btn-primary h-10 px-5"
+                          : "btn-secondary h-10 px-5"
                       }
                       onClick={() => selectProduct(product)}
                       type="button"
@@ -150,17 +144,13 @@ export function TicketFlow() {
       }
       detail={
         <>
-          <div className="flex items-center gap-2 text-sm font-bold text-lychee">
-            <CalendarDays aria-hidden="true" className="h-4 w-4" />
-            {t("form.eyebrow")}
-          </div>
+          <PanelTitle icon={<CalendarDays aria-hidden="true" className="h-4 w-4" />} tone="lychee">{t("form.eyebrow")}</PanelTitle>
           <h2 className="mt-3 break-words text-2xl font-extrabold">{t("form.title")}</h2>
 
           <div className="mt-5 grid gap-4">
-            <label className="grid gap-2 text-sm font-semibold">
-              {t("form.dateLabel")}
+            <FieldLabel label={t("form.dateLabel")}>
               <select
-                className="h-12 w-full rounded-md border border-stone bg-rice px-3 text-sm outline-none transition focus:border-water"
+                className="select-control w-full"
                 onChange={(event) => {
                   setSelectedDate(event.target.value as TicketDate)
                   setOrder(null)
@@ -174,12 +164,11 @@ export function TicketFlow() {
                   </option>
                 ))}
               </select>
-            </label>
+            </FieldLabel>
 
-            <label className="grid gap-2 text-sm font-semibold">
-              {t("form.quantityLabel")}
+            <FieldLabel label={t("form.quantityLabel")}>
               <select
-                className="h-12 w-full rounded-md border border-stone bg-rice px-3 text-sm outline-none transition focus:border-water"
+                className="select-control w-full"
                 onChange={(event) => {
                   setQuantity(Number(event.target.value) as (typeof quantityOptions)[number])
                   setOrder(null)
@@ -193,11 +182,10 @@ export function TicketFlow() {
                   </option>
                 ))}
               </select>
-            </label>
-            <label className="grid gap-2 text-sm font-semibold">
-              {systemT("touristIdentity.phone")}
-              <input className="h-12 rounded-md border border-stone bg-rice px-3 outline-none focus:border-water" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder={systemT("touristIdentity.phonePlaceholder")} value={phone} />
-            </label>
+            </FieldLabel>
+            <FieldLabel label={systemT("touristIdentity.phone")}>
+              <input className="input-control" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder={systemT("touristIdentity.phonePlaceholder")} value={phone} />
+            </FieldLabel>
           </div>
 
           <div className="mt-5 rounded-md bg-rice p-4">
@@ -226,17 +214,13 @@ export function TicketFlow() {
             <p className="mt-2 break-words text-sm leading-6 text-ink/66">{t("notice.body")}</p>
           </div>
 
-          {submitError ? (
-            <p className="mt-4 rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">
-              {t("messages.submitFailed")}
-            </p>
-          ) : null}
+          {submitError ? <InlineNotice className="mt-4" tone="danger">{t("messages.submitFailed")}</InlineNotice> : null}
 
           <button
             className={
               !isSubmitting && /^1[3-9]\d{9}$/.test(phone.trim())
-                ? "mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white transition hover:bg-moss"
-                : "mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink/20 px-5 text-sm font-bold text-ink/46"
+                ? "btn-primary mt-5 w-full bg-ink hover:bg-moss"
+                : "btn-primary mt-5 w-full"
             }
             disabled={isSubmitting || !/^1[3-9]\d{9}$/.test(phone.trim())}
             onClick={handleConfirm}

@@ -13,6 +13,7 @@ import {
   type OrchardTreeOption,
   type TreeAvailability,
 } from "@web/lib/trees-data"
+import { FieldLabel, InlineNotice, MetricTile, PanelTitle } from "@web/components/subpage-ui"
 import { MasterDetailLayout } from "@ui/index"
 import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
 
@@ -95,10 +96,7 @@ export function AdoptionFlow() {
       className="lg:grid-cols-[minmax(0,0.95fr)_minmax(320px,0.65fr)]"
       master={
         <>
-          <div className="flex items-center gap-2 text-sm font-bold text-water">
-            <Sprout aria-hidden="true" className="h-4 w-4" />
-            {t("list.eyebrow")}
-          </div>
+          <PanelTitle icon={<Sprout aria-hidden="true" className="h-4 w-4" />}>{t("list.eyebrow")}</PanelTitle>
           <h2 className="mt-3 break-words text-3xl font-extrabold">{t("list.title")}</h2>
           <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("list.body")}</p>
 
@@ -107,14 +105,7 @@ export function AdoptionFlow() {
               const active = tree.id === selectedTree.id
 
               return (
-                <article
-                  className={
-                    active
-                      ? "grid overflow-hidden rounded-lg border-2 border-ink bg-white shadow-soft md:grid-cols-[220px_1fr]"
-                      : "grid overflow-hidden rounded-lg border border-stone bg-white shadow-soft md:grid-cols-[220px_1fr]"
-                  }
-                  key={tree.id}
-                >
+                <article className={active ? "choice-card choice-card-active grid overflow-hidden p-0 md:grid-cols-[220px_1fr]" : "choice-card grid overflow-hidden p-0 md:grid-cols-[220px_1fr]"} key={tree.id}>
                   <div className="relative aspect-[4/3] md:aspect-auto">
                     <Image alt={t(tree.imageAltKey)} className="object-cover" fill sizes="(min-width: 768px) 220px, 100vw" src={tree.imageAsset} />
                   </div>
@@ -131,18 +122,9 @@ export function AdoptionFlow() {
                     <p className="mt-3 break-words text-sm leading-6 text-ink/68">{t(tree.summaryKey)}</p>
 
                     <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                      <div className="rounded-md bg-rice p-3">
-                        <div className="text-lg font-extrabold">{t(tree.species)}</div>
-                        <div className="text-xs text-ink/58">{t("list.species")}</div>
-                      </div>
-                      <div className="rounded-md bg-rice p-3">
-                        <div className="text-lg font-extrabold">{t("list.ageValue", { count: tree.age })}</div>
-                        <div className="text-xs text-ink/58">{t("list.age")}</div>
-                      </div>
-                      <div className="rounded-md bg-rice p-3">
-                        <div className="text-lg font-extrabold">{t(`health.${tree.healthStatus}`)}</div>
-                        <div className="text-xs text-ink/58">{t("list.health")}</div>
-                      </div>
+                      <MetricTile label={t("list.species")} tone="muted" value={t(tree.species)} />
+                      <MetricTile label={t("list.age")} tone="muted" value={t("list.ageValue", { count: tree.age })} />
+                      <MetricTile label={t("list.health")} tone="muted" value={t(`health.${tree.healthStatus}`)} />
                     </div>
 
                     <div className="mt-4 flex items-start gap-2 rounded-md border border-stone p-3 text-sm text-ink/68">
@@ -151,14 +133,14 @@ export function AdoptionFlow() {
                     </div>
 
                     <button
-                      className={active ? "mt-5 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white" : "mt-5 h-10 rounded-full border border-stone px-5 text-sm font-bold text-ink transition hover:border-ink"}
+                      className={active ? "btn-primary mt-5 h-10 px-5 bg-ink hover:bg-moss" : "btn-secondary mt-5 h-10 px-5"}
                       onClick={() => selectTree(tree)}
                       type="button"
                     >
                       {active ? t("list.selected") : t("list.select")}
                     </button>
                     <Link
-                      className="ml-2 inline-flex h-10 items-center rounded-full border border-stone px-5 text-sm font-bold text-ink transition hover:border-ink"
+                      className="btn-secondary ml-2 mt-5 h-10 px-5"
                       href={`/${locale}/trees/${tree.id}`}
                     >
                       {t("profile.eyebrow")}
@@ -172,10 +154,7 @@ export function AdoptionFlow() {
       }
       detail={
         <>
-          <div className="flex items-center gap-2 text-sm font-bold text-lychee">
-            <Leaf aria-hidden="true" className="h-4 w-4" />
-            {t("profile.eyebrow")}
-          </div>
+          <PanelTitle icon={<Leaf aria-hidden="true" className="h-4 w-4" />} tone="lychee">{t("profile.eyebrow")}</PanelTitle>
           <h2 className="mt-3 break-words text-2xl font-extrabold">{t(selectedTree.nameKey)}</h2>
           <p className="mt-2 text-sm text-ink/58">{selectedTree.treeCode}</p>
 
@@ -189,7 +168,7 @@ export function AdoptionFlow() {
             <div className="mt-3 grid gap-2">
               {adoptionPlanOptions.map((plan) => (
                 <button
-                  className={selectedPlan === plan.value ? "rounded-md border-2 border-ink bg-white p-3 text-left" : "rounded-md border border-stone bg-white/70 p-3 text-left transition hover:border-ink"}
+                  className={selectedPlan === plan.value ? "rounded-lg border border-ink bg-white p-3 text-left shadow-[inset_0_0_0_1px_rgba(25,32,27,0.92)]" : "rounded-lg border border-line bg-white/70 p-3 text-left transition hover:border-ink"}
                   key={plan.value}
                   onClick={() => {
                     setSelectedPlan(plan.value)
@@ -239,10 +218,9 @@ export function AdoptionFlow() {
             </div>
           </div>
 
-          <label className="mt-4 grid gap-2 text-sm font-semibold">
-            {systemT("touristIdentity.phone")}
-            <input className="h-12 rounded-md border border-stone bg-rice px-3 outline-none focus:border-water" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder={systemT("touristIdentity.phonePlaceholder")} value={phone} />
-          </label>
+          <FieldLabel className="mt-4" label={systemT("touristIdentity.phone")}>
+            <input className="input-control" inputMode="tel" onChange={(event) => setPhone(event.target.value)} placeholder={systemT("touristIdentity.phonePlaceholder")} value={phone} />
+          </FieldLabel>
 
           <label className="mt-4 flex items-start gap-3 rounded-md bg-ink p-4 text-white">
             <input
@@ -265,17 +243,17 @@ export function AdoptionFlow() {
           </label>
 
           {selectedTree.availability === "maintenance" ? (
-            <p className="mt-4 rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">{t("messages.unavailable")}</p>
+            <InlineNotice className="mt-4" tone="danger">{t("messages.unavailable")}</InlineNotice>
           ) : null}
           {!agreementAccepted ? (
-            <p className="mt-4 rounded-md bg-rice p-3 text-sm font-semibold text-ink/68">{t("messages.needAgreement")}</p>
+            <InlineNotice className="mt-4" tone="neutral">{t("messages.needAgreement")}</InlineNotice>
           ) : null}
           {submitError ? (
-            <p className="mt-4 rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">{t("messages.submitFailed")}</p>
+            <InlineNotice className="mt-4" tone="danger">{t("messages.submitFailed")}</InlineNotice>
           ) : null}
 
           <button
-            className={canConfirm && !isSubmitting ? "mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white transition hover:bg-moss" : "mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink/20 px-5 text-sm font-bold text-ink/46"}
+            className={canConfirm && !isSubmitting ? "btn-primary mt-4 w-full bg-ink hover:bg-moss" : "btn-primary mt-4 w-full"}
             disabled={!canConfirm || isSubmitting}
             onClick={handleConfirm}
             type="button"

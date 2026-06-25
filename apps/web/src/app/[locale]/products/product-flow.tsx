@@ -4,6 +4,7 @@ import { CheckCircle2, CircleAlert, PackageCheck, Store } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useState } from "react"
 
+import { EmptyState, FieldLabel, InlineNotice, PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
 import { MasterDetailLayout } from "@ui/index"
 
 interface Product {
@@ -107,23 +108,21 @@ export function ProductFlow() {
     <MasterDetailLayout
       master={
         <>
-          <div className="flex items-center gap-2 text-sm font-bold text-water">
-            <Store aria-hidden="true" className="h-4 w-4" />
-            {t("list.eyebrow")}
-          </div>
+          <PanelTitle icon={<Store aria-hidden="true" className="h-4 w-4" />}>{t("list.eyebrow")}</PanelTitle>
           <h2 className="mt-3 break-words text-3xl font-extrabold">{t("list.title")}</h2>
           <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("list.body")}</p>
 
           <div className="mt-6 grid gap-4">
-            {isLoading ? <p className="rounded-lg border border-stone bg-white p-5 text-sm font-bold text-ink/54">{t("messages.loading")}</p> : null}
+            {isLoading ? <SurfacePanel>{t("messages.loading")}</SurfacePanel> : null}
+            {!isLoading && products.length === 0 ? <EmptyState title={t("messages.loadFailed")} /> : null}
             {products.map((product) => {
               const active = product.id === selectedProduct?.id
 
               return (
-                <article className={active ? "rounded-lg border-2 border-ink bg-white p-5 shadow-soft" : "rounded-lg border border-stone bg-white p-5 shadow-soft"} key={product.id}>
+                <article className={active ? "choice-card choice-card-active" : "choice-card"} key={product.id}>
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <div className="text-xs font-bold uppercase tracking-[0.16em] text-water">{product.category}</div>
+                      <div className="text-sm font-bold text-water">{product.category}</div>
                       <h3 className="mt-3 break-words text-2xl font-extrabold">{product.name}</h3>
                     </div>
                     <div className="rounded-md bg-rice px-3 py-2 text-right">
@@ -132,7 +131,7 @@ export function ProductFlow() {
                     </div>
                   </div>
                   <p className="mt-3 break-words text-sm leading-7 text-ink/66">{product.description}</p>
-                  <button className={active ? "mt-5 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white" : "mt-5 h-10 rounded-full border border-stone px-5 text-sm font-bold text-ink"} onClick={() => { setSelectedId(product.id); setOrder(null); setError("") }} type="button">
+                    <button className={active ? "btn-primary mt-5 h-10 px-5" : "btn-secondary mt-5 h-10 px-5"} onClick={() => { setSelectedId(product.id); setOrder(null); setError("") }} type="button">
                     {active ? t("list.selected") : t("list.select")}
                   </button>
                 </article>
@@ -143,27 +142,21 @@ export function ProductFlow() {
       }
       detail={
         <>
-          <div className="flex items-center gap-2 text-sm font-bold text-lychee">
-            <PackageCheck aria-hidden="true" className="h-4 w-4" />
-            {t("form.eyebrow")}
-          </div>
+          <PanelTitle icon={<PackageCheck aria-hidden="true" className="h-4 w-4" />} tone="lychee">{t("form.eyebrow")}</PanelTitle>
           <h2 className="mt-3 break-words text-2xl font-extrabold">{t("form.title")}</h2>
 
           <div className="mt-5 grid gap-4">
-            <label className="grid gap-2 text-sm font-semibold">
-              {t("form.nameLabel")}
-              <input className="h-12 rounded-md border border-stone bg-rice px-3" onChange={(event) => setGuestName(event.target.value)} value={guestName} />
-            </label>
-            <label className="grid gap-2 text-sm font-semibold">
-              {t("form.phoneLabel")}
-              <input className="h-12 rounded-md border border-stone bg-rice px-3" onChange={(event) => setGuestPhone(event.target.value)} value={guestPhone} />
-            </label>
-            <label className="grid gap-2 text-sm font-semibold">
-              {t("form.quantityLabel")}
-              <select className="h-12 rounded-md border border-stone bg-rice px-3" onChange={(event) => setQuantity(Number(event.target.value))} value={quantity}>
+            <FieldLabel label={t("form.nameLabel")}>
+              <input className="input-control" onChange={(event) => setGuestName(event.target.value)} value={guestName} />
+            </FieldLabel>
+            <FieldLabel label={t("form.phoneLabel")}>
+              <input className="input-control" onChange={(event) => setGuestPhone(event.target.value)} value={guestPhone} />
+            </FieldLabel>
+            <FieldLabel label={t("form.quantityLabel")}>
+              <select className="select-control" onChange={(event) => setQuantity(Number(event.target.value))} value={quantity}>
                 {[1, 2, 3, 4, 5, 8, 10].map((count) => <option key={count} value={count}>{t("form.quantityValue", { count })}</option>)}
               </select>
-            </label>
+            </FieldLabel>
           </div>
 
           <div className="mt-5 rounded-md bg-rice p-4">
@@ -183,9 +176,9 @@ export function ProductFlow() {
             <p className="mt-2 break-words text-sm leading-6 text-ink/66">{t("notice.body")}</p>
           </div>
 
-          {error ? <p className="mt-4 rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">{error}</p> : null}
+          {error ? <InlineNotice className="mt-4" tone="danger">{error}</InlineNotice> : null}
 
-          <button className="mt-5 flex h-12 w-full items-center justify-center rounded-full bg-ink px-5 text-sm font-bold text-white disabled:bg-ink/30" disabled={isSubmitting || !selectedProduct} onClick={submitOrder} type="button">
+          <button className="btn-primary mt-5 w-full bg-ink hover:bg-moss" disabled={isSubmitting || !selectedProduct} onClick={submitOrder} type="button">
             {isSubmitting ? t("form.submitting") : t("form.confirm")}
           </button>
 

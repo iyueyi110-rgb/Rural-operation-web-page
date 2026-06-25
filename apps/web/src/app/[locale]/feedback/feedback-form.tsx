@@ -4,6 +4,7 @@ import { CheckCircle2, MessageCircle, SendHorizontal, Star } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useMemo, useState } from "react"
 
+import { FieldLabel, InlineNotice, PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
 import type { FeedbackCategory, FeedbackSeverity } from "@web/lib/feedback-store"
 
 interface SubmittedFeedback {
@@ -71,19 +72,15 @@ export function FeedbackForm() {
 
   return (
     <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,0.76fr)_minmax(300px,0.42fr)]">
-      <section className="min-w-0 rounded-lg border border-stone bg-white p-5 shadow-soft sm:p-6">
-        <div className="flex items-center gap-2 text-sm font-bold text-water">
-          <MessageCircle aria-hidden="true" className="h-4 w-4" />
-          {t("form.eyebrow")}
-        </div>
+      <SurfacePanel className="min-w-0 sm:p-6">
+        <PanelTitle icon={<MessageCircle aria-hidden="true" className="h-4 w-4" />}>{t("form.eyebrow")}</PanelTitle>
         <h2 className="mt-3 break-words text-3xl font-extrabold">{t("form.title")}</h2>
         <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("form.body")}</p>
 
         <div className="mt-6 grid gap-5">
-          <label className="grid gap-2">
-            <span className="text-sm font-bold">{t("form.categoryLabel")}</span>
+          <FieldLabel label={t("form.categoryLabel")}>
             <select
-              className="h-12 rounded-md border border-stone bg-rice px-3 text-sm font-semibold outline-none transition focus:border-ink"
+              className="select-control"
               onChange={(event) => setCategory(event.target.value as FeedbackCategory)}
               value={category}
             >
@@ -93,12 +90,11 @@ export function FeedbackForm() {
                 </option>
               ))}
             </select>
-          </label>
+          </FieldLabel>
 
-          <label className="grid gap-2">
-            <span className="text-sm font-bold">{t("form.severityLabel")}</span>
+          <FieldLabel label={t("form.severityLabel")}>
             <select
-              className="h-12 rounded-md border border-stone bg-rice px-3 text-sm font-semibold outline-none transition focus:border-ink"
+              className="select-control"
               onChange={(event) => setSeverity(event.target.value as FeedbackSeverity)}
               value={severity}
             >
@@ -108,7 +104,7 @@ export function FeedbackForm() {
                 </option>
               ))}
             </select>
-          </label>
+          </FieldLabel>
 
           <div>
             <div className="text-sm font-bold">{t("form.ratingLabel")}</div>
@@ -132,10 +128,9 @@ export function FeedbackForm() {
             </div>
           </div>
 
-          <label className="grid gap-2">
-            <span className="text-sm font-bold">{t("form.contentLabel")}</span>
+          <FieldLabel helper={t("form.remaining", { count: remaining })} label={t("form.contentLabel")}>
             <textarea
-              className="min-h-[168px] resize-none rounded-md border border-stone bg-rice p-3 text-sm leading-7 outline-none transition focus:border-ink"
+              className="textarea-control min-h-[168px] resize-none"
               maxLength={500}
               onChange={(event) => {
                 setContent(event.target.value)
@@ -145,10 +140,9 @@ export function FeedbackForm() {
               placeholder={t("form.contentPlaceholder")}
               value={content}
             />
-            <span className="text-xs font-semibold text-ink/48">{t("form.remaining", { count: remaining })}</span>
-          </label>
+          </FieldLabel>
 
-          {error ? <p className="rounded-md bg-lychee/10 p-3 text-sm font-semibold text-lychee">{error}</p> : null}
+          {error ? <InlineNotice tone="danger">{error}</InlineNotice> : null}
 
           <button
             className={
@@ -164,7 +158,7 @@ export function FeedbackForm() {
             {isSubmitting ? t("form.submitting") : t("form.submit")}
           </button>
         </div>
-      </section>
+      </SurfacePanel>
 
       <aside className="min-w-0 rounded-lg border border-stone bg-ink p-5 text-white shadow-soft lg:sticky lg:top-20 lg:self-start">
         <h2 className="break-words text-2xl font-extrabold">{t("result.title")}</h2>

@@ -15,6 +15,7 @@ import {
   type RouteWeather,
 } from "@web/lib/routes-data"
 import type { Locale } from "@web/i18n/routing"
+import { FieldLabel, InlineNotice, MetricTile, PanelTitle, SegmentedControl, SurfacePanel } from "@web/components/subpage-ui"
 
 const RouteSatelliteMap = dynamic(
   () =>
@@ -67,19 +68,15 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
 
   return (
     <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-      <section className="min-w-0 overflow-hidden rounded-lg border border-stone bg-white p-5 shadow-soft">
-        <div className="flex items-center gap-2 text-sm font-bold text-water">
-          <Route aria-hidden="true" className="h-4 w-4" />
-          {t("form.eyebrow")}
-        </div>
+      <SurfacePanel className="min-w-0 overflow-hidden">
+        <PanelTitle icon={<Route aria-hidden="true" className="h-4 w-4" />}>{t("form.eyebrow")}</PanelTitle>
         <h2 className="mt-3 break-words text-2xl font-extrabold">{t("form.title")}</h2>
         <p className="mt-2 break-words text-sm leading-6 text-ink/68">{t("form.body")}</p>
 
         <div className="mt-6 grid gap-4">
-          <label className="grid gap-2 text-sm font-semibold text-ink">
-            {t("form.durationLabel")}
+          <FieldLabel label={t("form.durationLabel")}>
             <select
-              className="h-12 w-full min-w-0 rounded-md border border-stone bg-rice px-3 text-sm outline-none transition focus:border-water"
+              className="select-control w-full"
               onChange={(event) => setDuration(event.target.value as RouteDuration)}
               value={duration}
             >
@@ -87,12 +84,11 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
               <option value="oneDay">{t("form.durationOptions.oneDay")}</option>
               <option value="twoDays">{t("form.durationOptions.twoDays")}</option>
             </select>
-          </label>
+          </FieldLabel>
 
-          <label className="grid gap-2 text-sm font-semibold text-ink">
-            {t("form.audienceLabel")}
+          <FieldLabel label={t("form.audienceLabel")}>
             <select
-              className="h-12 w-full min-w-0 rounded-md border border-stone bg-rice px-3 text-sm outline-none transition focus:border-water"
+              className="select-control w-full"
               onChange={(event) => setAudience(event.target.value as RouteAudience)}
               value={audience}
             >
@@ -100,12 +96,11 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
               <option value="family">{t("form.audienceOptions.family")}</option>
               <option value="regular">{t("form.audienceOptions.regular")}</option>
             </select>
-          </label>
+          </FieldLabel>
 
-          <label className="grid gap-2 text-sm font-semibold text-ink">
-            {t("form.weatherLabel")}
+          <FieldLabel label={t("form.weatherLabel")}>
             <select
-              className="h-12 w-full min-w-0 rounded-md border border-stone bg-rice px-3 text-sm outline-none transition focus:border-water"
+              className="select-control w-full"
               onChange={(event) => setWeather(event.target.value as RouteWeather)}
               value={weather}
             >
@@ -113,10 +108,10 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
               <option value="rainy">{t("form.weatherOptions.rainy")}</option>
               <option value="hot">{t("form.weatherOptions.hot")}</option>
             </select>
-          </label>
+          </FieldLabel>
         </div>
 
-        <div className="mt-6 rounded-md bg-ink p-4 text-white">
+        <div className="mt-6 rounded-lg bg-ink p-4 text-white">
           <div className="flex items-center gap-2 text-sm font-semibold">
             <AlertTriangle aria-hidden="true" className="h-4 w-4" />
             {t("form.ruleTitle")}
@@ -125,7 +120,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
             {t("form.ruleBody")}
           </p>
           <button
-            className="mt-4 h-11 rounded-full bg-white px-5 text-sm font-bold text-ink transition hover:bg-rice"
+            className="btn-secondary mt-4 bg-white hover:bg-rice"
             disabled={isGenerating}
             onClick={generateRoute}
             type="button"
@@ -133,38 +128,21 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
             {isGenerating ? t("form.generating") : t("form.generate")}
           </button>
         </div>
-      </section>
+      </SurfacePanel>
 
-      <section className="min-w-0 overflow-hidden rounded-lg border border-stone bg-white shadow-soft">
-        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-stone p-4 sm:items-center">
+      <SurfacePanel className="min-w-0 overflow-hidden p-0">
+        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-line p-4 sm:items-center">
           <div className="min-w-0">
             <div className="text-sm font-bold text-water">{t("map.eyebrow")}</div>
             <h2 className="mt-1 break-words text-xl font-extrabold">{t("map.title")}</h2>
           </div>
-          <div className="grid w-full grid-cols-2 rounded-full border border-stone bg-rice p-1 sm:inline-flex sm:w-auto sm:shrink-0">
-            <button
-              className={
-                mapMode === "scope"
-                  ? "h-9 rounded-full bg-ink px-4 text-sm font-semibold text-white"
-                  : "h-9 rounded-full px-4 text-sm font-semibold text-ink/68"
-              }
-              onClick={() => setMapMode("scope")}
-              type="button"
-            >
-              {t("map.scope")}
-            </button>
-            <button
-              className={
-                mapMode === "satellite"
-                  ? "h-9 rounded-full bg-ink px-4 text-sm font-semibold text-white"
-                  : "h-9 rounded-full px-4 text-sm font-semibold text-ink/68"
-              }
-              onClick={() => setMapMode("satellite")}
-              type="button"
-            >
-              {t("map.satellite")}
-            </button>
-          </div>
+          <SegmentedControl
+            className="grid w-full grid-cols-2 sm:w-auto"
+            labelFor={(value) => (value === "scope" ? t("map.scope") : t("map.satellite"))}
+            onChange={setMapMode}
+            options={["scope", "satellite"] as const}
+            value={mapMode}
+          />
         </div>
         <div className="relative aspect-[16/11] bg-ink">
           {mapMode === "scope" ? (
@@ -179,15 +157,12 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
             <RouteSatelliteMap />
           )}
         </div>
-      </section>
+      </SurfacePanel>
 
-      <section className="min-w-0 rounded-lg border border-stone bg-white p-5 shadow-soft lg:col-span-2">
+      <SurfacePanel className="min-w-0 lg:col-span-2">
         <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]">
           <div className="min-w-0">
-            <div className="flex items-center gap-2 text-sm font-bold text-lychee">
-              <MapPinned aria-hidden="true" className="h-4 w-4" />
-              {t("result.eyebrow")}
-            </div>
+            <PanelTitle icon={<MapPinned aria-hidden="true" className="h-4 w-4" />} tone="lychee">{t("result.eyebrow")}</PanelTitle>
             <h2 className="mt-3 break-words text-3xl font-extrabold">{t(selectedRoute.titleKey)}</h2>
             <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t(selectedRoute.summaryKey)}</p>
             {provider === "preview" ? (
@@ -205,26 +180,14 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
               </div>
             )}
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <div className="min-w-0 rounded-md bg-rice p-4">
-                <Clock3 aria-hidden="true" className="h-5 w-5 text-water" />
-                <div className="mt-3 break-words text-xl font-extrabold">{t(selectedRoute.totalTimeKey)}</div>
-                <div className="mt-1 text-sm text-ink/58">{t("result.totalTime")}</div>
-              </div>
-              <div className="min-w-0 rounded-md bg-rice p-4">
-                <Route aria-hidden="true" className="h-5 w-5 text-water" />
-                <div className="mt-3 break-words text-xl font-extrabold">{t(selectedRoute.mobilityKey)}</div>
-                <div className="mt-1 text-sm text-ink/58">{t("result.mobility")}</div>
-              </div>
-              <div className="min-w-0 rounded-md bg-rice p-4">
-                <Umbrella aria-hidden="true" className="h-5 w-5 text-water" />
-                <div className="mt-3 break-words text-xl font-extrabold">{t(selectedRoute.weatherKey)}</div>
-                <div className="mt-1 text-sm text-ink/58">{t("result.weather")}</div>
-              </div>
+              <MetricTile icon={<Clock3 aria-hidden="true" className="h-5 w-5" />} label={t("result.totalTime")} tone="muted" value={t(selectedRoute.totalTimeKey)} />
+              <MetricTile icon={<Route aria-hidden="true" className="h-5 w-5" />} label={t("result.mobility")} tone="muted" value={t(selectedRoute.mobilityKey)} />
+              <MetricTile icon={<Umbrella aria-hidden="true" className="h-5 w-5" />} label={t("result.weather")} tone="muted" value={t(selectedRoute.weatherKey)} />
             </div>
           </div>
 
           <div className="grid min-w-0 gap-4">
-            <div className="rounded-md border border-stone p-4">
+            <div className="rounded-lg border border-line p-4">
               <h3 className="text-base font-extrabold">{t("result.waypoints")}</h3>
               <ol className="mt-4 grid gap-3">
                 {selectedRoute.waypoints.map((point, index) => (
@@ -239,7 +202,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-md bg-rice p-4">
+              <div className="rounded-lg bg-rice p-4">
                 <h3 className="text-base font-extrabold">{t("result.reservationNodes")}</h3>
                 <ul className="mt-3 grid gap-2 text-sm leading-6 text-ink/70">
                   {selectedRoute.reservationNodes.map((node) => (
@@ -247,7 +210,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
                   ))}
                 </ul>
               </div>
-              <div className="rounded-md bg-rice p-4">
+              <div className="rounded-lg bg-rice p-4">
                 <h3 className="text-base font-extrabold">{t("result.fallback")}</h3>
                 <p className="mt-3 break-words text-sm leading-6 text-ink/70">
                   {t(selectedRoute.rainFallbackKey)}
@@ -255,13 +218,15 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
               </div>
             </div>
 
-            <div className="rounded-md border border-lychee/25 bg-lychee/8 p-4">
+            <InlineNotice tone="danger">
+              <span>
               <h3 className="text-base font-extrabold text-lychee">{t("result.notice")}</h3>
               <p className="mt-2 break-words text-sm leading-6 text-ink/70">{t(selectedRoute.noticeKey)}</p>
-            </div>
+              </span>
+            </InlineNotice>
 
             <Link
-              className="inline-flex h-11 w-fit items-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white transition hover:bg-moss"
+              className="btn-primary w-fit bg-ink hover:bg-moss"
               href={`/${locale}/booking`}
             >
               {t("result.bookingCta")}
@@ -269,7 +234,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
             </Link>
           </div>
         </div>
-      </section>
+      </SurfacePanel>
     </div>
   )
 }

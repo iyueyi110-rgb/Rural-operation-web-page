@@ -43,6 +43,10 @@
     "calendar": {
       "title": "Zouma Farming Calendar",
       "description": "View Zouma Village farming activities by solar term and season."
+    },
+    "activities": {
+      "title": "走馬村アクティビティ",
+      "description": "ライチ収穫食育祭、中庭イベント、研学ワークショップ、共居体験の予約を表示します。"
     }
   },
   "trees": {
@@ -85,7 +89,19 @@
     },
     "profile": {
       "eyebrow": "樹プロフィール",
-      "planTitle": "里親プラン"
+      "planTitle": "里親プラン",
+      "selectCta": "里親を選択",
+      "fireMemoryTitle": "山火事の記憶",
+      "fireMemoryEmpty": "運営側の山火事記録はまだ入力されていません。",
+      "newShootsTitle": "新芽記録",
+      "newShootsEmpty": "運営側の新芽記録はまだ入力されていません。",
+      "growthPhotosTitle": "成長写真",
+      "growthPhotoAlt": "{name} 成長写真 {index}",
+      "growthPhotosEmpty": "成長写真はまだありません。后台アップロード後に表示されます。",
+      "fruitDestinationTitle": "果実の行き先",
+      "fruitDestinationFallback": "運営側が今回の収穫果実の行き先を記録しました。",
+      "fruitDestinationEmpty": "果実の行き先記録はまだありません。収穫後に追加できます。",
+      "careLogsEmpty": "管理ログはまだありません。入力後は新しい順に表示されます。"
     },
     "experience": {
       "environment": {
@@ -409,6 +425,33 @@
         "title": "雨洪工坊 · 占位",
         "status": "未使用",
         "date": "未定"
+      }
+    },
+    "reminder": {
+      "title": "ライチ収穫期のお知らせ",
+      "body": "現在はアプリ内バナーで通知します。里親ユーザーは収穫期前に管理ログ、活動予約、現地引換案内を確認できます。"
+    },
+    "lookup": {
+      "title": "マイ里親記録",
+      "initialMessage": "里親登録時の電話番号を入力してください。システムはマスク済み情報で検索します。",
+      "found": "里親記録が見つかりました。",
+      "empty": "一致する里親記録はありません。",
+      "failed": "検索に失敗しました。後でもう一度お試しください。",
+      "phonePlaceholder": "電話番号を入力",
+      "loading": "検索中",
+      "submit": "里親記録を検索",
+      "tree": "樹木",
+      "plan": "プラン",
+      "status": "状態",
+      "noShipment": "収穫代行物流はまだありません。",
+      "shipmentTitle": "収穫代行物流",
+      "signed": "受領済み",
+      "harvestBooking": "収穫予約：{date} / {status}",
+      "steps": {
+        "pending": "収穫待ち",
+        "picking": "収穫中",
+        "shipping": "配送中",
+        "delivered": "配達済み"
       }
     }
   },
@@ -838,7 +881,9 @@
       "paymentMode": "支払い方式"
     },
     "notice": {
-      "title": "予約注意事項"
+      "title": "予約注意事項",
+      "activitiesTitle": "最近の活動",
+      "activitiesEmpty": "この中庭の最近の活動はありません。"
     },
     "messages": {
       "capacityExceeded": "人数がこの中庭の上限を超えています。人数を減らすか大きい中庭を選択してください。",
@@ -1402,6 +1447,76 @@
     "messages": {
       "loading": "Loading farming calendar",
       "empty": "No farming calendar items match the filters"
+    }
+  },
+  "activities": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "村の活動紹介"
+    },
+    "hero": {
+      "eyebrow": "村の活動",
+      "title": "活動は里親関係を現地体験に変えます",
+      "body": "収穫、食育、中庭の食事、共居体験を通じて、一本の樹を再訪できる村の運営イベントへつなげます。",
+      "summaryTime": "約3分で確認",
+      "summaryLocation": "重慶市長寿区 · 走馬村"
+    },
+    "showcase": {
+      "label": "本期主活動",
+      "name": "ライチ収穫食育祭",
+      "date": "6月下旬 · 果樹園と尾根の中庭",
+      "body": "親子収穫、食育講座、果実選別、村の食事、里親樹の再訪を週末の活動単位にまとめます。"
+    },
+    "filters": {
+      "title": "活動を絞り込む",
+      "type": "活動タイプ",
+      "date": "活動日",
+      "all": "すべて"
+    },
+    "types": {
+      "village_feast": "尾根の食事会",
+      "food_class": "食育講座",
+      "study": "研学行程",
+      "workshop": "共創ワークショップ",
+      "exhibition": "展示案内",
+      "co_living": "共居体験"
+    },
+    "statuses": {
+      "open": "予約受付中",
+      "full": "満席",
+      "cancelled": "中止",
+      "draft": "準備中",
+      "closed": "終了"
+    },
+    "card": {
+      "capacity": "{booked}/{max} 名",
+      "offlinePrice": "現地確認"
+    },
+    "actions": {
+      "book": "活動を予約",
+      "full": "満席",
+      "cancelled": "中止",
+      "closed": "終了",
+      "draft": "準備中"
+    },
+    "form": {
+      "title": "予約情報",
+      "body": "連絡先を残すと活動予約を送信できます。運営側が人数と現地手配を確認します。",
+      "name": "氏名",
+      "phone": "電話番号",
+      "guestCount": "参加人数",
+      "guestCountValue": "{count} 名",
+      "noteTitle": "運営メモ",
+      "noteBody": "活動予約は運営コンソールに入り、村民タスク、通知、受け入れ計画に変換できます。"
+    },
+    "messages": {
+      "bookingFailed": "予約に失敗しました。氏名、電話番号、人数を確認してください。",
+      "bookingConfirmed": "活動予約を確認しました。",
+      "empty": "該当する活動はありません",
+      "emptyBody": "タイプや日付を調整するか、本期主活動の予約可能ノードを確認してください。"
+    },
+    "order": {
+      "title": "予約を作成しました"
     }
   },
   "villagerSystem": {
