@@ -50,6 +50,7 @@
     }
   },
   "common": {
+    "back": "返回上一级",
     "loading": "正在整理走马村今日内容",
     "errorTitle": "页面暂时没有加载成功",
     "errorBody": "请稍后重试，系统会保留当前浏览入口。",
@@ -1528,6 +1529,7 @@
       "saving": "正在保存"
     },
     "nav": {
+      "back": "返回",
       "dashboard": "仪表盘",
       "tasks": "任务",
       "earnings": "收益",

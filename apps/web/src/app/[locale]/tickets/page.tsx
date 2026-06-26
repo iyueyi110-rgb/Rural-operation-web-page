@@ -3,13 +3,25 @@ import { ArrowLeft, CalendarDays, Ticket } from "lucide-react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import type { Locale } from "@web/i18n/routing"
-import { PanelTitle, SubpageHero, SurfacePanel } from "@web/components/subpage-ui"
+import { BackButton } from "@web/components/back-button"
+import {
+  PanelTitle,
+  SubpageHero,
+  SurfacePanel,
+} from "@web/components/subpage-ui"
 import { getSiteUrl } from "@web/lib/site-url"
 import { PageHeader, Section } from "@ui/index"
 import { TicketFlow } from "./ticket-flow"
 
-export async function generateMetadata({ params }: { params: { locale: Locale } }): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: "metadata.tickets" })
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: Locale }
+}): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "metadata.tickets",
+  })
 
   return {
     metadataBase: getSiteUrl(),
@@ -18,13 +30,29 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
   }
 }
 
-export default async function TicketsPage({ params }: { params: { locale: Locale } }) {
+export default async function TicketsPage({
+  params,
+}: {
+  params: { locale: Locale }
+}) {
   setRequestLocale(params.locale)
   const t = await getTranslations("tickets")
+  const common = await getTranslations("common")
 
   return (
     <main className="min-h-screen bg-rice pb-16 text-ink">
-      <PageHeader backHref={`/${params.locale}`} backLabel={t("nav.backHome")} icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />} rightLabel={t("nav.phase")} />
+      <PageHeader
+        backHref={`/${params.locale}`}
+        backLabel={t("nav.backHome")}
+        backElement={
+          <BackButton
+            fallbackHref={`/${params.locale}`}
+            label={common("back")}
+          />
+        }
+        icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
+        rightLabel={t("nav.phase")}
+      />
       <SubpageHero
         body={t("hero.body")}
         eyebrow={t("hero.eyebrow")}
@@ -37,10 +65,15 @@ export default async function TicketsPage({ params }: { params: { locale: Locale
         </div>
 
         <SurfacePanel className="mt-6">
-          <PanelTitle icon={<CalendarDays aria-hidden="true" className="h-4 w-4" />} tone="moss">
+          <PanelTitle
+            icon={<CalendarDays aria-hidden="true" className="h-4 w-4" />}
+            tone="moss"
+          >
             {t("notice.title")}
           </PanelTitle>
-          <p className="mt-3 text-sm leading-7 text-ink/66">{t("notice.body")}</p>
+          <p className="mt-3 text-sm leading-7 text-ink/66">
+            {t("notice.body")}
+          </p>
         </SurfacePanel>
       </Section>
     </main>

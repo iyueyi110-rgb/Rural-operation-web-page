@@ -3,13 +3,21 @@ import { ArrowLeft, ShieldCheck } from "lucide-react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import type { Locale } from "@web/i18n/routing"
+import { BackButton } from "@web/components/back-button"
 import { SubpageHero, SurfacePanel } from "@web/components/subpage-ui"
 import { getSiteUrl } from "@web/lib/site-url"
 import { consentItems } from "@web/lib/privacy-data"
 import { PageHeader, Section } from "@ui/index"
 
-export async function generateMetadata({ params }: { params: { locale: Locale } }): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: "metadata.privacy" })
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: Locale }
+}): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "metadata.privacy",
+  })
 
   return {
     metadataBase: getSiteUrl(),
@@ -18,13 +26,29 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
   }
 }
 
-export default async function PrivacyPage({ params }: { params: { locale: Locale } }) {
+export default async function PrivacyPage({
+  params,
+}: {
+  params: { locale: Locale }
+}) {
   setRequestLocale(params.locale)
   const t = await getTranslations("privacy")
+  const common = await getTranslations("common")
 
   return (
     <main className="min-h-screen bg-rice pb-16 text-ink">
-      <PageHeader backHref={`/${params.locale}`} backLabel={t("nav.backHome")} icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />} rightLabel={t("nav.phase")} />
+      <PageHeader
+        backHref={`/${params.locale}`}
+        backLabel={t("nav.backHome")}
+        backElement={
+          <BackButton
+            fallbackHref={`/${params.locale}`}
+            label={common("back")}
+          />
+        }
+        icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
+        rightLabel={t("nav.phase")}
+      />
       <SubpageHero
         body={t("hero.body")}
         eyebrow={t("hero.eyebrow")}
@@ -41,7 +65,9 @@ export default async function PrivacyPage({ params }: { params: { locale: Locale
                   {t(item.statusKey)}
                 </span>
               </div>
-              <p className="mt-4 text-sm leading-7 text-ink/66">{t(item.bodyKey)}</p>
+              <p className="mt-4 text-sm leading-7 text-ink/66">
+                {t(item.bodyKey)}
+              </p>
             </SurfacePanel>
           ))}
         </div>

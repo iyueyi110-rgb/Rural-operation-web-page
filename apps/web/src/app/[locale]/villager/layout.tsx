@@ -1,6 +1,13 @@
 "use client"
 
-import { Bell, ClipboardList, LayoutDashboard, LogOut, WalletCards } from "lucide-react"
+import {
+  ArrowLeft,
+  Bell,
+  ClipboardList,
+  LayoutDashboard,
+  LogOut,
+  WalletCards,
+} from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
@@ -25,7 +32,10 @@ export default function VillagerLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const isLogin = pathname.endsWith("/villager/login")
-  const [validatedVillagerId, setValidatedVillagerId] = useState<string | null>(null)
+  const isDashboard = pathname.endsWith("/villager/dashboard")
+  const [validatedVillagerId, setValidatedVillagerId] = useState<string | null>(
+    null,
+  )
 
   useEffect(() => {
     if (isLogin) {
@@ -61,11 +71,29 @@ export default function VillagerLayout({ children }: { children: ReactNode }) {
 
   if (isLogin) return children
   if (!validatedVillagerId) {
-    return <main className="min-h-screen bg-rice p-6 text-ink"><div className="mx-auto max-w-2xl rounded-xl border border-line bg-surface p-5 text-sm font-bold text-ink/62">{t("common.loading")}</div></main>
+    return (
+      <main className="min-h-screen bg-rice p-6 text-ink">
+        <div className="mx-auto max-w-2xl rounded-xl border border-line bg-surface p-5 text-sm font-bold text-ink/62">
+          {t("common.loading")}
+        </div>
+      </main>
+    )
   }
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f5f0e6_0%,#ebe2d3_100%)] pb-24 text-ink">
+      {!isDashboard ? (
+        <div className="sticky top-0 z-30 flex h-12 items-center border-b border-stone bg-white/90 px-4 backdrop-blur-sm">
+          <button
+            className="flex cursor-pointer items-center gap-2 border-none bg-transparent text-sm font-bold text-moss transition hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+            onClick={() => router.back()}
+            type="button"
+          >
+            <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+            {t("nav.back")}
+          </button>
+        </div>
+      ) : null}
       {children}
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-surface/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-2xl items-center justify-around px-2 py-2">

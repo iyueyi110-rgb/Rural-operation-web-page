@@ -484,6 +484,7 @@
     }
   },
   "common": {
+    "back": "Back",
     "loading": "Preparing today's Zouma Village content",
     "errorTitle": "The page could not load",
     "errorBody": "Please try again later.",
@@ -1528,6 +1529,7 @@
       "saving": "Saving"
     },
     "nav": {
+      "back": "Back",
       "dashboard": "Dashboard",
       "tasks": "Tasks",
       "earnings": "Earnings",

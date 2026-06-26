@@ -3,6 +3,7 @@ import { ArrowLeft, Clock, MapPin } from "lucide-react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { RouteGenerator } from "./route-generator"
+import { BackButton } from "@web/components/back-button"
 import { HeroMeta, SubpageHero } from "@web/components/subpage-ui"
 import { getSiteUrl } from "@web/lib/site-url"
 import type { Locale } from "@web/i18n/routing"
@@ -13,7 +14,10 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale }
 }): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: "metadata.routes" })
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "metadata.routes",
+  })
 
   return {
     metadataBase: getSiteUrl(),
@@ -27,15 +31,26 @@ export async function generateMetadata({
   }
 }
 
-export default async function RoutesPage({ params }: { params: { locale: Locale } }) {
+export default async function RoutesPage({
+  params,
+}: {
+  params: { locale: Locale }
+}) {
   setRequestLocale(params.locale)
   const t = await getTranslations("routes")
+  const common = await getTranslations("common")
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-rice pb-16 text-ink">
       <PageHeader
         backHref={`/${params.locale}`}
         backLabel={t("nav.backHome")}
+        backElement={
+          <BackButton
+            fallbackHref={`/${params.locale}`}
+            label={common("back")}
+          />
+        }
         icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
         rightLabel={t("nav.phase")}
       />
@@ -45,8 +60,12 @@ export default async function RoutesPage({ params }: { params: { locale: Locale 
         eyebrow={t("hero.eyebrow")}
         meta={
           <>
-            <HeroMeta icon={<Clock aria-hidden="true" className="h-3 w-3" />}>{t("hero.summaryTime")}</HeroMeta>
-            <HeroMeta icon={<MapPin aria-hidden="true" className="h-3 w-3" />}>{t("hero.summaryLocation")}</HeroMeta>
+            <HeroMeta icon={<Clock aria-hidden="true" className="h-3 w-3" />}>
+              {t("hero.summaryTime")}
+            </HeroMeta>
+            <HeroMeta icon={<MapPin aria-hidden="true" className="h-3 w-3" />}>
+              {t("hero.summaryLocation")}
+            </HeroMeta>
           </>
         }
         title={t("hero.title")}
