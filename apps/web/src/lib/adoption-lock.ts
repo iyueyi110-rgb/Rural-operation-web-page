@@ -1,7 +1,7 @@
 import { getRedis } from "@zouma/database"
 
 const LOCK_PREFIX = "adoption_lock:"
-const LOCK_TTL_SECONDS = 600
+const LOCK_TTL_SECONDS = 120
 const RELEASE_SCRIPT = `
 if redis.call("get", KEYS[1]) == ARGV[1] then
   return redis.call("del", KEYS[1])
@@ -13,7 +13,10 @@ export function buildAdoptionLockKey(treeId: string) {
   return `${LOCK_PREFIX}${treeId}`
 }
 
-export function createAdoptionLockValue(userId: string, timestamp = Date.now()) {
+export function createAdoptionLockValue(
+  userId: string,
+  timestamp = Date.now(),
+) {
   return `${userId}_${timestamp}`
 }
 

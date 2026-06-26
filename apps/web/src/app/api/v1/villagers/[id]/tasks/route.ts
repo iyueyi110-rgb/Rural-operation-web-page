@@ -8,8 +8,11 @@ export async function OPTIONS(request: Request) {
   return optionsResponse(request)
 }
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const auth = requireVillagerOrAdmin(request, params.id)
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
+  const auth = await requireVillagerOrAdmin(request, params.id)
   if (!auth.authorized) return auth.response
 
   const data = await prisma.task.findMany({

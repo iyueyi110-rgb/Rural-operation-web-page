@@ -1,22 +1,26 @@
-const TOKEN_PREFIX = "villager_"
-const TOKEN_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000
+import { jwtVerify, SignJWT } from "jose"
 
-export function createVillagerToken(villagerId: string, timestamp = Date.now()) {
-  return `${TOKEN_PREFIX}${Buffer.from(`${villagerId}_${timestamp}`, "utf-8").toString("base64")}`
+import { jwtSecret } from "@web/lib/auth-jwt"
+
+export async function createVillagerToken(villagerId: string) {
+  return new SignJWT({ villagerId })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(jwtSecret())
 }
 
-export function getVillagerIdFromToken(request: Request, now = Date.now()): string | null {
+export async function getVillagerIdFromToken(
+  request: Request,
+): Promise<string | null> {
   const token = request.headers.get("X-Villager-Token")
-  if (!token?.startsWith(TOKEN_PREFIX)) return null
+  if (!token) return null
 
   try {
-    const decoded = Buffer.from(token.slice(TOKEN_PREFIX.length), "base64").toString("utf-8")
-    const [id, timestampValue, ...extra] = decoded.split("_")
-    const timestamp = Number(timestampValue)
-
-    if (!id || !timestampValue || extra.length > 0 || !Number.isFinite(timestamp)) return null
-    if (timestamp > now || now - timestamp > TOKEN_MAX_AGE_MS) return null
-    return id
+    const { payload } = await jwtVerify(token, jwtSecret(), {
+      algorithms: ["HS256"],
+    })
+    return typeof payload.villagerId === "string" ? payload.villagerId : null
   } catch {
     return null
   }

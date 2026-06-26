@@ -4,21 +4,30 @@ import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { isTaskStatus, mapTask } from "@web/lib/task-records"
 import { getVillagerIdFromToken } from "@web/lib/villager-auth"
 
-const villagerTaskStatuses = ["pending", "accepted", "in_progress", "completed"] as const
+const villagerTaskStatuses = [
+  "pending",
+  "accepted",
+  "in_progress",
+  "completed",
+] as const
 
 export function OPTIONS(request: Request) {
   return optionsResponse(request)
 }
 
 export async function GET(request: Request) {
-  const villagerId = getVillagerIdFromToken(request)
+  const villagerId = await getVillagerIdFromToken(request)
   if (!villagerId) {
     return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
   }
 
   const status = new URL(request.url).searchParams.get("status")
   if (status && !isVillagerTaskStatus(status)) {
-    return jsonResponse(request, { error: "Invalid task status" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid task status" },
+      { status: 400 },
+    )
   }
 
   const data = await prisma.task.findMany({
@@ -30,11 +39,14 @@ export async function GET(request: Request) {
     orderBy: { createdAt: "desc" },
   })
 
-  return jsonResponse(request, { data: data.map(mapTask), meta: { total: data.length } })
+  return jsonResponse(request, {
+    data: data.map(mapTask),
+    meta: { total: data.length },
+  })
 }
 
 export async function PATCH(request: Request) {
-  const villagerId = getVillagerIdFromToken(request)
+  const villagerId = await getVillagerIdFromToken(request)
   if (!villagerId) {
     return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
   }
@@ -45,7 +57,11 @@ export async function PATCH(request: Request) {
     typeof body.id !== "string" ||
     !isVillagerTaskStatus(body.status)
   ) {
-    return jsonResponse(request, { error: "Invalid task update" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid task update" },
+      { status: 400 },
+    )
   }
 
   const existing = await prisma.task.findFirst({
@@ -55,7 +71,11 @@ export async function PATCH(request: Request) {
     return jsonResponse(request, { error: "Task not found" }, { status: 404 })
   }
   if (!canVillagerMoveTask(existing.status, body.status)) {
-    return jsonResponse(request, { error: "Invalid task status transition" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid task status transition" },
+      { status: 400 },
+    )
   }
 
   const data = await prisma.task.update({
@@ -69,10 +89,14 @@ export async function PATCH(request: Request) {
   return jsonResponse(request, { data: mapTask(data) })
 }
 
-function isVillagerTaskStatus(value: unknown): value is (typeof villagerTaskStatuses)[number] {
+function isVillagerTaskStatus(
+  value: unknown,
+): value is (typeof villagerTaskStatuses)[number] {
   return (
     isTaskStatus(value) &&
-    villagerTaskStatuses.includes(value as (typeof villagerTaskStatuses)[number])
+    villagerTaskStatuses.includes(
+      value as (typeof villagerTaskStatuses)[number],
+    )
   )
 }
 

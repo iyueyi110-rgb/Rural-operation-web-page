@@ -1,4 +1,8 @@
-import { getChinaDateString, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import {
+  getChinaDateString,
+  jsonResponse,
+  optionsResponse,
+} from "@web/lib/aigc-api"
 import { runAutoResolution } from "@web/lib/auto-resolution"
 import { generateDailyReport } from "@web/lib/report-generator"
 
@@ -12,9 +16,16 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const url = new URL(request.url)
-  const secret = url.searchParams.get("secret")
+  const secret = request.headers
+    .get("Authorization")
+    ?.replace(/^Bearer\s+/i, "")
+    .trim()
 
-  if (!process.env.CRON_SECRET || !secret || secret !== process.env.CRON_SECRET) {
+  if (
+    !process.env.CRON_SECRET ||
+    !secret ||
+    secret !== process.env.CRON_SECRET
+  ) {
     return jsonResponse(
       request,
       { error: { code: "UNAUTHORIZED", message: "Cron secret is invalid." } },
@@ -35,7 +46,8 @@ export async function POST(request: Request) {
       {
         error: {
           code: "REPORT_GENERATION_FAILED",
-          message: error instanceof Error ? error.message : "AI service unavailable.",
+          message:
+            error instanceof Error ? error.message : "AI service unavailable.",
         },
       },
       { status: 503 },

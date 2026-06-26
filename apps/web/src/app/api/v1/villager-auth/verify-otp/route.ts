@@ -11,18 +11,31 @@ export function OPTIONS(request: Request) {
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body)) {
-    return jsonResponse(request, { error: "Invalid OTP verification" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid OTP verification" },
+      { status: 400 },
+    )
   }
 
   const phone = normalizeMainlandMobile(body.phone)
   const otp = typeof body.otp === "string" ? body.otp.trim() : ""
   if (!isMainlandMobile(phone) || !otp) {
-    return jsonResponse(request, { error: "phone and otp are required" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "phone and otp are required" },
+      { status: 400 },
+    )
   }
 
   const villager = await prisma.$transaction(async (tx) => {
     const found = await tx.villager.findFirst({
-      where: { phone, otpCode: otp, otpExpiry: { gt: new Date() }, status: "active" },
+      where: {
+        phone,
+        otpCode: otp,
+        otpExpiry: { gt: new Date() },
+        status: "active",
+      },
     })
     if (!found) return null
 
@@ -32,11 +45,15 @@ export async function POST(request: Request) {
     })
   })
   if (!villager) {
-    return jsonResponse(request, { error: "验证码无效或已过期" }, { status: 401 })
+    return jsonResponse(
+      request,
+      { error: "验证码无效或已过期" },
+      { status: 401 },
+    )
   }
 
   return jsonResponse(request, {
-    token: createVillagerToken(villager.id),
+    token: await createVillagerToken(villager.id),
     villager: {
       id: villager.id,
       name: villager.name,

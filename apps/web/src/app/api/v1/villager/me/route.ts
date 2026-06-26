@@ -9,7 +9,7 @@ export function OPTIONS(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const villagerId = getVillagerIdFromToken(request)
+  const villagerId = await getVillagerIdFromToken(request)
   if (!villagerId) {
     return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
   }
@@ -22,7 +22,11 @@ export async function GET(request: Request) {
     },
   })
   if (!villager || villager.status !== "active") {
-    return jsonResponse(request, { error: "Villager not found" }, { status: 404 })
+    return jsonResponse(
+      request,
+      { error: "Villager not found" },
+      { status: 404 },
+    )
   }
 
   const monthStart = new Date()

@@ -14,7 +14,12 @@ export async function requireUserSession(request: Request) {
     where: { id: session.userId },
     select: { id: true, jwtSalt: true, mobile: true, role: true },
   })
-  if (!user || !user.jwtSalt || user.jwtSalt !== session.salt || user.role !== session.role) {
+  if (
+    !user ||
+    !user.jwtSalt ||
+    user.jwtSalt !== session.salt ||
+    user.role !== session.role
+  ) {
     return null
   }
 
@@ -24,15 +29,32 @@ export async function requireUserSession(request: Request) {
 export async function requireBearerAuth(request: Request) {
   const user = await requireUserSession(request)
   if (!user) {
-    return { authorized: false as const, response: jsonResponse(request, { error: "Authentication required" }, { status: 401 }) }
+    return {
+      authorized: false as const,
+      response: jsonResponse(
+        request,
+        { error: "Authentication required" },
+        { status: 401 },
+      ),
+    }
   }
   return { authorized: true as const, user }
 }
 
-export async function requireTouristRecipient(request: Request, recipientId: string) {
+export async function requireTouristRecipient(
+  request: Request,
+  recipientId: string,
+) {
   const user = await requireUserSession(request)
   if (!user) {
-    return { authorized: false as const, response: jsonResponse(request, { error: "Unauthorized" }, { status: 401 }) }
+    return {
+      authorized: false as const,
+      response: jsonResponse(
+        request,
+        { error: "Unauthorized" },
+        { status: 401 },
+      ),
+    }
   }
 
   const allowedIds = new Set([user.id])
@@ -40,15 +62,26 @@ export async function requireTouristRecipient(request: Request, recipientId: str
   if (maskedMobile) allowedIds.add(maskedMobile)
 
   if (!allowedIds.has(recipientId.trim())) {
-    return { authorized: false as const, response: jsonResponse(request, { error: "Unauthorized" }, { status: 401 }) }
+    return {
+      authorized: false as const,
+      response: jsonResponse(
+        request,
+        { error: "Unauthorized" },
+        { status: 401 },
+      ),
+    }
   }
 
   return { authorized: true as const, user }
 }
 
-export function requireVillagerRecipient(request: Request, recipientId: string) {
-  const tokenVillagerId = getVillagerIdFromToken(request)
-  if (tokenVillagerId === recipientId.trim()) return { authorized: true as const }
+export async function requireVillagerRecipient(
+  request: Request,
+  recipientId: string,
+) {
+  const tokenVillagerId = await getVillagerIdFromToken(request)
+  if (tokenVillagerId === recipientId.trim())
+    return { authorized: true as const }
 
   return {
     authorized: false as const,
@@ -56,10 +89,13 @@ export function requireVillagerRecipient(request: Request, recipientId: string) 
   }
 }
 
-export function requireVillagerOrAdmin(request: Request, villagerId: string) {
+export async function requireVillagerOrAdmin(
+  request: Request,
+  villagerId: string,
+) {
   if (isAdminRequest(request)) return { authorized: true as const }
 
-  const tokenVillagerId = getVillagerIdFromToken(request)
+  const tokenVillagerId = await getVillagerIdFromToken(request)
   if (tokenVillagerId === villagerId) return { authorized: true as const }
 
   return {

@@ -1,7 +1,6 @@
 "use client"
 
 import {
-  ArrowLeft,
   Bell,
   ClipboardList,
   LayoutDashboard,
@@ -13,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useState, type ReactNode } from "react"
 
+import { BackButton } from "@web/components/back-button"
 import {
   clearVillagerToken,
   fetchWithVillagerAuth,
@@ -59,10 +59,13 @@ export default function VillagerLayout({ children }: { children: ReactNode }) {
           router.replace(`/${locale}/villager/login`)
           return
         }
-        setValidatedVillagerId(session.id)
+        return response.json() as Promise<{ data?: { id?: string } }>
+      })
+      .then((result) => {
+        if (!cancelled) setValidatedVillagerId(result?.data?.id ?? "")
       })
       .catch(() => {
-        if (!cancelled) setValidatedVillagerId(session.id)
+        if (!cancelled) setValidatedVillagerId("")
       })
     return () => {
       cancelled = true
@@ -84,14 +87,11 @@ export default function VillagerLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-[linear-gradient(180deg,#f5f0e6_0%,#ebe2d3_100%)] pb-24 text-ink">
       {!isDashboard ? (
         <div className="sticky top-0 z-30 flex h-12 items-center border-b border-stone bg-white/90 px-4 backdrop-blur-sm">
-          <button
+          <BackButton
             className="flex cursor-pointer items-center gap-2 border-none bg-transparent text-sm font-bold text-moss transition hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
-            onClick={() => router.back()}
-            type="button"
-          >
-            <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-            {t("nav.back")}
-          </button>
+            fallbackHref={`/${locale}/villager/dashboard`}
+            label={t("nav.back")}
+          />
         </div>
       ) : null}
       {children}
