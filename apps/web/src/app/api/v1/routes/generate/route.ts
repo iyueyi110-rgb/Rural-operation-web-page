@@ -1,4 +1,5 @@
 import { prisma } from "@zouma/database"
+import { getFallbackResponse } from "@zouma/prompts/fallback-responses"
 import { ModelProviderAdapter } from "@zouma/utils"
 import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
 
@@ -113,6 +114,7 @@ export async function POST(request: Request) {
       },
     })
   } catch (error) {
+    const fallback = getFallbackResponse("route")
     prisma.routeGenerationLog.create({
       data: {
         routeId: fallbackRoute.id,
@@ -130,8 +132,10 @@ export async function POST(request: Request) {
         model: "ModelProviderAdapter",
         latencyMs: 0,
         riskSlugs,
+        fallback: fallback.content,
         message: error instanceof Error ? error.message : "Model provider is not configured",
       },
+      meta: { degraded: true, reason: "AI 服务暂时不可用，显示预设内容" },
     })
   }
 }

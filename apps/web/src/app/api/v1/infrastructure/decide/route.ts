@@ -16,5 +16,16 @@ export async function POST(request: Request) {
   if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)
 
   const data = await generateControlCommands()
-  return jsonResponse(request, { data, meta: { total: data.length } }, { status: 201 })
+  return jsonResponse(
+    request,
+    {
+      data,
+      meta: {
+        total: data.length,
+        degraded: data.length === 0,
+        reason: data.length === 0 ? "传感器和客流样本不足，暂无自动处置建议" : undefined,
+      },
+    },
+    { status: 201 },
+  )
 }

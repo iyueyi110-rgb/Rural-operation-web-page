@@ -12,5 +12,12 @@ export async function GET(request: Request) {
       (sensor.type === "water_level" && sensor.value > 2.2) ||
       (sensor.type === "temperature" && sensor.value > 35),
   )
-  return jsonResponse(request, { data: alerts, meta: { total: alerts.length } })
+  return jsonResponse(request, {
+    data: alerts,
+    meta: {
+      total: alerts.length,
+      degraded: sensors.length === 0,
+      reason: sensors.length === 0 ? "传感器数据待硬件部署后接入" : undefined,
+    },
+  })
 }

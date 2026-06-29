@@ -4,8 +4,8 @@ import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 
 function isDeviceReadingAuthorized(request: Request) {
   const expected = process.env.SENSOR_API_KEY
-  if (!expected) return false
-  return request.headers.get("x-api-key") === expected
+  if (!expected) return "demo" as const
+  return request.headers.get("x-api-key") === expected ? "authorized" as const : "unauthorized" as const
 }
 
 export function OPTIONS(request: Request) {
@@ -13,7 +13,8 @@ export function OPTIONS(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!isDeviceReadingAuthorized(request)) {
+  const authState = isDeviceReadingAuthorized(request)
+  if (authState === "unauthorized") {
     return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
   }
 
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
   })
   const deviceIds = new Set(devices.map((device) => device.deviceId))
   const missingDevice = validRows.find((reading) => !deviceIds.has(reading.deviceId))
-  if (missingDevice) {
+  if (missingDevice && authState !== "demo") {
     return jsonResponse(request, { error: `Device ${missingDevice.deviceId} was not found` }, { status: 400 })
   }
 
@@ -46,6 +47,18 @@ export async function POST(request: Request) {
   const data = await prisma.$transaction(async (tx) => {
     const created = []
     for (const reading of validRows) {
+      if (!deviceIds.has(reading.deviceId)) {
+        await tx.device.create({
+          data: {
+            deviceId: reading.deviceId,
+            name: `演示设备 ${reading.deviceId}`,
+            type: reading.type,
+            status: "active",
+            lastSeenAt: now,
+          },
+        })
+        deviceIds.add(reading.deviceId)
+      }
       created.push(
         await tx.deviceReading.create({
           data: {
@@ -53,7 +66,10 @@ export async function POST(request: Request) {
             type: reading.type,
             value: reading.value,
             unit: reading.unit,
-            raw: reading.raw as Prisma.InputJsonValue,
+            raw: {
+              ...(reading.raw as Record<string, unknown>),
+              source: authState === "demo" ? "demo_simulated" : "iot_gateway",
+            } as Prisma.InputJsonValue,
           },
         }),
       )
@@ -65,5 +81,16 @@ export async function POST(request: Request) {
     return created
   })
 
-  return jsonResponse(request, { data, meta: { total: data.length } }, { status: 201 })
+  return jsonResponse(
+    request,
+    {
+      data,
+      meta: {
+        total: data.length,
+        demoMode: authState === "demo",
+        source: authState === "demo" ? "demo_simulated" : "iot_gateway",
+      },
+    },
+    { status: 201 },
+  )
 }

@@ -8,6 +8,7 @@
   "exports": {
     ".": "./daily-report.ts",
     "./daily-report": "./daily-report.ts",
-    "./content-factory": "./content-factory.ts"
+    "./content-factory": "./content-factory.ts",
+    "./fallback-responses": "./fallback-responses.ts"
   }
 }

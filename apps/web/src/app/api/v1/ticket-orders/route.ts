@@ -1,10 +1,14 @@
+import { prisma } from "@zouma/database"
+
 import { jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { requireUserSession } from "@web/lib/api-auth"
 import { quantityOptions, ticketDateOptions, ticketProducts } from "@web/lib/tickets-data"
 
 interface TicketOrderRequest {
   productId?: string
   date?: string
   quantity?: number
+  guestPhone?: string
 }
 
 export function OPTIONS(request: Request) {
@@ -31,16 +35,37 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Ticket quantity is out of range" }, { status: 400 })
   }
 
-  const createdAt = new Date().toISOString()
+  const user = await requireUserSession(request)
+  const dbProduct = await prisma.ticketProduct.findUnique({
+    where: { id: product.id },
+  })
+  if (!dbProduct) {
+    return jsonResponse(request, { error: "Ticket product is not available in database" }, { status: 404 })
+  }
+  const quantity = body.quantity
+  const record = await prisma.ticketOrder.create({
+    data: {
+      productId: dbProduct.id,
+      userId: user?.id ?? null,
+      quantity,
+      totalAmount: dbProduct.price * quantity,
+      guestPhone:
+        user?.mobile ??
+        (typeof body.guestPhone === "string" ? body.guestPhone.trim() : null),
+      status: "pending_payment",
+    },
+  })
 
   return jsonResponse(request, {
     data: {
-      id: `TK-${Date.now()}`,
-      status: "pending_payment",
-      productId: product.id,
+      id: record.id,
+      status: record.status,
+      orderType: "ticket_order",
+      productId: record.productId,
       date: dateOption.value,
-      quantity: body.quantity,
-      createdAt,
+      quantity: record.quantity,
+      amount: record.totalAmount,
+      createdAt: record.createdAt.toISOString(),
     },
-  })
+  }, { status: 201 })
 }

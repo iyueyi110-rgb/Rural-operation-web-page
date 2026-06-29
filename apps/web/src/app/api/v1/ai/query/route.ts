@@ -1,4 +1,5 @@
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { getFallbackResponse } from "@zouma/prompts/fallback-responses"
 import { answerOperationalQuestion } from "@web/lib/ai-query"
 import { requireBearerAuth } from "@web/lib/api-auth"
 import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
@@ -27,6 +28,15 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Question length must be between 2 and 200 characters" }, { status: 400 })
   }
 
-  const answer = await answerOperationalQuestion(question)
-  return jsonResponse(request, { data: { question, answer } })
+  try {
+    const answer = await answerOperationalQuestion(question)
+    return jsonResponse(request, { data: { question, answer } })
+  } catch (error) {
+    console.error("AI query fallback activated:", error)
+    const fallback = getFallbackResponse("ai_query")
+    return jsonResponse(request, {
+      data: { question, answer: fallback.content, source: fallback.source },
+      meta: { degraded: true, reason: "AI 服务暂时不可用，显示预设内容" },
+    })
+  }
 }

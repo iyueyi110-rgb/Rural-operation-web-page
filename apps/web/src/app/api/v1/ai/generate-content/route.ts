@@ -1,4 +1,5 @@
 import { buildContentFactoryPrompt, CONTENT_FACTORY_SYSTEM_PROMPTS, type ContentFactoryType } from "@zouma/prompts/content-factory"
+import { getFallbackResponse } from "@zouma/prompts/fallback-responses"
 import { ModelProviderAdapter } from "@zouma/utils"
 import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
 import { isAdminRequest } from "@web/lib/tree-records"
@@ -57,13 +58,17 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error("Content generation failed:", error)
-    return jsonResponse(
-      request,
-      {
-        error: error instanceof Error ? error.message : "AI content generation failed",
-        provider: "configuration-required",
+    const fallback = getFallbackResponse("content_factory")
+    return jsonResponse(request, {
+      data: {
+        type,
+        content: fallback.content,
+        provider: "fallback",
+        model: "preset",
+        latencyMs: 0,
+        source: fallback.source,
       },
-      { status: 503 },
-    )
+      meta: { degraded: true, reason: "AI 服务暂时不可用，显示预设内容" },
+    })
   }
 }
