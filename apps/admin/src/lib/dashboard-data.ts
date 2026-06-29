@@ -24,6 +24,14 @@ export interface ProductMetric {
   stockStatus: string
 }
 
+export interface SensorMetric {
+  id: string
+  type: string
+  value: number
+  unit: string
+  createdAt: string
+}
+
 export function summarizeProduction(
   villagers: VillagerMetric[],
   completedTasks: CompletedTaskMetric[],
@@ -81,6 +89,26 @@ export function summarizeProductFeedback(
   }
 }
 
+export function normalizeEcologySensors(sensors: SensorMetric[]) {
+  const priority = ["soil_moisture", "humidity", "water_level", "temperature"]
+  const latestByType = new Map<string, SensorMetric>()
+
+  for (const sensor of sensors) {
+    const type = normalizeSensorType(sensor.type)
+    if (!priority.includes(type)) continue
+
+    const normalizedSensor = { ...sensor, type }
+    const existing = latestByType.get(type)
+    if (!existing || Date.parse(normalizedSensor.createdAt) > Date.parse(existing.createdAt)) {
+      latestByType.set(type, normalizedSensor)
+    }
+  }
+
+  return [...latestByType.values()].sort(
+    (first, second) => priority.indexOf(first.type) - priority.indexOf(second.type),
+  )
+}
+
 export function buildSparklinePath(values: number[], width = 220, height = 48) {
   if (!values.length) return ""
 
@@ -123,6 +151,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function finiteNumber(value: number) {
   return Number.isFinite(value) ? value : 0
+}
+
+function normalizeSensorType(type: string) {
+  if (type === "air_humidity") return "humidity"
+  return type
 }
 
 function round(value: number) {

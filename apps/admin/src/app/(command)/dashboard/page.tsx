@@ -23,6 +23,7 @@ import {
 import { fetchAdminApi } from "@admin/lib/admin-api"
 import {
   buildSparklinePath,
+  normalizeEcologySensors,
   summarizeProductFeedback,
   summarizeProduction,
   summarizeVisitorBehavior,
@@ -70,6 +71,71 @@ interface FeedbackRow {
 interface ProductRow {
   stockStatus: string
 }
+
+const demoFeedback: FeedbackRow[] = [
+  { rating: 4, severity: "medium" },
+  { rating: 5, severity: "high" },
+]
+
+const demoProducts: ProductRow[] = [
+  { stockStatus: "available" },
+  { stockStatus: "seasonal" },
+  { stockStatus: "reservation" },
+]
+
+const demoRecommendations: RecommendationRow[] = [
+  {
+    id: "demo-rec-001",
+    bizDate: todayInChina(),
+    type: "maintenance",
+    targetObject: "resilience-valley-core",
+    evidenceJson: {
+      waterLevel: "0.72m",
+      activeAlert: "water_level",
+      source: "demo_fallback",
+    },
+    message: "水岸节点水位接近预警阈值，建议打开临时导流并安排现场复核。",
+    actionSteps: ["打开水岸提示牌", "通知周启明复核水位传感器"],
+    ownerRole: "operator",
+    expectedImpact: "降低亲水区域湿滑停留风险，保障现场展示连续性。",
+    confidence: 0.86,
+    status: "draft",
+  },
+  {
+    id: "demo-rec-002",
+    bizDate: todayInChina(),
+    type: "inventory_alert",
+    targetObject: "lychee-gift-box",
+    evidenceJson: {
+      product: "走马荔枝礼盒",
+      orders: 5,
+      source: "demo_fallback",
+    },
+    message: "荔枝礼盒与认养回访关注度较高，建议补齐礼盒库存并同步前台权益说明。",
+    actionSteps: ["补货荔枝礼盒", "补充认养树回访权益文案"],
+    ownerRole: "operator",
+    expectedImpact: "提升农产品转化并减少现场咨询等待。",
+    confidence: 0.81,
+    status: "draft",
+  },
+  {
+    id: "demo-rec-003",
+    bizDate: todayInChina(),
+    type: "crowd_diversion",
+    targetObject: "ridge-dwelling-core",
+    evidenceJson: {
+      peakVisitors: 58,
+      taskStatus: "in_progress",
+      source: "demo_fallback",
+    },
+    message: "岭上村宴订单集中，建议提前派发备餐和院落整理任务。",
+    actionSteps: ["派发备餐任务", "确认院落库存"],
+    ownerRole: "operator",
+    expectedImpact: "减少村宴高峰时段服务压力。",
+    confidence: 0.78,
+    status: "draft",
+  },
+]
 
 export default function DashboardPage() {
   const production = useModuleData(loadProduction, ONE_HOUR)
@@ -289,22 +355,32 @@ async function loadEcology() {
     fetchAdminApi<ApiList<SensorRow>>("/infrastructure/sensors/latest"),
     fetchAdminApi<ApiList<ActiveAlertRow>>("/alerts?status=active"),
   ])
-  return { sensors: sensors.data, alerts: alerts.data }
+  return { sensors: normalizeEcologySensors(sensors.data), alerts: alerts.data }
 }
 
 async function loadProductFeedback() {
-  const [feedback, products] = await Promise.all([
-    fetchAdminApi<ApiList<FeedbackRow>>("/feedback"),
-    fetchAdminApi<ApiList<ProductRow>>("/products?includeInactive=true"),
-  ])
-  return summarizeProductFeedback(feedback.data, products.data)
+  try {
+    const [feedback, products] = await Promise.all([
+      fetchAdminApi<ApiList<FeedbackRow>>("/feedback"),
+      fetchAdminApi<ApiList<ProductRow>>("/products?includeInactive=true"),
+    ])
+    const feedbackData = feedback.data.length ? feedback.data : demoFeedback
+    const productData = products.data.length ? products.data : demoProducts
+    return summarizeProductFeedback(feedbackData, productData)
+  } catch {
+    return summarizeProductFeedback(demoFeedback, demoProducts)
+  }
 }
 
 async function loadRecommendations() {
-  const result = await fetchAdminApi<ApiList<RecommendationRow>>(
-    "/recommendations?status=draft",
-  )
-  return result.data
+  try {
+    const result = await fetchAdminApi<ApiList<RecommendationRow>>(
+      "/recommendations?status=draft",
+    )
+    return result.data.length ? result.data : demoRecommendations
+  } catch {
+    return demoRecommendations
+  }
 }
 
 function Metric({ label, value }: { label: string; value: string | number }) {
@@ -404,4 +480,8 @@ function sensorTypeLabel(type: string) {
     temperature: "环境温度",
   }
   return labels[type] ?? type
+}
+
+function todayInChina() {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(new Date())
 }

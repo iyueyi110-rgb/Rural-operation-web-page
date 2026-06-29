@@ -1548,7 +1548,7 @@
       "requesting": "生成中",
       "verify": "ログイン",
       "verifying": "確認中",
-      "developmentOtp": "試験用コード：{otp}",
+      "developmentOtp": "デモモード：SMS が利用できません。コード {otp} を使用してください。",
       "requestError": "該当する村民が見つかりません",
       "verifyError": "コードが無効または期限切れです"
     },

@@ -1548,7 +1548,7 @@
       "requesting": "正在生成",
       "verify": "登录",
       "verifying": "正在验证",
-      "developmentOtp": "试运营验证码：{otp}",
+      "developmentOtp": "演示模式：短信不可用，直接使用验证码 {otp}",
       "requestError": "未找到匹配的在岗村民",
       "verifyError": "验证码错误或已过期"
     },

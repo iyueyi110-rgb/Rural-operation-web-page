@@ -1548,7 +1548,7 @@
       "requesting": "Generating",
       "verify": "Sign in",
       "verifying": "Verifying",
-      "developmentOtp": "Pilot code: {otp}",
+      "developmentOtp": "Demo mode: SMS is unavailable. Use code {otp}.",
       "requestError": "No active villager matches this phone",
       "verifyError": "The code is invalid or expired"
     },

@@ -27,9 +27,16 @@ export function VillagerLoginClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone: normalizedPhone }),
       })
-      const result = (await response.json()) as { otp?: string; error?: string }
+      const result = (await response.json()) as {
+        demoMode?: boolean
+        error?: string
+        otp?: string
+      }
       if (!response.ok) throw new Error(result.error)
       setDevelopmentOtp(result.otp ?? "")
+      if (result.demoMode && result.otp) {
+        setOtp(result.otp)
+      }
     } catch {
       setError(t("login.requestError"))
     } finally {

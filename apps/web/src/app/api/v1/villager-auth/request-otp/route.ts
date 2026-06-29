@@ -10,6 +10,8 @@ import {
   rateLimitResponse,
 } from "@web/lib/rate-limit"
 
+const DEMO_OTP = "888888"
+
 export function OPTIONS(request: Request) {
   return optionsResponse(request)
 }
@@ -47,16 +49,21 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "未找到匹配村民" }, { status: 404 })
   }
 
-  const otp = String(randomInt(100000, 1_000_000))
+  const smsUnavailable =
+    !process.env.SMS_API_KEY?.trim() || !process.env.SMS_TEMPLATE_ID?.trim()
+  const demoMode = process.env.NODE_ENV === "development" && smsUnavailable
+  const otp = demoMode ? DEMO_OTP : String(randomInt(100000, 1_000_000))
+
   await prisma.villager.update({
     where: { id: villager.id },
     data: { otpCode: otp, otpExpiry: new Date(Date.now() + 5 * 60 * 1000) },
   })
 
-  if (process.env.NODE_ENV === "development") {
+  if (demoMode) {
     return jsonResponse(request, {
       success: true,
       message: "验证码已发送",
+      demoMode: true,
       otp,
     })
   }

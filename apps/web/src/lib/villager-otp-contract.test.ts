@@ -9,5 +9,6 @@ const requestOtpSource = readFileSync(
 
 test("development villager otp request returns the temporary code", () => {
   assert.match(requestOtpSource, /process\.env\.NODE_ENV === "development"/)
+  assert.match(requestOtpSource, /const DEMO_OTP = "888888"/)
   assert.match(requestOtpSource, /return jsonResponse\(request, \{[\s\S]*?otp,\s*\}\)/)
 })

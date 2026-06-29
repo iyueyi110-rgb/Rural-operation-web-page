@@ -3,6 +3,7 @@ import { seedNodes } from "./seed-nodes"
 import { seedProducts } from "./seed-products"
 import { seedFarmingCalendar } from "./seed-farming-calendar"
 import { seedTrees } from "./seed-trees"
+import { seedDemoData } from "./seed-demo"
 
 const seedTickets = [
   {
@@ -158,6 +159,7 @@ async function main() {
   await seedTrees()
   await seedProducts()
   await seedFarmingCalendar()
+  await seedDemoData()
 }
 
 main()
