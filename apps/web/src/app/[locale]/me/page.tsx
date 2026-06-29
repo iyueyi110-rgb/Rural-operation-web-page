@@ -10,9 +10,9 @@ import {
   SurfacePanel,
 } from "@web/components/subpage-ui"
 import { getSiteUrl } from "@web/lib/site-url"
-import { memberOrders } from "@web/lib/me-data"
 import { PageHeader, Section } from "@ui/index"
 import { AdoptionLookup } from "./adoption-lookup"
+import { MeDashboardClient } from "./me-dashboard-client"
 
 export async function generateMetadata({
   params,
@@ -69,30 +69,7 @@ export default async function MePage({
           </p>
         </SurfacePanel>
 
-        <div className="mt-8 grid gap-4">
-          {memberOrders.map((order) => (
-            <article
-              className="choice-card grid gap-3 md:grid-cols-[1fr_auto]"
-              key={order.id}
-            >
-              <div>
-                <div className="text-sm font-bold text-water">
-                  {t(order.typeKey)}
-                </div>
-                <h2 className="mt-2 text-xl font-extrabold">
-                  {t(order.titleKey)}
-                </h2>
-                <p className="mt-2 text-sm text-ink/58">{order.id}</p>
-              </div>
-              <div className="grid gap-2 text-sm md:text-right">
-                <span className="font-bold text-moss">
-                  {t(order.statusKey)}
-                </span>
-                <span className="text-ink/58">{t(order.dateKey)}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+        <MeDashboardClient />
         <AdoptionLookup />
       </Section>
     </main>

@@ -1,6 +1,6 @@
 "use client"
 
-import { CalendarDays, CheckCircle2, CircleAlert, CreditCard, Ticket } from "lucide-react"
+import { CalendarDays, CheckCircle2, CircleAlert, Ticket } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useMemo, useState } from "react"
 
@@ -12,6 +12,7 @@ import {
 } from "@web/lib/tickets-data"
 import { MasterDetailLayout } from "@ui/index"
 import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
+import { DemoPaymentDialog } from "@web/components/demo-payment-dialog"
 
 type TicketProduct = (typeof ticketProducts)[number]
 type TicketProductId = TicketProduct["id"]
@@ -19,10 +20,12 @@ type TicketDate = (typeof ticketDateOptions)[number]["value"]
 
 interface TicketOrder {
   id: string
-  status: "pending_payment"
+  status: string
+  orderType: string
   productId: string
   date: string
   quantity: number
+  amount: number
   createdAt: string
 }
 
@@ -68,6 +71,7 @@ export function TicketFlow() {
           productId: selectedProduct.id,
           date: selectedDate,
           quantity,
+          guestPhone: phone.trim(),
         }),
       })
 
@@ -239,16 +243,16 @@ export function TicketFlow() {
               <p className="mt-2 text-sm leading-6 text-ink/70">{t("order.body")}</p>
               <div className="mt-4 rounded-md bg-white p-3 text-sm">
                 <div className="font-bold">{t("order.status")}</div>
+                <div className="mt-1 text-ink/62">{order.status === "paid" ? "已完成演示支付" : "待演示支付"}</div>
                 <div className="mt-2 font-semibold">{t("order.idLabel")}: {order.id}</div>
               </div>
-              <button
-                className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold text-ink/70"
-                disabled
-                type="button"
-              >
-                <CreditCard aria-hidden="true" className="h-4 w-4" />
-                {t("order.paymentEntry")}
-              </button>
+              <DemoPaymentDialog
+                amount={order.amount}
+                orderId={order.id}
+                orderTitle={t(selectedProduct.nameKey)}
+                orderType={order.orderType}
+                onPaid={() => setOrder((current) => current ? { ...current, status: "paid" } : current)}
+              />
             </div>
           ) : null}
         </>

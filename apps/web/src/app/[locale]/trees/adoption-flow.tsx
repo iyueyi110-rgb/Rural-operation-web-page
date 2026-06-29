@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { BadgeCheck, CalendarDays, CheckCircle2, CreditCard, FileText, Leaf, MapPin, ShieldCheck, Sprout } from "lucide-react"
+import { BadgeCheck, CalendarDays, CheckCircle2, FileText, Leaf, MapPin, ShieldCheck, Sprout } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { useMemo, useState } from "react"
 
@@ -15,6 +15,7 @@ import {
 import { FieldLabel, InlineNotice, MetricTile, PanelTitle } from "@web/components/subpage-ui"
 import { MasterDetailLayout, SafeImage } from "@ui/index"
 import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
+import { DemoPaymentDialog } from "@web/components/demo-payment-dialog"
 
 const availabilityTone: Record<TreeAvailability, string> = {
   available: "bg-moss/12 text-moss border-moss/20",
@@ -24,7 +25,9 @@ const availabilityTone: Record<TreeAvailability, string> = {
 
 interface TreeAdoptionOrder {
   id: string
-  status: "pending_payment"
+  status: string
+  orderType: string
+  amount: number
   createdAt: string
 }
 
@@ -270,14 +273,17 @@ export function AdoptionFlow() {
               <p className="mt-2 text-sm leading-6 text-ink/70">{t("order.body")}</p>
               <div className="mt-4 rounded-md bg-white p-3 text-sm">
                 <div className="font-bold">{t("order.status")}</div>
-                <div className="mt-1 text-ink/62">{t("order.paymentStatus")}</div>
+                <div className="mt-1 text-ink/62">{order.status === "active" ? "认养已激活" : t("order.paymentStatus")}</div>
                 <div className="mt-2 font-semibold">{t("order.idLabel")}: {order.id}</div>
                 <div className="mt-1 text-ink/62">{t("order.createdAtLabel")}: {new Date(order.createdAt).toLocaleString()}</div>
               </div>
-              <button className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold text-ink/70" disabled type="button">
-                <CreditCard aria-hidden="true" className="h-4 w-4" />
-                {t("order.paymentEntry")}
-              </button>
+              <DemoPaymentDialog
+                amount={order.amount}
+                orderId={order.id}
+                orderTitle={t(selectedTree.nameKey)}
+                orderType={order.orderType}
+                onPaid={() => setOrder((current) => current ? { ...current, status: "active" } : current)}
+              />
             </div>
           ) : null}
         </>

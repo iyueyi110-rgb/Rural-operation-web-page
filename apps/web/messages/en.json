@@ -480,6 +480,11 @@
         "title": "AI processing",
         "body": "AI inputs must be sanitized first.",
         "status": "Off by default"
+      },
+      "location": {
+        "title": "Location data",
+        "body": "Routes and tree profiles use area-level location; precise coordinates are not sent to external AI services.",
+        "status": "Revocable"
       }
     }
   },
