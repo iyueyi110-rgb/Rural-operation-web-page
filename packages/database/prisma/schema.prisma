@@ -152,17 +152,17 @@ model Visitor {
 }
 
 model User {
-  id          String    @id @default(cuid())
-  mobile      String    @unique
+  id          String         @id @default(cuid())
+  mobile      String         @unique
   nickname    String?
-  role        String    @default("visitor")
-  locale      String    @default("zh-CN")
+  role        String         @default("visitor")
+  locale      String         @default("zh-CN")
   otpCode     String?
   otpExpiry   DateTime?
   jwtSalt     String?
   lastLoginAt DateTime?
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
   profile     UserProfile?
   adoptions   TreeAdoption[]
   routePlans  RoutePlan[]
@@ -207,7 +207,7 @@ model Recommendation {
   message        String    @db.Text
   actionSteps    Json      @map("action_steps")
   ownerRole      String    @map("owner_role")
-  expectedImpact String?   @db.Text @map("expected_impact")
+  expectedImpact String?   @map("expected_impact") @db.Text
   confidence     Float     @default(0)
   status         String    @default("draft")
   approvedBy     String?   @map("approved_by")
@@ -245,6 +245,7 @@ model UnifiedOrder {
   productName String
   quantity    Int      @default(1)
   totalAmount Float    @default(0)
+  userId      String?
   status      String   @default("pending_payment")
   nodeId      String?
   metadata    Json?
@@ -254,6 +255,7 @@ model UnifiedOrder {
   node SpaceNode? @relation(fields: [nodeId], references: [id])
 
   @@index([nodeId, createdAt])
+  @@index([userId, createdAt])
   @@map("unified_order")
 }
 
@@ -465,9 +467,30 @@ model Alert {
   @@map("alert")
 }
 
+model Courtyard {
+  id            String              @id @default(cuid())
+  name          String
+  sceneRealm    String
+  capacity      Int
+  inventoryType String              @default("entire_house")
+  priceRule     Json                @default("{}")
+  status        String              @default("active")
+  locationGeo   String?
+  description   String?             @db.Text
+  amenities     Json                @default("[]")
+  images        Json                @default("[]")
+  createdAt     DateTime            @default(now()) @map("created_at")
+  updatedAt     DateTime            @updatedAt @map("updated_at")
+  activities    CourtyardActivity[]
+
+  @@index([sceneRealm, status])
+  @@map("courtyard")
+}
+
 model CourtyardActivity {
   id            String            @id @default(cuid())
   courtyardId   String
+  courtyard     Courtyard         @relation(fields: [courtyardId], references: [id])
   activityType  String
   title         String
   description   String            @db.Text
@@ -553,4 +576,90 @@ model VisitorInteractionTask {
   @@index([adoptionId, status, createdAt])
   @@index([treeId, createdAt])
   @@map("visitor_interaction_task")
+}
+
+model TicketProduct {
+  id          String        @id @default(cuid())
+  name        String
+  category    String
+  price       Float
+  totalStock  Int           @default(100)
+  soldCount   Int           @default(0)
+  status      String        @default("on_sale")
+  validFrom   String?
+  validTo     String?
+  description String?       @db.Text
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  orders      TicketOrder[]
+
+  @@index([category, status])
+  @@map("ticket_product")
+}
+
+model TicketOrder {
+  id          String        @id @default(cuid())
+  productId   String
+  userId      String?
+  quantity    Int           @default(1)
+  totalAmount Float         @default(0)
+  guestName   String?
+  guestPhone  String?
+  status      String        @default("pending_payment")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  product     TicketProduct @relation(fields: [productId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([guestPhone, createdAt])
+  @@map("ticket_order")
+}
+
+model PaymentOrder {
+  id            String    @id @default(cuid())
+  orderType     String
+  orderId       String
+  userId        String?
+  amount        Float
+  channel       String    @default("mock_demo")
+  status        String    @default("pending")
+  idempotentKey String    @unique
+  paidAt        DateTime?
+  expiresAt     DateTime?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@index([orderType, orderId])
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@map("payment_order")
+}
+
+model ConsentRecord {
+  id          String   @id @default(cuid())
+  userId      String
+  consentType String
+  granted     Boolean  @default(true)
+  ipAddress   String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, consentType])
+  @@index([userId])
+  @@map("consent_record")
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String
+  action     String
+  targetType String
+  targetId   String?
+  detail     Json     @default("{}")
+  ipAddress  String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
+  @@map("audit_log")
 }

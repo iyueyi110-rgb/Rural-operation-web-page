@@ -1,4 +1,7 @@
+import { prisma } from "@zouma/database"
+
 import { jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import { requireUserSession } from "@web/lib/api-auth"
 import {
   bookingDateOptions,
   courtyardOptions,
@@ -42,13 +45,39 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Courtyard is not available for this date" }, { status: 409 })
   }
 
-  const createdAt = new Date().toISOString()
+  const user = await requireUserSession(request)
+  const dbCourtyard = await prisma.courtyard.findUnique({
+    where: { id: courtyard.id },
+  })
+  if (!dbCourtyard) {
+    return jsonResponse(request, { error: "Courtyard is not available in database" }, { status: 404 })
+  }
+  const totalAmount = paymentMode.value === "deposit" ? 240 : 680
+  const record = await prisma.unifiedOrder.create({
+    data: {
+      orderType: "courtyard_booking",
+      productId: dbCourtyard.id,
+      productName: dbCourtyard.name,
+      quantity: 1,
+      totalAmount,
+      userId: user?.id ?? null,
+      status: "pending_payment",
+      metadata: {
+        date: dateOption.value,
+        guestCount: body.guestCount,
+        paymentMode: paymentMode.value,
+        demoMode: true,
+      },
+    },
+  })
 
   return jsonResponse(request, {
     data: {
-      id: `CB-${Date.now()}`,
-      status: "pending_payment",
-      createdAt,
+      id: record.id,
+      status: record.status,
+      orderType: record.orderType,
+      amount: record.totalAmount,
+      createdAt: record.createdAt.toISOString(),
     },
-  })
+  }, { status: 201 })
 }

@@ -4,6 +4,7 @@ import {
   jsonResponse,
   optionsResponse,
 } from "@web/lib/aigc-api"
+import { getFallbackResponse } from "@zouma/prompts/fallback-responses"
 import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
 import {
   generateRecommendations,
@@ -61,16 +62,19 @@ export async function POST(request: Request) {
     )
   } catch (error) {
     console.error("Recommendation generation failed:", error)
-    return jsonResponse(
-      request,
-      {
-        error: {
-          code: "RECOMMENDATION_GENERATION_FAILED",
-          message:
-            error instanceof Error ? error.message : "AI service unavailable.",
-        },
+    const fallback = getFallbackResponse("recommendation")
+    return jsonResponse(request, {
+      data: {
+        id: `fallback-recommendation-${date}`,
+        bizDate: date,
+        type: "fallback",
+        message: fallback.content,
+        actionSteps: ["复核天气、客流、设备与工单数据", "待 AI 服务恢复后重新生成智策"],
+        ownerRole: "operator",
+        confidence: 0,
+        status: "draft",
       },
-      { status: 503 },
-    )
+      meta: { created: false, degraded: true, reason: "AI 服务暂时不可用，显示预设内容" },
+    })
   }
 }

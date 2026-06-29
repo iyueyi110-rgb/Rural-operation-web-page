@@ -146,9 +146,11 @@ export async function POST(request: Request) {
       id: record.id,
       treeId: record.treeId,
       status: record.status,
+      orderType: "tree_adoption",
+      amount: plan.value === "annual" ? 680 : 360,
       createdAt: record.createdAt.toISOString(),
     },
-  })
+  }, { status: 201 })
 }
 
 class AdoptionConflictError extends Error {}

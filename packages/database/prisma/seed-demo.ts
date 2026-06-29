@@ -99,10 +99,14 @@ export async function seedDemoData() {
 
   await seedDemoVillagers(nodes)
   await seedDemoUsers()
+  await seedDemoCourtyards()
+  await seedDemoTicketProducts()
   await seedDemoTasks(nodes)
   await seedDemoDevices(nodes)
   await seedDemoActivities()
   await seedDemoOrders(nodes)
+  await seedDemoTicketOrders()
+  await seedDemoPaymentsAndConsents()
   await seedDemoVisitorsAndScores(nodes)
   await seedDemoTreeOperations()
   await seedDemoReportsAndRecommendations(nodes)
@@ -175,6 +179,97 @@ async function seedDemoUsers() {
           },
         },
       },
+    })
+  }
+}
+
+async function seedDemoCourtyards() {
+  const courtyards = [
+    {
+      id: "ridge-shared-courtyard",
+      name: "岭上共居院",
+      sceneRealm: "ridge_dwelling",
+      capacity: 8,
+      status: "active",
+      description: "适合轻住宿、村宴和小型共创活动的岭上院落。",
+      amenities: ["sharedKitchen", "courtyardTea", "lowCarbonRoom", "parkingTransfer"],
+      images: ["/images/home/courtyard-booking-generated.webp"],
+    },
+    {
+      id: "lychee-food-courtyard",
+      name: "荔枝食育院",
+      sceneRealm: "lychee_field",
+      capacity: 12,
+      status: "active",
+      description: "连接采摘、食育课堂和亲子体验的荔田院落。",
+      amenities: ["foodClassroom", "harvestTable", "familyFriendly", "rainShelter"],
+      images: ["/images/courtyards/lychee-food-courtyard.webp"],
+    },
+    {
+      id: "ancient-road-station",
+      name: "古道驿站院",
+      sceneRealm: "ancient_road",
+      capacity: 6,
+      status: "maintenance",
+      description: "古道入口轻休憩节点，当前用于演示维护状态。",
+      amenities: ["audioGuide", "teaBreak", "lightWalk", "historyWall"],
+      images: ["/images/courtyards/ancient-road-station.webp"],
+    },
+    {
+      id: "resilience-water-courtyard",
+      name: "韧谷水岸院",
+      sceneRealm: "resilience_valley",
+      capacity: 10,
+      status: "active",
+      description: "面向研学和水脉观察的韧谷院落。",
+      amenities: ["studyRoom", "rainShelter", "watersideGuide"],
+      images: ["/images/home/resilience-valley.webp"],
+    },
+  ] as const
+
+  for (const courtyard of courtyards) {
+    await prisma.courtyard.upsert({
+      where: { id: courtyard.id },
+      create: {
+        id: courtyard.id,
+        name: courtyard.name,
+        sceneRealm: courtyard.sceneRealm,
+        capacity: courtyard.capacity,
+        status: courtyard.status,
+        description: courtyard.description,
+        amenities: courtyard.amenities,
+        images: courtyard.images,
+        priceRule: { weekday: 480, weekend: 680 },
+      },
+      update: {
+        name: courtyard.name,
+        sceneRealm: courtyard.sceneRealm,
+        capacity: courtyard.capacity,
+        status: courtyard.status,
+        description: courtyard.description,
+        amenities: courtyard.amenities,
+        images: courtyard.images,
+        priceRule: { weekday: 480, weekend: 680 },
+      },
+    })
+  }
+}
+
+async function seedDemoTicketProducts() {
+  const products = [
+    ["ancient-road-pass", "古道半日导览票", "scenic", 30, 120, 18, "走马岭古道轻导览与指路碑讲述。"],
+    ["lychee-class", "荔枝食育课堂票", "activity", 68, 80, 12, "亲子荔枝食育、采摘和分级体验。"],
+    ["resilience-workshop", "韧谷水脉研学票", "activity", 88, 60, 8, "水脉观察、韧性设施和安全课程。"],
+    ["ridge-courtyard-package", "岭上院落村宴套餐", "package", 198, 40, 6, "院落茶歇、村宴和晨间农事组合。"],
+    ["family-rainy-package", "亲子雨天备用套餐", "package", 128, 50, 5, "雨天食育课堂、室内导览和手作活动。"],
+    ["harvest-return-pass", "认养回访采摘票", "scenic", 48, 100, 10, "认养用户回访采摘和果品打包体验。"],
+  ] as const
+
+  for (const [id, name, category, price, totalStock, soldCount, description] of products) {
+    await prisma.ticketProduct.upsert({
+      where: { id },
+      create: { id, name, category, price, totalStock, soldCount, description, status: "on_sale" },
+      update: { name, category, price, totalStock, soldCount, description, status: "on_sale" },
     })
   }
 }
@@ -353,14 +448,14 @@ async function seedDemoActivities() {
 
 async function seedDemoOrders(nodes: Record<string, string>) {
   const orders = [
-    ["demo-order-001", "product", "lychee-gift-box", "走马荔枝礼盒", 2, 336, nodes["lychee-field-core"]],
-    ["demo-order-002", "activity", "demo-activity-food", "岭上村宴食育课", 4, 272, nodes["ridge-dwelling-core"]],
-    ["demo-order-003", "ticket", "ancient-route-ticket", "古道半日票", 3, 90, nodes["ancient-road-core"]],
-    ["demo-order-004", "harvest", "demo-activity-harvest", "荔枝采摘回访日", 2, 176, nodes["lychee-field-core"]],
-    ["demo-order-005", "meal", "ridge-meal-set", "岭上村宴预订", 1, 420, nodes["ridge-dwelling-core"]],
+    ["demo-order-001", "product", "lychee-gift-box", "走马荔枝礼盒", 2, 336, nodes["lychee-field-core"], "demo-user-001"],
+    ["demo-order-002", "activity_booking", "demo-activity-food", "岭上村宴食育课", 4, 272, nodes["ridge-dwelling-core"], "demo-user-001"],
+    ["demo-order-003", "ticket_order", "ancient-road-pass", "古道半日票", 3, 90, nodes["ancient-road-core"], "demo-user-002"],
+    ["demo-order-004", "activity_booking", "demo-activity-harvest", "荔枝采摘回访日", 2, 176, nodes["lychee-field-core"], "demo-user-001"],
+    ["demo-order-005", "courtyard_booking", "ridge-meal-set", "岭上村宴预订", 1, 420, nodes["ridge-dwelling-core"], "demo-user-003"],
   ] as const
 
-  for (const [id, orderType, productId, productName, quantity, totalAmount, nodeIdValue] of orders) {
+  for (const [id, orderType, productId, productName, quantity, totalAmount, nodeIdValue, userId] of orders) {
     await prisma.unifiedOrder.upsert({
       where: { id },
       create: {
@@ -370,6 +465,7 @@ async function seedDemoOrders(nodes: Record<string, string>) {
         productName,
         quantity,
         totalAmount,
+        userId,
         nodeId: nodeIdValue,
         status: "paid",
         metadata: { demo: true },
@@ -380,10 +476,72 @@ async function seedDemoOrders(nodes: Record<string, string>) {
         productName,
         quantity,
         totalAmount,
+        userId,
         nodeId: nodeIdValue,
         status: "paid",
         metadata: { demo: true },
       },
+    })
+  }
+}
+
+async function seedDemoTicketOrders() {
+  const orders = [
+    ["demo-ticket-order-001", "ancient-road-pass", "demo-user-002", 3, 90, "王先生", "138****0002", "paid"],
+    ["demo-ticket-order-002", "lychee-class", "demo-user-001", 2, 136, "林女士", "138****0001", "pending_payment"],
+  ] as const
+
+  for (const [id, productId, userId, quantity, totalAmount, guestName, guestPhone, status] of orders) {
+    await prisma.ticketOrder.upsert({
+      where: { id },
+      create: { id, productId, userId, quantity, totalAmount, guestName, guestPhone, status },
+      update: { productId, userId, quantity, totalAmount, guestName, guestPhone, status },
+    })
+  }
+}
+
+async function seedDemoPaymentsAndConsents() {
+  const payments = [
+    ["demo-payment-pending", "ticket_order", "demo-ticket-order-002", "demo-user-001", 136, "pending"],
+    ["demo-payment-paid", "ticket_order", "demo-ticket-order-001", "demo-user-002", 90, "paid"],
+    ["demo-payment-adoption", "tree_adoption", "demo-adoption-001", "demo-user-001", 680, "paid"],
+    ["demo-payment-expired", "courtyard_booking", "demo-order-expired", "demo-user-003", 240, "expired"],
+    ["demo-payment-refunded", "activity_booking", "demo-order-refunded", "demo-user-001", 88, "refunded"],
+  ] as const
+
+  for (const [id, orderType, orderId, userId, amount, status] of payments) {
+    await prisma.paymentOrder.upsert({
+      where: { id },
+      create: {
+        id,
+        orderType,
+        orderId,
+        userId,
+        amount,
+        status,
+        channel: "mock_demo",
+        idempotentKey: `${id}-idem`,
+        paidAt: status === "paid" || status === "refunded" ? demoNow : null,
+        expiresAt: status === "expired" ? demoNow : null,
+      },
+      update: {
+        orderType,
+        orderId,
+        userId,
+        amount,
+        status,
+        channel: "mock_demo",
+        paidAt: status === "paid" || status === "refunded" ? demoNow : null,
+        expiresAt: status === "expired" ? demoNow : null,
+      },
+    })
+  }
+
+  for (const consentType of ["privacy_policy", "data_collection", "ai_processing", "location"] as const) {
+    await prisma.consentRecord.upsert({
+      where: { userId_consentType: { userId: "demo-user-001", consentType } },
+      create: { userId: "demo-user-001", consentType, granted: true, ipAddress: "127.0.0.1" },
+      update: { granted: true, ipAddress: "127.0.0.1" },
     })
   }
 }

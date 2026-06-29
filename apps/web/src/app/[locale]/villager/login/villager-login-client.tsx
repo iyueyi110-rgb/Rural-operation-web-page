@@ -7,6 +7,7 @@ import { useState } from "react"
 
 import { saveVillagerToken } from "@web/lib/villager-auth-client"
 import { FieldLabel, InlineNotice, PanelTitle, SurfacePanel } from "@web/components/subpage-ui"
+import { OtpDemoBanner } from "@web/components/otp-demo-banner"
 
 export function VillagerLoginClient() {
   const t = useTranslations("villagerSystem")
@@ -100,11 +101,7 @@ export function VillagerLoginClient() {
           {busy === "request" ? t("login.requesting") : t("login.request")}
         </button>
 
-        {developmentOtp ? (
-          <InlineNotice className="mt-4" tone="info">
-            {t("login.developmentOtp", { otp: developmentOtp })}
-          </InlineNotice>
-        ) : null}
+        <OtpDemoBanner otpCode={developmentOtp} />
 
         <FieldLabel className="mt-5" label={t("login.otp")}>
           <input

@@ -17,4 +17,10 @@ export const consentItems = [
     bodyKey: "items.ai.body",
     statusKey: "items.ai.status",
   },
+  {
+    id: "location",
+    titleKey: "items.location.title",
+    bodyKey: "items.location.body",
+    statusKey: "items.location.status",
+  },
 ] as const

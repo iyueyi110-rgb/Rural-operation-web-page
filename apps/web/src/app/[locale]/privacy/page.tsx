@@ -4,10 +4,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import type { Locale } from "@web/i18n/routing"
 import { BackButton } from "@web/components/back-button"
-import { SubpageHero, SurfacePanel } from "@web/components/subpage-ui"
+import { SubpageHero } from "@web/components/subpage-ui"
 import { getSiteUrl } from "@web/lib/site-url"
 import { consentItems } from "@web/lib/privacy-data"
 import { PageHeader, Section } from "@ui/index"
+import { PrivacyConsentsClient } from "./privacy-consents-client"
 
 export async function generateMetadata({
   params,
@@ -56,21 +57,14 @@ export default async function PrivacyPage({
         title={t("hero.title")}
       />
       <Section>
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
-          {consentItems.map((item) => (
-            <SurfacePanel key={item.id}>
-              <div className="flex items-center justify-between gap-3">
-                <h2 className="text-xl font-extrabold">{t(item.titleKey)}</h2>
-                <span className="rounded-full border border-moss/20 bg-moss/10 px-3 py-1 text-xs font-bold text-moss">
-                  {t(item.statusKey)}
-                </span>
-              </div>
-              <p className="mt-4 text-sm leading-7 text-ink/66">
-                {t(item.bodyKey)}
-              </p>
-            </SurfacePanel>
-          ))}
-        </div>
+        <PrivacyConsentsClient
+          labels={Object.fromEntries(
+            consentItems.map((item) => [
+              item.id,
+              { title: t(item.titleKey), body: t(item.bodyKey) },
+            ]),
+          )}
+        />
       </Section>
     </main>
   )

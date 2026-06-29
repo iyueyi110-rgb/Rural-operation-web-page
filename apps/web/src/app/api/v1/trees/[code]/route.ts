@@ -58,6 +58,19 @@ export async function PATCH(
       adoptStatus: typeof body.adoptStatus === "string" ? body.adoptStatus : tree.adoptStatus,
     },
   })
+  await prisma.auditLog.create({
+    data: {
+      actorId: request.headers.get("x-admin-token") ? "admin-token" : "admin",
+      action: "tree_update",
+      targetType: "orchard_tree",
+      targetId: updated.id,
+      detail: {
+        treeCode: updated.treeCode,
+        fields: Object.keys(body),
+      },
+      ipAddress: request.headers.get("x-forwarded-for") ?? null,
+    },
+  })
 
   return jsonResponse(request, { data: { id: updated.id, treeCode: updated.treeCode } })
 }

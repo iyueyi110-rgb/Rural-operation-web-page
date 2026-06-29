@@ -11,5 +11,11 @@ export async function GET(request: Request) {
     orderBy: { date: "desc" },
   })
 
-  return jsonResponse(request, { data })
+  return jsonResponse(request, {
+    data,
+    meta: {
+      degraded: !data,
+      reason: !data ? "暂无日报，等待定时任务生成" : undefined,
+    },
+  })
 }

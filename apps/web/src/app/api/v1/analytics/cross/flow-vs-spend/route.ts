@@ -9,5 +9,13 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const date = searchParams.get("date") ?? getChinaDateString()
   const data = await computeFlowVsSpend(date)
-  return jsonResponse(request, { data, meta: { total: data.length } })
+  const insufficient = data.every((row) => row.peopleCount === 0 || row.orderCount === 0)
+  return jsonResponse(request, {
+    data,
+    meta: {
+      total: data.length,
+      degraded: insufficient,
+      reason: insufficient ? "客流或消费样本不足，显示演示分析结构" : undefined,
+    },
+  })
 }
