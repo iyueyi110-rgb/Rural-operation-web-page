@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, nodeDisplayName } from "@admin/lib/admin-api"
+import { adminApiBase, fetchWithTimeout, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface SpaceNodeRow extends Record<string, unknown> {
@@ -48,7 +48,7 @@ export default function NodesPage() {
     setError("")
 
     try {
-      const response = await fetch(`${adminApiBase}/nodes`)
+      const response = await fetchWithTimeout(`${adminApiBase}/nodes`)
       if (!response.ok) throw new Error(adminCopy.common.error)
       const result = (await response.json()) as { data: SpaceNodeRow[] }
       setNodes(result.data)
@@ -64,7 +64,7 @@ export default function NodesPage() {
     if (!node) return
 
     try {
-      const response = await fetch(`${adminApiBase}/nodes/scores/${node.slug}`)
+      const response = await fetchWithTimeout(`${adminApiBase}/nodes/scores/${node.slug}`)
       if (!response.ok) throw new Error(adminCopy.common.error)
       const result = (await response.json()) as { data: ScoreRow[] }
       setScores(result.data)

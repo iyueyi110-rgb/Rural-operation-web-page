@@ -4,7 +4,7 @@ import { RefreshCw } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { AdminNotice, AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
-import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface DailyReport {
@@ -29,7 +29,7 @@ export default function ReportsPage() {
     setError("")
 
     try {
-      const response = await fetch(`${adminApiBase}/reports`)
+      const response = await fetchWithTimeout(`${adminApiBase}/reports`)
       if (!response.ok) throw new Error(adminCopy.common.error)
       const result = (await response.json()) as { data: DailyReport[] }
       setReports(result.data)

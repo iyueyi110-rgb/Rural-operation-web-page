@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, CalendarDays, Leaf, Sprout } from "lucide-react"
 import { getTranslations, setRequestLocale } from "next-intl/server"
@@ -19,7 +18,7 @@ import {
 import { TreeEnvironmentCard } from "@web/components/tree-environment-card"
 import { getSiteUrl } from "@web/lib/site-url"
 import { getTreeAdoptionRights, getTreeProfile } from "@web/lib/tree-records"
-import { PageHeader, Section } from "@ui/index"
+import { PageHeader, SafeImage, Section } from "@ui/index"
 
 import { HarvestShipmentForm } from "./harvest-shipment-form"
 
@@ -100,7 +99,7 @@ export default async function TreeDetailPage({
 
           <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-[0_12px_28px_rgba(25,32,27,0.08)]">
             <div className="relative aspect-[4/3]">
-              <Image
+              <SafeImage
                 alt={t(tree.imageAltKey)}
                 className="object-cover"
                 fill
@@ -165,7 +164,7 @@ export default async function TreeDetailPage({
                   className="relative aspect-[4/3] overflow-hidden rounded-lg bg-rice"
                   key={photo}
                 >
-                  <Image
+                  <SafeImage
                     alt={t("profile.growthPhotoAlt", {
                       name: t(tree.nameKey),
                       index: index + 1,

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, fetchWithTimeout, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface ProductRow extends Record<string, unknown> {
@@ -46,8 +46,8 @@ export default function ProductsPage() {
   async function loadData() {
     setIsLoading(true)
     const [productResponse, nodeResponse] = await Promise.all([
-      fetch(`${adminApiBase}/products?includeInactive=true`),
-      fetch(`${adminApiBase}/nodes`),
+      fetchWithTimeout(`${adminApiBase}/products?includeInactive=true`),
+      fetchWithTimeout(`${adminApiBase}/nodes`),
     ])
     const productPayload = (await productResponse.json()) as { data?: ProductRow[] }
     const nodePayload = (await nodeResponse.json()) as { data?: NodeRow[] }

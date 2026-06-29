@@ -32,6 +32,11 @@ a {
   text-decoration: none;
 }
 
+:focus-visible {
+  outline: 2px solid #b93835;
+  outline-offset: 2px;
+}
+
 ::selection {
   background: #b93835;
   color: white;
@@ -246,4 +251,52 @@ a {
 
 .scroll-hint-float {
   animation: scrollHintFloat 3s ease-out 1.5s both;
+}
+
+.section-card,
+.scene-card,
+.route-card,
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}
+
+@media (prefers-reduced-data: reduce) {
+  video {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #19201b;
+    --foreground: #f3eee3;
+    --surface: #1e2722;
+    --line: #3a4a3d;
+  }
+
+  body {
+    background: #19201b;
+    color: var(--foreground);
+  }
+
+  img,
+  video {
+    opacity: 0.92;
+  }
+}
+
+@media print {
+  .no-print,
+  header,
+  nav,
+  footer {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: #19201b !important;
+  }
 }

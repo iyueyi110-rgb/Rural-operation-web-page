@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react"
 
 import { AdminNotice, AdminPageShell } from "@admin/components/admin-page-shell"
 import { adminCopy } from "@admin/lib/admin-copy"
-import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
 import type { Feedback, FeedbackRecord } from "@zouma/contracts"
 
 type FeedbackStatus = Feedback["status"]
@@ -70,7 +70,7 @@ export function FeedbackContent() {
     setError("")
 
     try {
-      const response = await fetch(`${adminApiBase}/feedback`, { cache: "no-store" })
+      const response = await fetchWithTimeout(`${adminApiBase}/feedback`, { cache: "no-store" })
 
       if (!response.ok) {
         throw new Error("load failed")

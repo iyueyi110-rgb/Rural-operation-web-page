@@ -1,26 +1,30 @@
-import type { Metadata } from "next"
 import type { ReactNode } from "react"
-import { Noto_Sans_SC } from "next/font/google"
+import { Noto_Sans_SC, Noto_Serif_SC } from "next/font/google"
 
 import "leaflet/dist/leaflet.css"
 import "./globals.css"
-import { adminCopy } from "@admin/lib/admin-copy"
-import { AdminShell } from "./admin-shell"
+import { OfflineBanner } from "@web/components/offline-banner"
 
 const notoSansSc = Noto_Sans_SC({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
+  variable: "--font-sans",
 })
 
-export const metadata: Metadata = {
-  title: adminCopy.metadata.title,
-  description: adminCopy.metadata.description,
-}
+const notoSerifSc = Noto_Serif_SC({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-serif",
+})
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="zh-CN" className={notoSansSc.className}>
+    <html
+      lang="zh-CN"
+      className={`${notoSansSc.variable} ${notoSerifSc.variable}`}
+    >
       <body>
         <noscript>
           <div
@@ -36,7 +40,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             请启用 JavaScript 以获得完整体验。部分功能在禁用 JS 时不可用。
           </div>
         </noscript>
-        <AdminShell>{children}</AdminShell>
+        <OfflineBanner />
+        {children}
       </body>
     </html>
   )

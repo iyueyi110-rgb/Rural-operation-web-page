@@ -138,8 +138,10 @@ export async function POST(request: Request) {
   let deliveryChannel = "in_app"
   if (requestedChannel === "sms") {
     const phone = await resolveSmsPhone(recipientType, rawRecipientId)
-    const sent = phone ? await sendSms(phone, `${title}\n${content}`) : false
-    deliveryChannel = sent ? "sms" : "in_app"
+    const smsResult = phone
+      ? await sendSms(phone, `${title}\n${content}`)
+      : { success: false, fallback: "in_app" as const }
+    deliveryChannel = smsResult.success ? "sms" : "in_app"
   }
 
   const data = await prisma.notification.create({

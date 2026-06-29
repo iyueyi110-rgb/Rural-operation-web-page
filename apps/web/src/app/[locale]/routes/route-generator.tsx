@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { AlertTriangle, Clock3, MapPinned, MoveRight, Route, Umbrella } from "lucide-react"
@@ -16,6 +15,7 @@ import {
 } from "@web/lib/routes-data"
 import type { Locale } from "@web/i18n/routing"
 import { FieldLabel, InlineNotice, MetricTile, PanelTitle, SegmentedControl, SurfacePanel } from "@web/components/subpage-ui"
+import { SafeImage } from "@ui/index"
 
 const RouteSatelliteMap = dynamic(
   () =>
@@ -146,7 +146,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
         </div>
         <div className="relative aspect-[16/11] bg-ink">
           {mapMode === "scope" ? (
-            <Image
+            <SafeImage
               alt={t("map.scopeAlt")}
               className="object-cover"
               fill

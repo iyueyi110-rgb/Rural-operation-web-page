@@ -1,3 +1,5 @@
+import { fetchWithTimeout } from "@web/lib/fetch-timeout"
+
 const TOKEN_KEY = "villager_token"
 
 export function readVillagerToken(
@@ -27,5 +29,5 @@ export function fetchWithVillagerAuth(
   const session = getVillagerSession()
   const headers = new Headers(init.headers)
   if (session) headers.set("X-Villager-Token", session.token)
-  return fetch(input, { ...init, headers })
+  return fetchWithTimeout(input, { ...init, headers })
 }

@@ -53,5 +53,13 @@ export async function POST(request: Request) {
     data: { otpCode: otp, otpExpiry: new Date(Date.now() + 5 * 60 * 1000) },
   })
 
+  if (process.env.NODE_ENV === "development") {
+    return jsonResponse(request, {
+      success: true,
+      message: "验证码已发送",
+      otp,
+    })
+  }
+
   return jsonResponse(request, { success: true, message: "验证码已发送" })
 }

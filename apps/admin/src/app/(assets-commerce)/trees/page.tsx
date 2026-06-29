@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
-import { adminApiBase, adminApiToken, fetchAdminApi } from "@admin/lib/admin-api"
+import { adminApiBase, adminApiToken, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface CareLog {
@@ -41,7 +41,7 @@ export default function TreesAdminPage() {
 
   const loadTrees = useCallback(async () => {
     setIsLoading(true)
-    const response = await fetch(`${adminApiBase}/trees`)
+    const response = await fetchWithTimeout(`${adminApiBase}/trees`)
     const payload = (await response.json()) as { data: TreeRow[] }
     setTrees(payload.data)
     setSelected((current) => current ?? payload.data[0] ?? null)
@@ -101,7 +101,7 @@ export default function TreesAdminPage() {
     const formData = new FormData()
     formData.set("file", file)
 
-    const uploadResponse = await fetch(`${adminApiBase}/upload`, {
+    const uploadResponse = await fetchWithTimeout(`${adminApiBase}/upload`, {
       method: "POST",
       headers: { "X-Admin-Token": adminApiToken },
       body: formData,

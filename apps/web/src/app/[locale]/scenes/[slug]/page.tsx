@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
@@ -15,7 +14,7 @@ import { BackButton } from "@web/components/back-button"
 import { getSceneDetail, sceneDetails } from "@web/lib/scenes-data"
 import { getSiteUrl } from "@web/lib/site-url"
 import type { Locale } from "@web/i18n/routing"
-import { Section, StatusBadge } from "@ui/index"
+import { SafeImage, Section, StatusBadge } from "@ui/index"
 
 export function generateStaticParams() {
   return sceneDetails.map((scene) => ({ slug: scene.slug }))
@@ -91,7 +90,7 @@ export default async function SceneDetailPage({
       </header>
 
       <section className="relative min-h-[82svh] overflow-hidden pt-16 text-white">
-        <Image
+        <SafeImage
           alt={t(scene.imageAltKey)}
           className="object-cover"
           fill

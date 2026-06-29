@@ -54,6 +54,30 @@ const seedTickets = [
   },
 ]
 
+const seedVillagers = [
+  {
+    id: "villager-dev-001",
+    name: "李桂兰",
+    phone: "17732954821",
+    skills: ["farming", "logistics"],
+    nodeSlug: "lychee-field-core",
+  },
+  {
+    id: "villager-dev-002",
+    name: "张德明",
+    phone: "13900001111",
+    skills: ["guiding", "handicraft"],
+    nodeSlug: "ancient-road-core",
+  },
+  {
+    id: "villager-dev-003",
+    name: "陈素芬",
+    phone: "13900002222",
+    skills: ["cooking", "logistics"],
+    nodeSlug: "ridge-dwelling-core",
+  },
+]
+
 async function seedFeedbackTickets() {
   await prisma.feedbackHandlingRecord.deleteMany({
     where: {
@@ -90,9 +114,47 @@ async function seedFeedbackTickets() {
   }
 }
 
+async function seedVillagerAccounts() {
+  for (const villager of seedVillagers) {
+    const node = await prisma.spaceNode.findUnique({
+      where: { slug: villager.nodeSlug },
+      select: { id: true },
+    })
+    const existingVillager = await prisma.villager.findFirst({
+      where: { phone: villager.phone },
+      select: { id: true },
+    })
+
+    if (existingVillager) {
+      await prisma.villager.update({
+        where: { id: existingVillager.id },
+        data: {
+          name: villager.name,
+          skills: villager.skills,
+          nodeId: node?.id,
+          status: "active",
+        },
+      })
+      continue
+    }
+
+    await prisma.villager.create({
+      data: {
+        id: villager.id,
+        name: villager.name,
+        phone: villager.phone,
+        skills: villager.skills,
+        nodeId: node?.id,
+        status: "active",
+      },
+    })
+  }
+}
+
 async function main() {
   await seedFeedbackTickets()
   await seedNodes()
+  await seedVillagerAccounts()
   await seedTrees()
   await seedProducts()
   await seedFarmingCalendar()

@@ -4,7 +4,7 @@ import { AlertTriangle, Plus, RadioTower, RefreshCw } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, fetchWithTimeout, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface DeviceRow {
@@ -43,8 +43,8 @@ export default function DevicesPage() {
   async function loadData() {
     setIsLoading(true)
     const [deviceResponse, nodeResponse] = await Promise.all([
-      fetch(`${adminApiBase}/devices`),
-      fetch(`${adminApiBase}/nodes`),
+      fetchWithTimeout(`${adminApiBase}/devices`),
+      fetchWithTimeout(`${adminApiBase}/nodes`),
     ])
     const devicePayload = (await deviceResponse.json()) as { data?: DeviceRow[] }
     const nodePayload = (await nodeResponse.json()) as { data?: NodeRow[] }

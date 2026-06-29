@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import type { AdminMapProps, MapLayer, MapNode, MapNodeMetric } from "@admin/components/admin-map"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase } from "@admin/lib/admin-api"
+import { adminApiBase, fetchWithTimeout } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 import { zoumaVillageLabel } from "@admin/lib/map-location"
 
@@ -61,10 +61,10 @@ export default function MapPage() {
     try {
       const date = today()
       const [nodesResult, scoresResult, crossResult, presenceResult] = await Promise.all([
-        fetch(`${adminApiBase}/nodes`).then((response) => response.json()) as Promise<{ data: MapNode[] }>,
-        fetch(`${adminApiBase}/nodes/scores?date=${date}`).then((response) => response.json()) as Promise<{ data: NodeScore[] }>,
-        fetch(`${adminApiBase}/analytics/cross/flow-vs-spend?date=${date}`).then((response) => response.json()) as Promise<{ data: CrossRow[] }>,
-        fetch(`${adminApiBase}/presence?latest=true`).then((response) => response.json()) as Promise<{ data: PresenceRow[] }>,
+        fetchWithTimeout(`${adminApiBase}/nodes`).then((response) => response.json()) as Promise<{ data: MapNode[] }>,
+        fetchWithTimeout(`${adminApiBase}/nodes/scores?date=${date}`).then((response) => response.json()) as Promise<{ data: NodeScore[] }>,
+        fetchWithTimeout(`${adminApiBase}/analytics/cross/flow-vs-spend?date=${date}`).then((response) => response.json()) as Promise<{ data: CrossRow[] }>,
+        fetchWithTimeout(`${adminApiBase}/presence?latest=true`).then((response) => response.json()) as Promise<{ data: PresenceRow[] }>,
       ])
 
       setNodes(nodesResult.data)

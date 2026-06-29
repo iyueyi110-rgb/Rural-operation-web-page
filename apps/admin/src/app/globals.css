@@ -34,11 +34,49 @@ textarea {
   color: inherit;
 }
 
+:focus-visible {
+  outline: 2px solid #b93835;
+  outline-offset: 2px;
+}
+
 .admin-console-grid {
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
   background-size: 36px 36px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --admin-bg: #19201b;
+    --admin-ink: #f3eee3;
+    --admin-line: #3a4a3d;
+  }
+
+  body {
+    background: #19201b;
+    color: var(--admin-ink);
+  }
+
+  img,
+  video {
+    opacity: 0.92;
+  }
+}
+
+@media print {
+  .no-print,
+  header,
+  nav,
+  footer {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: #19201b !important;
+  }
 }
 
 @keyframes alertBlink {

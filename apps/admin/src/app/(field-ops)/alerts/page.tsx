@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminNotice, AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
-import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface AlertRow extends Record<string, unknown> {
@@ -29,9 +29,9 @@ export default function AlertsPage() {
     const params = new URLSearchParams({ status, run: "true" })
     if (type) params.set("type", type)
     const [behaviorResult, sensorResult, weatherResult] = await Promise.allSettled([
-      fetch(`${adminApiBase}/alerts?${params}`).then((response) => response.json()) as Promise<{ data?: AlertRow[] }>,
-      fetch(`${adminApiBase}/infrastructure/alerts`).then((response) => response.json()) as Promise<{ data?: Array<{ id: string; sensorId: string; type: string; value: number; unit: string; createdAt: string }> }>,
-      fetch(`${adminApiBase}/weather/alerts`).then((response) => response.json()) as Promise<{ data?: Array<{ id: string; type: string; severity: string; title: string; text: string; createdAt: string }> }>,
+      fetchWithTimeout(`${adminApiBase}/alerts?${params}`).then((response) => response.json()) as Promise<{ data?: AlertRow[] }>,
+      fetchWithTimeout(`${adminApiBase}/infrastructure/alerts`).then((response) => response.json()) as Promise<{ data?: Array<{ id: string; sensorId: string; type: string; value: number; unit: string; createdAt: string }> }>,
+      fetchWithTimeout(`${adminApiBase}/weather/alerts`).then((response) => response.json()) as Promise<{ data?: Array<{ id: string; type: string; severity: string; title: string; text: string; createdAt: string }> }>,
     ])
     const behaviorRows =
       behaviorResult.status === "fulfilled"

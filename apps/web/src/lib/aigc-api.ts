@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 
+export { fetchWithTimeout } from "@web/lib/fetch-timeout"
 import { getAllowedCorsOrigins } from "@web/lib/site-url"
 
 export function getCorsHeaders(request: Request) {

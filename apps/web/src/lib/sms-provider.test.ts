@@ -5,7 +5,7 @@ import { sendSms } from "./sms-provider"
 
 test("falls back without invoking a transport when SMS is not configured", async () => {
   let called = false
-  const sent = await sendSms("13900000000", "任务提醒", {
+  const result = await sendSms("13900000000", "任务提醒", {
     apiKey: "",
     templateId: "",
     transport: async () => {
@@ -14,13 +14,13 @@ test("falls back without invoking a transport when SMS is not configured", async
     },
   })
 
-  assert.equal(sent, false)
+  assert.deepEqual(result, { success: false, fallback: "in_app" })
   assert.equal(called, false)
 })
 
 test("uses the reserved transport seam when SMS configuration is available", async () => {
   let received: unknown
-  const sent = await sendSms("13900000000", "任务提醒", {
+  const result = await sendSms("13900000000", "任务提醒", {
     apiKey: "test-key",
     templateId: "task-template",
     transport: async (message) => {
@@ -29,7 +29,7 @@ test("uses the reserved transport seam when SMS configuration is available", asy
     },
   })
 
-  assert.equal(sent, true)
+  assert.deepEqual(result, { success: true })
   assert.deepEqual(received, {
     phone: "13900000000",
     content: "任务提醒",
@@ -39,7 +39,7 @@ test("uses the reserved transport seam when SMS configuration is available", asy
 })
 
 test("SMS transport failures return false so callers can preserve in-app delivery", async () => {
-  const sent = await sendSms("13900000000", "任务提醒", {
+  const result = await sendSms("13900000000", "任务提醒", {
     apiKey: "test-key",
     templateId: "task-template",
     transport: async () => {
@@ -47,5 +47,5 @@ test("SMS transport failures return false so callers can preserve in-app deliver
     },
   })
 
-  assert.equal(sent, false)
+  assert.deepEqual(result, { success: false, fallback: "in_app" })
 })

@@ -3,6 +3,21 @@ import { adminCopy } from "@admin/lib/admin-copy"
 export const adminApiBase = process.env.NEXT_PUBLIC_WEB_API_BASE ?? "http://localhost:3000/api/v1"
 export const adminApiToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
 
+export async function fetchWithTimeout(
+  url: string,
+  init: RequestInit = {},
+  timeoutMs = 15_000,
+) {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+
+  try {
+    return await fetch(url, { ...init, signal: init.signal ?? controller.signal })
+  } finally {
+    clearTimeout(timeoutId)
+  }
+}
+
 export async function fetchAdminApi<T>(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers)
   if (adminApiToken) {
@@ -12,7 +27,7 @@ export async function fetchAdminApi<T>(path: string, init: RequestInit = {}) {
     headers.set("Content-Type", "application/json")
   }
 
-  const response = await fetch(`${adminApiBase}${path}`, { ...init, headers })
+  const response = await fetchWithTimeout(`${adminApiBase}${path}`, { ...init, headers })
   const payload = (await response.json().catch(() => null)) as (T & { error?: string }) | null
 
   if (!response.ok || payload === null) {

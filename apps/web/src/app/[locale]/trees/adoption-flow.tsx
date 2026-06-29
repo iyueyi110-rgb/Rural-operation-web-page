@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { BadgeCheck, CalendarDays, CheckCircle2, CreditCard, FileText, Leaf, MapPin, ShieldCheck, Sprout } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
@@ -14,7 +13,7 @@ import {
   type TreeAvailability,
 } from "@web/lib/trees-data"
 import { FieldLabel, InlineNotice, MetricTile, PanelTitle } from "@web/components/subpage-ui"
-import { MasterDetailLayout } from "@ui/index"
+import { MasterDetailLayout, SafeImage } from "@ui/index"
 import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
 
 const availabilityTone: Record<TreeAvailability, string> = {
@@ -107,7 +106,7 @@ export function AdoptionFlow() {
               return (
                 <article className={active ? "choice-card choice-card-active grid overflow-hidden p-0 md:grid-cols-[220px_1fr]" : "choice-card grid overflow-hidden p-0 md:grid-cols-[220px_1fr]"} key={tree.id}>
                   <div className="relative aspect-[4/3] md:aspect-auto">
-                    <Image alt={t(tree.imageAltKey)} className="object-cover" fill sizes="(min-width: 768px) 220px, 100vw" src={tree.imageAsset} />
+                    <SafeImage alt={t(tree.imageAltKey)} className="object-cover" fill sizes="(min-width: 768px) 220px, 100vw" src={tree.imageAsset} />
                   </div>
                   <div className="min-w-0 p-5">
                     <div className="flex flex-wrap items-center justify-between gap-3">

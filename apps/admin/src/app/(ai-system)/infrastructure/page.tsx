@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { CloudRain, Droplets, Gauge, Thermometer, Waves } from "lucide-react"
 
-import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface SensorReading {
@@ -51,8 +51,8 @@ export default function InfrastructurePage() {
   const loadData = useCallback(async () => {
     setIsLoading(true)
     const [sensorResponse, commandResponse] = await Promise.all([
-      fetch(`${adminApiBase}/infrastructure/sensors/latest`),
-      fetch(`${adminApiBase}/infrastructure/commands`),
+      fetchWithTimeout(`${adminApiBase}/infrastructure/sensors/latest`),
+      fetchWithTimeout(`${adminApiBase}/infrastructure/commands`),
     ])
     const sensorPayload = (await sensorResponse.json()) as { data?: SensorReading[] }
     const commandPayload = (await commandResponse.json()) as { data?: ControlCommand[] }

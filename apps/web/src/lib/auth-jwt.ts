@@ -1,15 +1,22 @@
 import { jwtVerify, SignJWT } from "jose"
 
 const TOKEN_MAX_AGE_SECONDS = 7 * 24 * 60 * 60
+const DEV_JWT_SECRET = "zouma-dev-jwt-secret-do-not-use-in-production"
 
 export function jwtSecret() {
   const secret = process.env.JWT_SECRET
-  if (!secret) {
-    throw new Error(
-      "JWT_SECRET environment variable is required. Generate one with: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
-    )
+  if (secret) {
+    return new TextEncoder().encode(secret)
   }
-  return new TextEncoder().encode(secret)
+
+  if (process.env.NODE_ENV !== "production") {
+    console.warn("JWT_SECRET not set, using development fallback secret")
+    return new TextEncoder().encode(DEV_JWT_SECRET)
+  }
+
+  throw new Error(
+    "JWT_SECRET environment variable is required in production. Generate one with: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
+  )
 }
 
 export async function createJWT(

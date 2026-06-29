@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { BedDouble, CalendarDays, CheckCircle2, CircleAlert, CreditCard, UsersRound } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useState } from "react"
@@ -14,7 +13,7 @@ import {
   type CourtyardOption,
 } from "@web/lib/courtyards-data"
 import { FieldLabel, InlineNotice, MetricTile, PanelTitle, SegmentedControl } from "@web/components/subpage-ui"
-import { MasterDetailLayout } from "@ui/index"
+import { MasterDetailLayout, SafeImage } from "@ui/index"
 import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
 
 type InventoryStatus = CourtyardOption["inventoryStatus"] | (typeof bookingDateOptions)[number]["status"]
@@ -161,7 +160,7 @@ export function BookingFlow() {
                 key={courtyard.id}
               >
                 <div className="relative aspect-[4/3] md:aspect-auto">
-                  <Image
+                  <SafeImage
                     alt={t(courtyard.imageAltKey)}
                     className="object-cover"
                     fill

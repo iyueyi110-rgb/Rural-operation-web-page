@@ -1,11 +1,10 @@
-import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, CheckCircle2, Sprout } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 
 import type { Locale } from "@web/i18n/routing"
 import { buildAdoptionHref } from "@web/lib/home-navigation"
-import { Section } from "@ui/index"
+import { SafeImage, Section } from "@ui/index"
 
 export async function HomeAdoptionFeature({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: "home" })
@@ -15,7 +14,7 @@ export async function HomeAdoptionFeature({ locale }: { locale: Locale }) {
       <Section>
         <div className="overflow-hidden rounded-lg border border-stone bg-ink shadow-soft lg:grid lg:grid-cols-[1.08fr_0.92fr]">
           <div className="relative min-h-[360px] lg:min-h-[620px]">
-            <Image
+            <SafeImage
               alt={t("adoption.imageAlt")}
               className="object-cover"
               fill

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
-import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface ActivityRow extends Record<string, unknown> {
@@ -44,7 +44,7 @@ export default function ActivitiesAdminPage() {
   })
 
   const loadActivities = useCallback(async () => {
-    const response = await fetch(`${adminApiBase}/activities`)
+    const response = await fetchWithTimeout(`${adminApiBase}/activities`)
     const payload = (await response.json()) as { data?: ActivityRow[] }
     setActivities(payload.data ?? [])
   }, [])
@@ -54,7 +54,7 @@ export default function ActivitiesAdminPage() {
       setBookings([])
       return
     }
-    const response = await fetch(`${adminApiBase}/activity-bookings?activityId=${activityId}`)
+    const response = await fetchWithTimeout(`${adminApiBase}/activity-bookings?activityId=${activityId}`)
     const payload = (await response.json()) as { data?: BookingRow[] }
     setBookings(payload.data ?? [])
   }, [])

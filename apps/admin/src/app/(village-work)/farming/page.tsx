@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface FarmingRow extends Record<string, unknown> {
@@ -42,7 +42,7 @@ export default function FarmingPage() {
 
   async function loadData() {
     setIsLoading(true)
-    const response = await fetch(`${adminApiBase}/farming-calendar`)
+    const response = await fetchWithTimeout(`${adminApiBase}/farming-calendar`)
     const payload = (await response.json()) as { data?: FarmingRow[] }
     setRows(payload.data ?? [])
     setIsLoading(false)

@@ -1,3 +1,5 @@
+import { fetchWithTimeout } from "@web/lib/fetch-timeout"
+
 const AUTH_TOKEN_KEY = "auth_token"
 
 interface ReadableStorage {
@@ -28,7 +30,7 @@ export function buildAuthHeaders(token: string | null, initial?: HeadersInit) {
 }
 
 export function fetchWithAuth(input: RequestInfo | URL, init: RequestInit = {}) {
-  return fetch(input, { ...init, headers: buildAuthHeaders(getAuthToken(), init.headers) })
+  return fetchWithTimeout(input, { ...init, headers: buildAuthHeaders(getAuthToken(), init.headers) })
 }
 
 export function rememberTouristIdentity(phone: string) {

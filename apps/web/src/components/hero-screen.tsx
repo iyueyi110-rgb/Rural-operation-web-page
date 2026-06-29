@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import Image from "next/image"
 import Link from "next/link"
 import {
   CalendarDays,
@@ -19,7 +18,7 @@ import type { Locale } from "@web/i18n/routing"
 import { previewStats } from "@web/lib/home-data"
 import { buildAdoptionHref, buildExploreHref } from "@web/lib/home-navigation"
 import type { WeatherSummary } from "@web/lib/weather"
-import { Section } from "@ui/index"
+import { SafeImage, Section } from "@ui/index"
 
 const heroVideoUrl = process.env.NEXT_PUBLIC_HOME_HERO_VIDEO_URL?.trim()
 const heroMetricValues = [1.8, 3107, 2383] as const
@@ -180,7 +179,7 @@ export function HeroScreen({
           <div className="absolute -right-8 bottom-10 h-52 w-52 rounded-full bg-water/20 blur-3xl" />
           <div className="relative overflow-hidden rounded-xl border border-white/14 bg-white/[0.075] p-3 shadow-panel backdrop-blur-xl">
             <div className="relative min-h-[340px] overflow-hidden rounded-lg border border-white/10 bg-ink/45 sm:min-h-[420px]">
-              <Image
+              <SafeImage
                 alt={activeActivityLabel}
                 className="object-cover transition-opacity duration-200"
                 fill

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
-import { adminApiBase } from "@admin/lib/admin-api"
+import { adminApiBase, fetchWithTimeout } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface CrossRow extends Record<string, unknown> {
@@ -36,8 +36,8 @@ export default function AnalyticsPage() {
   const loadRows = useCallback(async () => {
     setIsLoading(true)
     const [response, routeResponse] = await Promise.all([
-      fetch(`${adminApiBase}/analytics/cross/flow-vs-spend?date=${date}`),
-      fetch(`${adminApiBase}/analytics/routes/ranking?days=30`),
+      fetchWithTimeout(`${adminApiBase}/analytics/cross/flow-vs-spend?date=${date}`),
+      fetchWithTimeout(`${adminApiBase}/analytics/routes/ranking?days=30`),
     ])
     const payload = (await response.json()) as { data?: CrossRow[] }
     const routePayload = (await routeResponse.json()) as { data?: RouteRankingRow[] }

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, nodeDisplayName } from "@admin/lib/admin-api"
+import { adminApiBase, fetchWithTimeout, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface SpaceNode {
@@ -52,9 +52,9 @@ export default function OrdersPage() {
       if (date) params.set("date", date)
 
       const [ordersResponse, nodesResponse, consumptionResponse] = await Promise.all([
-        fetch(`${adminApiBase}/orders?${params}`),
-        fetch(`${adminApiBase}/nodes`),
-        fetch(`${adminApiBase}/analytics/consumption/by-node`),
+        fetchWithTimeout(`${adminApiBase}/orders?${params}`),
+        fetchWithTimeout(`${adminApiBase}/nodes`),
+        fetchWithTimeout(`${adminApiBase}/analytics/consumption/by-node`),
       ])
 
       if (!ordersResponse.ok || !nodesResponse.ok || !consumptionResponse.ok) throw new Error(adminCopy.common.error)

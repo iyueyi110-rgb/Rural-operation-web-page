@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
+import { adminApiBase, fetchAdminApi, fetchWithTimeout, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface NodeRow {
@@ -69,9 +69,9 @@ export default function TasksPage() {
     if (filters.villagerId) query.set("villagerId", filters.villagerId)
 
     const [taskResponse, villagerResponse, nodeResponse] = await Promise.all([
-      fetch(`${adminApiBase}/tasks${query.toString() ? `?${query}` : ""}`),
-      fetch(`${adminApiBase}/villagers`),
-      fetch(`${adminApiBase}/nodes`),
+      fetchWithTimeout(`${adminApiBase}/tasks${query.toString() ? `?${query}` : ""}`),
+      fetchWithTimeout(`${adminApiBase}/villagers`),
+      fetchWithTimeout(`${adminApiBase}/nodes`),
     ])
     const taskPayload = (await taskResponse.json()) as { data?: TaskRow[] }
     const villagerPayload = (await villagerResponse.json()) as { data?: VillagerRow[] }
