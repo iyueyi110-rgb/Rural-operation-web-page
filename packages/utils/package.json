@@ -5,6 +5,10 @@
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./fetch-timeout": "./src/fetch-timeout.ts"
+  },
   "scripts": {
     "build": "tsc --noEmit",
     "lint": "tsc --noEmit",

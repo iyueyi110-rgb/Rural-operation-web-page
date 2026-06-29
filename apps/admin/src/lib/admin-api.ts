@@ -1,22 +1,11 @@
+import { fetchWithTimeout } from "@zouma/utils/fetch-timeout"
+
 import { adminCopy } from "@admin/lib/admin-copy"
+
+export { fetchWithTimeout }
 
 export const adminApiBase = process.env.NEXT_PUBLIC_WEB_API_BASE ?? "http://localhost:3000/api/v1"
 export const adminApiToken = process.env.NEXT_PUBLIC_ADMIN_API_TOKEN ?? ""
-
-export async function fetchWithTimeout(
-  url: string,
-  init: RequestInit = {},
-  timeoutMs = 15_000,
-) {
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
-
-  try {
-    return await fetch(url, { ...init, signal: init.signal ?? controller.signal })
-  } finally {
-    clearTimeout(timeoutId)
-  }
-}
 
 export async function fetchAdminApi<T>(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers)
