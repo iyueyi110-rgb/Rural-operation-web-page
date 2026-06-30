@@ -69,6 +69,28 @@ function Get-PortUsage([int]$port) {
   }
 }
 
+function Stop-PortUsage([int]$port) {
+  $usage = Get-PortUsage $port
+  if (-not $usage) {
+    Ok "Port $port available"
+    return
+  }
+
+  Warn "Port $($usage.Port) is already used by PID $($usage.PID) ($($usage.Process)); stopping it before launch."
+  Invoke-Native "taskkill /PID $($usage.PID) /T /F" | Out-Null
+
+  for ($i = 0; $i -lt 30; $i++) {
+    if (-not (Get-PortUsage $port)) { break }
+    Start-Sleep -Milliseconds 200
+  }
+
+  if (Get-PortUsage $port) {
+    Fail "Port $port is still occupied after cleanup. Stop the listed process manually, then run this shortcut again."
+  }
+
+  Ok "Port $port released"
+}
+
 # ============================================================
 #  Environment check
 # ============================================================
@@ -96,13 +118,8 @@ if (-not (Test-Path ".env.local")) {
   Warn "Edit .env.local and set DEEPSEEK_API_KEY / QWEATHER_API_KEY for AI + weather features"
 }
 
-$usedPorts = @(3000, 3001) | ForEach-Object { Get-PortUsage $_ } | Where-Object { $_ }
-if ($usedPorts.Count -gt 0) {
-  foreach ($portInfo in $usedPorts) {
-    Warn "Port $($portInfo.Port) is already used by PID $($portInfo.PID) ($($portInfo.Process))."
-  }
-  Fail "Close the existing Zouma window or stop the listed process, then run this shortcut again."
-}
+Step "Stop existing dev servers"
+@(3000, 3001) | ForEach-Object { Stop-PortUsage $_ }
 Ok "Ports 3000/3001 available"
 
 # ============================================================

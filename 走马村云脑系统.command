@@ -7,6 +7,9 @@ set -euo pipefail
 # ============================================================
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ ! -f "$ROOT_DIR/package.json" ] && [ -f "$ROOT_DIR/../package.json" ]; then
+  ROOT_DIR="$(cd "$ROOT_DIR/.." && pwd)"
+fi
 cd "$ROOT_DIR"
 
 # Finder 双击 .command 时 PATH 很短，主动补上 Homebrew、用户级工具和系统路径。
@@ -153,15 +156,14 @@ if [ -f ".env.local" ]; then
   ok "环境变量已加载"
 fi
 
-if url_ready "$FRONTEND_URL" && url_ready "$ADMIN_URL"; then
-  ok "系统已经在运行，直接打开页面。"
-  open_sites
-  exit 0
-fi
+step "0.5/6 清理现有开发进程"
+
+"$ROOT_DIR/scripts/launcher-process-cleanup.sh" 3000 3001
+ok "旧进程清理完成"
 
 for port in 3000 3001; do
   if port_in_use "$port"; then
-    err "端口 ${port} 已被占用。请先停止占用进程，或修改 FRONTEND_URL/ADMIN_URL 环境变量。"
+    err "端口 ${port} 仍被占用，请手动停止占用进程后再试。"
     exit 1
   fi
 done
