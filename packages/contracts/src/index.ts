@@ -79,10 +79,27 @@ export interface FeedbackRecord extends Feedback {
 
 // ==== AIGC 云脑新增 ====
 
-export type SpaceNodeType = "entrance" | "viewpoint" | "activity" | "rest" | "shop" | "waterside"
+export type SpaceNodeType =
+  | "entrance"
+  | "viewpoint"
+  | "activity"
+  | "rest"
+  | "shop"
+  | "waterside"
 export type PresenceSource = "wifi_probe" | "camera" | "infrared" | "manual"
-export type OrderType = "courtyard_booking" | "tree_adoption" | "ticket_order" | "activity_booking" | "product_order"
-export type WeatherAlertType = "rainstorm" | "snowstorm" | "heat" | "wind" | "typhoon" | "other"
+export type OrderType =
+  | "courtyard_booking"
+  | "tree_adoption"
+  | "ticket_order"
+  | "activity_booking"
+  | "product_order"
+export type WeatherAlertType =
+  | "rainstorm"
+  | "snowstorm"
+  | "heat"
+  | "wind"
+  | "typhoon"
+  | "other"
 
 export interface SpaceNodeData {
   id: string
@@ -144,7 +161,13 @@ export interface UnifiedOrderData {
 }
 
 export interface ReportSectionData {
-  type: "visitor_flow" | "consumption" | "alerts" | "feedback" | "weather" | "infrastructure"
+  type:
+    | "visitor_flow"
+    | "consumption"
+    | "alerts"
+    | "feedback"
+    | "weather"
+    | "infrastructure"
   title: string
   content: string
 }
@@ -225,10 +248,25 @@ export interface ProductData {
   updatedAt: string
 }
 
-export type VillagerSkill = "cooking" | "farming" | "guiding" | "handicraft" | "logistics"
+export type VillagerSkill =
+  | "cooking"
+  | "farming"
+  | "guiding"
+  | "handicraft"
+  | "logistics"
 export type VillagerStatus = "active" | "inactive"
-export type TaskType = "farming" | "guiding" | "logistics" | "maintenance" | "service"
-export type TaskStatus = "pending" | "accepted" | "in_progress" | "completed" | "cancelled"
+export type TaskType =
+  | "farming"
+  | "guiding"
+  | "logistics"
+  | "maintenance"
+  | "service"
+export type TaskStatus =
+  | "pending"
+  | "accepted"
+  | "in_progress"
+  | "completed"
+  | "cancelled"
 
 export interface VillagerTaskSummary {
   totalTasks: number
@@ -263,12 +301,38 @@ export interface TaskData {
 }
 
 export type SolarTerm =
-  | "立春" | "雨水" | "惊蛰" | "春分" | "清明" | "谷雨"
-  | "立夏" | "小满" | "芒种" | "夏至" | "小暑" | "大暑"
-  | "立秋" | "处暑" | "白露" | "秋分" | "寒露" | "霜降"
-  | "立冬" | "小雪" | "大雪" | "冬至" | "小寒" | "大寒"
+  | "立春"
+  | "雨水"
+  | "惊蛰"
+  | "春分"
+  | "清明"
+  | "谷雨"
+  | "立夏"
+  | "小满"
+  | "芒种"
+  | "夏至"
+  | "小暑"
+  | "大暑"
+  | "立秋"
+  | "处暑"
+  | "白露"
+  | "秋分"
+  | "寒露"
+  | "霜降"
+  | "立冬"
+  | "小雪"
+  | "大雪"
+  | "冬至"
+  | "小寒"
+  | "大寒"
 
-export type FarmingActivityType = "planting" | "pruning" | "fertilizing" | "harvesting" | "processing" | "festival"
+export type FarmingActivityType =
+  | "planting"
+  | "pruning"
+  | "fertilizing"
+  | "harvesting"
+  | "processing"
+  | "festival"
 export type FarmingCalendarStatus = "upcoming" | "active" | "completed"
 
 export interface FarmingCalendarData {
@@ -285,8 +349,20 @@ export interface FarmingCalendarData {
 
 // ==== P1 新增 ====
 
-export type TreeCareLogType = "watering" | "pruning" | "fertilizing" | "pest_control" | "photo" | "harvest"
-export type ActivityType = "village_feast" | "food_class" | "study" | "workshop" | "exhibition" | "co_living"
+export type TreeCareLogType =
+  | "watering"
+  | "pruning"
+  | "fertilizing"
+  | "pest_control"
+  | "photo"
+  | "harvest"
+export type ActivityType =
+  | "village_feast"
+  | "food_class"
+  | "study"
+  | "workshop"
+  | "exhibition"
+  | "co_living"
 export type AlertType =
   | "night_linger"
   | "crowd"
@@ -337,7 +413,108 @@ export interface TreeAdoptionData {
   harvestBookings?: HarvestBookingData[]
 }
 
-export type HarvestShipmentStatus = "pending" | "picking" | "shipping" | "delivered"
+export type InteractionTaskType =
+  | "watering"
+  | "fertilizing"
+  | "photo_upload"
+  | "diary"
+  | "share"
+
+export type InteractionTaskStatus = "pending" | "completed" | "expired"
+
+export interface InteractionTaskData {
+  id: string
+  adoptionId: string
+  treeId: string
+  taskType: InteractionTaskType
+  title: string
+  description?: string
+  status: InteractionTaskStatus
+  periodKey?: string
+  maxCompletions: number
+  completionCount: number
+  pointsPerCompletion: number
+  totalPointsEarned: number
+  seasonEventId?: string
+  completedAt?: string
+  imageUrl?: string
+  note?: string
+  points: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface InteractionTaskSummary {
+  totalTasks: number
+  completedTasks: number
+  pendingTasks: number
+  totalCompletions: number
+  completedCompletions: number
+  pendingCompletions: number
+  totalPointsEarned: number
+  completionRate: number
+  tasksByType: Record<InteractionTaskType, { total: number; completed: number }>
+}
+
+export interface AdoptionPointsData {
+  adoptionId: string
+  totalPoints: number
+  availablePoints: number
+  redeemedPoints: number
+}
+
+export interface PointsTransactionData {
+  id: string
+  amount: number
+  type: "earn" | "redeem" | "expire" | "adjust"
+  source: string
+  referenceId?: string
+  note?: string
+  createdAt: string
+}
+
+export interface SeasonEventData {
+  id: string
+  solarTerm: string
+  title: string
+  description?: string
+  taskType: InteractionTaskType
+  bonusPoints: number
+  startDate: string
+  endDate: string
+  imageUrl?: string
+  status: "active" | "ended"
+}
+
+export interface RedemptionOptionData {
+  id: string
+  title: string
+  description?: string
+  pointsCost: number
+  type: "coupon" | "rights" | "physical" | "digital"
+  stock: number
+  redeemedCount: number
+  imageUrl?: string
+  status: "active" | "inactive"
+}
+
+export interface RedemptionRecordData {
+  id: string
+  adoptionId: string
+  optionId: string
+  pointsSpent: number
+  status: "pending" | "fulfilled" | "cancelled"
+  note?: string
+  createdAt: string
+  fulfilledAt?: string
+  option?: RedemptionOptionData
+}
+
+export type HarvestShipmentStatus =
+  | "pending"
+  | "picking"
+  | "shipping"
+  | "delivered"
 
 export interface HarvestShipmentData {
   id: string
@@ -415,9 +592,22 @@ export interface ActivityBookingData {
   createdAt: string
 }
 
-export type SensorReadingType = "rainfall" | "soil_moisture" | "water_level" | "temperature" | "humidity"
-export type ControlCommandType = "irrigation" | "flood_alert" | "fire_alert" | "rain_delay"
-export type ControlCommandStatus = "pending" | "approved" | "executed" | "rejected"
+export type SensorReadingType =
+  | "rainfall"
+  | "soil_moisture"
+  | "water_level"
+  | "temperature"
+  | "humidity"
+export type ControlCommandType =
+  | "irrigation"
+  | "flood_alert"
+  | "fire_alert"
+  | "rain_delay"
+export type ControlCommandStatus =
+  | "pending"
+  | "approved"
+  | "executed"
+  | "rejected"
 
 export interface SensorReadingData {
   id: string

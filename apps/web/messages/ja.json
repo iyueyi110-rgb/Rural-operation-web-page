@@ -1643,6 +1643,58 @@
         "photo_upload": "写真を投稿",
         "diary": "日記を送信",
         "share": "コピーして完了"
+      },
+      "dashboard": {
+        "metaTitle": "体験タスクシステム｜走馬村",
+        "metaDescription": "認養した果樹のタスク、ポイント、交換記録を確認します。",
+        "phase": "認養体験",
+        "title": "体験タスクシステム",
+        "body": "認養した一本の果樹を中心に、手入れタスク、ポイント、再訪関係を管理します。",
+        "entryTitle": "今月の体験タスク",
+        "entryBody": "進捗を確認し、水やりや写真投稿をすばやく完了できます。",
+        "currentAdoption": "現在の認養",
+        "totalPoints": "利用可能ポイント",
+        "availablePoints": "利用可能ポイント",
+        "totalEarned": "累計獲得",
+        "monthlyProgress": "今月の進捗",
+        "pending": "未完了",
+        "pointsTitle": "ポイントセンター",
+        "tasksTitle": "手入れタスク",
+        "viewAll": "体験システムへ",
+        "quickWater": "クイック水やり",
+        "quickPhoto": "クイック写真"
+      },
+      "identity": {
+        "title": "認養情報を確認",
+        "body": "認養時に登録した電話番号を入力すると、active の果樹と体験タスクを読み込みます。",
+        "phone": "認養電話番号",
+        "lookup": "認養を検索",
+        "adoptCta": "果樹を認養する"
+      },
+      "timeline": {
+        "title": "手入れタイムライン",
+        "empty": "手入れ記録はまだありません"
+      },
+      "redemption": {
+        "title": "ポイント交換",
+        "empty": "交換できる特典はまだありません",
+        "redeem": "交換する",
+        "success": "交換を申請しました",
+        "insufficient": "ポイントが不足しています"
+      },
+      "season": {
+        "eventTag": "季節限定",
+        "bonusPoints": "追加 +{points} 点",
+        "endsIn": "残り {days} 日"
+      },
+      "states": {
+        "loadFailed": "体験データを読み込めませんでした。後でもう一度お試しください。",
+        "noActiveAdoption": "この電話番号には active の認養記録がありません。",
+        "lookupFailed": "認養検索に失敗しました。電話番号を確認してください。",
+        "completed": "タスクが完了し、ポイントが加算されました。",
+        "uploadFailed": "写真のアップロードまたは送信に失敗しました。もう一度選択してください。",
+        "completeFailed": "タスク送信に失敗しました。後でもう一度お試しください。",
+        "done": "完了"
       }
     },
     "metadata": {

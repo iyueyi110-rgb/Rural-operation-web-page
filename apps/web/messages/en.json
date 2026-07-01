@@ -1643,6 +1643,58 @@
         "photo_upload": "Upload photo",
         "diary": "Submit diary",
         "share": "Copy and complete"
+      },
+      "dashboard": {
+        "metaTitle": "Interaction tasks | Zouma Village",
+        "metaDescription": "View adopted-tree tasks, points, and redemption records.",
+        "phase": "Adoption interactions",
+        "title": "Interaction task system",
+        "body": "Manage care tasks, points, and return visits around your adopted tree.",
+        "entryTitle": "This month's tasks",
+        "entryBody": "Check progress and quickly complete watering or photo tasks.",
+        "currentAdoption": "Current adoption",
+        "totalPoints": "Available points",
+        "availablePoints": "Available points",
+        "totalEarned": "Total earned",
+        "monthlyProgress": "Monthly progress",
+        "pending": "Pending",
+        "pointsTitle": "Points center",
+        "tasksTitle": "Care tasks",
+        "viewAll": "Open interactions",
+        "quickWater": "Quick watering",
+        "quickPhoto": "Quick photo"
+      },
+      "identity": {
+        "title": "Find your adoption",
+        "body": "Enter the phone number used for adoption to load active trees and interaction tasks.",
+        "phone": "Adoption phone",
+        "lookup": "Find adoption",
+        "adoptCta": "Adopt a tree"
+      },
+      "timeline": {
+        "title": "Care timeline",
+        "empty": "No care records yet"
+      },
+      "redemption": {
+        "title": "Point redemption",
+        "empty": "No redemption options yet",
+        "redeem": "Redeem",
+        "success": "Redemption submitted",
+        "insufficient": "Not enough points"
+      },
+      "season": {
+        "eventTag": "Seasonal task",
+        "bonusPoints": "Bonus +{points} pts",
+        "endsIn": "{days} days left"
+      },
+      "states": {
+        "loadFailed": "Interaction data could not load. Please try again later.",
+        "noActiveAdoption": "No active adoption was found for this phone number.",
+        "lookupFailed": "Adoption lookup failed. Check the phone number and try again.",
+        "completed": "Task completed and points added.",
+        "uploadFailed": "Photo upload or submission failed. Please choose the photo again.",
+        "completeFailed": "Task submission failed. Please try again later.",
+        "done": "Done"
       }
     },
     "metadata": {

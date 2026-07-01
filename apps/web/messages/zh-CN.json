@@ -1643,6 +1643,58 @@
         "photo_upload": "上传照片",
         "diary": "提交日记",
         "share": "复制分享并完成"
+      },
+      "dashboard": {
+        "metaTitle": "互动任务系统｜走马村",
+        "metaDescription": "查看认养果树任务、积分与兑换记录。",
+        "phase": "认养互动",
+        "title": "互动任务系统",
+        "body": "围绕一棵认养树，完成养护任务、记录积分，也把复访关系留在系统里。",
+        "entryTitle": "本月互动任务",
+        "entryBody": "查看进度，快速完成浇水或照片上传。",
+        "currentAdoption": "当前认养",
+        "totalPoints": "可用积分",
+        "availablePoints": "可用积分",
+        "totalEarned": "累计获得",
+        "monthlyProgress": "本月完成",
+        "pending": "待完成",
+        "pointsTitle": "积分中心",
+        "tasksTitle": "养护任务",
+        "viewAll": "进入互动系统",
+        "quickWater": "快速浇水",
+        "quickPhoto": "快速拍照"
+      },
+      "identity": {
+        "title": "识别认养身份",
+        "body": "输入认养时留下的手机号，系统会读取你的 active 认养树和互动任务。",
+        "phone": "认养手机号",
+        "lookup": "查询认养",
+        "adoptCta": "去认养一棵树"
+      },
+      "timeline": {
+        "title": "养护时间线",
+        "empty": "还没有养护记录"
+      },
+      "redemption": {
+        "title": "积分兑换",
+        "empty": "暂无可兑换权益",
+        "redeem": "立即兑换",
+        "success": "兑换已提交",
+        "insufficient": "积分不足"
+      },
+      "season": {
+        "eventTag": "季节限定",
+        "bonusPoints": "额外 +{points} 分",
+        "endsIn": "剩余 {days} 天"
+      },
+      "states": {
+        "loadFailed": "互动数据暂时没有加载成功，请稍后重试。",
+        "noActiveAdoption": "当前手机号没有 active 认养记录。",
+        "lookupFailed": "认养查询失败，请检查手机号后重试。",
+        "completed": "任务已完成，积分已入账。",
+        "uploadFailed": "照片上传或提交失败，请重新选择照片。",
+        "completeFailed": "任务提交失败，请稍后重试。",
+        "done": "已完成"
       }
     },
     "metadata": {

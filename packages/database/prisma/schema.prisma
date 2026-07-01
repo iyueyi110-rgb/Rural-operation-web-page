@@ -384,19 +384,21 @@ model TreeCareLog {
 }
 
 model TreeAdoption {
-  id               String                   @id @default(cuid())
-  treeId           String
-  plan             String
-  adopterName      String?
-  adopterPhone     String?
-  adopterId        String?
-  rightsJson       Json?
-  status           String                   @default("pending_payment")
-  createdAt        DateTime                 @default(now()) @map("created_at")
-  updatedAt        DateTime                 @updatedAt @map("updated_at")
-  tree             OrchardTree              @relation(fields: [treeId], references: [id])
-  adopter          User?                    @relation(fields: [adopterId], references: [id])
-  interactionTasks VisitorInteractionTask[]
+  id                String                   @id @default(cuid())
+  treeId            String
+  plan              String
+  adopterName       String?
+  adopterPhone      String?
+  adopterId         String?
+  rightsJson        Json?
+  status            String                   @default("pending_payment")
+  createdAt         DateTime                 @default(now()) @map("created_at")
+  updatedAt         DateTime                 @updatedAt @map("updated_at")
+  tree              OrchardTree              @relation(fields: [treeId], references: [id])
+  adopter           User?                    @relation(fields: [adopterId], references: [id])
+  interactionTasks  VisitorInteractionTask[]
+  pointsAccount     AdoptionPoints?
+  redemptionRecords RedemptionRecord[]
 
   @@index([adopterPhone, createdAt])
   @@map("tree_adoption")
@@ -557,25 +559,114 @@ model Notification {
 }
 
 model VisitorInteractionTask {
-  id          String       @id @default(cuid())
-  adoptionId  String
-  treeId      String
-  taskType    String
-  title       String
-  description String?      @db.Text
-  status      String       @default("pending")
-  completedAt DateTime?
-  imageUrl    String?
-  note        String?      @db.Text
-  points      Int          @default(0)
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @map("updated_at")
-  adoption    TreeAdoption @relation(fields: [adoptionId], references: [id])
-  tree        OrchardTree  @relation(fields: [treeId], references: [id])
+  id                  String       @id @default(cuid())
+  adoptionId          String
+  treeId              String
+  taskType            String
+  title               String
+  description         String?      @db.Text
+  status              String       @default("pending")
+  periodKey           String?
+  maxCompletions      Int          @default(1)
+  completionCount     Int          @default(0)
+  pointsPerCompletion Int          @default(0)
+  totalPointsEarned   Int          @default(0)
+  seasonEventId       String?
+  completedAt         DateTime?
+  imageUrl            String?
+  note                String?      @db.Text
+  points              Int          @default(0)
+  createdAt           DateTime     @default(now()) @map("created_at")
+  updatedAt           DateTime     @updatedAt @map("updated_at")
+  adoption            TreeAdoption @relation(fields: [adoptionId], references: [id])
+  tree                OrchardTree  @relation(fields: [treeId], references: [id])
+  seasonEvent         SeasonEvent? @relation(fields: [seasonEventId], references: [id])
 
-  @@index([adoptionId, status, createdAt])
+  @@index([adoptionId, periodKey, status])
+  @@index([adoptionId, taskType, periodKey])
   @@index([treeId, createdAt])
   @@map("visitor_interaction_task")
+}
+
+model AdoptionPoints {
+  id              String              @id @default(cuid())
+  adoptionId      String              @unique
+  totalPoints     Int                 @default(0)
+  availablePoints Int                 @default(0)
+  redeemedPoints  Int                 @default(0)
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+  adoption        TreeAdoption        @relation(fields: [adoptionId], references: [id])
+  transactions    PointsTransaction[]
+
+  @@map("adoption_points")
+}
+
+model PointsTransaction {
+  id               String         @id @default(cuid())
+  adoptionPointsId String
+  amount           Int
+  type             String
+  source           String
+  referenceId      String?
+  note             String?        @db.Text
+  createdAt        DateTime       @default(now()) @map("created_at")
+  adoptionPoints   AdoptionPoints @relation(fields: [adoptionPointsId], references: [id])
+
+  @@index([adoptionPointsId, createdAt])
+  @@index([adoptionPointsId, type])
+  @@map("points_transaction")
+}
+
+model SeasonEvent {
+  id          String                   @id @default(cuid())
+  solarTerm   String
+  title       String
+  description String?                  @db.Text
+  taskType    String
+  bonusPoints Int                      @default(0)
+  startDate   DateTime
+  endDate     DateTime
+  imageUrl    String?
+  status      String                   @default("active")
+  createdAt   DateTime                 @default(now()) @map("created_at")
+  updatedAt   DateTime                 @updatedAt @map("updated_at")
+  tasks       VisitorInteractionTask[]
+
+  @@index([startDate, endDate, status])
+  @@map("season_event")
+}
+
+model RedemptionOption {
+  id            String             @id @default(cuid())
+  title         String
+  description   String?            @db.Text
+  pointsCost    Int
+  type          String
+  stock         Int                @default(-1)
+  redeemedCount Int                @default(0)
+  imageUrl      String?
+  status        String             @default("active")
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  records       RedemptionRecord[]
+
+  @@map("redemption_option")
+}
+
+model RedemptionRecord {
+  id          String           @id @default(cuid())
+  adoptionId  String
+  optionId    String
+  pointsSpent Int
+  status      String           @default("pending")
+  note        String?          @db.Text
+  createdAt   DateTime         @default(now()) @map("created_at")
+  fulfilledAt DateTime?
+  adoption    TreeAdoption     @relation(fields: [adoptionId], references: [id])
+  option      RedemptionOption @relation(fields: [optionId], references: [id])
+
+  @@index([adoptionId, createdAt])
+  @@map("redemption_record")
 }
 
 model TicketProduct {

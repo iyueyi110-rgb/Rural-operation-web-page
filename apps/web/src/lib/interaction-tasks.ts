@@ -1,3 +1,5 @@
+import type { InteractionTaskType } from "@zouma/contracts"
+
 export const interactionTaskTypes = [
   "watering",
   "fertilizing",
@@ -6,7 +8,7 @@ export const interactionTaskTypes = [
   "share",
 ] as const
 
-export type InteractionTaskType = (typeof interactionTaskTypes)[number]
+export type { InteractionTaskType }
 
 const interactionPoints: Record<InteractionTaskType, number> = {
   watering: 10,
@@ -16,7 +18,17 @@ const interactionPoints: Record<InteractionTaskType, number> = {
   share: 15,
 }
 
-export function isInteractionTaskType(value: unknown): value is InteractionTaskType {
+const interactionRepeatCounts: Record<InteractionTaskType, number> = {
+  watering: 4,
+  fertilizing: 1,
+  photo_upload: 1,
+  diary: 1,
+  share: 1,
+}
+
+export function isInteractionTaskType(
+  value: unknown,
+): value is InteractionTaskType {
   return (
     typeof value === "string" &&
     interactionTaskTypes.includes(value as InteractionTaskType)
@@ -25,4 +37,8 @@ export function isInteractionTaskType(value: unknown): value is InteractionTaskT
 
 export function getInteractionPoints(taskType: InteractionTaskType) {
   return interactionPoints[taskType]
+}
+
+export function getInteractionRepeatCount(taskType: InteractionTaskType) {
+  return interactionRepeatCounts[taskType]
 }
