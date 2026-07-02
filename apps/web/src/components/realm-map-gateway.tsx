@@ -121,6 +121,8 @@ export function RealmMapGateway() {
 
     let disposed = false
     let teardown: () => void = () => undefined
+    const isSmallViewport = window.matchMedia("(max-width: 639px)").matches
+    const mapZoom = isSmallViewport ? 15 : 16
     const navigate = (slug: string) => router.push(`/${locale}/scenes/${slug}`)
     const createRealmLabel = (realm: (typeof realms)[number]) => {
       const label = document.createElement("span")
@@ -143,7 +145,7 @@ export function RealmMapGateway() {
       const map = L.map(container, {
         scrollWheelZoom: false,
         zoomControl: true,
-      }).setView([zoumaVillageCenter[1], zoumaVillageCenter[0]], 16)
+      }).setView([zoumaVillageCenter[1], zoumaVillageCenter[0]], mapZoom)
 
       L.tileLayer(
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -178,13 +180,10 @@ export function RealmMapGateway() {
       container.innerHTML = ""
       const map = new AMap.Map(container, {
         center: zoumaVillageCenter,
-        layers: [
-          new AMap.TileLayer.Satellite(),
-          new AMap.TileLayer.RoadNet(),
-        ],
+        layers: [new AMap.TileLayer.Satellite(), new AMap.TileLayer.RoadNet()],
         pitch: 0,
         viewMode: "3D",
-        zoom: 16,
+        zoom: mapZoom,
       })
 
       const overlays: AMapShape[] = realms.map((realm) => {
@@ -234,7 +233,7 @@ export function RealmMapGateway() {
         <div className="relative mt-9 overflow-hidden rounded-xl border border-line bg-[#dce4d8] shadow-panel">
           <div
             aria-label={t("mapGateway.mapAria")}
-            className="h-[68svh] min-h-[520px] w-full"
+            className="h-[58svh] min-h-[380px] w-full sm:h-[68svh] sm:min-h-[520px]"
             ref={containerRef}
             role="region"
           />

@@ -43,7 +43,7 @@ export function HomeMobileMenu({
             transition={{ duration: 0.18 }}
           >
             <motion.div
-              className="ml-auto flex h-full w-full max-w-sm flex-col border-l border-white/10 bg-ink p-5 text-white shadow-soft"
+              className="ml-auto flex h-dvh w-full max-w-sm flex-col border-l border-white/10 bg-ink p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] text-white shadow-soft"
               exit={{ x: 24, opacity: 0 }}
               initial={{ x: 24, opacity: 0 }}
               onClick={(event) => event.stopPropagation()}
@@ -64,7 +64,10 @@ export function HomeMobileMenu({
                 </button>
               </div>
 
-              <nav className="mt-8 grid gap-2" aria-label={menuLabel}>
+              <nav
+                className="mt-8 grid min-h-0 gap-2 overflow-y-auto pr-1"
+                aria-label={menuLabel}
+              >
                 {items.map((item) => (
                   <Link
                     className="rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 text-base font-semibold text-white/86 transition hover:bg-white/10"

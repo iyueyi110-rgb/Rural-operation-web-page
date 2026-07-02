@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { AdoptionFlow } from "./adoption-flow"
 import { BackButton } from "@web/components/back-button"
+import { VisitorHeaderActions } from "@web/components/visitor-header-actions"
 import type { Locale } from "@web/i18n/routing"
 import {
   PanelTitle,
@@ -58,7 +59,12 @@ export default async function TreesPage({
           />
         }
         icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
-        rightLabel={t("nav.phase")}
+        rightElement={
+          <VisitorHeaderActions
+            locale={params.locale}
+            rightLabel={t("nav.phase")}
+          />
+        }
       />
 
       <SubpageHero

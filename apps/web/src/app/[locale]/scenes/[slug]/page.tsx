@@ -11,6 +11,7 @@ import {
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { BackButton } from "@web/components/back-button"
+import { VisitorHeaderActions } from "@web/components/visitor-header-actions"
 import { getSceneDetail, sceneDetails } from "@web/lib/scenes-data"
 import { getSiteUrl } from "@web/lib/site-url"
 import type { Locale } from "@web/i18n/routing"
@@ -65,7 +66,7 @@ export default async function SceneDetailPage({
   return (
     <main className="min-h-screen bg-rice pb-28 text-ink md:pb-16">
       <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-ink/78 text-white backdrop-blur-xl">
-        <Section className="flex h-16 items-center justify-between gap-4">
+        <Section className="flex h-16 items-center justify-between gap-3 sm:gap-4">
           <BackButton
             className="flex shrink-0 cursor-pointer items-center gap-2 border-none bg-transparent text-sm font-semibold text-white/86 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             fallbackHref={`/${params.locale}`}
@@ -86,6 +87,9 @@ export default async function SceneDetailPage({
               </Link>
             ))}
           </nav>
+          <div className="md:hidden">
+            <VisitorHeaderActions locale={params.locale} />
+          </div>
         </Section>
       </header>
 
