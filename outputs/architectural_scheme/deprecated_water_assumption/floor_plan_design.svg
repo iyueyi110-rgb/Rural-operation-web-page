@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200">
+  <defs>
+    <style>
+      .bg{fill:#f7f4ec}
+      .water{fill:#d7e6e2;stroke:#8eb5ad;stroke-width:3}
+      .bank{fill:none;stroke:#9c8b74;stroke-width:10;stroke-linecap:round}
+      .path{fill:none;stroke:#b8a07d;stroke-width:30;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
+      .wall{fill:#d7d0c4;stroke:#332f2b;stroke-width:5;stroke-linejoin:round}
+      .roof{fill:#5d5a54;stroke:#2e2b28;stroke-width:4;stroke-linejoin:round;opacity:.9}
+      .roofline{stroke:#2f2b27;stroke-width:3;fill:none;opacity:.75}
+      .inner{fill:#efe9dc;stroke:#5d5146;stroke-width:3}
+      .deck{fill:#c5aa7c;stroke:#735c3f;stroke-width:3}
+      .green{fill:#8fad72;stroke:#50633d;stroke-width:3}
+      .tree{fill:#7a9b61;stroke:#3d5533;stroke-width:3}
+      .label{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;fill:#2f2b27;font-size:30px;font-weight:650}
+      .small{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;fill:#3d3832;font-size:22px}
+      .tiny{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;fill:#4d463e;font-size:18px}
+      .num{font-family:Arial,sans-serif;fill:#fff;font-size:24px;font-weight:700}
+      .bubble{fill:#2f2b27}
+      .thin{stroke:#6a5d4d;stroke-width:2;fill:none}
+      .dash{stroke:#7a6a58;stroke-width:3;stroke-dasharray:10 10;fill:none}
+      .glass{fill:#dbe9e6;stroke:#5f8f89;stroke-width:3;opacity:.75}
+      .furniture{fill:#b89663;stroke:#6a5135;stroke-width:2}
+      .stonehatch{stroke:#fff9ed;stroke-width:3;opacity:.65}
+    </style>
+    <pattern id="stone" width="74" height="54" patternUnits="userSpaceOnUse">
+      <rect width="74" height="54" fill="#d4ccc0"/>
+      <path d="M0 18H74M0 37H74M24 0V18M53 18V37M13 37V54M62 37V54" class="stonehatch"/>
+    </pattern>
+    <pattern id="tiles" width="24" height="18" patternUnits="userSpaceOnUse">
+      <rect width="24" height="18" fill="#5d5a54"/>
+      <path d="M0 8 Q6 2 12 8 T24 8M0 17H24" stroke="#34302c" stroke-width="2" fill="none" opacity=".8"/>
+    </pattern>
+  </defs>
+
+  <rect class="bg" width="1800" height="1200"/>
+  <text x="84" y="80" class="label" style="font-size:42px">滨水研学工坊建筑平面设计图</text>
+  <text x="86" y="122" class="small">由草图整理：纺织工坊 / 研发土墙 / 接待讲解 / 茶饮体验 / 展陈与滨水休憩</text>
+
+  <path class="water" d="M0,850 C210,650 405,600 610,667 C770,720 875,780 1050,728 C1210,682 1358,735 1525,850 C1628,922 1715,980 1800,990 L1800,1200 L0,1200 Z"/>
+  <path class="bank" d="M20,815 C235,610 410,575 620,635 C810,690 880,770 1045,705 C1222,635 1360,700 1548,823 C1650,890 1722,930 1800,940"/>
+  <path class="path" d="M135,650 C280,615 445,620 585,640 C730,660 845,656 948,612 C1050,568 1162,558 1270,595 C1365,628 1445,704 1535,825"/>
+  <path class="dash" d="M126,686 C325,655 520,676 710,696 C842,710 970,670 1070,618 C1200,552 1355,584 1462,672"/>
+
+  <!-- Left arrival / textile and research cluster -->
+  <g transform="rotate(-2 275 500)">
+    <polygon class="roof" points="88,390 370,365 454,438 118,478"/>
+    <polygon class="wall" points="115,430 408,405 408,555 115,580"/>
+    <rect x="145" y="455" width="96" height="90" class="inner"/>
+    <rect x="253" y="445" width="125" height="100" class="inner"/>
+    <rect x="170" y="480" width="45" height="18" class="furniture"/>
+    <rect x="268" y="468" width="82" height="20" class="furniture"/>
+    <rect x="275" y="505" width="82" height="20" class="furniture"/>
+    <line x1="170" y1="555" x2="222" y2="555" class="thin"/>
+    <line x1="275" y1="545" x2="355" y2="545" class="thin"/>
+  </g>
+  <g transform="rotate(-1 430 535)">
+    <polygon class="roof" points="420,410 690,390 754,450 454,485"/>
+    <polygon class="wall" points="450,447 722,425 722,575 450,596"/>
+    <rect x="478" y="470" width="210" height="88" class="inner"/>
+    <rect x="495" y="495" width="64" height="20" class="furniture"/>
+    <rect x="585" y="492" width="64" height="20" class="furniture"/>
+    <rect x="535" y="532" width="95" height="16" class="furniture"/>
+  </g>
+  <rect x="70" y="520" width="150" height="130" class="wall"/>
+  <polygon class="roof" points="48,500 230,480 260,530 62,555" fill="url(#tiles)" stroke="#2e2b28" stroke-width="4"/>
+
+  <!-- Reception / interpretation cluster -->
+  <g transform="rotate(1 840 470)">
+    <polygon class="roof" points="748,345 1012,330 1100,392 804,430" fill="url(#tiles)" stroke="#2e2b28" stroke-width="4"/>
+    <polygon class="wall" points="792,390 1076,360 1080,548 790,562"/>
+    <rect x="825" y="414" width="94" height="110" class="inner"/>
+    <rect x="937" y="402" width="108" height="125" class="inner"/>
+    <rect x="840" y="442" width="58" height="20" class="furniture"/>
+    <rect x="956" y="440" width="68" height="18" class="furniture"/>
+    <rect x="956" y="480" width="68" height="18" class="furniture"/>
+    <path class="glass" d="M815,552 C875,590 972,592 1066,546 L1068,582 C968,632 870,630 810,590 Z"/>
+  </g>
+
+  <!-- Courtyard and waterside rest -->
+  <ellipse cx="1012" cy="595" rx="82" ry="52" class="deck"/>
+  <circle cx="1010" cy="586" r="43" class="tree"/>
+  <circle cx="980" cy="594" r="22" fill="#9eb37c"/>
+  <circle cx="1042" cy="604" r="20" fill="#8ca46c"/>
+  <rect x="892" y="652" width="205" height="80" class="deck" transform="rotate(-9 994 692)"/>
+  <text x="940" y="703" class="small" transform="rotate(-9 994 692)">临水休憩台</text>
+
+  <!-- Right tea / exhibition cluster -->
+  <g transform="rotate(18 1270 420)">
+    <polygon class="roof" points="1130,270 1390,245 1460,320 1168,362" fill="url(#tiles)" stroke="#2e2b28" stroke-width="4"/>
+    <polygon class="wall" points="1170,312 1430,285 1435,462 1172,490"/>
+    <rect x="1200" y="336" width="88" height="122" class="inner"/>
+    <rect x="1304" y="324" width="100" height="122" class="inner"/>
+    <rect x="1218" y="365" width="50" height="20" class="furniture"/>
+    <rect x="1320" y="350" width="62" height="18" class="furniture"/>
+    <rect x="1320" y="388" width="62" height="18" class="furniture"/>
+  </g>
+  <g transform="rotate(13 1375 610)">
+    <polygon class="roof" points="1195,510 1510,478 1600,556 1240,605" fill="url(#tiles)" stroke="#2e2b28" stroke-width="4"/>
+    <polygon class="wall" points="1240,555 1562,512 1565,756 1240,786"/>
+    <rect x="1270" y="590" width="118" height="150" class="inner"/>
+    <rect x="1408" y="570" width="120" height="160" class="inner"/>
+    <rect x="1294" y="612" width="58" height="30" class="furniture"/>
+    <rect x="1294" y="680" width="58" height="30" class="furniture"/>
+    <rect x="1433" y="598" width="58" height="30" class="furniture"/>
+    <rect x="1433" y="668" width="58" height="30" class="furniture"/>
+  </g>
+
+  <!-- Roof ridges -->
+  <path class="roofline" d="M160,405 L388,386 M480,420 L724,397 M820,355 L1080,340 M1170,270 L1450,247 M1238,504 L1585,480"/>
+  <path class="roofline" d="M96,410 L120,478 M370,365 L408,405 M690,390 L722,425 M1012,330 L1076,360 M1390,245 L1430,285 M1510,478 L1562,512"/>
+
+  <!-- Trees/site -->
+  <circle cx="95" cy="360" r="54" class="tree"/>
+  <circle cx="1548" cy="368" r="55" class="tree"/>
+  <circle cx="1500" cy="512" r="42" class="tree"/>
+  <circle cx="1320" cy="820" r="40" class="tree"/>
+  <circle cx="160" cy="720" r="34" class="tree"/>
+  <path class="green" d="M48,720 C130,675 225,704 280,770 C195,835 96,824 48,720 Z"/>
+  <path class="green" d="M1460,760 C1538,730 1628,765 1658,842 C1568,895 1488,854 1460,760 Z"/>
+
+  <!-- Numbered bubbles and labels -->
+  <g>
+    <circle cx="150" cy="615" r="22" class="bubble"/><text x="143" y="624" class="num">1</text>
+    <text x="80" y="705" class="small">入口灰空间</text>
+    <text x="80" y="732" class="tiny">到达、售票、雨棚候场</text>
+
+    <circle cx="260" cy="510" r="22" class="bubble"/><text x="253" y="519" class="num">2</text>
+    <text x="175" y="350" class="small">纺织工坊</text>
+    <text x="175" y="378" class="tiny">织机体验、手作课程</text>
+
+    <circle cx="570" cy="515" r="22" class="bubble"/><text x="563" y="524" class="num">3</text>
+    <text x="470" y="350" class="small">研发土墙</text>
+    <text x="470" y="378" class="tiny">材料样本、研学小组</text>
+
+    <circle cx="930" cy="470" r="22" class="bubble"/><text x="923" y="479" class="num">4</text>
+    <text x="780" y="300" class="small">接待讲解厅</text>
+    <text x="780" y="328" class="tiny">序厅、讲解、公共服务</text>
+
+    <circle cx="1010" cy="590" r="22" class="bubble"/><text x="1003" y="599" class="num">5</text>
+    <text x="1055" y="625" class="small">内庭院</text>
+    <text x="1055" y="653" class="tiny">保留大树与石铺地</text>
+
+    <circle cx="1305" cy="405" r="22" class="bubble"/><text x="1298" y="414" class="num">6</text>
+    <text x="1365" y="360" class="small">茶饮体验</text>
+    <text x="1365" y="388" class="tiny">茶席、备餐、吧台</text>
+
+    <circle cx="1400" cy="660" r="22" class="bubble"/><text x="1393" y="669" class="num">7</text>
+    <text x="1510" y="665" class="small">展陈厅</text>
+    <text x="1510" y="693" class="tiny">村史、工艺、产品陈列</text>
+
+    <circle cx="996" cy="694" r="22" class="bubble"/><text x="989" y="703" class="num">8</text>
+    <text x="760" y="775" class="small">滨水休憩区</text>
+    <text x="760" y="803" class="tiny">台阶、坐凳、观景平台</text>
+  </g>
+
+  <!-- Legend -->
+  <rect x="1130" y="920" width="560" height="205" rx="0" fill="#eee7da" stroke="#776957" stroke-width="3"/>
+  <text x="1160" y="965" class="label" style="font-size:28px">统一材质与屋顶控制</text>
+  <rect x="1162" y="990" width="52" height="32" fill="url(#stone)" stroke="#50483f" stroke-width="2"/>
+  <text x="1230" y="1015" class="small">灰褐毛石墙：保留粗砌纹理、白灰勾缝、局部青苔</text>
+  <rect x="1162" y="1032" width="52" height="32" fill="url(#tiles)" stroke="#50483f" stroke-width="2"/>
+  <text x="1230" y="1057" class="small">深灰小青瓦坡屋面：连续低檐、深木椽与檐口</text>
+  <rect x="1162" y="1074" width="52" height="32" class="deck"/>
+  <text x="1230" y="1099" class="small">木平台 / 石铺地：连接庭院、连廊与滨水休憩台</text>
+
+  <!-- North arrow and scale -->
+  <g transform="translate(1620 100)">
+    <path d="M0,70 L28,0 L56,70 L28,55 Z" fill="#2f2b27"/>
+    <text x="18" y="103" class="small">N</text>
+  </g>
+  <g transform="translate(92 1060)">
+    <line x1="0" y1="0" x2="260" y2="0" stroke="#2f2b27" stroke-width="5"/>
+    <line x1="0" y1="-12" x2="0" y2="12" stroke="#2f2b27" stroke-width="5"/>
+    <line x1="130" y1="-12" x2="130" y2="12" stroke="#2f2b27" stroke-width="5"/>
+    <line x1="260" y1="-12" x2="260" y2="12" stroke="#2f2b27" stroke-width="5"/>
+    <text x="0" y="42" class="tiny">0</text>
+    <text x="114" y="42" class="tiny">5m</text>
+    <text x="236" y="42" class="tiny">10m</text>
+  </g>
+</svg>

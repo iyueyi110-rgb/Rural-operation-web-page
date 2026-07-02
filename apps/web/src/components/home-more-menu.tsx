@@ -22,7 +22,7 @@ export function HomeMoreMenu({
   useEffect(() => {
     if (!open) return
 
-    function closeOnOutsideClick(event: MouseEvent) {
+    function closeOnOutsideClick(event: PointerEvent | MouseEvent) {
       if (!menuRef.current?.contains(event.target as Node)) {
         setOpen(false)
       }
@@ -32,11 +32,12 @@ export function HomeMoreMenu({
       if (event.key === "Escape") setOpen(false)
     }
 
-    document.addEventListener("mousedown", closeOnOutsideClick)
+    // pointerdown 统一处理鼠标和触摸，避免移动端 mousedown 时序问题
+    document.addEventListener("pointerdown", closeOnOutsideClick)
     document.addEventListener("keydown", closeOnEscape)
 
     return () => {
-      document.removeEventListener("mousedown", closeOnOutsideClick)
+      document.removeEventListener("pointerdown", closeOnOutsideClick)
       document.removeEventListener("keydown", closeOnEscape)
     }
   }, [open])
@@ -48,6 +49,7 @@ export function HomeMoreMenu({
         aria-haspopup="menu"
         className="inline-flex items-center gap-1.5 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70"
         onClick={() => setOpen((current) => !current)}
+        onPointerDown={(event) => event.stopPropagation()}
         type="button"
       >
         {label}

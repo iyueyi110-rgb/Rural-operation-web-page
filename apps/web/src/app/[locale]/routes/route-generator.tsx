@@ -151,7 +151,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
               className="object-cover"
               fill
               sizes="(min-width: 1024px) 58vw, 100vw"
-              src="/images/routes/zouma-route-scope-user.jpg"
+              src="/images/routes/zouma-route-scope-clean.png"
             />
           ) : (
             <RouteSatelliteMap />
@@ -189,7 +189,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
           <div className="grid min-w-0 gap-4">
             <div className="rounded-lg border border-line p-4">
               <h3 className="text-base font-extrabold">{t("result.waypoints")}</h3>
-              <ol className="mt-4 grid gap-3">
+              <ol className="mt-4 grid gap-x-5 gap-y-3 md:grid-flow-col md:grid-cols-3 md:grid-rows-4">
                 {selectedRoute.waypoints.map((point, index) => (
                   <li className="flex gap-3 text-sm leading-6 text-ink/72" key={point}>
                     <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-xs font-bold text-white">

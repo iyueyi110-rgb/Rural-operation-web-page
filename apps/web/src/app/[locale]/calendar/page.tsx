@@ -7,6 +7,7 @@ import { BackButton } from "@web/components/back-button"
 import { HeroMeta, SubpageHero } from "@web/components/subpage-ui"
 import { getSiteUrl } from "@web/lib/site-url"
 import { PageHeader, Section } from "@ui/index"
+import { ProductFlow } from "../products/product-flow"
 import { FarmingCalendar } from "./farming-calendar"
 
 export async function generateMetadata({
@@ -68,6 +69,9 @@ export default async function CalendarPage({
       <Section>
         <div className="mt-8">
           <FarmingCalendar />
+        </div>
+        <div className="mt-10">
+          <ProductFlow />
         </div>
       </Section>
     </main>
