@@ -108,7 +108,7 @@ export function FeedbackForm() {
 
           <div>
             <div className="text-sm font-bold">{t("form.ratingLabel")}</div>
-            <div className="mt-2 grid grid-cols-5 gap-2">
+            <div className="mt-2 grid grid-cols-5 gap-1.5 sm:gap-2">
               {ratings.map((value) => (
                 <button
                   aria-label={t("form.ratingAria", { count: value })}

@@ -39,41 +39,44 @@ export function GrowthAnimation({
         {t("description")}
       </p>
 
-      <div
-        aria-label={t("timelineAria")}
-        className="mt-6 flex snap-x gap-3 overflow-x-auto pb-3"
-        role="group"
-      >
-        {growthStages.map((item, index) => {
-          const Icon = stageIcons[item]
-          const selected = item === selectedStage
-          return (
-            <button
-              aria-pressed={selected}
-              className={`min-w-[180px] snap-start rounded-md border p-4 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-water ${
-                selected
-                  ? "border-moss bg-moss text-white"
-                  : "border-stone bg-rice text-ink hover:border-moss/50"
-              }`}
-              key={item}
-              onClick={() => selectStage(item)}
-              type="button"
-            >
-              <div className="flex items-center justify-between gap-3">
-                <Icon aria-hidden="true" className="h-5 w-5" />
-                <span className="text-xs font-bold opacity-55">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-              </div>
-              <h3 className="mt-4 text-sm font-extrabold">
-                {t(`stages.${item}.label`)}
-              </h3>
-              <p className="mt-2 text-xs leading-5 opacity-70">
-                {t(`stages.${item}.body`)}
-              </p>
-            </button>
-          )
-        })}
+      <div className="relative">
+        <div
+          aria-label={t("timelineAria")}
+          className="mt-6 flex snap-x gap-3 overflow-x-auto pb-3"
+          role="group"
+        >
+          {growthStages.map((item, index) => {
+            const Icon = stageIcons[item]
+            const selected = item === selectedStage
+            return (
+              <button
+                aria-pressed={selected}
+                className={`min-w-[180px] snap-start rounded-md border p-4 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-water ${
+                  selected
+                    ? "border-moss bg-moss text-white"
+                    : "border-stone bg-rice text-ink hover:border-moss/50"
+                }`}
+                key={item}
+                onClick={() => selectStage(item)}
+                type="button"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <Icon aria-hidden="true" className="h-5 w-5" />
+                  <span className="text-xs font-bold opacity-55">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <h3 className="mt-4 text-sm font-extrabold">
+                  {t(`stages.${item}.label`)}
+                </h3>
+                <p className="mt-2 text-xs leading-5 opacity-70">
+                  {t(`stages.${item}.body`)}
+                </p>
+              </button>
+            )
+          })}
+        </div>
+        <div className="pointer-events-none absolute bottom-3 right-0 top-6 w-10 bg-gradient-to-l from-rice to-transparent md:hidden" />
       </div>
 
       <div className="mt-4 grid min-h-56 place-items-center rounded-lg bg-gradient-to-b from-rice to-[#e5eddc] p-7 text-center">

@@ -63,7 +63,7 @@ export default async function SceneDetailPage({
   const common = await getTranslations("common")
 
   return (
-    <main className="min-h-screen bg-rice pb-16 text-ink">
+    <main className="min-h-screen bg-rice pb-28 text-ink md:pb-16">
       <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-ink/78 text-white backdrop-blur-xl">
         <Section className="flex h-16 items-center justify-between gap-4">
           <BackButton
@@ -200,6 +200,29 @@ export default async function SceneDetailPage({
           </div>
         </div>
       </Section>
+
+      <nav className="fixed bottom-0 inset-x-0 z-30 border-t border-white/10 bg-ink/95 text-white shadow-panel backdrop-blur-md md:hidden">
+        <div className="flex gap-1 overflow-x-auto px-3 py-3">
+          {sceneDetails.map((item) => {
+            const isActive = item.slug === scene.slug
+
+            return (
+              <Link
+                aria-current={isActive ? "page" : undefined}
+                className={
+                  isActive
+                    ? "shrink-0 rounded-full border border-white/20 bg-white/12 px-4 py-2 text-xs font-semibold text-white"
+                    : "shrink-0 rounded-full border border-white/12 px-4 py-2 text-xs font-semibold text-white/72 transition active:bg-white/10"
+                }
+                href={`/${params.locale}/scenes/${item.slug}`}
+                key={item.slug}
+              >
+                {t(item.titleKey)}
+              </Link>
+            )
+          })}
+        </div>
+      </nav>
     </main>
   )
 }

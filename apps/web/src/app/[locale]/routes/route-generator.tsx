@@ -137,7 +137,7 @@ export function RouteGenerator({ locale }: { locale: Locale }) {
             <h2 className="mt-1 break-words text-xl font-extrabold">{t("map.title")}</h2>
           </div>
           <SegmentedControl
-            className="grid w-full grid-cols-2 sm:w-auto"
+            className="grid w-full max-w-xs grid-cols-2 sm:w-auto"
             labelFor={(value) => (value === "scope" ? t("map.scope") : t("map.satellite"))}
             onChange={setMapMode}
             options={["scope", "satellite"] as const}

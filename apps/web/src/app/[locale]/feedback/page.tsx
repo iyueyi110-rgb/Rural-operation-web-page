@@ -45,7 +45,7 @@ export default async function FeedbackPage({
   const common = await getTranslations("common")
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-rice pb-16 text-ink">
+    <main className="min-h-screen bg-rice pb-16 text-ink">
       <PageHeader
         backHref={`/${params.locale}`}
         backLabel={t("nav.backHome")}
