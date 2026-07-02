@@ -15,17 +15,29 @@ export async function POST(request: Request) {
   const rateLimit = await checkRateLimit(getRateLimitKey(request, "infrastructure-decide"), 5, 60)
   if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)
 
-  const data = await generateControlCommands()
-  return jsonResponse(
-    request,
-    {
-      data,
-      meta: {
-        total: data.length,
-        degraded: data.length === 0,
-        reason: data.length === 0 ? "传感器和客流样本不足，暂无自动处置建议" : undefined,
+  try {
+    const data = await generateControlCommands()
+    return jsonResponse(
+      request,
+      {
+        data,
+        meta: {
+          total: data.length,
+          degraded: data.length === 0,
+          reason: data.length === 0 ? "传感器和客流样本不足，暂无自动处置建议" : undefined,
+        },
       },
-    },
-    { status: 201 },
-  )
+      { status: 201 },
+    )
+  } catch (error) {
+    console.error("Infrastructure decision failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: {
+        total: 0,
+        degraded: true,
+        reason: "决策服务暂时不可用，请稍后重试",
+      },
+    })
+  }
 }
