@@ -517,7 +517,8 @@
       "more": "More",
       "menu": "Open navigation menu",
       "closeMenu": "Close navigation menu",
-      "activities": "Activities"
+      "activities": "Activities",
+      "interactions": "Tasks"
     },
     "hero": {
       "badge": "AIGC-enabled resilient mountain village",
@@ -1084,15 +1085,23 @@
       "morningFarm": "Morning farm activity",
       "xikouStation": "Xikou relay station",
       "lingwangTeaRoom": "Lingwang tea room",
+      "fengwangTeaRoom": "Fengwang tea room",
       "lijingCoCreationCenter": "Lijing co-creation center",
       "zoumaCultureCenter": "Zouma culture center",
+      "zoumaStation": "Zouma relay station",
       "integratedServiceCenter": "Integrated service center",
       "researchCenter": "Study center",
       "ecologicalDemoCenter": "Ecological demonstration center",
+      "ecologicalRestaurant": "Ecological restaurant",
       "ancientLycheePavilion": "Ancient lychee pavilion",
       "experienceField": "Experience field",
+      "tianyuanExperiencePoint": "Pastoral experience point",
+      "camp": "Camp",
+      "homestay": "Homestay",
       "viewingPlatform": "Viewing platform",
       "researchWorkshop": "Study workshop",
+      "studyHomestay": "Study homestay",
+      "studyNode": "Study node",
       "homestayCluster": "Homestay cluster"
     },
     "reservationNodes": {
@@ -1694,6 +1703,9 @@
         "completed": "Task completed and points added.",
         "uploadFailed": "Photo upload or submission failed. Please choose the photo again.",
         "completeFailed": "Task submission failed. Please try again later.",
+        "demoFallback": "Live interaction data is empty, so demo fallback data is shown.",
+        "demoNotice": "Demo mode: tasks, points, and redemption are shown only to demonstrate the full interaction flow and are not written to the database.",
+        "demoCompleted": "Demo task completed and points were added locally.",
         "done": "Done"
       }
     },

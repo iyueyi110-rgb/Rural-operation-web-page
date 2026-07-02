@@ -517,7 +517,8 @@
       "more": "その他",
       "menu": "ナビゲーションを開く",
       "closeMenu": "ナビゲーションを閉じる",
-      "activities": "イベント"
+      "activities": "イベント",
+      "interactions": "インタラクション"
     },
     "hero": {
       "badge": "AIGC を活用した山村更新モデル",
@@ -1084,15 +1085,23 @@
       "morningFarm": "朝の農事体験点",
       "xikouStation": "溪口駅舎",
       "lingwangTeaRoom": "岭望茶室",
+      "fengwangTeaRoom": "峰望茶室",
       "lijingCoCreationCenter": "荔晶共創センター",
       "zoumaCultureCenter": "走馬文化センター",
+      "zoumaStation": "走馬駅舎",
       "integratedServiceCenter": "総合サービスセンター",
       "researchCenter": "研学センター",
       "ecologicalDemoCenter": "生態モデルセンター",
+      "ecologicalRestaurant": "生態レストラン",
       "ancientLycheePavilion": "古荔亭",
       "experienceField": "体験田",
+      "tianyuanExperiencePoint": "田園体験ポイント",
+      "camp": "キャンプ地",
+      "homestay": "民宿",
       "viewingPlatform": "展望台",
       "researchWorkshop": "研学工房",
+      "studyHomestay": "研学民宿",
+      "studyNode": "研学",
       "homestayCluster": "民宿エリア"
     },
     "reservationNodes": {
@@ -1694,6 +1703,9 @@
         "completed": "タスクが完了し、ポイントが加算されました。",
         "uploadFailed": "写真のアップロードまたは送信に失敗しました。もう一度選択してください。",
         "completeFailed": "タスク送信に失敗しました。後でもう一度お試しください。",
+        "demoFallback": "実データが空のため、デモ用の降格データを表示しています。",
+        "demoNotice": "デモモード：タスク、ポイント、交換は体験フローの表示用で、実データベースには保存されません。",
+        "demoCompleted": "デモタスクが完了し、ポイントを画面内で加算しました。",
         "done": "完了"
       }
     },

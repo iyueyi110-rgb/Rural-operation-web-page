@@ -22,7 +22,7 @@ export function HomeMobileMenu({
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         aria-expanded={open}
         aria-label={menuLabel}

@@ -11,17 +11,17 @@ import { Section } from "@ui/index"
 export async function HomeHeader({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: "home" })
   const coreNavItems = [
-    { href: buildExploreHref(locale, "realms"), label: t("nav.realms") },
-    { href: `/${locale}/routes`, label: t("nav.routes") },
-    { href: `/${locale}/booking`, label: t("nav.booking") },
-    { href: `/${locale}/trees`, label: t("nav.adoption") },
-  ]
-  const moreNavItems = [
     { href: `/${locale}/tickets`, label: t("quickActions.tickets") },
-    { href: `/${locale}/products`, label: t("nav.products") },
     { href: `/${locale}/calendar`, label: t("nav.calendar") },
     { href: `/${locale}/activities`, label: t("nav.activities") },
+    { href: `/${locale}/routes`, label: t("nav.routes") },
+    { href: `/${locale}/booking`, label: t("nav.booking") },
+  ]
+  const moreNavItems = [
+    { href: buildExploreHref(locale, "realms"), label: t("nav.realms") },
+    { href: `/${locale}/trees`, label: t("nav.adoption") },
     { href: buildExploreHref(locale, "weather"), label: t("nav.weather") },
+    { href: `/${locale}/me/interactions`, label: t("nav.interactions") },
   ]
   const accountItems = [
     { href: `/${locale}/me`, label: t("quickActions.me") },
@@ -46,7 +46,7 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
               {t("nav.brand")}
             </span>
           </Link>
-          <div className="hidden items-center gap-3 text-xs font-semibold text-white/62 md:flex">
+          <div className="hidden items-center gap-3 text-xs font-semibold text-white/62 xl:flex">
             <Link className="transition hover:text-white" href={`/${locale}/me`}>
               {t("quickActions.me")}
             </Link>
@@ -69,7 +69,7 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
 
         <nav
           aria-label={t("nav.aria")}
-          className="hidden items-center gap-5 text-sm text-white/78 md:flex"
+          className="hidden items-center gap-4 text-sm text-white/78 lg:flex xl:gap-5"
         >
           {coreNavItems.map((item) => (
             <Link
