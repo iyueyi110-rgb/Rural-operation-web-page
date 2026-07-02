@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 import { BackButton } from "@web/components/back-button"
 import { InteractionDashboard } from "@web/components/interactions/interaction-dashboard"
 import { SubpageHero } from "@web/components/subpage-ui"
+import { VisitorHeaderActions } from "@web/components/visitor-header-actions"
 import type { Locale } from "@web/i18n/routing"
 import { getSiteUrl } from "@web/lib/site-url"
 import { PageHeader, Section } from "@ui/index"
@@ -47,7 +48,12 @@ export default async function InteractionsPage({
         backHref={`/${params.locale}/me`}
         backLabel={common("back")}
         icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
-        rightLabel={t("dashboard.phase")}
+        rightElement={
+          <VisitorHeaderActions
+            locale={params.locale}
+            rightLabel={t("dashboard.phase")}
+          />
+        }
       />
       <SubpageHero
         body={t("dashboard.body")}

@@ -18,6 +18,8 @@ interface TreeAdoptionRequest {
   adopterPhone?: string
 }
 
+const adoptableTreeStatuses = ["available", "limited"]
+
 export async function OPTIONS(request: Request) {
   return optionsResponse(request)
 }
@@ -52,7 +54,7 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Tree is not available in database" }, { status: 404 })
   }
 
-  if (dbTree.adoptStatus === "maintenance") {
+  if (!adoptableTreeStatuses.includes(dbTree.adoptStatus)) {
     return jsonResponse(request, { error: "Tree is not available for adoption" }, { status: 409 })
   }
 
@@ -102,7 +104,7 @@ export async function POST(request: Request) {
         where: { id: dbTree.id },
         select: { adoptStatus: true, version: true },
       })
-      if (!currentTree || currentTree.adoptStatus !== "available") {
+      if (!currentTree || !adoptableTreeStatuses.includes(currentTree.adoptStatus)) {
         throw new AdoptionConflictError()
       }
 
@@ -110,7 +112,7 @@ export async function POST(request: Request) {
         where: {
           id: dbTree.id,
           version: currentTree.version,
-          adoptStatus: "available",
+          adoptStatus: { in: adoptableTreeStatuses },
         },
         data: { adoptStatus: "reserved", version: { increment: 1 } },
       })

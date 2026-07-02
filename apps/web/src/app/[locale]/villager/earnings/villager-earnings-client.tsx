@@ -31,7 +31,7 @@ export function VillagerEarningsClient() {
     <main className="mx-auto max-w-2xl p-5 sm:p-8">
       <PanelTitle tone="moss">{t("earnings.eyebrow")}</PanelTitle>
       <h1 className="mt-2 text-3xl font-extrabold">{t("earnings.title")}</h1>
-      <div className="mt-6 grid grid-cols-2 gap-3">
+      <div className="mt-6 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
         <MetricTile icon={<WalletCards className="h-5 w-5" />} label={t("earnings.total")} tone="dark" value={`¥${total}`} />
         <MetricTile icon={<TrendingUp className="h-5 w-5" />} label={t("earnings.monthly")} value={`¥${monthly}`} />
       </div>

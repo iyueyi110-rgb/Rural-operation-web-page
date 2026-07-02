@@ -16,6 +16,7 @@ import { FieldLabel, InlineNotice, MetricTile, PanelTitle } from "@web/component
 import { MasterDetailLayout, SafeImage } from "@ui/index"
 import { fetchWithAuth, rememberTouristIdentity } from "@web/lib/auth-client"
 import { DemoPaymentDialog } from "@web/components/demo-payment-dialog"
+import type { TreeProfile } from "@web/lib/tree-records"
 
 const availabilityTone: Record<TreeAvailability, string> = {
   available: "bg-moss/12 text-moss border-moss/20",
@@ -31,11 +32,33 @@ interface TreeAdoptionOrder {
   createdAt: string
 }
 
-export function AdoptionFlow() {
+function resolveAvailability(tree: OrchardTreeOption, liveTree?: TreeProfile): TreeAvailability {
+  if (!liveTree) return tree.availability
+  if (liveTree.adoptStatus === "available") return tree.availability
+  if (liveTree.adoptStatus === "limited") return "limited"
+  return "maintenance"
+}
+
+function mergeLiveTrees(trees: TreeProfile[] | undefined) {
+  return orchardTreeOptions.map((tree) => {
+    const liveTree = trees?.find(
+      (item) => item.treeCode === tree.id || item.treeCode === tree.treeCode || item.id === tree.id,
+    )
+
+    return {
+      ...tree,
+      availability: resolveAvailability(tree, liveTree),
+    }
+  })
+}
+
+export function AdoptionFlow({ trees }: { trees?: TreeProfile[] }) {
   const t = useTranslations("trees")
   const systemT = useTranslations("villagerSystem")
   const locale = useLocale()
-  const [selectedTreeId, setSelectedTreeId] = useState(orchardTreeOptions[0].id)
+  const treeOptions = useMemo(() => mergeLiveTrees(trees), [trees])
+  const firstSelectableTree = treeOptions.find((tree) => tree.availability !== "maintenance") ?? treeOptions[0]
+  const [selectedTreeId, setSelectedTreeId] = useState(firstSelectableTree.id)
   const [selectedPlan, setSelectedPlan] = useState<AdoptionPlan>("seasonal")
   const [agreementAccepted, setAgreementAccepted] = useState(false)
   const [phone, setPhone] = useState("")
@@ -44,8 +67,8 @@ export function AdoptionFlow() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const selectedTree = useMemo(
-    () => orchardTreeOptions.find((tree) => tree.id === selectedTreeId) ?? orchardTreeOptions[0],
-    [selectedTreeId],
+    () => treeOptions.find((tree) => tree.id === selectedTreeId) ?? firstSelectableTree,
+    [firstSelectableTree, selectedTreeId, treeOptions],
   )
   const canConfirm = agreementAccepted && selectedTree.availability !== "maintenance" && /^1[3-9]\d{9}$/.test(phone.trim())
 
@@ -103,7 +126,7 @@ export function AdoptionFlow() {
           <p className="mt-3 break-words text-sm leading-7 text-ink/68">{t("list.body")}</p>
 
           <div className="mt-6 grid gap-4">
-            {orchardTreeOptions.map((tree) => {
+            {treeOptions.map((tree) => {
               const active = tree.id === selectedTree.id
 
               return (

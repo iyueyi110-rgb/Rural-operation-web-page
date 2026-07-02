@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import type { Locale } from "@web/i18n/routing"
 import { BackButton } from "@web/components/back-button"
+import { VisitorHeaderActions } from "@web/components/visitor-header-actions"
 import {
   PanelTitle,
   SubpageHero,
@@ -52,7 +53,12 @@ export default async function MePage({
           />
         }
         icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
-        rightLabel={t("nav.phase")}
+        rightElement={
+          <VisitorHeaderActions
+            locale={params.locale}
+            rightLabel={t("nav.phase")}
+          />
+        }
       />
       <SubpageHero
         body={t("hero.body")}

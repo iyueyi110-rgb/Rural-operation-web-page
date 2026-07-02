@@ -7,6 +7,7 @@ import { notFound } from "next/navigation"
 import type { Locale } from "@web/i18n/routing"
 import { AdoptionRightsPanel } from "@web/components/adoption-rights-panel"
 import { BackButton } from "@web/components/back-button"
+import { VisitorHeaderActions } from "@web/components/visitor-header-actions"
 import { GrowthAnimation } from "@web/components/growth-animation"
 import { InteractionPanel } from "@web/components/interaction-panel"
 import {
@@ -66,7 +67,12 @@ export default async function TreeDetailPage({
           />
         }
         icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
-        rightLabel={t("profile.eyebrow")}
+        rightElement={
+          <VisitorHeaderActions
+            locale={params.locale}
+            rightLabel={t("profile.eyebrow")}
+          />
+        }
       />
 
       <Section className="pt-12">

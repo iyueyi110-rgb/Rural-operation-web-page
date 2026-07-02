@@ -7,12 +7,14 @@ export function PageHeader({
   backHref,
   backLabel,
   rightLabel,
+  rightElement,
   icon,
   backElement,
 }: {
   backHref: string
   backLabel: string
   rightLabel?: string
+  rightElement?: ReactNode
   icon?: ReactNode
   backElement?: ReactNode
 }) {
@@ -28,11 +30,12 @@ export function PageHeader({
             {backLabel}
           </Link>
         )}
-        {rightLabel ? (
-          <div className="min-w-0 truncate rounded-full border border-white/12 bg-white/8 px-3 py-1 text-right text-sm font-semibold text-white/72">
-            {rightLabel}
-          </div>
-        ) : null}
+        {rightElement ??
+          (rightLabel ? (
+            <div className="min-w-0 truncate rounded-full border border-white/12 bg-white/8 px-3 py-1 text-right text-sm font-semibold text-white/72">
+              {rightLabel}
+            </div>
+          ) : null)}
       </Section>
     </header>
   )

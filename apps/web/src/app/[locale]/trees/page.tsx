@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { AdoptionFlow } from "./adoption-flow"
 import { BackButton } from "@web/components/back-button"
+import { VisitorHeaderActions } from "@web/components/visitor-header-actions"
 import type { Locale } from "@web/i18n/routing"
 import {
   PanelTitle,
@@ -11,6 +12,7 @@ import {
   SurfacePanel,
 } from "@web/components/subpage-ui"
 import { getSiteUrl } from "@web/lib/site-url"
+import { listTreeProfiles } from "@web/lib/tree-records"
 import { PageHeader, Section } from "@ui/index"
 
 export async function generateMetadata({
@@ -43,9 +45,10 @@ export default async function TreesPage({
   setRequestLocale(params.locale)
   const t = await getTranslations("trees")
   const common = await getTranslations("common")
+  const trees = await listTreeProfiles()
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-rice pb-16 text-ink">
+    <main className="min-h-screen bg-rice pb-16 text-ink">
       <PageHeader
         backHref={`/${params.locale}`}
         backLabel={t("nav.backHome")}
@@ -56,7 +59,12 @@ export default async function TreesPage({
           />
         }
         icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
-        rightLabel={t("nav.phase")}
+        rightElement={
+          <VisitorHeaderActions
+            locale={params.locale}
+            rightLabel={t("nav.phase")}
+          />
+        }
       />
 
       <SubpageHero
@@ -91,7 +99,7 @@ export default async function TreesPage({
       />
 
       <Section className="pt-9">
-        <AdoptionFlow />
+        <AdoptionFlow trees={trees} />
       </Section>
     </main>
   )

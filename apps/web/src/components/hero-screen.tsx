@@ -149,7 +149,7 @@ export function HeroScreen({
             </Link>
           </div>
 
-          <div className="mt-8 grid w-full max-w-2xl grid-cols-1 gap-2 rounded-xl border border-white/12 bg-white/[0.055] p-2 backdrop-blur-xl sm:mt-9 sm:grid-cols-3 sm:gap-3 sm:p-3">
+          <div className="mt-8 grid w-full max-w-2xl grid-cols-1 gap-2 rounded-xl border border-white/12 bg-white/[0.055] p-2 backdrop-blur-xl min-[480px]:grid-cols-2 sm:mt-9 sm:grid-cols-3 sm:gap-3 sm:p-3">
             {previewStats.map((stat, index) => (
               <div
                 className="min-w-0 rounded-lg bg-ink/24 px-3 py-3 sm:px-4"

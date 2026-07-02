@@ -6,29 +6,26 @@ import { HomeMoreMenu } from "@web/components/home-more-menu"
 import { HomeMobileMenu } from "@web/components/home-mobile-menu"
 import type { Locale } from "@web/i18n/routing"
 import { buildExploreHref } from "@web/lib/home-navigation"
+import { buildVisitorNavItems } from "@web/lib/visitor-navigation"
 import { Section } from "@ui/index"
 
 export async function HomeHeader({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: "home" })
-  const coreNavItems = [
-    { href: `/${locale}/tickets`, label: t("quickActions.tickets") },
-    { href: `/${locale}/calendar`, label: t("nav.calendar") },
-    { href: `/${locale}/activities`, label: t("nav.activities") },
-    { href: `/${locale}/routes`, label: t("nav.routes") },
-    { href: `/${locale}/booking`, label: t("nav.booking") },
-  ]
-  const moreNavItems = [
-    { href: buildExploreHref(locale, "realms"), label: t("nav.realms") },
-    { href: `/${locale}/trees`, label: t("nav.adoption") },
-    { href: buildExploreHref(locale, "weather"), label: t("nav.weather") },
-    { href: `/${locale}/me/interactions`, label: t("nav.interactions") },
-  ]
-  const accountItems = [
-    { href: `/${locale}/me`, label: t("quickActions.me") },
-    { href: `/${locale}/villager/login`, label: t("quickActions.villager") },
-    { href: `/${locale}/privacy`, label: t("quickActions.privacy") },
-  ]
-  const mobileItems = [...coreNavItems, ...moreNavItems, ...accountItems]
+  const { accountItems, coreNavItems, mobileItems, moreNavItems } =
+    buildVisitorNavItems(locale, {
+      activities: t("nav.activities"),
+      adoption: t("nav.adoption"),
+      booking: t("nav.booking"),
+      calendar: t("nav.calendar"),
+      interactions: t("nav.interactions"),
+      me: t("quickActions.me"),
+      privacy: t("quickActions.privacy"),
+      realms: t("nav.realms"),
+      routes: t("nav.routes"),
+      tickets: t("quickActions.tickets"),
+      villager: t("quickActions.villager"),
+      weather: t("nav.weather"),
+    })
 
   return (
     <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-ink/75 text-white backdrop-blur-xl">
@@ -47,7 +44,10 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
             </span>
           </Link>
           <div className="hidden items-center gap-3 text-xs font-semibold text-white/62 xl:flex">
-            <Link className="transition hover:text-white" href={`/${locale}/me`}>
+            <Link
+              className="transition hover:text-white"
+              href={`/${locale}/me`}
+            >
               {t("quickActions.me")}
             </Link>
             <span aria-hidden="true" className="h-3 w-px bg-white/18" />

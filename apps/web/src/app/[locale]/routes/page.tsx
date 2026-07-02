@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { RouteGenerator } from "./route-generator"
 import { BackButton } from "@web/components/back-button"
+import { VisitorHeaderActions } from "@web/components/visitor-header-actions"
 import { HeroMeta, SubpageHero } from "@web/components/subpage-ui"
 import { getSiteUrl } from "@web/lib/site-url"
 import type { Locale } from "@web/i18n/routing"
@@ -26,7 +27,7 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      images: ["/images/routes/zouma-route-scope-user.jpg"],
+      images: ["/images/routes/zouma-route-scope-clean.png"],
     },
   }
 }
@@ -41,7 +42,7 @@ export default async function RoutesPage({
   const common = await getTranslations("common")
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-rice pb-16 text-ink">
+    <main className="min-h-screen bg-rice pb-16 text-ink">
       <PageHeader
         backHref={`/${params.locale}`}
         backLabel={t("nav.backHome")}
@@ -52,7 +53,12 @@ export default async function RoutesPage({
           />
         }
         icon={<ArrowLeft aria-hidden="true" className="h-4 w-4" />}
-        rightLabel={t("nav.phase")}
+        rightElement={
+          <VisitorHeaderActions
+            locale={params.locale}
+            rightLabel={t("nav.phase")}
+          />
+        }
       />
 
       <SubpageHero

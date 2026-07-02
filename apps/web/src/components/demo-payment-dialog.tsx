@@ -116,7 +116,7 @@ export function DemoPaymentDialog({
             <div className="mt-5 rounded-md border border-[#f0c36a] bg-[#fff5d6] p-4 text-sm leading-6 text-[#6c4b00]">
               <div className="flex items-center gap-2 font-extrabold">
                 <ShieldAlert aria-hidden="true" className="h-4 w-4" />
-                当前为演示模式，不涉及真实资金
+                演示模式：支付功能为模拟演示，不会产生真实交易
               </div>
               <p className="mt-1">点击确认支付即可模拟支付成功，并同步更新订单状态。</p>
             </div>

@@ -25,6 +25,10 @@ import { PointsSummary } from "./points-summary"
 import { RedemptionPanel, type RedemptionOptionView } from "./redemption-panel"
 import { SeasonBanner, type SeasonEventView } from "./season-banner"
 
+const demoAdoptionId = "demo-interaction-adoption"
+const demoTreeId = "demo-tree-lz026"
+const demoPoints = { totalPoints: 85, availablePoints: 65, redeemedPoints: 20 }
+
 interface AdoptionRecord {
   id: string
   treeId: string
@@ -67,6 +71,7 @@ export function InteractionDashboard() {
   const [isLoadingIdentity, setIsLoadingIdentity] = useState(false)
   const [isLoadingDashboard, setIsLoadingDashboard] = useState(false)
   const [message, setMessage] = useState("")
+  const [isDemoMode, setIsDemoMode] = useState(false)
 
   const activeAdoptions = useMemo(
     () => adoptions.filter((adoption) => adoption.status === "active"),
@@ -101,25 +106,53 @@ export function InteractionDashboard() {
               readJson<{ data?: SeasonEventView[] }>,
             ),
           ])
-        setTasks(Array.isArray(tasksPayload.data) ? tasksPayload.data : [])
-        setPoints(pointsPayload.data ?? emptyPoints)
-        setTransactions(
-          Array.isArray(pointsPayload.transactions)
-            ? pointsPayload.transactions
-            : [],
-        )
-        setRedemptionOptions(
-          Array.isArray(optionsPayload.data) ? optionsPayload.data : [],
-        )
-        setSeasonEvents(
-          Array.isArray(seasonPayload.data) ? seasonPayload.data : [],
-        )
-        setMessage("")
+        const loadedTasks = Array.isArray(tasksPayload.data)
+          ? tasksPayload.data
+          : []
+        const loadedPoints = pointsPayload.data ?? emptyPoints
+        const loadedTransactions = Array.isArray(pointsPayload.transactions)
+          ? pointsPayload.transactions
+          : []
+        const loadedRedemptionOptions = Array.isArray(optionsPayload.data)
+          ? optionsPayload.data
+          : []
+        const loadedSeasonEvents = Array.isArray(seasonPayload.data)
+          ? seasonPayload.data
+          : []
+        const shouldShowDemo =
+          loadedTasks.length === 0 &&
+          loadedTransactions.length === 0 &&
+          loadedRedemptionOptions.length === 0 &&
+          loadedSeasonEvents.length === 0 &&
+          loadedPoints.totalPoints === 0 &&
+          loadedPoints.availablePoints === 0
+
+        if (shouldShowDemo) {
+          setIsDemoMode(true)
+          setTasks(createDemoTasks(adoption))
+          setPoints(demoPoints)
+          setTransactions(createDemoTransactions())
+          setRedemptionOptions(createDemoRedemptionOptions())
+          setSeasonEvents(createDemoSeasonEvents())
+          setMessage(t("states.demoFallback"))
+        } else {
+          setIsDemoMode(false)
+          setTasks(loadedTasks)
+          setPoints(loadedPoints)
+          setTransactions(loadedTransactions)
+          setRedemptionOptions(loadedRedemptionOptions)
+          setSeasonEvents(loadedSeasonEvents)
+          setMessage("")
+        }
       } catch (error) {
         console.error("Interaction dashboard load failed:", error)
-        setTasks([])
-        setTransactions([])
-        setMessage(t("states.loadFailed"))
+        setIsDemoMode(true)
+        setTasks(createDemoTasks(adoption))
+        setPoints(demoPoints)
+        setTransactions(createDemoTransactions())
+        setRedemptionOptions(createDemoRedemptionOptions())
+        setSeasonEvents(createDemoSeasonEvents())
+        setMessage(t("states.demoFallback"))
       } finally {
         setIsLoadingDashboard(false)
       }
@@ -169,6 +202,49 @@ export function InteractionDashboard() {
 
   async function completeTask(group: InteractionTaskGroup, file?: File) {
     if (!selectedAdoption || !phone || !group.nextTaskId) return
+    if (isDemoMode) {
+      const completedAt = new Date().toISOString()
+      setBusyId(group.id)
+      window.setTimeout(() => {
+        setTasks((current) =>
+          current.map((task) =>
+            task.periodKey === group.periodKey && task.taskType === group.taskType
+              ? {
+                  ...task,
+                  status: task.id === group.nextTaskId ? "completed" : task.status,
+                  completedAt: task.id === group.nextTaskId ? completedAt : task.completedAt,
+                  completionCount: Math.min(
+                    group.maxCompletions,
+                    group.completionCount + 1,
+                  ),
+                  totalPointsEarned:
+                    group.totalPointsEarned + group.pointsPerCompletion,
+                  note: task.id === group.nextTaskId ? notes[group.id] || task.note : task.note,
+                  updatedAt: completedAt,
+                }
+              : task,
+          ),
+        )
+        setPoints((current) => ({
+          totalPoints: current.totalPoints + group.pointsPerCompletion,
+          availablePoints: current.availablePoints + group.pointsPerCompletion,
+          redeemedPoints: current.redeemedPoints,
+        }))
+        setTransactions((current) => [
+          {
+            id: `demo-earn-${group.nextTaskId}`,
+            amount: group.pointsPerCompletion,
+            source: group.taskType,
+            note: `${group.title} · 演示入账`,
+            createdAt: completedAt,
+          },
+          ...current,
+        ])
+        setMessage(t("states.demoCompleted"))
+        setBusyId("")
+      }, 260)
+      return
+    }
     setBusyId(group.id)
     try {
       let imageUrl: string | undefined
@@ -225,6 +301,41 @@ export function InteractionDashboard() {
 
   async function redeem(option: RedemptionOptionView) {
     if (!selectedAdoption || !phone) return
+    if (isDemoMode) {
+      if (points.availablePoints < option.pointsCost) {
+        setMessage(t("redemption.insufficient"))
+        return
+      }
+      const redeemedAt = new Date().toISOString()
+      setRedeemingId(option.id)
+      window.setTimeout(() => {
+        setPoints((current) => ({
+          totalPoints: current.totalPoints,
+          availablePoints: current.availablePoints - option.pointsCost,
+          redeemedPoints: current.redeemedPoints + option.pointsCost,
+        }))
+        setRedemptionOptions((current) =>
+          current.map((item) =>
+            item.id === option.id
+              ? { ...item, redeemedCount: item.redeemedCount + 1 }
+              : item,
+          ),
+        )
+        setTransactions((current) => [
+          {
+            id: `demo-redeem-${option.id}-${Date.now()}`,
+            amount: -option.pointsCost,
+            source: "redeem",
+            note: `${option.title} · 演示兑换`,
+            createdAt: redeemedAt,
+          },
+          ...current,
+        ])
+        setMessage(t("redemption.success"))
+        setRedeemingId("")
+      }, 260)
+      return
+    }
     setRedeemingId(option.id)
     try {
       const response = await fetch("/api/v1/redeem", {
@@ -344,6 +455,9 @@ export function InteractionDashboard() {
       </SurfacePanel>
 
       {message ? <InlineNotice tone="neutral">{message}</InlineNotice> : null}
+      {isDemoMode ? (
+        <InlineNotice tone="warning">{t("states.demoNotice")}</InlineNotice>
+      ) : null}
 
       {isLoadingDashboard ? (
         <SurfacePanel>
@@ -414,4 +528,152 @@ export function InteractionDashboard() {
 async function readJson<T>(response: Response): Promise<T> {
   if (!response.ok) throw new Error(`Request failed: ${response.status}`)
   return (await response.json()) as T
+}
+
+function createDemoTasks(adoption: AdoptionRecord): InteractionTaskModel[] {
+  const now = Date.now()
+  const adoptionId = adoption.id || demoAdoptionId
+  const treeId = adoption.treeId || demoTreeId
+  const periodKey = "demo-2026-07"
+
+  return [
+    createDemoTask({
+      id: "demo-watering-1",
+      adoptionId,
+      treeId,
+      taskType: "watering",
+      title: "本月浇水",
+      description: "完成一次清晨补水，记录土壤湿度和叶片状态。",
+      maxCompletions: 4,
+      completionCount: 2,
+      pointsPerCompletion: 10,
+      totalPointsEarned: 20,
+      status: "completed",
+      periodKey,
+      createdAt: new Date(now - 9 * 86_400_000).toISOString(),
+      updatedAt: new Date(now - 2 * 86_400_000).toISOString(),
+    }),
+    createDemoTask({
+      id: "demo-watering-2",
+      adoptionId,
+      treeId,
+      taskType: "watering",
+      title: "本月浇水",
+      description: "完成一次清晨补水，记录土壤湿度和叶片状态。",
+      maxCompletions: 4,
+      completionCount: 2,
+      pointsPerCompletion: 10,
+      totalPointsEarned: 20,
+      status: "pending",
+      periodKey,
+      createdAt: new Date(now - 8 * 86_400_000).toISOString(),
+      updatedAt: new Date(now - 8 * 86_400_000).toISOString(),
+    }),
+    createDemoTask({
+      id: "demo-photo-1",
+      adoptionId,
+      treeId,
+      taskType: "photo_upload",
+      title: "上传本周成长照片",
+      description: "拍摄树冠、新梢或挂果细节，形成一条可回看的成长记录。",
+      maxCompletions: 1,
+      completionCount: 0,
+      pointsPerCompletion: 15,
+      totalPointsEarned: 0,
+      status: "pending",
+      periodKey,
+      createdAt: new Date(now - 6 * 86_400_000).toISOString(),
+      updatedAt: new Date(now - 6 * 86_400_000).toISOString(),
+    }),
+    createDemoTask({
+      id: "demo-diary-1",
+      adoptionId,
+      treeId,
+      taskType: "diary",
+      title: "写一条养护观察",
+      description: "记录天气、叶片、果实或现场体验，作为返访关系的内容沉淀。",
+      maxCompletions: 1,
+      completionCount: 0,
+      pointsPerCompletion: 20,
+      totalPointsEarned: 0,
+      status: "pending",
+      periodKey,
+      createdAt: new Date(now - 5 * 86_400_000).toISOString(),
+      updatedAt: new Date(now - 5 * 86_400_000).toISOString(),
+    }),
+  ]
+}
+
+function createDemoTask(
+  task: Omit<InteractionTaskModel, "points" | "seasonEventId">,
+): InteractionTaskModel {
+  return {
+    ...task,
+    points: task.status === "completed" ? task.pointsPerCompletion ?? 0 : 0,
+  }
+}
+
+function createDemoTransactions(): TimelineTransaction[] {
+  const now = Date.now()
+  return [
+    {
+      id: "demo-points-water",
+      amount: 10,
+      source: "watering",
+      note: "完成清晨浇水 · 演示入账",
+      createdAt: new Date(now - 2 * 86_400_000).toISOString(),
+    },
+    {
+      id: "demo-points-share",
+      amount: 15,
+      source: "share",
+      note: "分享认养树成长 · 演示入账",
+      createdAt: new Date(now - 4 * 86_400_000).toISOString(),
+    },
+    {
+      id: "demo-points-redeem",
+      amount: -20,
+      source: "redeem",
+      note: "兑换荔枝明信片 · 演示扣减",
+      createdAt: new Date(now - 7 * 86_400_000).toISOString(),
+    },
+  ]
+}
+
+function createDemoRedemptionOptions(): RedemptionOptionView[] {
+  return [
+    {
+      id: "demo-postcard",
+      title: "走马村荔枝明信片",
+      description: "返访时领取一套认养树成长明信片。",
+      pointsCost: 30,
+      type: "souvenir",
+      stock: 20,
+      redeemedCount: 3,
+      status: "active",
+    },
+    {
+      id: "demo-orchard-tea",
+      title: "果园茶歇抵扣券",
+      description: "在村内活动节点抵扣一次茶歇体验。",
+      pointsCost: 80,
+      type: "coupon",
+      stock: 10,
+      redeemedCount: 2,
+      status: "active",
+    },
+  ]
+}
+
+function createDemoSeasonEvents(): SeasonEventView[] {
+  return [
+    {
+      id: "demo-summer-care",
+      solarTerm: "小暑",
+      title: "小暑护果周",
+      description: "完成浇水、拍照和观察记录，可获得额外互动积分。",
+      bonusPoints: 20,
+      endDate: new Date(Date.now() + 9 * 86_400_000).toISOString(),
+    },
+  ]
 }

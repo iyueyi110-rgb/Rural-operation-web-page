@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200">
+  <defs>
+    <style>
+      .bg{fill:#1f272c}
+      .contour{fill:none;stroke:#e6e000;stroke-width:3;stroke-linecap:round;opacity:.95}
+      .major{fill:none;stroke:#08e431;stroke-width:4;stroke-linecap:round;opacity:.95}
+      .site{fill:#303941;stroke:#00d9e8;stroke-width:4;stroke-linejoin:round;opacity:.72}
+      .field{fill:#263238;stroke:#18c12e;stroke-width:3;stroke-linejoin:round}
+      .plot{fill:none;stroke:#0aae25;stroke-width:2}
+      .crop{font-family:Arial,sans-serif;fill:#00e02c;font-size:22px}
+      .mass{fill:#303941;stroke:#ff32d4;stroke-width:4;stroke-linejoin:round}
+      .roof{fill:#5a5650;stroke:#241f1b;stroke-width:4;stroke-linejoin:round;opacity:.92}
+      .label{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;fill:#f7f0df;font-size:30px;font-weight:650}
+      .small{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;fill:#e8dfcf;font-size:22px}
+      .note{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;fill:#ffd45c;font-size:22px;font-weight:650}
+      .redline{fill:none;stroke:#ff2c1d;stroke-width:16;stroke-dasharray:46 26;stroke-linecap:butt}
+      .path{fill:none;stroke:#b99462;stroke-width:24;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
+      .tree{fill:#698f52;stroke:#2f5128;stroke-width:4}
+    </style>
+  </defs>
+  <rect class="bg" width="1800" height="1200"/>
+  <text x="70" y="76" class="label" style="font-size:42px">按实地建筑分布图锁定的平面控制</text>
+  <text x="72" y="118" class="small">修正：下方为农田台地，不是河流；建筑按现状紫色轮廓与草图功能关系深化</text>
+
+  <!-- hillside contour bands above the building platform -->
+  <path class="contour" d="M-30,118 C180,50 330,104 520,68 C710,32 864,58 1030,48 C1240,34 1430,72 1830,30"/>
+  <path class="contour" d="M-30,150 C170,84 334,136 514,102 C720,62 880,96 1046,80 C1238,62 1430,106 1830,72"/>
+  <path class="major" d="M-30,182 C170,124 340,168 514,138 C720,98 890,132 1054,116 C1244,98 1436,145 1830,112"/>
+  <path class="contour" d="M-30,214 C170,160 346,204 510,172 C710,136 884,170 1054,150 C1250,130 1440,184 1830,148"/>
+  <path class="contour" d="M-30,248 C160,196 350,242 520,210 C710,176 884,210 1050,188 C1260,168 1448,230 1830,186"/>
+  <path class="major" d="M-30,286 C150,232 350,286 520,250 C718,208 866,252 1032,228 C1250,196 1460,282 1830,236"/>
+  <path class="contour" d="M-30,328 C145,270 345,328 520,292 C724,248 858,300 1024,268 C1242,230 1462,330 1830,284"/>
+  <path class="contour" d="M-30,370 C140,314 338,372 520,338 C710,304 850,348 1012,318 C1228,280 1460,380 1830,330"/>
+  <path class="major" d="M-30,420 C132,356 334,420 510,382 C704,340 850,398 1010,362 C1220,320 1468,436 1830,380"/>
+  <path class="contour" d="M-30,470 C132,406 330,468 504,424 C702,374 846,448 1010,405 C1226,352 1470,492 1830,430"/>
+  <path class="contour" d="M-30,520 C128,454 314,508 494,470 C694,426 846,492 1004,450 C1212,398 1460,552 1830,486"/>
+  <path class="major" d="M-30,580 C112,510 296,558 476,518 C670,474 834,552 998,505 C1200,446 1448,620 1830,552"/>
+
+  <!-- site platform and farmland terrace -->
+  <path class="site" d="M275,640 L430,565 L620,505 L810,436 L1110,450 L1350,520 L1530,632 L1465,780 L1165,735 L920,655 L715,720 L470,760 L270,748 Z"/>
+  <path class="field" d="M0,708 C168,650 290,730 454,690 C650,642 838,770 1025,732 C1218,690 1372,812 1552,760 C1650,730 1735,785 1800,770 L1800,1200 L0,1200 Z"/>
+  <path class="plot" d="M110,920 L420,860 L670,925 L1140,970 L1510,900"/>
+  <path class="plot" d="M410,860 L520,1200"/>
+  <path class="plot" d="M980,732 L1160,1200"/>
+  <path class="plot" d="M1345,812 L1500,1200"/>
+  <path class="plot" d="M0,1000 C300,930 620,1010 900,1000 C1190,990 1460,1015 1800,945"/>
+  <path class="redline" d="M1710,0 C1685,160 1698,310 1642,470 C1590,624 1546,748 1542,1200"/>
+  <path class="path" d="M210,600 C380,555 540,575 700,520 C880,460 1048,444 1222,488 C1390,530 1490,625 1560,742"/>
+
+  <!-- Existing building distribution from CAD image: use magenta boundaries and same relative placement -->
+  <polygon class="mass" points="300,545 470,546 468,672 286,670"/>
+  <polygon class="roof" points="290,512 472,512 500,548 302,548"/>
+  <text x="305" y="508" class="small">入口/服务</text>
+
+  <polygon class="mass" points="410,438 640,438 640,548 410,548"/>
+  <polygon class="roof" points="405,406 642,406 670,438 410,438"/>
+  <text x="430" y="392" class="small">纺织工坊</text>
+
+  <polygon class="mass" points="642,420 790,408 795,535 650,545"/>
+  <polygon class="roof" points="635,386 785,372 815,408 642,420"/>
+  <text x="650" y="370" class="small">研发土墙</text>
+
+  <polygon class="mass" points="870,330 1040,340 1030,454 850,438"/>
+  <polygon class="roof" points="858,295 1048,305 1075,340 870,330"/>
+  <text x="875" y="282" class="small">接待/讲解</text>
+
+  <polygon class="mass" points="1032,312 1188,350 1156,482 1000,430"/>
+  <polygon class="roof" points="1018,274 1200,320 1228,360 1032,312"/>
+  <text x="1120" y="300" class="small">茶饮体验</text>
+
+  <polygon class="mass" points="1195,505 1455,550 1420,730 1160,678"/>
+  <polygon class="roof" points="1186,470 1465,516 1496,560 1195,505"/>
+  <text x="1292" y="760" class="small">展陈区</text>
+
+  <polygon class="mass" points="1222,395 1355,408 1345,548 1200,525"/>
+  <polygon class="roof" points="1212,360 1360,374 1390,410 1222,395"/>
+  <text x="1350" y="455" class="small">配套/廊接</text>
+
+  <polygon class="mass" points="862,525 952,532 940,612 850,604"/>
+  <text x="846" y="650" class="small">小亭/休憩</text>
+
+  <circle cx="1115" cy="585" r="58" class="tree"/>
+  <text x="1165" y="615" class="small">保留树庭</text>
+
+  <!-- crop marks -->
+  <text x="160" y="875" class="crop">⊥</text><text x="310" y="885" class="crop">⊥</text><text x="470" y="875" class="crop">⊥</text>
+  <text x="625" y="895" class="crop">⊥</text><text x="780" y="875" class="crop">⊥</text><text x="930" y="865" class="crop">⊥</text>
+  <text x="1110" y="840" class="crop">⊥</text><text x="1260" y="845" class="crop">⊥</text><text x="1430" y="850" class="crop">⊥</text>
+  <text x="230" y="980" class="crop">↓</text><text x="380" y="996" class="crop">↓</text><text x="550" y="980" class="crop">↓</text>
+  <text x="720" y="1005" class="crop">↓</text><text x="900" y="985" class="crop">↓</text><text x="1080" y="1000" class="crop">↓</text>
+  <text x="1290" y="985" class="crop">↓</text><text x="1510" y="1005" class="crop">↓</text>
+
+  <rect x="72" y="1018" width="850" height="120" fill="#263238" stroke="#776957" stroke-width="3"/>
+  <text x="102" y="1060" class="note">确认原则</text>
+  <text x="102" y="1094" class="small">1. 紫色建筑轮廓为硬约束：效果图不得重排、合并或改变角度。</text>
+  <text x="102" y="1126" class="small">2. 场地为山坡 + 平台 + 农田台地：不得再表现为河流、水岸或亲水平台。</text>
+</svg>
