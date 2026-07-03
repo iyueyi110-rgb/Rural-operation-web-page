@@ -26,8 +26,20 @@ export async function OPTIONS(request: Request) {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const records = await listTreeAdoptions(searchParams.get("adopterPhone") ?? undefined)
-  return jsonResponse(request, { data: records, meta: { total: records.length } })
+  try {
+    const records = await listTreeAdoptions(searchParams.get("adopterPhone") ?? undefined)
+    return jsonResponse(request, { data: records, meta: { total: records.length } })
+  } catch (error) {
+    console.error("Tree adoption query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: {
+        degraded: true,
+        total: 0,
+        reason: "数据库暂不可用，认养记录暂无演示数据",
+      },
+    })
+  }
 }
 
 export async function POST(request: Request) {

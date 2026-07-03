@@ -128,20 +128,34 @@ export function OPTIONS(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const records = await prisma.feedbackTicket.findMany({
-    include: feedbackInclude,
-    orderBy: { createdAt: "desc" },
-  })
-  const data = records.map(toFeedbackRecord)
+  try {
+    const records = await prisma.feedbackTicket.findMany({
+      include: feedbackInclude,
+      orderBy: { createdAt: "desc" },
+    })
+    const data = records.map(toFeedbackRecord)
 
-  return jsonResponse(request, {
-    data,
-    meta: {
-      total: data.length,
-      page: 1,
-      pageSize: data.length,
-    },
-  })
+    return jsonResponse(request, {
+      data,
+      meta: {
+        total: data.length,
+        page: 1,
+        pageSize: data.length,
+      },
+    })
+  } catch (error) {
+    console.error("Feedback query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: {
+        degraded: true,
+        total: 0,
+        page: 1,
+        pageSize: 0,
+        reason: "数据库暂不可用，反馈记录暂无演示数据",
+      },
+    })
+  }
 }
 
 export async function POST(request: Request) {
