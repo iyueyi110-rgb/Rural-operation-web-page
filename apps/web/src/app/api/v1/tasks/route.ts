@@ -14,20 +14,28 @@ export async function GET(request: Request) {
   const status = searchParams.get("status")
   const villagerId = searchParams.get("villagerId")
 
-  const data = await prisma.task.findMany({
-    where: {
-      ...(isTaskType(taskType) ? { taskType } : {}),
-      ...(isTaskStatus(status) ? { status } : {}),
-      ...(villagerId ? { villagerId } : {}),
-    },
-    include: {
-      villager: { select: { id: true, name: true } },
-      node: { select: { id: true, slug: true, nameKey: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  })
+  try {
+    const data = await prisma.task.findMany({
+      where: {
+        ...(isTaskType(taskType) ? { taskType } : {}),
+        ...(isTaskStatus(status) ? { status } : {}),
+        ...(villagerId ? { villagerId } : {}),
+      },
+      include: {
+        villager: { select: { id: true, name: true } },
+        node: { select: { id: true, slug: true, nameKey: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    })
 
-  return jsonResponse(request, { data: data.map(mapTask), meta: { total: data.length } })
+    return jsonResponse(request, { data: data.map(mapTask), meta: { total: data.length } })
+  } catch (error) {
+    console.error("Tasks query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
+  }
 }
 
 export async function POST(request: Request) {
