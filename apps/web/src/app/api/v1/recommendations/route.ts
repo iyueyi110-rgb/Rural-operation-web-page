@@ -39,15 +39,23 @@ export async function GET(request: Request) {
     )
   }
 
-  const data = await prisma.recommendation.findMany({
-    where: {
-      ...(bizDate ? { bizDate } : {}),
-      ...(status ? { status } : {}),
-      ...(type ? { type } : {}),
-    },
-    orderBy: { createdAt: "desc" },
-    take: 100,
-  })
+  try {
+    const data = await prisma.recommendation.findMany({
+      where: {
+        ...(bizDate ? { bizDate } : {}),
+        ...(status ? { status } : {}),
+        ...(type ? { type } : {}),
+      },
+      orderBy: { createdAt: "desc" },
+      take: 100,
+    })
 
-  return jsonResponse(request, { data, meta: { total: data.length } })
+    return jsonResponse(request, { data, meta: { total: data.length } })
+  } catch (error) {
+    console.error("Recommendations query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
+  }
 }
