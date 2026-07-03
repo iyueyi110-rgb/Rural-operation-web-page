@@ -56,33 +56,41 @@ export async function GET(request: Request) {
     ? recipientType
     : undefined
   const validCategories = rawCategories.filter(isNotificationCategory)
-  const recipientIds =
-    validRecipientType && recipientId
-      ? await resolveRecipientIds(validRecipientType, recipientId)
-      : recipientId?.trim()
-        ? [recipientId.trim()]
-        : []
-  const data = await prisma.notification.findMany({
-    where: {
-      ...(validRecipientType ? { recipientType: validRecipientType } : {}),
-      ...(recipientIds.length === 1
-        ? { recipientId: recipientIds[0] }
-        : recipientIds.length > 1
-          ? { recipientId: { in: recipientIds } }
+  try {
+    const recipientIds =
+      validRecipientType && recipientId
+        ? await resolveRecipientIds(validRecipientType, recipientId)
+        : recipientId?.trim()
+          ? [recipientId.trim()]
+          : []
+    const data = await prisma.notification.findMany({
+      where: {
+        ...(validRecipientType ? { recipientType: validRecipientType } : {}),
+        ...(recipientIds.length === 1
+          ? { recipientId: recipientIds[0] }
+          : recipientIds.length > 1
+            ? { recipientId: { in: recipientIds } }
+            : {}),
+        ...(isRead ? { isRead: isRead === "true" } : {}),
+        ...(validCategories.length > 0
+          ? { category: { in: validCategories } }
           : {}),
-      ...(isRead ? { isRead: isRead === "true" } : {}),
-      ...(validCategories.length > 0
-        ? { category: { in: validCategories } }
-        : {}),
-    },
-    orderBy: { createdAt: "desc" },
-    take: 50,
-  })
+      },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    })
 
-  return jsonResponse(request, {
-    data: data.map(mapNotification),
-    meta: { total: data.length },
-  })
+    return jsonResponse(request, {
+      data: data.map(mapNotification),
+      meta: { total: data.length },
+    })
+  } catch (error) {
+    console.error("Notifications query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
+  }
 }
 
 export async function POST(request: Request) {
