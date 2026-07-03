@@ -16,18 +16,26 @@ export async function GET(request: Request) {
     ...(realm ? { realm } : {}),
     ...(nodeType ? { nodeType } : {}),
   }
-  const [data, total] = await Promise.all([
-    prisma.spaceNode.findMany({
-      where,
-      orderBy: [{ realm: "asc" }, { slug: "asc" }],
-      skip: params.skip,
-      take: params.limit,
-    }),
-    prisma.spaceNode.count({ where }),
-  ])
+  try {
+    const [data, total] = await Promise.all([
+      prisma.spaceNode.findMany({
+        where,
+        orderBy: [{ realm: "asc" }, { slug: "asc" }],
+        skip: params.skip,
+        take: params.limit,
+      }),
+      prisma.spaceNode.count({ where }),
+    ])
 
-  return jsonResponse(request, {
-    data,
-    meta: paginationMeta(total, params),
-  })
+    return jsonResponse(request, {
+      data,
+      meta: paginationMeta(total, params),
+    })
+  } catch (error) {
+    console.error("Nodes query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
+  }
 }
