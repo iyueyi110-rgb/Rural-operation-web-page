@@ -20,20 +20,28 @@ export async function GET(request: Request) {
   const status = searchParams.get("status")
   const nodeId = searchParams.get("nodeId")
 
-  const data = await prisma.villager.findMany({
-    where: {
-      ...(isVillagerStatus(status) ? { status } : {}),
-      ...(nodeId ? { nodeId } : {}),
-    },
-    include: { node: true, tasks: true },
-    orderBy: [{ status: "asc" }, { createdAt: "desc" }],
-  })
+  try {
+    const data = await prisma.villager.findMany({
+      where: {
+        ...(isVillagerStatus(status) ? { status } : {}),
+        ...(nodeId ? { nodeId } : {}),
+      },
+      include: { node: true, tasks: true },
+      orderBy: [{ status: "asc" }, { createdAt: "desc" }],
+    })
 
-  const isAdmin = isAdminRequest(request)
-  return jsonResponse(request, {
-    data: data.map((villager) => mapVillager(villager, { maskPhone: !isAdmin })),
-    meta: { total: data.length },
-  })
+    const isAdmin = isAdminRequest(request)
+    return jsonResponse(request, {
+      data: data.map((villager) => mapVillager(villager, { maskPhone: !isAdmin })),
+      meta: { total: data.length },
+    })
+  } catch (error) {
+    console.error("Villagers query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
+  }
 }
 
 export async function POST(request: Request) {
