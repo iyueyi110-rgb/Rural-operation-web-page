@@ -16,20 +16,28 @@ export async function GET(request: Request) {
   const shouldRun = searchParams.get("run") === "true"
   const { start, end } = getChinaDayRange(date)
 
-  if (shouldRun) {
-    await runAlertChecks(date)
+  try {
+    if (shouldRun) {
+      await runAlertChecks(date)
+    }
+
+    const data = await prisma.alert.findMany({
+      where: {
+        createdAt: { gte: start, lte: end },
+        ...(type ? { alertType: type } : {}),
+        ...(status ? { status } : {}),
+      },
+      orderBy: { createdAt: "desc" },
+    })
+
+    return jsonResponse(request, { data: data.map(toAlertData), meta: { total: data.length } })
+  } catch (error) {
+    console.error("Alerts query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
   }
-
-  const data = await prisma.alert.findMany({
-    where: {
-      createdAt: { gte: start, lte: end },
-      ...(type ? { alertType: type } : {}),
-      ...(status ? { status } : {}),
-    },
-    orderBy: { createdAt: "desc" },
-  })
-
-  return jsonResponse(request, { data: data.map(toAlertData), meta: { total: data.length } })
 }
 
 export async function PATCH(request: Request) {
