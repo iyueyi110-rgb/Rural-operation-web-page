@@ -92,6 +92,12 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
             {t("nav.login")}
           </Link>
           <Link
+            className="hidden h-10 items-center gap-2 rounded-full border border-lychee/40 bg-lychee/10 px-3 text-sm font-semibold text-lychee transition hover:bg-lychee/20 sm:inline-flex sm:px-4"
+            href={`/${locale}/me/demo-login`}
+          >
+            演示登录
+          </Link>
+          <Link
             className="hidden h-10 items-center gap-2 rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-rice sm:inline-flex"
             href={buildExploreHref(locale)}
           >

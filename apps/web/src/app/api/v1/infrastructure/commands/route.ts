@@ -11,13 +11,21 @@ export async function OPTIONS(request: Request) {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const status = searchParams.get("status") ?? undefined
-  const data = await prisma.controlCommand.findMany({
-    where: status ? { status } : undefined,
-    orderBy: { createdAt: "desc" },
-    take: 50,
-  })
+  try {
+    const data = await prisma.controlCommand.findMany({
+      where: status ? { status } : undefined,
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    })
 
-  return jsonResponse(request, { data: data.map(mapControlCommand), meta: { total: data.length } })
+    return jsonResponse(request, { data: data.map(mapControlCommand), meta: { total: data.length } })
+  } catch (error) {
+    console.error("Infrastructure commands query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
+  }
 }
 
 export async function PATCH(request: Request) {

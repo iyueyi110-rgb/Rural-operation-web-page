@@ -1,10 +1,8 @@
-import { NextResponse } from "next/server"
-
 import type { Feedback, FeedbackRecord } from "@zouma/contracts"
 import { prisma } from "@zouma/database"
 import { ModelProviderAdapter } from "@zouma/utils"
 
-import { isPlainObject } from "@web/lib/aigc-api"
+import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { extractJsonContent } from "@web/lib/ai-json"
 import {
   isFeedbackCategory,
@@ -12,7 +10,6 @@ import {
   isFeedbackStatus,
   sanitizeContent,
 } from "@web/lib/feedback-store"
-import { getAllowedCorsOrigins } from "@web/lib/site-url"
 
 const feedbackInclude = {
   handlingRecords: {
@@ -39,30 +36,6 @@ interface FeedbackTicketWithRecords {
     operator: string
     createdAt: Date
   }>
-}
-
-function getCorsHeaders(request: Request) {
-  const allowedOrigins = getAllowedCorsOrigins()
-  const requestOrigin = request.headers.get("origin")
-  const allowedOrigin =
-    requestOrigin && allowedOrigins.includes(requestOrigin) ? requestOrigin : allowedOrigins[0]
-
-  return {
-    "Access-Control-Allow-Origin": allowedOrigin,
-    "Access-Control-Allow-Methods": "GET,POST,PATCH,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-    Vary: "Origin",
-  }
-}
-
-function jsonResponse(request: Request, body: unknown, init?: ResponseInit) {
-  return NextResponse.json(body, {
-    ...init,
-    headers: {
-      ...getCorsHeaders(request),
-      ...init?.headers,
-    },
-  })
 }
 
 function createId(prefix: "FB" | "HR") {
@@ -117,31 +90,38 @@ async function suggestFeedbackMeta(content: string) {
 }
 
 export function OPTIONS(request: Request) {
-  const allowedOrigins = getAllowedCorsOrigins()
-  const requestOrigin = request.headers.get("origin")
-
-  if (requestOrigin && !allowedOrigins.includes(requestOrigin)) {
-    return new Response(null, { status: 403, headers: getCorsHeaders(request) })
-  }
-
-  return new Response(null, { status: 204, headers: getCorsHeaders(request) })
+  return optionsResponse(request)
 }
 
 export async function GET(request: Request) {
-  const records = await prisma.feedbackTicket.findMany({
-    include: feedbackInclude,
-    orderBy: { createdAt: "desc" },
-  })
-  const data = records.map(toFeedbackRecord)
+  try {
+    const records = await prisma.feedbackTicket.findMany({
+      include: feedbackInclude,
+      orderBy: { createdAt: "desc" },
+    })
+    const data = records.map(toFeedbackRecord)
 
-  return jsonResponse(request, {
-    data,
-    meta: {
-      total: data.length,
-      page: 1,
-      pageSize: data.length,
-    },
-  })
+    return jsonResponse(request, {
+      data,
+      meta: {
+        total: data.length,
+        page: 1,
+        pageSize: data.length,
+      },
+    })
+  } catch (error) {
+    console.error("Feedback query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: {
+        degraded: true,
+        total: 0,
+        page: 1,
+        pageSize: 0,
+        reason: "数据库暂不可用，反馈记录暂无演示数据",
+      },
+    })
+  }
 }
 
 export async function POST(request: Request) {

@@ -12,13 +12,21 @@ export async function GET(
   context: { params: { code: string } | Promise<{ code: string }> },
 ) {
   const { code } = await context.params
-  const tree = await getTreeProfile(code)
+  try {
+    const tree = await getTreeProfile(code)
 
-  if (!tree) {
-    return jsonResponse(request, { error: "Tree not found" }, { status: 404 })
+    if (!tree) {
+      return jsonResponse(request, { error: "Tree not found" }, { status: 404 })
+    }
+
+    return jsonResponse(request, { data: tree })
+  } catch (error) {
+    console.error("Tree profile query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
   }
-
-  return jsonResponse(request, { data: tree })
 }
 
 export async function PATCH(

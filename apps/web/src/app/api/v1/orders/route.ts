@@ -37,20 +37,33 @@ export async function GET(request: Request) {
     where.createdAt = { gte: start, lte: end }
   }
 
-  const data = await prisma.unifiedOrder.findMany({
-    where,
-    include: { node: true },
-    orderBy: { createdAt: "desc" },
-  })
-  const totalAmount = data.reduce((sum, order) => sum + order.totalAmount, 0)
+  try {
+    const data = await prisma.unifiedOrder.findMany({
+      where,
+      include: { node: true },
+      orderBy: { createdAt: "desc" },
+    })
+    const totalAmount = data.reduce((sum, order) => sum + order.totalAmount, 0)
 
-  return jsonResponse(request, {
-    data,
-    meta: {
-      total: data.length,
-      totalAmount,
-    },
-  })
+    return jsonResponse(request, {
+      data,
+      meta: {
+        total: data.length,
+        totalAmount,
+      },
+    })
+  } catch (error) {
+    console.error("Order query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: {
+        degraded: true,
+        total: 0,
+        totalAmount: 0,
+        reason: "数据库暂不可用，订单记录暂无演示数据",
+      },
+    })
+  }
 }
 
 export async function POST(request: Request) {

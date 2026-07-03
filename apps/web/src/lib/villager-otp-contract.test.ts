@@ -7,8 +7,9 @@ const requestOtpSource = readFileSync(
   "utf8",
 )
 
-test("development villager otp request returns the temporary code", () => {
-  assert.match(requestOtpSource, /process\.env\.NODE_ENV === "development"/)
+test("villager otp request returns the temporary code whenever SMS is unavailable", () => {
+  assert.doesNotMatch(requestOtpSource, /process\.env\.NODE_ENV === "development"/)
+  assert.match(requestOtpSource, /const demoMode = smsUnavailable/)
   assert.match(requestOtpSource, /const DEMO_OTP = "888888"/)
   assert.match(requestOtpSource, /return jsonResponse\(request, \{[\s\S]*?otp,\s*\}\)/)
 })

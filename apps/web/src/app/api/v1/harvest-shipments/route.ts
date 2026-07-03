@@ -20,15 +20,23 @@ export async function GET(request: Request) {
   const harvestBookingId = searchParams.get("harvestBookingId") ?? undefined
   const isAdmin = isAdminRequest(request)
 
-  const records = await prisma.harvestShipment.findMany({
-    where: harvestBookingId ? { harvestBookingId } : undefined,
-    orderBy: { createdAt: "desc" },
-  })
+  try {
+    const records = await prisma.harvestShipment.findMany({
+      where: harvestBookingId ? { harvestBookingId } : undefined,
+      orderBy: { createdAt: "desc" },
+    })
 
-  return jsonResponse(request, {
-    data: records.map((record) => mapHarvestShipment(record, { maskPrivateFields: !isAdmin })),
-    meta: { total: records.length },
-  })
+    return jsonResponse(request, {
+      data: records.map((record) => mapHarvestShipment(record, { maskPrivateFields: !isAdmin })),
+      meta: { total: records.length },
+    })
+  } catch (error) {
+    console.error("Harvest shipments query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
+  }
 }
 
 export async function POST(request: Request) {

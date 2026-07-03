@@ -12,22 +12,30 @@ export async function GET(request: Request) {
   const status = searchParams.get("status") ?? undefined
   const nodeId = searchParams.get("nodeId") ?? undefined
 
-  const data = await prisma.device.findMany({
-    where: {
-      ...(status ? { status } : {}),
-      ...(nodeId ? { nodeId } : {}),
-    },
-    include: {
-      node: true,
-      readings: {
-        orderBy: { createdAt: "desc" },
-        take: 1,
+  try {
+    const data = await prisma.device.findMany({
+      where: {
+        ...(status ? { status } : {}),
+        ...(nodeId ? { nodeId } : {}),
       },
-    },
-    orderBy: [{ status: "asc" }, { lastSeenAt: "desc" }],
-  })
+      include: {
+        node: true,
+        readings: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
+      },
+      orderBy: [{ status: "asc" }, { lastSeenAt: "desc" }],
+    })
 
-  return jsonResponse(request, { data, meta: { total: data.length } })
+    return jsonResponse(request, { data, meta: { total: data.length } })
+  } catch (error) {
+    console.error("Devices query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
+  }
 }
 
 export async function POST(request: Request) {

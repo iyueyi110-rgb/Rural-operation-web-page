@@ -51,7 +51,7 @@ export async function POST(request: Request) {
 
   const smsUnavailable =
     !process.env.SMS_API_KEY?.trim() || !process.env.SMS_TEMPLATE_ID?.trim()
-  const demoMode = process.env.NODE_ENV === "development" && smsUnavailable
+  const demoMode = smsUnavailable
   const otp = demoMode ? DEMO_OTP : String(randomInt(100000, 1_000_000))
 
   await prisma.villager.update({

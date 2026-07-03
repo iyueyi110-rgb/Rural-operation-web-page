@@ -18,22 +18,30 @@ export async function GET(request: Request) {
   const from = searchParams.get("from")
   const to = searchParams.get("to")
 
-  const data = await prisma.farmingCalendar.findMany({
-    where: {
-      ...(isStatus(status) ? { status } : {}),
-      ...(from || to
-        ? {
-            startDate: {
-              ...(from ? { gte: from } : {}),
-              ...(to ? { lte: to } : {}),
-            },
-          }
-        : {}),
-    },
-    orderBy: [{ startDate: "asc" }, { createdAt: "desc" }],
-  })
+  try {
+    const data = await prisma.farmingCalendar.findMany({
+      where: {
+        ...(isStatus(status) ? { status } : {}),
+        ...(from || to
+          ? {
+              startDate: {
+                ...(from ? { gte: from } : {}),
+                ...(to ? { lte: to } : {}),
+              },
+            }
+          : {}),
+      },
+      orderBy: [{ startDate: "asc" }, { createdAt: "desc" }],
+    })
 
-  return jsonResponse(request, { data, meta: { total: data.length } })
+    return jsonResponse(request, { data, meta: { total: data.length } })
+  } catch (error) {
+    console.error("Farming calendar query failed:", error)
+    return jsonResponse(request, {
+      data: [],
+      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+    })
+  }
 }
 
 export async function POST(request: Request) {

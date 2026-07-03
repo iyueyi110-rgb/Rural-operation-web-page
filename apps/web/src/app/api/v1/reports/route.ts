@@ -66,17 +66,29 @@ export async function GET(request: Request) {
           },
         }
       : undefined
-  const data = await prisma.dailyReport.findMany({
-    where,
-    orderBy: { date: "desc" },
-  })
+  try {
+    const data = await prisma.dailyReport.findMany({
+      where,
+      orderBy: { date: "desc" },
+    })
 
-  return jsonResponse(request, {
-    data,
-    meta: {
-      total: data.length,
-    },
-  })
+    return jsonResponse(request, {
+      data,
+      meta: {
+        total: data.length,
+      },
+    })
+  } catch (error) {
+    console.error("Daily report query failed:", error)
+    return jsonResponse(request, {
+      data: [buildFallbackDailyReport(getChinaDateString())],
+      meta: {
+        degraded: true,
+        total: 1,
+        reason: "数据库暂不可用，已返回降级演示数据",
+      },
+    })
+  }
 }
 
 export async function POST(request: Request) {
