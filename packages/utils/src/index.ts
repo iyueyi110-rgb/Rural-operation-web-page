@@ -18,3 +18,5 @@ export {
   renovationStrategyCatalog,
 } from "./renovation-strategies"
 export type { StrategyTemplate } from "./renovation-strategies"
+export { computeRenovationImpact } from "./renovation-impact"
+export type { ImpactInput, ImpactReport } from "./renovation-impact"

@@ -9,15 +9,18 @@
     ".": "./src/index.ts",
     "./diagnosis-engine": "./src/diagnosis-engine.ts",
     "./fetch-timeout": "./src/fetch-timeout.ts",
+    "./renovation-impact": "./src/renovation-impact.ts",
     "./renovation-strategies": "./src/renovation-strategies.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
     "lint": "tsc --noEmit",
+    "test": "node --import tsx --test",
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^22.19.21",
+    "tsx": "^4.22.4",
     "typescript": "^5.9.3"
   },
   "dependencies": {
