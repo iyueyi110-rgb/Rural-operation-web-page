@@ -4,10 +4,12 @@ import { useCallback, useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 
 import { AdminNotice, AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
+import { RenovationStrategyMiniDiagram } from "@admin/components/renovation-spatial-diagram"
 import { fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
 
 interface StrategyDetail {
   id: string
+  nodeId: string
   title: string
   description: string
   category: string
@@ -89,6 +91,8 @@ export default function RenovationDetailPage() {
       eyebrow="空间改造"
       title={strategy.title}
     >
+      <RenovationStrategyMiniDiagram strategy={strategy} />
+
       <AdminPanel>
         <div className="grid gap-3 text-sm text-ink/70 md:grid-cols-4">
           <Meta label="维度" value={strategy.dimension} />
