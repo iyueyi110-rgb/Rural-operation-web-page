@@ -15,6 +15,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
     return jsonResponse(request, { data })
   } catch (error) {
     console.error("Renovation strategy query failed:", error)
-    return jsonResponse(request, { error: "Renovation strategy query failed" }, { status: 500 })
+    return jsonResponse(request, {
+      data: null,
+      meta: { degraded: true, reason: "改造策略详情数据库暂不可用" },
+    })
   }
 }
