@@ -212,6 +212,9 @@ importers:
 
   packages/utils:
     dependencies:
+      '@zouma/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       server-only:
         specifier: ^0.0.1
         version: 0.0.1

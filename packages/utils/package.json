@@ -7,7 +7,9 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./fetch-timeout": "./src/fetch-timeout.ts"
+    "./diagnosis-engine": "./src/diagnosis-engine.ts",
+    "./fetch-timeout": "./src/fetch-timeout.ts",
+    "./renovation-strategies": "./src/renovation-strategies.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -19,6 +21,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@zouma/contracts": "workspace:*",
     "server-only": "^0.0.1"
   }
 }
