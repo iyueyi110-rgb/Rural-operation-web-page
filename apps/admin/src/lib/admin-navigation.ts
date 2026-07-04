@@ -2,6 +2,7 @@ import {
   BarChart3,
   Bell,
   Bot,
+  Building2,
   CalendarDays,
   ClipboardList,
   Cpu,
@@ -23,7 +24,7 @@ import {
 } from "lucide-react"
 import type { ComponentType } from "react"
 
-export type AdminNavGroupKey = "command" | "fieldOps" | "assetsCommerce" | "villageWork" | "aiSystem"
+export type AdminNavGroupKey = "command" | "fieldOps" | "assetsCommerce" | "villageWork" | "renovation" | "aiSystem"
 
 export interface AdminNavItem {
   key: string
@@ -60,6 +61,11 @@ export const adminNavGroups: AdminNavGroup[] = [
     key: "villageWork",
     label: "村民协作",
     description: "村民、农事与任务调度",
+  },
+  {
+    key: "renovation",
+    label: "空间改造",
+    description: "诊断、策略与建筑评估",
   },
   {
     key: "aiSystem",
@@ -198,6 +204,22 @@ export const adminNavItems: AdminNavItem[] = [
     description: "任务分配与收益",
     group: "villageWork",
     icon: ListChecks,
+  },
+  {
+    key: "renovation",
+    label: "改造策略",
+    href: "/renovation",
+    description: "空间诊断与改造方案",
+    group: "renovation",
+    icon: Building2,
+  },
+  {
+    key: "assessments",
+    label: "建筑评估",
+    href: "/assessments",
+    description: "结构、节能与拆除评估",
+    group: "renovation",
+    icon: ClipboardList,
   },
   {
     key: "contentFactory",
