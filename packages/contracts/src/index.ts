@@ -635,3 +635,304 @@ export interface ControlCommandData extends ControlSuggestionData {
   createdAt: string
   updatedAt: string
 }
+
+// ==== 建筑空间改造策略系统 ====
+
+export type RenovationDimension = "energy" | "spatial" | "ecological"
+export type RenovationCategory =
+  | "structural_repair"
+  | "energy_retrofit"
+  | "spatial_reorganization"
+  | "ecological_restoration"
+  | "facade_renovation"
+  | "infrastructure_upgrade"
+  | "microclimate_improvement"
+  | "accessibility_improvement"
+export type RenovationStatus =
+  | "draft"
+  | "review"
+  | "approved"
+  | "in_progress"
+  | "completed"
+  | "verified"
+export type DiagnosisUrgency = "critical" | "high" | "medium" | "low"
+export type BuildingCondition = "excellent" | "good" | "fair" | "poor" | "critical"
+export type DemolitionRecommendation = "none" | "partial" | "full" | "conditional"
+export type ReusePotential = "high" | "medium" | "low" | "none"
+export type InterventionType =
+  | "renovation"
+  | "partial_demolish_rebuild"
+  | "full_demolish_rebuild"
+  | "new_construction"
+  | "extension"
+  | "adaptive_reuse"
+  | "landscape_intervention"
+
+export interface BuildingAssessmentData {
+  id: string
+  nodeId: string
+  assessorId?: string
+  assessedAt: string
+  structuralScore: number
+  aestheticScore: number
+  functionalScore: number
+  safetyScore: number
+  energyScore: number
+  ecologicalScore: number
+  demolitionRecommendation?: DemolitionRecommendation
+  demolitionReason?: string
+  reusePotential?: ReusePotential
+  retainedElements: RetainedElement[]
+  issues: BuildingIssue[]
+  notes?: string
+  photos: string[]
+  source: string
+}
+
+export interface BuildingIssue {
+  category: RenovationDimension | "safety" | "accessibility"
+  severity: "critical" | "major" | "minor"
+  description: string
+  location?: string
+  photoRefs?: string[]
+}
+
+export interface RetainedElement {
+  element: string
+  condition: "excellent" | "good" | "fair" | "poor"
+  reuseAs: string
+  notes?: string
+}
+
+export interface SpatialDiagnosisData {
+  id: string
+  nodeId: string
+  bizDate: string
+  urgency: DiagnosisUrgency
+  issues: DiagnosisIssue[]
+  evidenceJson: DiagnosisEvidence
+  aiSummary?: string
+  energyIssues: DiagnosisIssue[]
+  spatialIssues: DiagnosisIssue[]
+  ecologicalIssues: DiagnosisIssue[]
+  status: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface DiagnosisIssue {
+  code: string
+  title: string
+  description: string
+  severity: "critical" | "major" | "minor"
+  dimension: RenovationDimension
+  evidenceKeys: string[]
+  suggestedActions: string[]
+}
+
+export interface DiagnosisEvidence {
+  crowdStress: number
+  feedbackRatio: number
+  safetyScore: number
+  energyScore: number
+  ecologicalScore: number
+  conversionRate: number | null
+  sensorAnomalies: string[]
+  recentAlerts: number
+}
+
+export interface RenovationMaterial {
+  name: string
+  category: "structural" | "insulation" | "finishing" | "ecological" | "energy_system"
+  specification: string
+  ecoLabel?: string
+  localAvailability: "high" | "medium" | "low"
+  unitCost?: string
+  notes?: string
+}
+
+export interface RenovationTechnique {
+  name: string
+  category: "traditional" | "modern" | "hybrid"
+  description: string
+  applicableConditions: string[]
+  constructionSteps: string[]
+  laborRequirement: "low" | "medium" | "high"
+  notes?: string
+}
+
+export interface EnergyConstructionDetail {
+  type: "insulation" | "ventilation" | "solar" | "rainwater" | "greening" | "lighting" | "heating_cooling"
+  name: string
+  description: string
+  materials: string[]
+  estimatedEnergySaving: string
+  implementationNotes: string
+}
+
+export interface EcologicalMeasure {
+  type: "greening" | "water_management" | "biodiversity" | "soil_restoration" | "microclimate"
+  name: string
+  description: string
+  speciesOrMaterials: string[]
+  expectedEcologicalBenefit: string
+}
+
+export interface ArchitecturalForm {
+  formLanguage: string
+  massingStrategy: string
+  materialPalette: string[]
+  roofType: string
+  elevationStrategy: string
+  relationshipToGround: string
+  referenceImages: string[]
+}
+
+export interface BuildingProgramItem {
+  space: string
+  area: number
+  capacity: number
+  requirements: string[]
+  notes?: string
+}
+
+export interface RenovationStrategyData {
+  id: string
+  nodeId: string
+  diagnosisId?: string
+  category: RenovationCategory
+  title: string
+  description: string
+  dimension: RenovationDimension
+  materials: RenovationMaterial[]
+  techniques: RenovationTechnique[]
+  energyConstruction: EnergyConstructionDetail[]
+  ecologicalMeasures: EcologicalMeasure[]
+  interventionType?: InterventionType
+  oldNewRelationship?: string
+  architecturalForm?: ArchitecturalForm
+  buildingProgram?: BuildingProgramItem[]
+  estimatedDuration?: string
+  difficultyLevel?: string
+  estimatedCostRange?: string
+  expectedImpact?: string
+  priority: "critical" | "high" | "medium" | "low"
+  status: RenovationStatus
+  approvedBy?: string
+  approvedAt?: string
+  completedAt?: string
+  verifiedAt?: string
+  beforeMetrics: Record<string, number>
+  afterMetrics: Record<string, number>
+  createdAt: string
+  updatedAt: string
+}
+
+export interface SiteConstraint {
+  type:
+    | "setback"
+    | "height_limit"
+    | "heritage_buffer"
+    | "flood_zone"
+    | "tree_protection"
+    | "utility_easement"
+  description: string
+  distance?: number
+}
+
+export interface SitePotentialData {
+  id: string
+  nodeId: string
+  locationName: string
+  locationLat: number
+  locationLng: number
+  siteArea?: number
+  currentUse?: string
+  suitabilityScore: number
+  accessibilityScore: number
+  viewScore: number
+  ecologyImpactScore: number
+  recommendedProgram?: string
+  recommendedForm?: string
+  recommendedFloors?: number
+  recommendedGFA?: number
+  formKeywords: string[]
+  constraints: SiteConstraint[]
+  rationale?: string
+  status: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface RenovationImpactReport {
+  nodeId: string
+  nodeSlug: string
+  strategyId: string
+  period: { before: string; after: string }
+  metrics: {
+    visitorChange: number
+    satisfactionChange: number
+    safetyRiskChange: number
+    energyScoreChange: number
+    conversionRateChange: number
+    feedbackReduction: number
+  }
+  verdict: "significantly_improved" | "improved" | "no_change" | "degraded"
+  summary: string
+}
+
+export interface RenovationPublicStrategy {
+  id: string
+  title: string
+  description: string
+  dimension: RenovationDimension
+  interventionType?: InterventionType
+  priority: "critical" | "high" | "medium" | "low"
+  estimatedDuration?: string
+  estimatedCostRange?: string
+  expectedImpact?: string
+}
+
+export interface RenovationPublicNode {
+  nodeId: string
+  slug: string
+  nameKey: string
+  realm: string
+  nodeType: string
+  building?: {
+    age?: number
+    material?: string
+    floors?: number
+    area?: number
+    structuralCondition?: BuildingCondition
+    energyScore?: number
+    heritageStatus?: string
+  }
+  diagnosis?: Pick<SpatialDiagnosisData, "id" | "urgency" | "aiSummary" | "issues" | "evidenceJson">
+  strategies: RenovationPublicStrategy[]
+  sitePotentials?: SitePotentialData[]
+  demo?: boolean
+}
+
+export interface SpaceNodeBuildingData extends SpaceNodeData {
+  buildingAge?: number
+  buildingMaterial?: string
+  buildingFloors?: number
+  buildingArea?: number
+  buildingOrientation?: string
+  heritageStatus?: string
+  lastRenovationAt?: string
+  structuralCondition?: BuildingCondition
+  aestheticCondition?: BuildingCondition
+  functionalCondition?: BuildingCondition
+  energyScore?: number
+  insulationQuality?: string
+  ventilationQuality?: string
+  solarPotential?: string
+  energyConsumptionEst?: number
+  greeneryCoverage?: number
+  waterPermeability?: string
+  biodiversityIndex?: string
+  microclimateZone?: string
+  photos: string[]
+}
