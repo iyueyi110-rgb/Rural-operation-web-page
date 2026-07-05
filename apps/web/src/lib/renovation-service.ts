@@ -214,6 +214,8 @@ export async function runWeeklyRenovationDiagnosis(bizDate = getChinaDateString(
         { buildingMaterial: { not: null } },
         { terrainRisk: { gt: 0.3 } },
         { watersideRisk: { gt: 0.3 } },
+        { assessments: { some: {} } },
+        { sitePotentials: { some: {} } },
       ],
     },
     select: { id: true },

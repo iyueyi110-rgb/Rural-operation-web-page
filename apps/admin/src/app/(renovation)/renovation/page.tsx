@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Building2, CheckCircle2, CircleAlert, LoaderCircle, RefreshCw, X } from "lucide-react"
+import { Building2, CheckCircle2, CircleAlert, LoaderCircle, RefreshCw, Sparkles, X } from "lucide-react"
 
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminNotice, AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
@@ -34,7 +34,9 @@ export default function RenovationPage() {
   const router = useRouter()
   const [rows, setRows] = useState<StrategyRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isGenerating, setIsGenerating] = useState(false)
   const [message, setMessage] = useState("")
+  const [messageTone, setMessageTone] = useState<"error" | "success">("error")
   const [selectedNodeId, setSelectedNodeId] = useState("")
   const [filters, setFilters] = useState({ interventionType: "", priority: "", status: "", realm: "" })
 
@@ -46,11 +48,32 @@ export default function RenovationPage() {
       setRows(payload.data ?? [])
     } catch {
       setRows([])
+      setMessageTone("error")
       setMessage("改造策略数据暂不可用。")
     } finally {
       setIsLoading(false)
     }
   }, [])
+
+  const runDiagnosis = useCallback(async () => {
+    setIsGenerating(true)
+    setMessage("")
+    try {
+      const payload = await fetchAdminApi<{ data: { nodeCount: number; results: Array<{ strategies?: unknown[] }> } }>(
+        "/renovation/run-weekly",
+        { method: "POST", body: JSON.stringify({}) },
+      )
+      const strategyCount = payload.data.results.reduce((sum, result) => sum + (Array.isArray(result.strategies) ? result.strategies.length : 0), 0)
+      await loadRows()
+      setMessageTone("success")
+      setMessage(`诊断完成：处理 ${payload.data.nodeCount} 个节点，返回 ${strategyCount} 条策略。`)
+    } catch {
+      setMessageTone("error")
+      setMessage("诊断生成失败，请确认数据库连接正常后重试。")
+    } finally {
+      setIsGenerating(false)
+    }
+  }, [loadRows])
 
   useEffect(() => {
     void loadRows()
@@ -113,20 +136,32 @@ export default function RenovationPage() {
   return (
     <AdminPageShell
       actions={
-        <button
-          className="inline-flex h-10 items-center gap-2 rounded-full border border-line bg-surface px-4 text-sm font-bold text-ink"
-          onClick={loadRows}
-          type="button"
-        >
-          <RefreshCw className="h-4 w-4" />
-          刷新
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            className="inline-flex h-10 items-center gap-2 rounded-full border border-line bg-surface px-4 text-sm font-bold text-ink disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isGenerating}
+            onClick={loadRows}
+            type="button"
+          >
+            <RefreshCw className="h-4 w-4" />
+            刷新
+          </button>
+          <button
+            className="inline-flex h-10 items-center gap-2 rounded-full bg-ink px-4 text-sm font-bold text-rice disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isGenerating}
+            onClick={runDiagnosis}
+            type="button"
+          >
+            {isGenerating ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            {isGenerating ? "生成中..." : "生成诊断与策略"}
+          </button>
+        </div>
       }
       description="查看由后端诊断引擎和 AI 增强层生成的空间改造策略，并通过示意图理解节点、诊断和干预关系。"
       eyebrow="空间改造"
       title="空间改造工作台"
     >
-      {message ? <AdminNotice tone="error">{message}</AdminNotice> : null}
+      {message ? <AdminNotice tone={messageTone}>{message}</AdminNotice> : null}
       <div className="grid gap-3 md:grid-cols-4">
         <AdminStatCard icon={<Building2 className="h-4 w-4" />} label="策略总数" value={stats.total} />
         <AdminStatCard icon={<CircleAlert className="h-4 w-4" />} label="紧急策略" value={stats.critical} />
