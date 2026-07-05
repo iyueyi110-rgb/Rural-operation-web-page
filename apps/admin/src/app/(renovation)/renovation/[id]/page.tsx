@@ -43,12 +43,12 @@ function text(value: unknown, fallback = "-") {
 function getStrategyPhoto(strategy: StrategyDetail) {
   const slug = strategy.node?.slug ?? ""
   const photoBySlug: Record<string, { url: string; alt: string }> = {
-    "ancient-road": { url: "/images/renovation/ancient-road-station.webp", alt: "古道驿站节能修缮示意照片" },
-    "lychee-garden": { url: "/images/renovation/activity-showcase-classroom.png", alt: "荔田工坊功能重组示意照片" },
-    "waterfront-rest": { url: "/images/renovation/resilience-valley.webp", alt: "龙溪河岸生态护坡示意照片" },
-    "ridge-courtyard": { url: "/images/renovation/ridge-courtyard.webp", alt: "岭上合院节能改造示意照片" },
-    "village-meal": { url: "/images/renovation/stone-house.webp", alt: "废弃粮仓部分拆除与新旧嵌合示意照片" },
-    "tree-adoption": { url: "/images/renovation/lychee-field.webp", alt: "荔枝林间空地轻量新建示意照片" },
+    "ancient-road": { url: "/images/renovation/ai/ancient-road-energy-retrofit.jpg", alt: "古道驿站节能修缮示意照片" },
+    "lychee-garden": { url: "/images/renovation/ai/lychee-workshop-reorganization.jpg", alt: "荔田工坊功能重组示意照片" },
+    "waterfront-rest": { url: "/images/renovation/ai/waterfront-ecological-revetment.jpg", alt: "龙溪河岸生态护坡示意照片" },
+    "ridge-courtyard": { url: "/images/renovation/ai/ridge-courtyard-energy-retrofit.jpg", alt: "岭上合院节能改造示意照片" },
+    "village-meal": { url: "/images/renovation/ai/village-meal-granary.jpg", alt: "废弃粮仓部分拆除与新旧嵌合示意照片" },
+    "tree-adoption": { url: "/images/renovation/ai/lychee-grove-service-station.jpg", alt: "荔枝林间空地轻量新建示意照片" },
   }
 
   return photoBySlug[slug] ?? { url: "/images/renovation/hero-village.webp", alt: "空间改造示意照片" }
