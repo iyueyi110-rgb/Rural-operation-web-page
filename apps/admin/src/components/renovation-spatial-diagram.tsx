@@ -10,6 +10,7 @@ import {
   type RenovationDiagramNode,
   type RenovationStrategyLike,
 } from "@admin/lib/renovation-diagram"
+import { getRenovationDemoPhoto } from "@admin/lib/renovation-demo-data"
 
 const realmOrder = ["ancient_road", "lychee_field", "resilience_valley", "ridge_dwelling", "unknown"]
 
@@ -51,20 +52,34 @@ export function RenovationSpatialDiagram({
                   <div className="text-[11px] font-bold text-ink/42">{realmNodes.length} 个节点</div>
                 </div>
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {realmNodes.map((node) => (
-                    <button
-                      className={
-                        selectedNodeId === node.nodeId
-                          ? "group rounded-lg border border-water bg-white p-3 text-left shadow-soft outline outline-2 outline-water/15"
-                          : "group rounded-lg border border-line bg-white p-3 text-left transition hover:border-water/50 hover:shadow-soft"
-                      }
-                      key={node.nodeId}
-                      onClick={() => onSelectNode?.(node.nodeId)}
-                      type="button"
-                    >
-                      <div className="flex items-start gap-3">
-                        <NodeMarker interventionType={node.interventionType} priority={node.priority} />
-                        <div className="min-w-0 flex-1">
+                  {realmNodes.map((node) => {
+                    const photo = getRenovationDemoPhoto(node.slug)
+                    const photoUrl = node.photoUrl ?? photo?.url
+                    const photoAlt = node.photoAlt ?? photo?.alt ?? "空间改造节点示意照片"
+
+                    return (
+                      <button
+                        className={
+                          selectedNodeId === node.nodeId
+                            ? "group rounded-lg border border-water bg-white p-2 text-left shadow-soft outline outline-2 outline-water/15"
+                            : "group rounded-lg border border-line bg-white p-2 text-left transition hover:border-water/50 hover:shadow-soft"
+                        }
+                        key={node.nodeId}
+                        onClick={() => onSelectNode?.(node.nodeId)}
+                        type="button"
+                      >
+                        <div
+                          aria-label={photoAlt}
+                          className="relative h-20 overflow-hidden rounded-md bg-rice bg-cover bg-center"
+                          role="img"
+                          style={{ backgroundImage: photoUrl ? `url(${photoUrl})` : undefined }}
+                        >
+                          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(25,32,27,0.04),rgba(25,32,27,0.58))]" />
+                          <div className="absolute bottom-2 left-2">
+                            <NodeMarker interventionType={node.interventionType} priority={node.priority} size="sm" />
+                          </div>
+                        </div>
+                        <div className="mt-3 min-w-0 px-1">
                           <div className="truncate text-sm font-extrabold text-ink">{node.label}</div>
                           <div className="mt-1 flex flex-wrap gap-1.5">
                             <Tag>{getInterventionLabel(node.interventionType)}</Tag>
@@ -72,14 +87,14 @@ export function RenovationSpatialDiagram({
                             <Tag>{node.status}</Tag>
                           </div>
                         </div>
-                      </div>
-                      <div className="mt-3 grid grid-cols-[auto_1fr_auto] items-center gap-2 text-[11px] font-bold text-ink/44">
-                        <span>诊断</span>
-                        <span className="h-px bg-line" />
-                        <span>{node.strategyCount} 条策略</span>
-                      </div>
-                    </button>
-                  ))}
+                        <div className="mt-3 grid grid-cols-[auto_1fr_auto] items-center gap-2 px-1 text-[11px] font-bold text-ink/44">
+                          <span>诊断</span>
+                          <span className="h-px bg-line" />
+                          <span>{node.strategyCount} 条策略</span>
+                        </div>
+                      </button>
+                    )
+                  })}
                 </div>
               </section>
             )
@@ -136,12 +151,13 @@ export function RenovationStrategyMiniDiagram({ strategy }: { strategy: Renovati
   )
 }
 
-function NodeMarker({ interventionType, priority }: { interventionType: string; priority: string }) {
+function NodeMarker({ interventionType, priority, size = "md" }: { interventionType: string; priority: string; size?: "sm" | "md" }) {
   const Icon = interventionType === "landscape_intervention" ? Leaf : interventionType === "new_construction" ? MapPin : Hammer
   const markerClass = markerTone(interventionType, priority)
+  const sizeClass = size === "sm" ? "h-8 w-8" : "h-10 w-10"
 
   return (
-    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-white shadow-soft ${markerClass}`}>
+    <span className={`flex ${sizeClass} shrink-0 items-center justify-center rounded-lg text-white shadow-soft ${markerClass}`}>
       <Icon className="h-4 w-4" />
     </span>
   )

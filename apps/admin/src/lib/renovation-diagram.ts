@@ -14,6 +14,8 @@ export type RenovationDiagramNode = {
   nodeId: string
   label: string
   slug?: string
+  photoUrl?: string
+  photoAlt?: string
   realm: string
   priority: string
   status: string
@@ -94,6 +96,8 @@ export function buildRenovationDiagramNodes(strategies: RenovationStrategyLike[]
         nodeId: strategy.nodeId,
         label,
         slug: strategy.node?.slug ?? undefined,
+        photoUrl: undefined,
+        photoAlt: undefined,
         realm,
         priority: strategy.priority,
         status: strategy.status,
