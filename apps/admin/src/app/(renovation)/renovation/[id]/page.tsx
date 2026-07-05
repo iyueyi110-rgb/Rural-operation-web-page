@@ -6,6 +6,7 @@ import { useParams } from "next/navigation"
 import { AdminNotice, AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
 import { RenovationStrategyMiniDiagram } from "@admin/components/renovation-spatial-diagram"
 import { fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
+import { getDemoRenovationStrategy, getRenovationDemoPhoto } from "@admin/lib/renovation-demo-data"
 
 interface StrategyDetail {
   id: string
@@ -37,21 +38,30 @@ function objectList(value: unknown): Array<Record<string, unknown>> {
 }
 
 function text(value: unknown, fallback = "-") {
+  if (typeof value === "number" && Number.isFinite(value)) return String(value)
   return typeof value === "string" && value.trim() ? value : fallback
 }
 
 function getStrategyPhoto(strategy: StrategyDetail) {
   const slug = strategy.node?.slug ?? ""
-  const photoBySlug: Record<string, { url: string; alt: string }> = {
-    "ancient-road": { url: "/images/renovation/ai/ancient-road-energy-retrofit.jpg", alt: "古道驿站节能修缮示意照片" },
-    "lychee-garden": { url: "/images/renovation/ai/lychee-workshop-reorganization.jpg", alt: "荔田工坊功能重组示意照片" },
-    "waterfront-rest": { url: "/images/renovation/ai/waterfront-ecological-revetment.jpg", alt: "龙溪河岸生态护坡示意照片" },
-    "ridge-courtyard": { url: "/images/renovation/ai/ridge-courtyard-energy-retrofit.jpg", alt: "岭上合院节能改造示意照片" },
-    "village-meal": { url: "/images/renovation/ai/village-meal-granary.jpg", alt: "废弃粮仓部分拆除与新旧嵌合示意照片" },
-    "tree-adoption": { url: "/images/renovation/ai/lychee-grove-service-station.jpg", alt: "荔枝林间空地轻量新建示意照片" },
-  }
+  return getRenovationDemoPhoto(slug) ?? { url: "/images/renovation/hero-village.webp", alt: "空间改造示意照片" }
+}
 
-  return photoBySlug[slug] ?? { url: "/images/renovation/hero-village.webp", alt: "空间改造示意照片" }
+function hasRenderableField(row: Record<string, unknown>, fields: string[]) {
+  return fields.some((field) => text(row[field], "").length > 0)
+}
+
+function sectionRows(value: unknown, fallback: unknown, fields: string[]) {
+  const rows = objectList(value)
+  if (rows.some((row) => hasRenderableField(row, fields))) return rows
+  return objectList(fallback)
+}
+
+function formWithFallback(value: unknown, fallback: unknown) {
+  const fields = ["formLanguage", "massingStrategy", "roofType", "elevationStrategy"]
+  const current = value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : {}
+  if (hasRenderableField(current, fields)) return current
+  return fallback && typeof fallback === "object" && !Array.isArray(fallback) ? (fallback as Record<string, unknown>) : {}
 }
 
 export default function RenovationDetailPage() {
@@ -65,10 +75,10 @@ export default function RenovationDetailPage() {
     setMessage("")
     try {
       const payload = await fetchAdminApi<{ data: StrategyDetail }>(`/renovation/strategies/${params.id}`)
-      setStrategy(payload.data)
+      setStrategy(payload.data ?? getDemoRenovationStrategy(params.id))
     } catch {
-      setStrategy(null)
-      setMessage("改造策略详情暂不可用。")
+      setStrategy(getDemoRenovationStrategy(params.id))
+      setMessage("后端详情暂不可用，已切换为空间改造降级演示。")
     } finally {
       setIsLoading(false)
     }
@@ -90,14 +100,13 @@ export default function RenovationDetailPage() {
     )
   }
 
-  const materials = objectList(strategy.materials)
-  const techniques = objectList(strategy.techniques)
-  const energy = objectList(strategy.energyConstruction)
-  const ecology = objectList(strategy.ecologicalMeasures)
-  const programs = objectList(strategy.buildingProgram)
-  const form = strategy.architecturalForm && typeof strategy.architecturalForm === "object" && !Array.isArray(strategy.architecturalForm)
-    ? (strategy.architecturalForm as Record<string, unknown>)
-    : {}
+  const demoStrategy = getDemoRenovationStrategy(strategy.id || strategy.node?.slug)
+  const materials = sectionRows(strategy.materials, demoStrategy.materials, ["name", "category", "specification", "localAvailability"])
+  const techniques = sectionRows(strategy.techniques, demoStrategy.techniques, ["name", "category", "description", "laborRequirement"])
+  const energy = sectionRows(strategy.energyConstruction, demoStrategy.energyConstruction, ["type", "name", "description", "estimatedEnergySaving"])
+  const ecology = sectionRows(strategy.ecologicalMeasures, demoStrategy.ecologicalMeasures, ["type", "name", "description", "expectedEcologicalBenefit"])
+  const programs = sectionRows(strategy.buildingProgram, demoStrategy.buildingProgram, ["space", "area", "capacity", "requirements"])
+  const form = formWithFallback(strategy.architecturalForm, demoStrategy.architecturalForm)
   const photo = getStrategyPhoto(strategy)
 
   return (
@@ -106,6 +115,8 @@ export default function RenovationDetailPage() {
       eyebrow="空间改造"
       title={strategy.title}
     >
+      {message ? <AdminNotice>{message}</AdminNotice> : null}
+
       <AdminPanel className="overflow-hidden p-0">
         <div
           aria-label={photo.alt}

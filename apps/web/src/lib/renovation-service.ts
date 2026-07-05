@@ -31,6 +31,33 @@ function toInputJson(value: unknown): Prisma.InputJsonValue {
   return value as Prisma.InputJsonValue
 }
 
+const publicRenovationPhotoBySlug: Record<string, { photoUrl: string; photoAlt: string }> = {
+  "ancient-road": {
+    photoUrl: "/images/renovation/ai/ancient-road-energy-retrofit.jpg",
+    photoAlt: "古道驿站节能修缮示意照片",
+  },
+  "lychee-garden": {
+    photoUrl: "/images/renovation/ai/lychee-workshop-reorganization.jpg",
+    photoAlt: "荔田工坊功能重组示意照片",
+  },
+  "waterfront-rest": {
+    photoUrl: "/images/renovation/ai/waterfront-ecological-revetment.jpg",
+    photoAlt: "龙溪河岸生态护坡示意照片",
+  },
+  "ridge-courtyard": {
+    photoUrl: "/images/renovation/ai/ridge-courtyard-energy-retrofit.jpg",
+    photoAlt: "岭上合院低扰动节能改造示意照片",
+  },
+  "village-meal": {
+    photoUrl: "/images/renovation/ai/village-meal-granary.jpg",
+    photoAlt: "废弃粮仓部分拆除与新旧嵌合示意照片",
+  },
+  "tree-adoption": {
+    photoUrl: "/images/renovation/ai/lychee-grove-service-station.jpg",
+    photoAlt: "荔枝林间空地轻量新建示意照片",
+  },
+}
+
 export async function collectRenovationDiagnosisInput(nodeId: string, bizDate = getChinaDateString()): Promise<DiagnosisInput> {
   const { start, end } = getChinaDayRange(bizDate)
   const node = await prisma.spaceNode.findUnique({
@@ -360,12 +387,15 @@ export async function getPublicRenovationNodes(): Promise<RenovationPublicNode[]
 
   return nodes.map((node) => {
     const diagnosis = node.diagnoses[0]
+    const photo = publicRenovationPhotoBySlug[node.slug]
     return {
       nodeId: node.id,
       slug: node.slug,
       nameKey: node.nameKey,
       realm: node.realm,
       nodeType: node.nodeType,
+      photoUrl: photo?.photoUrl,
+      photoAlt: photo?.photoAlt ?? `${node.nameKey}空间改造示意照片`,
       building: {
         age: node.buildingAge ?? undefined,
         material: node.buildingMaterial ?? undefined,

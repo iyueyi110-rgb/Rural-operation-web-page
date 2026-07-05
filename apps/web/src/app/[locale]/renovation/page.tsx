@@ -79,7 +79,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      images: ["/images/home/lychee-field.webp"],
+      images: ["/images/renovation/ai/lychee-grove-service-station.jpg"],
     },
   }
 }

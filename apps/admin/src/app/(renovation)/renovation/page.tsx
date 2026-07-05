@@ -9,6 +9,7 @@ import { AdminNotice, AdminPageShell, AdminPanel } from "@admin/components/admin
 import { AdminStatCard } from "@admin/components/admin-stat-card"
 import { RenovationSpatialDiagram } from "@admin/components/renovation-spatial-diagram"
 import { fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
+import { demoRenovationStrategies, getRenovationDemoPhoto } from "@admin/lib/renovation-demo-data"
 import {
   buildRenovationDiagramNodes,
   getDimensionLabel,
@@ -24,10 +25,27 @@ interface StrategyRow extends Record<string, unknown> {
   interventionType?: string | null
   priority: string
   status: string
+  photo?: string
   estimatedDuration?: string | null
   estimatedCostRange?: string | null
   createdAt: string
   node?: { slug?: string | null; nameKey?: string | null; realm?: string | null }
+}
+
+function applyStrategyFallback(rows: StrategyRow[]) {
+  return rows.length > 0 ? rows : demoRenovationStrategies
+}
+
+function StrategyPhotoThumb({ row }: { row: StrategyRow }) {
+  const photo = getRenovationDemoPhoto(row.node?.slug)
+  return (
+    <div
+      aria-label={photo?.alt ?? "空间改造示意照片"}
+      className="h-10 w-16 rounded-md bg-rice bg-cover bg-center"
+      role="img"
+      style={{ backgroundImage: photo ? `url(${photo.url})` : undefined }}
+    />
+  )
 }
 
 export default function RenovationPage() {
@@ -36,7 +54,7 @@ export default function RenovationPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isGenerating, setIsGenerating] = useState(false)
   const [message, setMessage] = useState("")
-  const [messageTone, setMessageTone] = useState<"error" | "success">("error")
+  const [messageTone, setMessageTone] = useState<"error" | "success" | "neutral">("error")
   const [selectedNodeId, setSelectedNodeId] = useState("")
   const [filters, setFilters] = useState({ interventionType: "", priority: "", status: "", realm: "" })
 
@@ -45,11 +63,16 @@ export default function RenovationPage() {
     setMessage("")
     try {
       const payload = await fetchAdminApi<{ data: StrategyRow[] }>("/renovation/strategies")
-      setRows(payload.data ?? [])
+      const nextRows = applyStrategyFallback(payload.data ?? [])
+      setRows(nextRows)
+      if (!payload.data?.length) {
+        setMessageTone("neutral")
+        setMessage("后端暂无改造策略，已展示完整降级演示数据。")
+      }
     } catch {
-      setRows([])
-      setMessageTone("error")
-      setMessage("改造策略数据暂不可用。")
+      setRows(demoRenovationStrategies)
+      setMessageTone("neutral")
+      setMessage("改造策略数据暂不可用，已切换为降级演示数据。")
     } finally {
       setIsLoading(false)
     }
@@ -68,8 +91,9 @@ export default function RenovationPage() {
       setMessageTone("success")
       setMessage(`诊断完成：处理 ${payload.data.nodeCount} 个节点，返回 ${strategyCount} 条策略。`)
     } catch {
-      setMessageTone("error")
-      setMessage("诊断生成失败，请确认数据库连接正常后重试。")
+      setRows(demoRenovationStrategies)
+      setMessageTone("neutral")
+      setMessage("诊断生成暂不可用，已保留可验收的降级演示策略。")
     } finally {
       setIsGenerating(false)
     }
@@ -123,6 +147,7 @@ export default function RenovationPage() {
   }
 
   const columns: Array<TableColumn<StrategyRow>> = [
+    { key: "photo", label: "示意", render: (_value, row) => <StrategyPhotoThumb row={row} /> },
     { key: "node", label: "空间节点", render: (_value, row) => nodeDisplayName(row.node?.slug, row.node?.nameKey) },
     { key: "title", label: "策略" },
     { key: "interventionType", label: "干预", render: (value) => getInterventionLabel(isString(value) ? value : undefined) },

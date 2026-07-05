@@ -899,6 +899,8 @@ export interface RenovationPublicNode {
   nameKey: string
   realm: string
   nodeType: string
+  photoUrl?: string
+  photoAlt?: string
   building?: {
     age?: number
     material?: string

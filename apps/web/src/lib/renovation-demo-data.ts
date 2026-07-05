@@ -14,7 +14,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     nameKey: "古道驿亭",
     realm: "ancient_road",
     nodeType: "heritage_stop",
-    photoUrl: "/images/courtyards/ancient-road-station.webp",
+    photoUrl: "/images/renovation/ai/ancient-road-energy-retrofit.jpg",
     photoAlt: "古道驿亭砖木空间改造示意照片",
     demo: true,
     building: {
@@ -63,7 +63,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     },
     strategies: [
       {
-        id: "demo-strategy-1",
+        id: "demo-strategy-ancient-road",
         title: "传统民居围护结构节能改造",
         description: "以内保温、屋面隔热和门窗密封提升热舒适。",
         dimension: "energy",
@@ -74,7 +74,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
         expectedImpact: "降低夏季热压力，提升停留舒适度。",
       },
       {
-        id: "demo-strategy-2",
+        id: "demo-strategy-ancient-road-space",
         title: "弹性复合空间功能重组",
         description: "调整展示、休憩和等候关系，缓解入口拥堵。",
         dimension: "spatial",
@@ -92,7 +92,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     nameKey: "荔田工坊",
     realm: "lychee_field",
     nodeType: "workshop",
-    photoUrl: "/images/home/activity-showcase-classroom.png",
+    photoUrl: "/images/renovation/ai/lychee-workshop-reorganization.jpg",
     photoAlt: "荔田工坊活动空间改造示意照片",
     demo: true,
     building: {
@@ -131,7 +131,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     },
     strategies: [
       {
-        id: "demo-strategy-3",
+        id: "demo-strategy-lychee-garden",
         title: "院落微气候调节",
         description: "通过遮阳棚、穿堂风和雨水花园改善半室外体验。",
         dimension: "energy",
@@ -149,7 +149,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     nameKey: "龙溪河岸",
     realm: "resilience_valley",
     nodeType: "waterside",
-    photoUrl: "/images/home/resilience-valley.webp",
+    photoUrl: "/images/renovation/ai/waterfront-ecological-revetment.jpg",
     photoAlt: "龙溪河岸生态护坡与亲水平台示意照片",
     demo: true,
     building: {
@@ -188,7 +188,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     },
     strategies: [
       {
-        id: "demo-strategy-4",
+        id: "demo-strategy-waterfront-rest",
         title: "滨水生态护坡与亲水平台",
         description: "用生态护坡和安全亲水平台替代硬质边界。",
         dimension: "ecological",
@@ -206,7 +206,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     nameKey: "岭上合院",
     realm: "ridge_dwelling",
     nodeType: "courtyard",
-    photoUrl: "/images/home/ridge-courtyard.webp",
+    photoUrl: "/images/renovation/ai/ridge-courtyard-energy-retrofit.jpg",
     photoAlt: "岭上合院低扰动节能改造示意照片",
     demo: true,
     building: {
@@ -246,7 +246,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     },
     strategies: [
       {
-        id: "demo-strategy-5",
+        id: "demo-strategy-ridge-courtyard",
         title: "传统民居围护结构节能改造",
         description: "尊重夯土外观，优先采用内侧低扰动节能构造。",
         dimension: "energy",
@@ -264,7 +264,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     nameKey: "废弃粮仓",
     realm: "ridge_dwelling",
     nodeType: "abandoned_building",
-    photoUrl: "/images/home/stone-house.webp",
+    photoUrl: "/images/renovation/ai/village-meal-granary.jpg",
     photoAlt: "废弃粮仓部分拆除与新旧嵌合示意照片",
     demo: true,
     building: {
@@ -303,7 +303,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     },
     strategies: [
       {
-        id: "demo-strategy-6",
+        id: "demo-strategy-village-meal",
         title: "部分拆除与新旧嵌合",
         description: "保留老墙和木梁，拆除低价值破损部分，植入展售与茶歇空间。",
         dimension: "spatial",
@@ -321,7 +321,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     nameKey: "荔枝林间空地",
     realm: "lychee_field",
     nodeType: "vacant_site",
-    photoUrl: "/images/home/lychee-field.webp",
+    photoUrl: "/images/renovation/ai/lychee-grove-service-station.jpg",
     photoAlt: "荔枝林间空地轻量服务站新建示意照片",
     demo: true,
     building: {
@@ -360,7 +360,7 @@ export const DEMO_NODES: RenovationDemoNode[] = [
     },
     strategies: [
       {
-        id: "demo-strategy-7",
+        id: "demo-strategy-tree-adoption",
         title: "场地新建：填空式轻建筑",
         description: "新建低矮轻量驿站，补充休憩、卫生和展陈功能。",
         dimension: "spatial",
