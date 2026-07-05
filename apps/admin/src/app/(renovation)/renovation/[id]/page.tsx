@@ -40,6 +40,20 @@ function text(value: unknown, fallback = "-") {
   return typeof value === "string" && value.trim() ? value : fallback
 }
 
+function getStrategyPhoto(strategy: StrategyDetail) {
+  const slug = strategy.node?.slug ?? ""
+  const photoBySlug: Record<string, { url: string; alt: string }> = {
+    "ancient-road": { url: "/images/renovation/ancient-road-station.webp", alt: "古道驿站节能修缮示意照片" },
+    "lychee-garden": { url: "/images/renovation/activity-showcase-classroom.png", alt: "荔田工坊功能重组示意照片" },
+    "waterfront-rest": { url: "/images/renovation/resilience-valley.webp", alt: "龙溪河岸生态护坡示意照片" },
+    "ridge-courtyard": { url: "/images/renovation/ridge-courtyard.webp", alt: "岭上合院节能改造示意照片" },
+    "village-meal": { url: "/images/renovation/stone-house.webp", alt: "废弃粮仓部分拆除与新旧嵌合示意照片" },
+    "tree-adoption": { url: "/images/renovation/lychee-field.webp", alt: "荔枝林间空地轻量新建示意照片" },
+  }
+
+  return photoBySlug[slug] ?? { url: "/images/renovation/hero-village.webp", alt: "空间改造示意照片" }
+}
+
 export default function RenovationDetailPage() {
   const params = useParams<{ id: string }>()
   const [strategy, setStrategy] = useState<StrategyDetail | null>(null)
@@ -84,6 +98,7 @@ export default function RenovationDetailPage() {
   const form = strategy.architecturalForm && typeof strategy.architecturalForm === "object" && !Array.isArray(strategy.architecturalForm)
     ? (strategy.architecturalForm as Record<string, unknown>)
     : {}
+  const photo = getStrategyPhoto(strategy)
 
   return (
     <AdminPageShell
@@ -91,6 +106,26 @@ export default function RenovationDetailPage() {
       eyebrow="空间改造"
       title={strategy.title}
     >
+      <AdminPanel className="overflow-hidden p-0">
+        <div
+          aria-label={photo.alt}
+          className="relative min-h-[22rem] bg-cover bg-center"
+          role="img"
+          style={{ backgroundImage: `url(${photo.url})` }}
+        >
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(25,32,27,0.78),rgba(25,32,27,0.18)_55%,rgba(25,32,27,0.05))]" />
+          <div className="absolute bottom-6 left-6 right-6 max-w-2xl text-white">
+            <div className="inline-flex rounded-full border border-white/18 bg-white/12 px-3 py-1 text-xs font-bold text-white/78 backdrop-blur">
+              空间改造示意照片
+            </div>
+            <h2 className="mt-3 text-2xl font-extrabold tracking-normal">{nodeDisplayName(strategy.node?.slug, strategy.node?.nameKey)}</h2>
+            <p className="mt-2 text-sm font-semibold leading-6 text-white/72">
+              {strategy.expectedImpact ?? strategy.oldNewRelationship ?? photo.alt}
+            </p>
+          </div>
+        </div>
+      </AdminPanel>
+
       <RenovationStrategyMiniDiagram strategy={strategy} />
 
       <AdminPanel>
