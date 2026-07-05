@@ -2,13 +2,20 @@ import type { RenovationPublicNode } from "@zouma/contracts"
 
 const createdAt = "2026-07-01T00:00:00.000Z"
 
-export const DEMO_NODES: RenovationPublicNode[] = [
+export interface RenovationDemoNode extends RenovationPublicNode {
+  photoUrl: string
+  photoAlt: string
+}
+
+export const DEMO_NODES: RenovationDemoNode[] = [
   {
     nodeId: "demo-ancient-road",
     slug: "ancient-road-pavilion",
     nameKey: "古道驿亭",
     realm: "ancient_road",
     nodeType: "heritage_stop",
+    photoUrl: "/images/courtyards/ancient-road-station.webp",
+    photoAlt: "古道驿亭砖木空间改造示意照片",
     demo: true,
     building: {
       age: 46,
@@ -85,6 +92,8 @@ export const DEMO_NODES: RenovationPublicNode[] = [
     nameKey: "荔田工坊",
     realm: "lychee_field",
     nodeType: "workshop",
+    photoUrl: "/images/home/activity-showcase-classroom.png",
+    photoAlt: "荔田工坊活动空间改造示意照片",
     demo: true,
     building: {
       age: 18,
@@ -140,6 +149,8 @@ export const DEMO_NODES: RenovationPublicNode[] = [
     nameKey: "龙溪河岸",
     realm: "resilience_valley",
     nodeType: "waterside",
+    photoUrl: "/images/home/resilience-valley.webp",
+    photoAlt: "龙溪河岸生态护坡与亲水平台示意照片",
     demo: true,
     building: {
       age: 8,
@@ -195,6 +206,8 @@ export const DEMO_NODES: RenovationPublicNode[] = [
     nameKey: "岭上合院",
     realm: "ridge_dwelling",
     nodeType: "courtyard",
+    photoUrl: "/images/home/ridge-courtyard.webp",
+    photoAlt: "岭上合院低扰动节能改造示意照片",
     demo: true,
     building: {
       age: 62,
@@ -251,6 +264,8 @@ export const DEMO_NODES: RenovationPublicNode[] = [
     nameKey: "废弃粮仓",
     realm: "ridge_dwelling",
     nodeType: "abandoned_building",
+    photoUrl: "/images/home/stone-house.webp",
+    photoAlt: "废弃粮仓部分拆除与新旧嵌合示意照片",
     demo: true,
     building: {
       age: 54,
@@ -306,6 +321,8 @@ export const DEMO_NODES: RenovationPublicNode[] = [
     nameKey: "荔枝林间空地",
     realm: "lychee_field",
     nodeType: "vacant_site",
+    photoUrl: "/images/home/lychee-field.webp",
+    photoAlt: "荔枝林间空地轻量服务站新建示意照片",
     demo: true,
     building: {
       age: 0,

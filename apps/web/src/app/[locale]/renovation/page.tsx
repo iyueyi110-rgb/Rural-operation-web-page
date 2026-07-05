@@ -25,10 +25,10 @@ import {
 } from "@web/components/subpage-ui"
 import { VisitorHeaderActions } from "@web/components/visitor-header-actions"
 import type { Locale } from "@web/i18n/routing"
-import { DEMO_NODES } from "@web/lib/renovation-demo-data"
+import { DEMO_NODES, type RenovationDemoNode } from "@web/lib/renovation-demo-data"
 import { getSiteUrl } from "@web/lib/site-url"
 import { PageHeader, Section } from "@ui/index"
-import type { RenovationPublicNode, RenovationPublicStrategy } from "@zouma/contracts"
+import type { RenovationPublicStrategy } from "@zouma/contracts"
 
 export const dynamic = "force-static"
 
@@ -91,12 +91,12 @@ function priorityTone(priority: RenovationPublicStrategy["priority"]) {
   return "border-line bg-rice text-ink/60"
 }
 
-function formatArea(node: RenovationPublicNode) {
+function formatArea(node: RenovationDemoNode) {
   if (!node.building?.area) return "待测绘"
   return `${node.building.area}m²`
 }
 
-function getUrgencyLabel(node: RenovationPublicNode) {
+function getUrgencyLabel(node: RenovationDemoNode) {
   const urgency = node.diagnosis?.urgency
   return urgency && urgency in urgencyLabels ? urgencyLabels[urgency as keyof typeof urgencyLabels] : "待诊断"
 }
@@ -106,13 +106,42 @@ function getInterventionLabel(strategy: RenovationPublicStrategy) {
   return type ? interventionLabels[type] ?? type : "综合干预"
 }
 
-function getAverageEnergyScore(nodes: RenovationPublicNode[]) {
+function getAverageEnergyScore(nodes: RenovationDemoNode[]) {
   const scores = nodes.flatMap((node) => (typeof node.building?.energyScore === "number" ? [node.building.energyScore] : []))
   if (scores.length === 0) return "N/A"
   return (scores.reduce((sum, score) => sum + score, 0) / scores.length).toFixed(1)
 }
 
-function RenovationDiagram({ nodes }: { nodes: RenovationPublicNode[] }) {
+function RenovationPhotoPanel({ node }: { node: RenovationDemoNode }) {
+  return (
+    <SurfacePanel className="overflow-hidden p-0">
+      <div
+        aria-label={node.photoAlt}
+        className="relative min-h-72 bg-cover bg-center text-white"
+        role="img"
+        style={{ backgroundImage: `url(${node.photoUrl})` }}
+      >
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(25,32,27,0.05),rgba(25,32,27,0.78))]" />
+        <div className="absolute left-5 right-5 top-5 flex items-center justify-between gap-3">
+          <span className="rounded-full border border-white/18 bg-ink/46 px-3 py-1 text-xs font-bold text-white/76 backdrop-blur">
+            空间改造示意照片
+          </span>
+          <span className="rounded-full border border-white/18 bg-white/12 px-3 py-1 text-xs font-bold text-white/76 backdrop-blur">
+            {realmLabels[node.realm] ?? node.realm}
+          </span>
+        </div>
+        <div className="absolute bottom-5 left-5 right-5">
+          <div className="text-2xl font-extrabold tracking-normal">{node.nameKey}</div>
+          <p className="mt-2 max-w-md text-sm font-semibold leading-6 text-white/72">
+            {node.strategies[0]?.expectedImpact ?? node.photoAlt}
+          </p>
+        </div>
+      </div>
+    </SurfacePanel>
+  )
+}
+
+function RenovationDiagram({ nodes }: { nodes: RenovationDemoNode[] }) {
   const featuredNodes = nodes.slice(0, 5)
 
   return (
@@ -173,6 +202,7 @@ export default async function RenovationPage({
   setRequestLocale(params.locale)
   const common = await getTranslations("common")
   const nodes = DEMO_NODES
+  const heroNode = nodes[0]
   const strategyCount = nodes.reduce((sum, node) => sum + node.strategies.length, 0)
   const siteCount = nodes.reduce((sum, node) => sum + (node.sitePotentials?.length ?? 0), 0)
 
@@ -197,7 +227,12 @@ export default async function RenovationPage({
       />
 
       <SubpageHero
-        aside={<RenovationDiagram nodes={nodes} />}
+        aside={
+          <div className="grid gap-4">
+            {heroNode ? <RenovationPhotoPanel node={heroNode} /> : null}
+            <RenovationDiagram nodes={nodes} />
+          </div>
+        }
         body="将建筑节能、拆改研判、功能重组和新建选址潜力统一呈现，公众可快速了解每个空间节点的诊断依据、干预类型、实施周期和预期效果。"
         eyebrow="Zouma Village Cloud Brain"
         icon={<Building2 aria-hidden="true" className="h-4 w-4" />}
@@ -246,6 +281,12 @@ export default async function RenovationPage({
         <div className="grid gap-5 lg:grid-cols-2">
           {nodes.map((node) => (
             <SurfacePanel className="flex min-h-full flex-col" key={node.nodeId}>
+              <div
+                aria-label={node.photoAlt}
+                className="-mx-5 -mt-5 mb-5 min-h-48 rounded-t-xl bg-cover bg-center"
+                role="img"
+                style={{ backgroundImage: `url(${node.photoUrl})` }}
+              />
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
