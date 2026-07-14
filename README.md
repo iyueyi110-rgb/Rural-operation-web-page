@@ -4,6 +4,10 @@
 
 > 模拟运营数据，不代表真实业务结果。
 
+## macOS 一键启动规则模拟工作台
+
+双击桌面的 `启动认养一棵树规则模拟.command`。启动器只运行 PostgreSQL、Web 模拟 API 与 Admin，自动打开登录页；本地登录口令为 `zouma-simulation-local`。按 `Ctrl+C` 停止 Web/Admin，PostgreSQL 容器保持运行。
+
 ## 本地启动
 
 ```bash
