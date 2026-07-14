@@ -48,4 +48,9 @@ if (main >/dev/null 2>&1); then
 fi
 rm -rf "$TEST_LOG_DIR"
 
+SHORTCUT="/Users/limyoon/Desktop/启动认养一棵树规则模拟.command"
+[ -f "$SHORTCUT" ] || fail "desktop shortcut missing"
+[ -x "$SHORTCUT" ] || fail "desktop shortcut is not executable"
+grep -Fq 'scripts/start-adoption-simulation-macos.sh' "$SHORTCUT" || fail "shortcut target missing"
+
 echo "launcher unit checks passed"
