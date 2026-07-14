@@ -31,4 +31,21 @@ ADMIN_PID=202
 cleanup
 assert_eq "$killed" " 101 202"
 
+require_command() { return 0; }
+classify_existing_services() { printf start; }
+docker() { return 0; }
+wait_for_postgres() { return 0; }
+pnpm() { return 0; }
+wait_for_http() { return 0; }
+open() { return 0; }
+wait() { return 0; }
+generate_secret() { return 1; }
+TEST_LOG_DIR="$(mktemp -d)"
+LOG_DIR="$TEST_LOG_DIR"
+if (main >/dev/null 2>&1); then
+  rm -rf "$TEST_LOG_DIR"
+  fail "launcher continued after secret generation failed"
+fi
+rm -rf "$TEST_LOG_DIR"
+
 echo "launcher unit checks passed"

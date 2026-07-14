@@ -67,8 +67,11 @@ main() {
   pnpm --filter @zouma/database exec prisma generate --schema prisma/schema.prisma
   pnpm --filter @zouma/database exec prisma migrate deploy --schema prisma/schema.prisma
 
-  export ADMIN_API_TOKEN="$(generate_secret)"
-  export ADMIN_SESSION_SECRET="$(generate_secret)"
+  ADMIN_API_TOKEN="$(generate_secret)" || die "Admin API token 生成失败"
+  [ -n "$ADMIN_API_TOKEN" ] || die "Admin API token 为空"
+  ADMIN_SESSION_SECRET="$(generate_secret)" || die "Admin session secret 生成失败"
+  [ -n "$ADMIN_SESSION_SECRET" ] || die "Admin session secret 为空"
+  export ADMIN_API_TOKEN ADMIN_SESSION_SECRET
   export ADMIN_LOGIN_PASSWORD WEB_API_BASE="http://127.0.0.1:3000/api/v1"
   export CORS_ALLOWED_ORIGINS="http://127.0.0.1:3000,http://127.0.0.1:3001,http://localhost:3000,http://localhost:3001"
 
