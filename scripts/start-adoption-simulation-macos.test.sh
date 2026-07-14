@@ -49,8 +49,14 @@ fi
 rm -rf "$TEST_LOG_DIR"
 
 SHORTCUT="/Users/limyoon/Desktop/启动认养一棵树规则模拟.command"
+SHORTCUT_TARGET="/Users/limyoon/Desktop/aigc/scripts/start-adoption-simulation-macos.sh"
 [ -f "$SHORTCUT" ] || fail "desktop shortcut missing"
 [ -x "$SHORTCUT" ] || fail "desktop shortcut is not executable"
-grep -Fq 'scripts/start-adoption-simulation-macos.sh' "$SHORTCUT" || fail "shortcut target missing"
+bash -n "$SHORTCUT" || fail "desktop shortcut syntax invalid"
+[ "$(wc -l < "$SHORTCUT" | tr -d ' ')" -eq 2 ] || fail "desktop shortcut must contain exactly two lines"
+EXPECTED_SHORTCUT="$(printf '#!/bin/bash\nexec "%s"' "$SHORTCUT_TARGET")"
+assert_eq "$(cat "$SHORTCUT")" "$EXPECTED_SHORTCUT"
+[ -f "$SHORTCUT_TARGET" ] || fail "shortcut target missing"
+[ -x "$SHORTCUT_TARGET" ] || fail "shortcut target is not executable"
 
 echo "launcher unit checks passed"
