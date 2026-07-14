@@ -1357,6 +1357,7 @@ interface CreateSimulationRepositoryOptions {
   prismaRepository?: SimulationRepository
   prismaProbe?: () => Promise<void>
   fileDirectory?: string
+  forcePrisma?: boolean
 }
 
 export async function createSimulationRepository(
@@ -1379,6 +1380,9 @@ export async function createSimulationRepository(
         ? databaseError.message
         : String(databaseError)
     }`
+    if (options.forcePrisma) {
+      throw new Error(`Prisma required but unavailable: ${databaseReason}`)
+    }
     try {
       return await createFileSimulationRepository(
         options.fileDirectory ?? defaultSimulationStoreDirectory(),

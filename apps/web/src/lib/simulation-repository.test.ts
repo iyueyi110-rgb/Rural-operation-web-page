@@ -456,3 +456,26 @@ test("repository factory falls back to memory when both Prisma and JSON are unav
   assert.equal(repository.meta.degraded, true)
   assert.match(repository.meta.reason ?? "", /database unavailable/)
 })
+
+test("repository factory fails closed when the launcher requires Prisma", async () => {
+  const directory = await mkdtemp(
+    path.join(os.tmpdir(), "simulation-prisma-required-"),
+  )
+  try {
+    await assert.rejects(
+      createSimulationRepository({
+        forcePrisma: true,
+        prismaProbe: async () => {
+          throw new Error("database unavailable")
+        },
+        fileDirectory: directory,
+      }),
+      /Prisma required.*database unavailable/i,
+    )
+    await assert.rejects(access(path.join(directory, "store.json")), {
+      code: "ENOENT",
+    })
+  } finally {
+    await rm(directory, { recursive: true, force: true })
+  }
+})

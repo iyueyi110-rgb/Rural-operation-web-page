@@ -6,7 +6,13 @@
 
 ## macOS 一键启动规则模拟工作台
 
-双击桌面的 `启动认养一棵树规则模拟.command`。启动器只运行 PostgreSQL、Web 模拟 API 与 Admin，自动打开登录页；本地登录口令为 `zouma-simulation-local`。按 `Ctrl+C` 停止 Web/Admin，PostgreSQL 容器保持运行。
+先启动 Docker Desktop，再双击桌面的 `启动认养一棵树规则模拟.command`。启动器只运行 PostgreSQL、Web 模拟 API 与 Admin，不会启动 Redis；三个端口分别只监听 `127.0.0.1:5432`、`127.0.0.1:3000` 和 `127.0.0.1:3001`。验证数据库迁移和模拟只读接口确实使用 Prisma 后，启动器才会自动打开登录页；本地登录口令为 `zouma-simulation-local`。
+
+一键启动专门设置 `SIMULATION_REPOSITORY_MODE=prisma`，Prisma 探测或查询失败时直接停止，**不适用**下面普通本地开发的 JSON/内存降级策略。Web 与 Admin 日志分别位于 `tmp/simulation-launcher/web.log` 和 `tmp/simulation-launcher/admin.log`；临时 Admin API token 只通过进程环境和 curl 标准输入传递，不写入日志或文件。
+
+保持启动器终端打开。按 `Ctrl+C`，或终端收到 `TERM`/`HUP`，会停止本次启动拥有的 Web/Admin 完整子进程树；任一服务异常退出时也会停止另一个服务。启动器不会终止既有端口进程或 PostgreSQL，PostgreSQL 容器保持运行。
+
+故障排查：提示 Docker 不可用时先确认 Docker Desktop 已完成启动；提示端口冲突或工作台已运行时，回到原启动终端使用现有实例，或先按 `Ctrl+C` 停止后重试；提示 PostgreSQL、Web、Admin 或 Prisma 未就绪时，先查看上述日志，再确认本机 5432/3000/3001 未被其他程序占用。启动器不会复用无法重新验证临时 token 和 Prisma backend 的旧进程。
 
 ## 本地启动
 

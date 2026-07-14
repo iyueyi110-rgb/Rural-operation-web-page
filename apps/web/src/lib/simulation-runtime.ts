@@ -24,7 +24,9 @@ const engine: SimulationEngineAdapter = {
 let servicePromise: ReturnType<typeof createService> | undefined
 
 async function createService() {
-  const repository = await createSimulationRepository()
+  const repository = await createSimulationRepository({
+    forcePrisma: process.env.SIMULATION_REPOSITORY_MODE === "prisma",
+  })
   return createSimulationService({ repository, engine })
 }
 
