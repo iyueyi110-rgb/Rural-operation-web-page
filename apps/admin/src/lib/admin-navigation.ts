@@ -7,6 +7,7 @@ import {
   ClipboardList,
   Cpu,
   FileText,
+  GitCompareArrows,
   LayoutDashboard,
   Lightbulb,
   ListChecks,
@@ -24,7 +25,13 @@ import {
 } from "lucide-react"
 import type { ComponentType } from "react"
 
-export type AdminNavGroupKey = "command" | "fieldOps" | "assetsCommerce" | "villageWork" | "renovation" | "aiSystem"
+export type AdminNavGroupKey =
+  | "command"
+  | "fieldOps"
+  | "assetsCommerce"
+  | "villageWork"
+  | "renovation"
+  | "aiSystem"
 
 export interface AdminNavItem {
   key: string
@@ -206,6 +213,14 @@ export const adminNavItems: AdminNavItem[] = [
     icon: ListChecks,
   },
   {
+    key: "simulations",
+    label: "规则模拟",
+    href: "/simulations",
+    description: "认养履约 V0/V1 规则对照",
+    group: "villageWork",
+    icon: GitCompareArrows,
+  },
+  {
     key: "renovation",
     label: "改造策略",
     href: "/renovation",
@@ -265,11 +280,16 @@ export const adminNavItems: AdminNavItem[] = [
 
 export function getAdminNavGroup(pathname: string) {
   const current = getAdminNavItem(pathname)
-  return current ? (adminNavGroups.find((group) => group.key === current.group) ?? defaultAdminNavGroup) : defaultAdminNavGroup
+  return current
+    ? (adminNavGroups.find((group) => group.key === current.group) ??
+        defaultAdminNavGroup)
+    : defaultAdminNavGroup
 }
 
 export function getAdminNavItem(pathname: string) {
-  return adminNavItems.find((item) => isAdminNavItemActive(pathname, item)) ?? null
+  return (
+    adminNavItems.find((item) => isAdminNavItemActive(pathname, item)) ?? null
+  )
 }
 
 export function getAdminNavItemsForGroup(groupKey: AdminNavGroupKey) {

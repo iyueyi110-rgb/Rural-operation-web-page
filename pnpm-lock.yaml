@@ -102,6 +102,9 @@ importers:
       '@zouma/prompts':
         specifier: workspace:*
         version: link:../../packages/prompts
+      '@zouma/simulation':
+        specifier: workspace:*
+        version: link:../../packages/simulation
       '@zouma/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -160,6 +163,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.17
         version: 3.4.19(tsx@4.22.4)
+      tsx:
+        specifier: ^4.22.4
+        version: 4.22.4
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -193,6 +199,22 @@ importers:
         version: 5.9.3
 
   packages/prompts: {}
+
+  packages/simulation:
+    dependencies:
+      '@zouma/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+    devDependencies:
+      '@types/node':
+        specifier: ^22.19.21
+        version: 22.19.21
+      tsx:
+        specifier: ^4.22.4
+        version: 4.22.4
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/ui:
     dependencies:

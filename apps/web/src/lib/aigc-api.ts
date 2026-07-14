@@ -7,17 +7,24 @@ export function getCorsHeaders(request: Request) {
   const allowedOrigins = getAllowedCorsOrigins()
   const requestOrigin = request.headers.get("origin")
   const allowedOrigin =
-    requestOrigin && allowedOrigins.includes(requestOrigin) ? requestOrigin : allowedOrigins[0]
+    requestOrigin && allowedOrigins.includes(requestOrigin)
+      ? requestOrigin
+      : allowedOrigins[0]
 
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
-    "Access-Control-Allow-Methods": "GET,POST,PATCH,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, X-Admin-Token, X-API-Key, Authorization, X-Villager-Token",
+    "Access-Control-Allow-Methods": "GET,POST,PATCH,DELETE,OPTIONS",
+    "Access-Control-Allow-Headers":
+      "Content-Type, X-Admin-Token, X-API-Key, Authorization, X-Villager-Token",
     Vary: "Origin",
   }
 }
 
-export function jsonResponse(request: Request, body: unknown, init?: ResponseInit) {
+export function jsonResponse(
+  request: Request,
+  body: unknown,
+  init?: ResponseInit,
+) {
   return NextResponse.json(body, {
     ...init,
     headers: {
@@ -54,6 +61,8 @@ export function getChinaDayRange(date: string) {
   }
 }
 
-export function isPlainObject(value: unknown): value is Record<string, unknown> {
+export function isPlainObject(
+  value: unknown,
+): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
 }

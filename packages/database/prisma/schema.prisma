@@ -944,3 +944,108 @@ model AuditLog {
   @@index([action, createdAt])
   @@map("audit_log")
 }
+
+// ==== 认养规则模拟（与真实运营数据完全隔离） ====
+
+model SimulationWorld {
+  id         String          @id
+  scenarioId String          @map("scenario_id")
+  randomSeed Int             @map("random_seed")
+  config     Json
+  payload    Json
+  worldHash  String          @map("world_hash")
+  dataOrigin String          @default("simulation") @map("data_origin")
+  createdAt  DateTime        @default(now()) @map("created_at")
+  runs       SimulationRun[]
+
+  @@index([scenarioId, randomSeed])
+  @@index([worldHash])
+  @@map("simulation_world")
+}
+
+model SimulationRun {
+  id             String              @id
+  pairId         String?             @map("pair_id")
+  worldId        String              @map("world_id")
+  runName        String              @map("run_name")
+  policyVersion  String              @map("policy_version")
+  policyRevision String              @map("policy_revision")
+  status         String              @default("pending")
+  result         Json?
+  metrics        Json?
+  decision       String?
+  errorMessage   String?             @map("error_message") @db.Text
+  startedAt      DateTime?           @map("started_at")
+  completedAt    DateTime?           @map("completed_at")
+  archivedAt     DateTime?           @map("archived_at")
+  dataOrigin     String              @default("simulation") @map("data_origin")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+  world          SimulationWorld     @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  events         SimulationEvent[]
+  badCases       SimulationBadCase[]
+
+  @@index([pairId])
+  @@index([worldId, policyVersion])
+  @@index([status, createdAt])
+  @@index([archivedAt, createdAt])
+  @@map("simulation_run")
+}
+
+model SimulationEvent {
+  id             String        @id
+  runId          String        @map("run_id")
+  scenarioId     String        @map("scenario_id")
+  randomSeed     Int           @map("random_seed")
+  eventType      String        @map("event_type")
+  occurredAt     DateTime      @map("occurred_at")
+  adoptionId     String?       @map("adoption_id")
+  taskId         String?       @map("task_id")
+  entityType     String?       @map("entity_type")
+  entityId       String?       @map("entity_id")
+  actorId        String?       @map("actor_id")
+  actorType      String        @map("actor_type")
+  fromStatus     String?       @map("from_status")
+  toStatus       String?       @map("to_status")
+  payload        Json?
+  dataOrigin     String        @default("simulation") @map("data_origin")
+  policyVersion  String        @map("policy_version")
+  policyRevision String        @map("policy_revision")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  run            SimulationRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, occurredAt])
+  @@index([runId, adoptionId, occurredAt])
+  @@index([runId, taskId, occurredAt])
+  @@index([scenarioId, randomSeed, occurredAt])
+  @@index([entityType, entityId, occurredAt])
+  @@index([actorId, occurredAt])
+  @@index([eventType, occurredAt])
+  @@index([policyVersion, occurredAt])
+  @@map("simulation_event")
+}
+
+model SimulationBadCase {
+  id                String        @id
+  runId             String        @map("run_id")
+  category          String
+  severity          String
+  title             String
+  description       String        @db.Text
+  taskId            String?       @map("task_id")
+  adoptionId        String?       @map("adoption_id")
+  eventIds          Json          @default("[]") @map("event_ids")
+  rootCause         String?       @map("root_cause") @db.Text
+  improvementAction String?       @map("improvement_action") @db.Text
+  dataOrigin        String        @default("simulation") @map("data_origin")
+  policyVersion     String        @map("policy_version")
+  policyRevision    String        @map("policy_revision")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  run               SimulationRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, category, severity])
+  @@index([runId, taskId])
+  @@index([policyVersion, createdAt])
+  @@map("simulation_bad_case")
+}

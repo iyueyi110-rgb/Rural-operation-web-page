@@ -36,7 +36,9 @@ NEXT_PUBLIC_AMAP_KEY="<same-as-amap-key>"
 JWT_SECRET="<64-char-hex>"
 CRON_SECRET="<64-char-hex>"
 ADMIN_API_TOKEN="<64-char-hex>"
-NEXT_PUBLIC_ADMIN_API_TOKEN="<same-as-admin-api-token>"
+WEB_API_BASE="https://zoumavillage.xyz/api/v1"
+ADMIN_LOGIN_PASSWORD="<independent-admin-login-password>"
+ADMIN_SESSION_SECRET="<independent-64-char-hex>"
 
 # Optional services. Leave empty unless providers are configured.
 SMS_API_KEY=""
@@ -50,6 +52,9 @@ NEXT_PUBLIC_HOME_HERO_VIDEO_URL=""
 Required production checks:
 
 - `NEXT_PUBLIC_WEB_API_BASE` must end with `/api/v1`.
+- `WEB_API_BASE` must end with `/api/v1` and is configured only on the Admin server.
+- `ADMIN_LOGIN_PASSWORD`, `ADMIN_SESSION_SECRET`, and `ADMIN_API_TOKEN` must be independent server-only values.
+- The built-in Admin login limiter has both per-client and process-global failure windows, but its bounded in-memory store is local to one warm serverless instance. Multi-instance production must inject a shared failure store or enforce an equivalent platform-level global login rule; ordinary `X-Forwarded-For` is intentionally ignored.
 - `QWEATHER_API_HOST` must be `https://nu4wcvrj9f.re.qweatherapi.com`.
 - `DATABASE_URL` must use the Supabase Session Pooler on port `6543` and include `?pgbouncer=true`.
 - `CORS_ALLOWED_ORIGINS` must include both production origins.

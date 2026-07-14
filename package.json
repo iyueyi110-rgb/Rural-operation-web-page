@@ -8,7 +8,11 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
-    "format": "prettier --check ."
+    "format": "prettier --check .",
+    "simulation:run": "pnpm --filter @zouma/simulation cli run",
+    "simulation:regression": "pnpm --filter @zouma/simulation cli regression",
+    "simulation:compare": "pnpm --filter @zouma/simulation cli compare",
+    "simulation:export": "pnpm --filter @zouma/simulation cli export"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.48.1",

@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-export type { Prisma } from "@prisma/client"
+export type { Prisma, PrismaClient } from "@prisma/client"
 export { getRedis } from "./redis"
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient }

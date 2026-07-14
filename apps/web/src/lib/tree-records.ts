@@ -1,10 +1,18 @@
 import "server-only"
 
 import { prisma } from "@zouma/database"
-import type { HarvestBookingData, HarvestShipmentData, OrchardTreeData, TreeAdoptionData, TreeCareLogData } from "@zouma/contracts"
+import type {
+  HarvestBookingData,
+  HarvestShipmentData,
+  OrchardTreeData,
+  TreeAdoptionData,
+  TreeCareLogData,
+} from "@zouma/contracts"
 
 import { orchardTreeOptions } from "@web/lib/trees-data"
 import { resolveTreeHiddenGeo } from "@web/lib/tree-geo"
+
+export { isAdminRequest } from "@web/lib/admin-request"
 
 export interface TreeProfile extends OrchardTreeData {
   nameKey: string
@@ -33,7 +41,8 @@ const fallbackTrees: TreeProfile[] = orchardTreeOptions.map((tree) => ({
   fireMemory: undefined,
   newShootsRecord: undefined,
   growthPhotos: [],
-  adoptStatus: tree.availability === "maintenance" ? "maintenance" : "available",
+  adoptStatus:
+    tree.availability === "maintenance" ? "maintenance" : "available",
   adoptPrice: undefined,
   harvestSeason: undefined,
   fruitVariety: tree.species,
@@ -48,7 +57,9 @@ const fallbackTrees: TreeProfile[] = orchardTreeOptions.map((tree) => ({
 }))
 
 function coerceGrowthPhotos(value: unknown): string[] {
-  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : []
 }
 
 function enrichTree(tree: {
@@ -152,10 +163,18 @@ export async function listTreeProfiles(): Promise<TreeProfile[]> {
   }
 }
 
-export async function getTreeProfile(code: string): Promise<TreeProfile | null> {
+export async function getTreeProfile(
+  code: string,
+): Promise<TreeProfile | null> {
   try {
     const tree = await prisma.orchardTree.findFirst({
-      where: { OR: [{ treeCode: code }, { treeCode: code.toLowerCase() }, { id: code }] },
+      where: {
+        OR: [
+          { treeCode: code },
+          { treeCode: code.toLowerCase() },
+          { id: code },
+        ],
+      },
       include: {
         careLogs: { orderBy: { createdAt: "desc" } },
         harvestBookings: {
@@ -172,7 +191,10 @@ export async function getTreeProfile(code: string): Promise<TreeProfile | null> 
     console.error("Tree detail fallback activated:", caughtError)
   }
 
-  return fallbackTrees.find((tree) => tree.treeCode === code || tree.id === code) ?? null
+  return (
+    fallbackTrees.find((tree) => tree.treeCode === code || tree.id === code) ??
+    null
+  )
 }
 
 export async function getTreeAdoptionRights(
@@ -185,10 +207,15 @@ export async function getTreeAdoptionRights(
       orderBy: { createdAt: "desc" },
       take: 10,
     })
-    const record = records.find((item) => item.status === "active") ?? records[0]
+    const record =
+      records.find((item) => item.status === "active") ?? records[0]
 
     return record
-      ? { plan: record.plan, status: record.status, rightsJson: record.rightsJson }
+      ? {
+          plan: record.plan,
+          status: record.status,
+          rightsJson: record.rightsJson,
+        }
       : null
   } catch (caughtError) {
     console.error("Tree adoption rights fallback activated:", caughtError)
@@ -196,7 +223,9 @@ export async function getTreeAdoptionRights(
   }
 }
 
-export async function listTreeAdoptions(adopterPhone?: string): Promise<TreeAdoptionData[]> {
+export async function listTreeAdoptions(
+  adopterPhone?: string,
+): Promise<TreeAdoptionData[]> {
   const records = await prisma.treeAdoption.findMany({
     where: adopterPhone ? { adopterPhone: maskPhone(adopterPhone) } : undefined,
     include: {
@@ -218,14 +247,20 @@ export async function listTreeAdoptions(adopterPhone?: string): Promise<TreeAdop
     id: record.id,
     treeId: record.treeId,
     treeCode: record.tree.treeCode,
-    hiddenGeo: resolveTreeHiddenGeo(record.tree.hiddenGeo, record.tree.lat, record.tree.lng),
+    hiddenGeo: resolveTreeHiddenGeo(
+      record.tree.hiddenGeo,
+      record.tree.lat,
+      record.tree.lng,
+    ),
     plan: record.plan,
     adopterName: record.adopterName ?? undefined,
     adopterPhone: record.adopterPhone ?? undefined,
     status: record.status,
     createdAt: record.createdAt.toISOString(),
     updatedAt: record.updatedAt.toISOString(),
-    harvestBookings: record.tree.harvestBookings.map((booking) => mapHarvestBooking(booking)),
+    harvestBookings: record.tree.harvestBookings.map((booking) =>
+      mapHarvestBooking(booking),
+    ),
   }))
 }
 
@@ -258,7 +293,12 @@ async function backfillTreeHiddenGeo(
 
 export function maskPhone(phone?: string) {
   if (!phone) return undefined
-  return phone.replace(/1[3-9]\d{9}/g, (value) => `${value.slice(0, 3)}****${value.slice(-4)}`).trim()
+  return phone
+    .replace(
+      /1[3-9]\d{9}/g,
+      (value) => `${value.slice(0, 3)}****${value.slice(-4)}`,
+    )
+    .trim()
 }
 
 export function maskAddress(address?: string) {
@@ -266,15 +306,6 @@ export function maskAddress(address?: string) {
   const trimmed = address.trim()
   if (trimmed.length <= 8) return `${trimmed.slice(0, 2)}***`
   return `${trimmed.slice(0, 6)}***${trimmed.slice(-2)}`
-}
-
-export function isAdminRequest(request: Request) {
-  const expected = process.env.ADMIN_API_TOKEN
-  if (!expected) {
-    console.error("ADMIN_API_TOKEN environment variable is not configured")
-    return false
-  }
-  return request.headers.get("x-admin-token") === expected
 }
 
 interface HarvestShipmentRecord {
@@ -292,15 +323,22 @@ interface HarvestShipmentRecord {
   updatedAt: Date
 }
 
-export function mapHarvestShipment(record: HarvestShipmentRecord, options: { maskPrivateFields?: boolean } = {}): HarvestShipmentData {
+export function mapHarvestShipment(
+  record: HarvestShipmentRecord,
+  options: { maskPrivateFields?: boolean } = {},
+): HarvestShipmentData {
   const maskPrivateFields = options.maskPrivateFields ?? true
 
   return {
     id: record.id,
     harvestBookingId: record.harvestBookingId,
     recipientName: record.recipientName,
-    recipientPhone: maskPrivateFields ? (maskPhone(record.recipientPhone) ?? "") : record.recipientPhone,
-    recipientAddress: maskPrivateFields ? (maskAddress(record.recipientAddress) ?? "") : record.recipientAddress,
+    recipientPhone: maskPrivateFields
+      ? (maskPhone(record.recipientPhone) ?? "")
+      : record.recipientPhone,
+    recipientAddress: maskPrivateFields
+      ? (maskAddress(record.recipientAddress) ?? "")
+      : record.recipientAddress,
     courier: record.courier ?? undefined,
     trackingNumber: record.trackingNumber ?? undefined,
     status: record.status as HarvestShipmentData["status"],
@@ -311,20 +349,23 @@ export function mapHarvestShipment(record: HarvestShipmentRecord, options: { mas
   }
 }
 
-export function mapHarvestBooking(record: {
-  id: string
-  treeId: string
-  scheduledDate: string
-  timeSlot: string
-  guestCount: number
-  guestName: string | null
-  guestPhone: string | null
-  fruitDestination?: string | null
-  destinationNote?: string | null
-  status: string
-  createdAt: Date
-  shipment?: HarvestShipmentRecord | null
-}, options: { maskPrivateFields?: boolean } = {}): HarvestBookingData {
+export function mapHarvestBooking(
+  record: {
+    id: string
+    treeId: string
+    scheduledDate: string
+    timeSlot: string
+    guestCount: number
+    guestName: string | null
+    guestPhone: string | null
+    fruitDestination?: string | null
+    destinationNote?: string | null
+    status: string
+    createdAt: Date
+    shipment?: HarvestShipmentRecord | null
+  },
+  options: { maskPrivateFields?: boolean } = {},
+): HarvestBookingData {
   return {
     id: record.id,
     treeId: record.treeId,
@@ -337,6 +378,8 @@ export function mapHarvestBooking(record: {
     destinationNote: record.destinationNote ?? undefined,
     status: record.status,
     createdAt: record.createdAt.toISOString(),
-    shipment: record.shipment ? mapHarvestShipment(record.shipment, options) : undefined,
+    shipment: record.shipment
+      ? mapHarvestShipment(record.shipment, options)
+      : undefined,
   }
 }
