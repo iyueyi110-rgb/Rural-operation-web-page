@@ -28,6 +28,11 @@ export function HomeMobileMenu({
         aria-label={menuLabel}
         className="grid h-10 w-10 place-items-center rounded-full border border-white/18 text-white transition hover:bg-white/10"
         onClick={() => setOpen(true)}
+        onPointerDown={(event) => {
+          event.preventDefault()
+          event.stopPropagation()
+          setOpen(true)
+        }}
         type="button"
       >
         <Menu aria-hidden="true" className="h-5 w-5" />
