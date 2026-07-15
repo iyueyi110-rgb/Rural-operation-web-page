@@ -14,7 +14,7 @@
 - Do not auto-stash, force-push, delete remote branches, or resolve merge conflicts automatically.
 - Keep `_aigc-archive/` on local disk and out of the target branch tree.
 - Preserve `outputs/`, `走马村云脑系统.command`, `lizhi-renling`, and `gudaoshushi`.
-- Baseline tests have one known unrelated Web contract failure; no additional failure is allowed.
+- Baseline tests have two known unrelated contract failures (one Web and one Admin); no additional failure is allowed.
 
 ---
 
@@ -64,7 +64,7 @@
 - [ ] Verify `origin/main` is an ancestor of `HEAD` and the branch diff has no whitespace errors introduced by the merge.
 - [ ] Run `pnpm type-check`; require exit 0.
 - [ ] Run `pnpm build`; require exit 0.
-- [ ] Run `pnpm -r --if-present test`; require the failure set to be identical to the recorded single Web contract baseline.
+- [ ] Run `pnpm -r --if-present test` plus the Admin test command separately when recursive execution stops at Web; require the failure names to match the recorded Web and Admin contract baseline exactly.
 
 ### Task 5: Publish once and close out
 

@@ -162,10 +162,11 @@ pnpm -r --if-present test
 
 - `pnpm type-check`：通过。
 - `pnpm build`：通过；无本地数据库时会打印降级日志，但退出码为 0。
-- 测试：Simulation 60/60、Utils 8/8 通过；Web 96/97 通过。
-- 唯一既有失败：`apps/web/src/lib/home-route-contract.test.ts` 中 `supports button, wheel, keyboard and touch page navigation`，缺少 `zouma:home-deck-next` 契约字符串。
+- 测试：Simulation 60/60、Utils 8/8 通过；合并前 Web 96/97 通过，合并后因 `origin/main` 新增一项测试变为 97/98 通过；Admin 51/52 通过。
+- 既有失败 1：`apps/web/src/lib/home-route-contract.test.ts` 中 `supports button, wheel, keyboard and touch page navigation`，缺少 `zouma:home-deck-next` 契约字符串。
+- 既有失败 2：`apps/admin/src/lib/villagers-page-contract.test.ts` 中 `handles connection failures while saving a villager`，测试要求 `catch {`，页面实际使用 `catch (error)`。该失败在初次递归测试中被 Web 包率先失败后的中止行为遮蔽；安全分支比对确认相关 Admin 文件未被本次清理或合并修改。
 
-本次验收允许该已知失败保持不变，但不得出现新的失败。若类型检查、构建失败，或测试失败数量/名称变化，立即停止且不推送。
+本次验收允许上述两个已知失败保持不变，但不得出现新的失败。若类型检查、构建失败，或测试失败名称变化，立即停止且不推送。
 
 ## Phase 6：单次推送与远程验证
 
