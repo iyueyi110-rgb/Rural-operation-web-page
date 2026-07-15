@@ -2,8 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 
-import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
-import { adminApiBase, adminApiToken, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
+import {
+  AdminDataTable,
+  type TableColumn,
+} from "@admin/components/admin-data-table"
+import {
+  adminApiBase,
+  fetchAdminApi,
+  fetchWithTimeout,
+} from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface CareLog {
@@ -68,7 +75,10 @@ export default function TreesAdminPage() {
         body: JSON.stringify({
           fireMemory,
           newShootsRecord,
-          growthPhotos: growthPhotosText.split("\n").map((item) => item.trim()).filter(Boolean),
+          growthPhotos: growthPhotosText
+            .split("\n")
+            .map((item) => item.trim())
+            .filter(Boolean),
           adoptStatus: selected.adoptStatus,
         }),
       })
@@ -84,7 +94,11 @@ export default function TreesAdminPage() {
     try {
       await fetchAdminApi(`/trees/${selected.treeCode}/care-logs`, {
         method: "POST",
-        body: JSON.stringify({ logType, content: logContent, operator: "运营后台" }),
+        body: JSON.stringify({
+          logType,
+          content: logContent,
+          operator: "运营后台",
+        }),
       })
       setMessage("养护日志已录入。")
       await loadTrees()
@@ -103,7 +117,6 @@ export default function TreesAdminPage() {
 
     const uploadResponse = await fetchWithTimeout(`${adminApiBase}/upload`, {
       method: "POST",
-      headers: { "X-Admin-Token": adminApiToken },
       body: formData,
     })
 
@@ -113,7 +126,9 @@ export default function TreesAdminPage() {
       return
     }
 
-    const uploadPayload = (await uploadResponse.json()) as { data?: { url?: string } }
+    const uploadPayload = (await uploadResponse.json()) as {
+      data?: { url?: string }
+    }
     const imageUrl = uploadPayload.data?.url
     if (!imageUrl) {
       setMessage("图片上传失败。")
@@ -155,11 +170,19 @@ export default function TreesAdminPage() {
   return (
     <div className="grid gap-5">
       <header>
-        <p className="text-sm font-bold text-water">{adminCopy.shell.subtitle}</p>
-        <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.trees.title}</h1>
+        <p className="text-sm font-bold text-water">
+          {adminCopy.shell.subtitle}
+        </p>
+        <h1 className="mt-1 text-2xl font-extrabold">
+          {adminCopy.trees.title}
+        </h1>
       </header>
 
-      {message ? <div className="rounded-md bg-rice p-3 text-sm font-bold text-ink/70">{message}</div> : null}
+      {message ? (
+        <div className="rounded-md bg-rice p-3 text-sm font-bold text-ink/70">
+          {message}
+        </div>
+      ) : null}
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
         <AdminDataTable
@@ -175,20 +198,36 @@ export default function TreesAdminPage() {
           {selected ? (
             <div className="grid gap-4">
               <div>
-                <p className="text-sm font-bold text-water">{adminCopy.trees.detail}</p>
-                <h2 className="mt-1 text-xl font-extrabold">{selected.treeCode}</h2>
+                <p className="text-sm font-bold text-water">
+                  {adminCopy.trees.detail}
+                </p>
+                <h2 className="mt-1 text-xl font-extrabold">
+                  {selected.treeCode}
+                </h2>
               </div>
               <label className="grid gap-2 text-sm font-bold">
                 山火记忆
-                <textarea className="min-h-28 rounded-md border border-stone bg-rice p-3 font-semibold" onChange={(event) => setFireMemory(event.target.value)} value={fireMemory} />
+                <textarea
+                  className="min-h-28 rounded-md border border-stone bg-rice p-3 font-semibold"
+                  onChange={(event) => setFireMemory(event.target.value)}
+                  value={fireMemory}
+                />
               </label>
               <label className="grid gap-2 text-sm font-bold">
                 新梢记录
-                <textarea className="min-h-28 rounded-md border border-stone bg-rice p-3 font-semibold" onChange={(event) => setNewShootsRecord(event.target.value)} value={newShootsRecord} />
+                <textarea
+                  className="min-h-28 rounded-md border border-stone bg-rice p-3 font-semibold"
+                  onChange={(event) => setNewShootsRecord(event.target.value)}
+                  value={newShootsRecord}
+                />
               </label>
               <label className="grid gap-2 text-sm font-bold">
                 图片 URL 列表
-                <textarea className="min-h-20 rounded-md border border-stone bg-rice p-3 font-mono text-xs" onChange={(event) => setGrowthPhotosText(event.target.value)} value={growthPhotosText} />
+                <textarea
+                  className="min-h-20 rounded-md border border-stone bg-rice p-3 font-mono text-xs"
+                  onChange={(event) => setGrowthPhotosText(event.target.value)}
+                  value={growthPhotosText}
+                />
               </label>
               <label className="grid gap-2 text-sm font-bold">
                 上传成长照片
@@ -203,13 +242,23 @@ export default function TreesAdminPage() {
                   type="file"
                 />
               </label>
-              <button className="h-11 rounded-full bg-ink px-5 text-sm font-bold text-white" onClick={saveTree} type="button">
+              <button
+                className="h-11 rounded-full bg-ink px-5 text-sm font-bold text-white"
+                onClick={saveTree}
+                type="button"
+              >
                 {isUploading ? "上传中..." : adminCopy.trees.save}
               </button>
 
               <div className="border-t border-stone pt-4">
-                <p className="text-sm font-bold text-water">{adminCopy.trees.careLogs}</p>
-                <select className="mt-3 h-10 w-full rounded-md border border-stone bg-rice px-3" onChange={(event) => setLogType(event.target.value)} value={logType}>
+                <p className="text-sm font-bold text-water">
+                  {adminCopy.trees.careLogs}
+                </p>
+                <select
+                  className="mt-3 h-10 w-full rounded-md border border-stone bg-rice px-3"
+                  onChange={(event) => setLogType(event.target.value)}
+                  value={logType}
+                >
                   <option value="watering">浇灌</option>
                   <option value="pruning">修剪</option>
                   <option value="fertilizing">施肥</option>
@@ -217,23 +266,38 @@ export default function TreesAdminPage() {
                   <option value="photo">照片</option>
                   <option value="harvest">采摘</option>
                 </select>
-                <textarea className="mt-3 min-h-20 w-full rounded-md border border-stone bg-rice p-3 text-sm font-semibold" onChange={(event) => setLogContent(event.target.value)} value={logContent} />
-                <button className="mt-3 h-10 w-full rounded-full bg-moss px-5 text-sm font-bold text-white" onClick={addCareLog} type="button">
+                <textarea
+                  className="mt-3 min-h-20 w-full rounded-md border border-stone bg-rice p-3 text-sm font-semibold"
+                  onChange={(event) => setLogContent(event.target.value)}
+                  value={logContent}
+                />
+                <button
+                  className="mt-3 h-10 w-full rounded-full bg-moss px-5 text-sm font-bold text-white"
+                  onClick={addCareLog}
+                  type="button"
+                >
                   {adminCopy.trees.addLog}
                 </button>
                 <div className="mt-4 grid gap-3">
                   {selected.careLogs.map((log) => (
-                    <article className="rounded-md bg-rice p-3 text-sm" key={log.id}>
+                    <article
+                      className="rounded-md bg-rice p-3 text-sm"
+                      key={log.id}
+                    >
                       <div className="font-bold">{log.logType}</div>
                       <p className="mt-1 text-ink/62">{log.content}</p>
-                      <div className="mt-1 text-xs text-ink/46">{new Date(log.createdAt).toLocaleString()}</div>
+                      <div className="mt-1 text-xs text-ink/46">
+                        {new Date(log.createdAt).toLocaleString()}
+                      </div>
                     </article>
                   ))}
                 </div>
               </div>
             </div>
           ) : (
-            <p className="text-sm font-semibold text-ink/54">{adminCopy.common.noSelection}</p>
+            <p className="text-sm font-semibold text-ink/54">
+              {adminCopy.common.noSelection}
+            </p>
           )}
         </aside>
       </div>

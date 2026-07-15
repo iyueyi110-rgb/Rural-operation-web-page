@@ -7,12 +7,14 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "lint": "next lint",
+    "test": "node --import tsx --test src/lib/*.test.ts",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@zouma/contracts": "workspace:*",
     "@zouma/database": "workspace:*",
     "@zouma/prompts": "workspace:*",
+    "@zouma/simulation": "workspace:*",
     "@zouma/ui": "workspace:*",
     "@zouma/utils": "workspace:*",
     "framer-motion": "^12.40.0",
@@ -34,6 +36,7 @@
     "eslint-config-next": "14.2.35",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.22.4",
     "typescript": "^5.9.3"
   }
 }

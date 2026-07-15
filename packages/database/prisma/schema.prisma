@@ -52,13 +52,48 @@ model SpaceNode {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
-  presenceLogs PresenceLog[]
-  dailyScores  NodeDailyScore[]
-  orders       UnifiedOrder[]
-  devices      Device[]
-  products     Product[]
-  villagers    Villager[]
-  tasks        Task[]
+  // ==== 建筑空间扩展字段（改造策略系统） ====
+  // 基础建筑信息
+  buildingAge         Int?    @map("building_age")
+  buildingMaterial    String? @map("building_material")
+  buildingFloors      Int?    @map("building_floors")
+  buildingArea        Float?  @map("building_area")
+  buildingOrientation String? @map("building_orientation")
+  heritageStatus      String? @map("heritage_status")
+  lastRenovationAt    String? @map("last_renovation_at")
+
+  // 建筑状况评分 (1-5)
+  structuralCondition String? @map("structural_condition")
+  aestheticCondition  String? @map("aesthetic_condition")
+  functionalCondition String? @map("functional_condition")
+
+  // 节能相关
+  energyScore          Float?  @map("energy_score")
+  insulationQuality    String? @map("insulation_quality")
+  ventilationQuality   String? @map("ventilation_quality")
+  solarPotential       String? @map("solar_potential")
+  energyConsumptionEst Float?  @map("energy_consumption_est")
+
+  // 生态相关
+  greeneryCoverage  Float?  @map("greenery_coverage")
+  waterPermeability String? @map("water_permeability")
+  biodiversityIndex String? @map("biodiversity_index")
+  microclimateZone  String? @map("microclimate_zone")
+
+  // 照片与文档
+  photos Json @default("[]")
+
+  presenceLogs         PresenceLog[]
+  dailyScores          NodeDailyScore[]
+  orders               UnifiedOrder[]
+  devices              Device[]
+  products             Product[]
+  villagers            Villager[]
+  tasks                Task[]
+  assessments          BuildingAssessment[]
+  diagnoses            SpatialDiagnosis[]
+  renovationStrategies RenovationStrategy[]
+  sitePotentials       SitePotential[]
 
   @@map("space_node")
 }
@@ -469,6 +504,161 @@ model Alert {
   @@map("alert")
 }
 
+// ==== 建筑空间改造策略系统 ====
+
+model BuildingAssessment {
+  id         String   @id @default(cuid())
+  nodeId     String
+  assessorId String?  @map("assessor_id")
+  assessedAt DateTime @default(now()) @map("assessed_at")
+
+  // 综合评分 (1-5)
+  structuralScore Int @map("structural_score")
+  aestheticScore  Int @map("aesthetic_score")
+  functionalScore Int @map("functional_score")
+  safetyScore     Int @map("safety_score")
+  energyScore     Int @map("energy_score")
+  ecologicalScore Int @map("ecological_score")
+
+  // 拆除与再利用评估
+  demolitionRecommendation String? @map("demolition_recommendation")
+  demolitionReason         String? @map("demolition_reason") @db.Text
+  reusePotential           String? @map("reuse_potential")
+  retainedElements         Json    @default("[]") @map("retained_elements")
+
+  // 发现的问题
+  issues Json    @default("[]")
+  notes  String? @db.Text
+  photos Json    @default("[]")
+
+  // 评估来源
+  source String @default("admin")
+
+  node SpaceNode @relation(fields: [nodeId], references: [id])
+
+  @@index([nodeId, assessedAt])
+  @@map("building_assessment")
+}
+
+model SpatialDiagnosis {
+  id      String @id @default(cuid())
+  nodeId  String
+  bizDate String @map("biz_date")
+
+  // 诊断结论
+  urgency      String  @default("medium")
+  issues       Json    @default("[]")
+  evidenceJson Json    @default("{}") @map("evidence_json")
+  aiSummary    String? @map("ai_summary") @db.Text
+
+  // 诊断维度
+  energyIssues     Json @default("[]") @map("energy_issues")
+  spatialIssues    Json @default("[]") @map("spatial_issues")
+  ecologicalIssues Json @default("[]") @map("ecological_issues")
+
+  status    String   @default("draft")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  node                 SpaceNode            @relation(fields: [nodeId], references: [id])
+  renovationStrategies RenovationStrategy[]
+
+  @@index([nodeId, bizDate])
+  @@index([urgency, status])
+  @@map("spatial_diagnosis")
+}
+
+model RenovationStrategy {
+  id          String  @id @default(cuid())
+  nodeId      String
+  diagnosisId String? @map("diagnosis_id")
+
+  // 策略分类
+  category    String
+  title       String
+  description String @db.Text
+
+  // 改造维度: energy | spatial | ecological
+  dimension String
+
+  // 建筑专业内容
+  materials          Json @default("[]")
+  techniques         Json @default("[]")
+  energyConstruction Json @default("[]") @map("energy_construction")
+  ecologicalMeasures Json @default("[]") @map("ecological_measures")
+
+  // 干预类型与空间设计
+  interventionType   String? @map("intervention_type")
+  oldNewRelationship String? @map("old_new_relationship") @db.Text
+  architecturalForm  Json    @default("{}") @map("architectural_form")
+  buildingProgram    Json    @default("[]") @map("building_program")
+
+  // 预估
+  estimatedDuration  String? @map("estimated_duration")
+  difficultyLevel    String? @map("difficulty_level")
+  estimatedCostRange String? @map("estimated_cost_range")
+  expectedImpact     String? @map("expected_impact") @db.Text
+
+  // 优先级与状态
+  priority String @default("medium")
+  status   String @default("draft")
+
+  // 审核与执行
+  approvedBy  String?   @map("approved_by")
+  approvedAt  DateTime? @map("approved_at")
+  completedAt DateTime? @map("completed_at")
+  verifiedAt  DateTime? @map("verified_at")
+
+  // 效果评估
+  beforeMetrics Json @default("{}") @map("before_metrics")
+  afterMetrics  Json @default("{}") @map("after_metrics")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  node      SpaceNode         @relation(fields: [nodeId], references: [id])
+  diagnosis SpatialDiagnosis? @relation(fields: [diagnosisId], references: [id])
+
+  @@index([nodeId, status])
+  @@index([category, priority])
+  @@index([dimension, status])
+  @@map("renovation_strategy")
+}
+
+model SitePotential {
+  id     String @id @default(cuid())
+  nodeId String
+
+  locationName String  @map("location_name")
+  locationLat  Float   @map("location_lat")
+  locationLng  Float   @map("location_lng")
+  siteArea     Float?  @map("site_area")
+  currentUse   String? @map("current_use")
+
+  suitabilityScore   Int @map("suitability_score")
+  accessibilityScore Int @map("accessibility_score")
+  viewScore          Int @map("view_score")
+  ecologyImpactScore Int @map("ecology_impact_score")
+
+  recommendedProgram String? @map("recommended_program")
+  recommendedForm    String? @map("recommended_form")
+  recommendedFloors  Int?    @map("recommended_floors")
+  recommendedGFA     Float?  @map("recommended_gfa")
+
+  formKeywords Json    @default("[]") @map("form_keywords")
+  constraints  Json    @default("[]")
+  rationale    String? @db.Text
+
+  status    String   @default("proposed")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  node SpaceNode @relation(fields: [nodeId], references: [id])
+
+  @@index([nodeId, suitabilityScore])
+  @@map("site_potential")
+}
+
 model Courtyard {
   id            String              @id @default(cuid())
   name          String
@@ -753,4 +943,109 @@ model AuditLog {
   @@index([actorId, createdAt])
   @@index([action, createdAt])
   @@map("audit_log")
+}
+
+// ==== 认养规则模拟（与真实运营数据完全隔离） ====
+
+model SimulationWorld {
+  id         String          @id
+  scenarioId String          @map("scenario_id")
+  randomSeed Int             @map("random_seed")
+  config     Json
+  payload    Json
+  worldHash  String          @map("world_hash")
+  dataOrigin String          @default("simulation") @map("data_origin")
+  createdAt  DateTime        @default(now()) @map("created_at")
+  runs       SimulationRun[]
+
+  @@index([scenarioId, randomSeed])
+  @@index([worldHash])
+  @@map("simulation_world")
+}
+
+model SimulationRun {
+  id             String              @id
+  pairId         String?             @map("pair_id")
+  worldId        String              @map("world_id")
+  runName        String              @map("run_name")
+  policyVersion  String              @map("policy_version")
+  policyRevision String              @map("policy_revision")
+  status         String              @default("pending")
+  result         Json?
+  metrics        Json?
+  decision       String?
+  errorMessage   String?             @map("error_message") @db.Text
+  startedAt      DateTime?           @map("started_at")
+  completedAt    DateTime?           @map("completed_at")
+  archivedAt     DateTime?           @map("archived_at")
+  dataOrigin     String              @default("simulation") @map("data_origin")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+  world          SimulationWorld     @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  events         SimulationEvent[]
+  badCases       SimulationBadCase[]
+
+  @@index([pairId])
+  @@index([worldId, policyVersion])
+  @@index([status, createdAt])
+  @@index([archivedAt, createdAt])
+  @@map("simulation_run")
+}
+
+model SimulationEvent {
+  id             String        @id
+  runId          String        @map("run_id")
+  scenarioId     String        @map("scenario_id")
+  randomSeed     Int           @map("random_seed")
+  eventType      String        @map("event_type")
+  occurredAt     DateTime      @map("occurred_at")
+  adoptionId     String?       @map("adoption_id")
+  taskId         String?       @map("task_id")
+  entityType     String?       @map("entity_type")
+  entityId       String?       @map("entity_id")
+  actorId        String?       @map("actor_id")
+  actorType      String        @map("actor_type")
+  fromStatus     String?       @map("from_status")
+  toStatus       String?       @map("to_status")
+  payload        Json?
+  dataOrigin     String        @default("simulation") @map("data_origin")
+  policyVersion  String        @map("policy_version")
+  policyRevision String        @map("policy_revision")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  run            SimulationRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, occurredAt])
+  @@index([runId, adoptionId, occurredAt])
+  @@index([runId, taskId, occurredAt])
+  @@index([scenarioId, randomSeed, occurredAt])
+  @@index([entityType, entityId, occurredAt])
+  @@index([actorId, occurredAt])
+  @@index([eventType, occurredAt])
+  @@index([policyVersion, occurredAt])
+  @@map("simulation_event")
+}
+
+model SimulationBadCase {
+  id                String        @id
+  runId             String        @map("run_id")
+  category          String
+  severity          String
+  title             String
+  description       String        @db.Text
+  taskId            String?       @map("task_id")
+  adoptionId        String?       @map("adoption_id")
+  eventIds          Json          @default("[]") @map("event_ids")
+  rootCause         String?       @map("root_cause") @db.Text
+  improvementAction String?       @map("improvement_action") @db.Text
+  dataOrigin        String        @default("simulation") @map("data_origin")
+  policyVersion     String        @map("policy_version")
+  policyRevision    String        @map("policy_revision")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  run               SimulationRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, category, severity])
+  @@index([runId, taskId])
+  @@index([policyVersion, createdAt])
+  @@map("simulation_bad_case")
 }

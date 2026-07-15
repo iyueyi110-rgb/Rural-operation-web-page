@@ -2,10 +2,12 @@ import {
   BarChart3,
   Bell,
   Bot,
+  Building2,
   CalendarDays,
   ClipboardList,
   Cpu,
   FileText,
+  GitCompareArrows,
   LayoutDashboard,
   Lightbulb,
   ListChecks,
@@ -23,7 +25,13 @@ import {
 } from "lucide-react"
 import type { ComponentType } from "react"
 
-export type AdminNavGroupKey = "command" | "fieldOps" | "assetsCommerce" | "villageWork" | "aiSystem"
+export type AdminNavGroupKey =
+  | "command"
+  | "fieldOps"
+  | "assetsCommerce"
+  | "villageWork"
+  | "renovation"
+  | "aiSystem"
 
 export interface AdminNavItem {
   key: string
@@ -60,6 +68,11 @@ export const adminNavGroups: AdminNavGroup[] = [
     key: "villageWork",
     label: "村民协作",
     description: "村民、农事与任务调度",
+  },
+  {
+    key: "renovation",
+    label: "空间改造",
+    description: "诊断、策略与建筑评估",
   },
   {
     key: "aiSystem",
@@ -200,6 +213,30 @@ export const adminNavItems: AdminNavItem[] = [
     icon: ListChecks,
   },
   {
+    key: "simulations",
+    label: "规则模拟",
+    href: "/simulations",
+    description: "认养履约 V0/V1 规则对照",
+    group: "villageWork",
+    icon: GitCompareArrows,
+  },
+  {
+    key: "renovation",
+    label: "改造策略",
+    href: "/renovation",
+    description: "空间诊断与改造方案",
+    group: "renovation",
+    icon: Building2,
+  },
+  {
+    key: "assessments",
+    label: "建筑评估",
+    href: "/assessments",
+    description: "结构、节能与拆除评估",
+    group: "renovation",
+    icon: ClipboardList,
+  },
+  {
     key: "contentFactory",
     label: "内容工厂",
     href: "/content-factory",
@@ -243,11 +280,16 @@ export const adminNavItems: AdminNavItem[] = [
 
 export function getAdminNavGroup(pathname: string) {
   const current = getAdminNavItem(pathname)
-  return current ? (adminNavGroups.find((group) => group.key === current.group) ?? defaultAdminNavGroup) : defaultAdminNavGroup
+  return current
+    ? (adminNavGroups.find((group) => group.key === current.group) ??
+        defaultAdminNavGroup)
+    : defaultAdminNavGroup
 }
 
 export function getAdminNavItem(pathname: string) {
-  return adminNavItems.find((item) => isAdminNavItemActive(pathname, item)) ?? null
+  return (
+    adminNavItems.find((item) => isAdminNavItemActive(pathname, item)) ?? null
+  )
 }
 
 export function getAdminNavItemsForGroup(groupKey: AdminNavGroupKey) {

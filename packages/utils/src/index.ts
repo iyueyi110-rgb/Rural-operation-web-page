@@ -9,3 +9,14 @@ export { computeScores } from "./scoring-engine"
 export type { ScoringInput, ScoringOutput } from "./scoring-engine"
 export { computeControlSuggestions } from "./control-engine"
 export type { ControlSensorInput, ControlSuggestion } from "./control-engine"
+export { diagnoseNode } from "./diagnosis-engine"
+export type { DiagnosisEvidenceSummary, DiagnosisInput, DiagnosisIssue, DiagnosisResult } from "./diagnosis-engine"
+export {
+  getStrategiesByDimension,
+  getStrategyByCode,
+  matchStrategies,
+  renovationStrategyCatalog,
+} from "./renovation-strategies"
+export type { StrategyTemplate } from "./renovation-strategies"
+export { computeRenovationImpact } from "./renovation-impact"
+export type { ImpactInput, ImpactReport } from "./renovation-impact"

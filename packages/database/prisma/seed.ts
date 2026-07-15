@@ -4,6 +4,7 @@ import { seedProducts } from "./seed-products"
 import { seedFarmingCalendar } from "./seed-farming-calendar"
 import { seedTrees } from "./seed-trees"
 import { seedDemoData } from "./seed-demo"
+import { seedRenovation } from "./seed-renovation"
 
 const seedTickets = [
   {
@@ -160,6 +161,7 @@ async function main() {
   await seedProducts()
   await seedFarmingCalendar()
   await seedDemoData()
+  await seedRenovation()
 }
 
 main()
