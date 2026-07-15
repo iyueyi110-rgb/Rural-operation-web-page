@@ -145,8 +145,10 @@ git merge --abort
 
 ```bash
 git merge-base --is-ancestor origin/main HEAD
-git diff --check origin/website-expression-polish...HEAD
+git diff --check HEAD^1..HEAD
 ```
+
+第二条命令只检查合并相对目标分支第一父提交引入的内容，避免把历史 Markdown 中用于强制换行的行尾双空格误判为本次合并问题。
 
 ## Phase 5：质量门禁
 
