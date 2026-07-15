@@ -8,6 +8,13 @@ coverage/
 outputs/simulation/
 tmp/simulation-store/
 tmp/simulation-launcher/
+
+# Local archives and generated diagnostics
+_aigc-archive/
+.playwright-cli/
+tmp/image-prompts/
+tmp/pdfs/
+tmp/*.png
 *.tsbuildinfo
 *.out.log
 *.err.log
