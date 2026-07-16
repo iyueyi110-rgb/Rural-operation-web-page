@@ -141,12 +141,22 @@ export function HeroScreen({
               {t("adoption.cta")}
             </Link>
             <Link
-              className="btn-ghost h-12 px-7 focus-visible:outline-white"
+              className="btn-ghost h-12 px-7 focus-visible:outline-white md:hidden"
               href={buildExploreHref(locale)}
             >
               {t("hero.startBrowsing")}
               <MoveRight aria-hidden="true" className="h-4 w-4" />
             </Link>
+            <button
+              className="btn-ghost hidden h-12 px-7 focus-visible:outline-white md:inline-flex"
+              onClick={() => {
+                window.dispatchEvent(new Event("zouma:home-deck-next"))
+              }}
+              type="button"
+            >
+              {t("hero.startBrowsing")}
+              <MoveRight aria-hidden="true" className="h-4 w-4" />
+            </button>
           </div>
 
           <div className="mt-8 grid w-full max-w-2xl grid-cols-1 gap-2 rounded-xl border border-white/12 bg-white/[0.055] p-2 backdrop-blur-xl min-[480px]:grid-cols-2 sm:mt-9 sm:grid-cols-3 sm:gap-3 sm:p-3">

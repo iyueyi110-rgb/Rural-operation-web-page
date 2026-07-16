@@ -17,5 +17,8 @@ test("handles unavailable villager APIs without an unhandled rejection", () => {
 
 test("handles connection failures while saving a villager", () => {
   assert.match(villagersPageSource, /async function saveVillager\(\)[\s\S]*?try \{/)
-  assert.match(villagersPageSource, /catch \{[\s\S]*?adminCopy\.villagers\.saveFailed/)
+  assert.match(
+    villagersPageSource,
+    /catch(?: \([^)]*\))? \{[\s\S]*?adminCopy\.villagers\.saveFailed/,
+  )
 })

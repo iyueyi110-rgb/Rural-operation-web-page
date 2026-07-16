@@ -73,3 +73,8 @@ test("supports button, wheel, keyboard and touch page navigation", () => {
   assert.match(pageDeckSource, /aria-current/)
   assert.match(pageDeckSource, /overflow-clip/)
 })
+
+test("keeps the start browsing action functional outside desktop deck mode", () => {
+  assert.match(heroSource, /buildExploreHref\(locale\)/)
+  assert.match(heroSource, /md:hidden/)
+})
