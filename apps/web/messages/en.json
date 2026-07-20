@@ -1416,6 +1416,7 @@
     "messages": {
       "loading": "Loading products",
       "loadFailed": "Products are unavailable",
+      "demoFallback": "Live product data is empty, so demo fallback data is shown.",
       "contactRequired": "Please fill contact name and phone",
       "submitFailed": "Order submission failed. Please retry."
     }
@@ -1461,7 +1462,8 @@
     },
     "messages": {
       "loading": "Loading farming calendar",
-      "empty": "No farming calendar items match the filters"
+      "empty": "No farming calendar items match the filters",
+      "demoFallback": "Live farming data is empty, so demo fallback data is shown."
     }
   },
   "activities": {
@@ -1491,6 +1493,8 @@
     "types": {
       "village_feast": "Ridge feast",
       "food_class": "Food class",
+      "harvest": "Harvest revisit",
+      "guided_walk": "Ancient-road walk",
       "study": "Study tour",
       "workshop": "Workshop",
       "exhibition": "Exhibition walk",
@@ -1528,7 +1532,8 @@
       "bookingFailed": "Booking failed. Check the name, phone and guest count.",
       "bookingConfirmed": "Activity booking confirmed.",
       "empty": "No matching activities",
-      "emptyBody": "Adjust the type or date, or return to the featured event for available booking nodes."
+      "emptyBody": "Adjust the type or date, or return to the featured event for available booking nodes.",
+      "demoFallback": "Live activity data is empty, so demo fallback data is shown."
     },
     "order": {
       "title": "Booking created"

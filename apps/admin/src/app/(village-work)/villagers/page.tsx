@@ -3,7 +3,10 @@
 import { RefreshCw, UserPlus, Users } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
-import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
+import {
+  AdminDataTable,
+  type TableColumn,
+} from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
 import { fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
@@ -35,7 +38,13 @@ interface NodeRow {
   nameKey: string
 }
 
-const skillOptions = ["cooking", "farming", "guiding", "handicraft", "logistics"] as const
+const skillOptions = [
+  "cooking",
+  "farming",
+  "guiding",
+  "handicraft",
+  "logistics",
+] as const
 
 export default function VillagersPage() {
   const [villagers, setVillagers] = useState<VillagerRow[]>([])
@@ -90,7 +99,13 @@ export default function VillagersPage() {
 
   function resetForm() {
     setSelected(null)
-    setForm({ name: "", phone: "", skills: ["farming"], nodeId: "", status: "active" })
+    setForm({
+      name: "",
+      phone: "",
+      skills: ["farming"],
+      nodeId: "",
+      status: "active",
+    })
   }
 
   function toggleSkill(skill: string) {
@@ -116,59 +131,122 @@ export default function VillagersPage() {
       setMessage(adminCopy.villagers.saved)
       await loadData()
       resetForm()
-    } catch (error) {
-      setMessage(`${adminCopy.villagers.saveFailed}: ${error instanceof Error ? error.message : ""}`)
+    } catch {
+      setMessage(adminCopy.villagers.saveFailed)
     }
   }
 
   const columns = useMemo<Array<TableColumn<VillagerRow>>>(
     () => [
       { key: "name", label: adminCopy.villagers.name },
-      { key: "phone", label: adminCopy.villagers.phone, render: (value) => maskPhone(String(value ?? "")) },
-      { key: "skills", label: adminCopy.villagers.skills, render: (value) => renderSkills(Array.isArray(value) ? value : []) },
-      { key: "node", label: adminCopy.villagers.node, render: (_value, row) => nodeDisplayName(row.node?.slug, row.node?.nameKey) },
-      { key: "status", label: adminCopy.villagers.status, render: (value) => value === "active" ? adminCopy.villagers.active : adminCopy.villagers.inactive },
+      {
+        key: "phone",
+        label: adminCopy.villagers.phone,
+        render: (value) => maskPhone(String(value ?? "")),
+      },
+      {
+        key: "skills",
+        label: adminCopy.villagers.skills,
+        render: (value) => renderSkills(Array.isArray(value) ? value : []),
+      },
+      {
+        key: "node",
+        label: adminCopy.villagers.node,
+        render: (_value, row) =>
+          nodeDisplayName(row.node?.slug, row.node?.nameKey),
+      },
+      {
+        key: "status",
+        label: adminCopy.villagers.status,
+        render: (value) =>
+          value === "active"
+            ? adminCopy.villagers.active
+            : adminCopy.villagers.inactive,
+      },
     ],
     [],
   )
 
-  const activeCount = villagers.filter((villager) => villager.status === "active").length
-  const selectedSummary = selected?.taskSummary ?? { totalTasks: 0, completedTasks: 0, totalEarnings: 0 }
-  const selectedMonthlySummary = selected?.monthlyTaskSummary ?? { totalTasks: 0, completedTasks: 0, totalEarnings: 0 }
+  const activeCount = villagers.filter(
+    (villager) => villager.status === "active",
+  ).length
+  const selectedSummary = selected?.taskSummary ?? {
+    totalTasks: 0,
+    completedTasks: 0,
+    totalEarnings: 0,
+  }
+  const selectedMonthlySummary = selected?.monthlyTaskSummary ?? {
+    totalTasks: 0,
+    completedTasks: 0,
+    totalEarnings: 0,
+  }
   const earningsRanking = [...villagers]
-    .sort((a, b) => (b.taskSummary?.totalEarnings ?? 0) - (a.taskSummary?.totalEarnings ?? 0))
+    .sort(
+      (a, b) =>
+        (b.taskSummary?.totalEarnings ?? 0) -
+        (a.taskSummary?.totalEarnings ?? 0),
+    )
     .slice(0, 5)
 
   return (
     <div className="grid gap-5">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold text-water">{adminCopy.villagers.subtitle}</p>
-          <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.villagers.title}</h1>
+          <p className="text-sm font-bold text-water">
+            {adminCopy.villagers.subtitle}
+          </p>
+          <h1 className="mt-1 text-2xl font-extrabold">
+            {adminCopy.villagers.title}
+          </h1>
         </div>
         <div className="flex gap-2">
-          <button className="flex h-10 items-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold" onClick={resetForm} type="button">
+          <button
+            className="flex h-10 items-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold"
+            onClick={resetForm}
+            type="button"
+          >
             <UserPlus className="h-4 w-4" />
             {adminCopy.villagers.create}
           </button>
-          <button className="flex h-10 items-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold" onClick={loadData} type="button">
+          <button
+            className="flex h-10 items-center gap-2 rounded-full border border-stone bg-white px-4 text-sm font-bold"
+            onClick={loadData}
+            type="button"
+          >
             <RefreshCw className="h-4 w-4" />
             {adminCopy.common.refresh}
           </button>
         </div>
       </header>
 
-      {error ? <div className="rounded-md bg-lychee/10 p-3 text-sm font-bold text-lychee">{error}</div> : null}
-      {message ? <div className="rounded-md bg-rice p-3 text-sm font-bold text-ink/70">{message}</div> : null}
+      {error ? (
+        <div className="rounded-md bg-lychee/10 p-3 text-sm font-bold text-lychee">
+          {error}
+        </div>
+      ) : null}
+      {message ? (
+        <div className="rounded-md bg-rice p-3 text-sm font-bold text-ink/70">
+          {message}
+        </div>
+      ) : null}
 
       <div className="grid gap-3 md:grid-cols-3">
-        <AdminStatCard icon={<Users className="h-4 w-4" />} label={adminCopy.villagers.title} value={isLoading ? "..." : villagers.length} />
+        <AdminStatCard
+          icon={<Users className="h-4 w-4" />}
+          label={adminCopy.villagers.title}
+          value={isLoading ? "..." : villagers.length}
+        />
         <AdminStatCard label={adminCopy.villagers.active} value={activeCount} />
-        <AdminStatCard label={adminCopy.villagers.inactive} value={villagers.length - activeCount} />
+        <AdminStatCard
+          label={adminCopy.villagers.inactive}
+          value={villagers.length - activeCount}
+        />
       </div>
 
       <section className="rounded-lg border border-stone bg-white p-4 shadow-soft">
-        <div className="text-sm font-extrabold">{adminCopy.villagers.earningsRanking}</div>
+        <div className="text-sm font-extrabold">
+          {adminCopy.villagers.earningsRanking}
+        </div>
         <div className="mt-3 grid gap-2 md:grid-cols-5">
           {earningsRanking.map((villager, index) => (
             <button
@@ -177,9 +255,15 @@ export default function VillagersPage() {
               onClick={() => selectVillager(villager)}
               type="button"
             >
-              <div className="text-xs font-bold text-water">TOP {index + 1}</div>
-              <div className="mt-1 truncate text-sm font-extrabold">{villager.name}</div>
-              <div className="mt-1 text-xs font-semibold text-ink/58">¥{(villager.taskSummary?.totalEarnings ?? 0).toFixed(0)}</div>
+              <div className="text-xs font-bold text-water">
+                TOP {index + 1}
+              </div>
+              <div className="mt-1 truncate text-sm font-extrabold">
+                {villager.name}
+              </div>
+              <div className="mt-1 text-xs font-semibold text-ink/58">
+                ¥{(villager.taskSummary?.totalEarnings ?? 0).toFixed(0)}
+              </div>
             </button>
           ))}
         </div>
@@ -196,25 +280,66 @@ export default function VillagersPage() {
         />
 
         <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
-          <div className="text-lg font-extrabold">{selected ? adminCopy.villagers.detail : adminCopy.villagers.create}</div>
+          <div className="text-lg font-extrabold">
+            {selected ? adminCopy.villagers.detail : adminCopy.villagers.create}
+          </div>
           <div className="mt-4 grid gap-3">
-            <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setForm({ ...form, name: event.target.value })} placeholder={adminCopy.villagers.name} value={form.name} />
-            <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setForm({ ...form, phone: event.target.value })} placeholder={adminCopy.villagers.phone} value={form.phone} />
-            <select className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setForm({ ...form, nodeId: event.target.value })} value={form.nodeId}>
+            <input
+              className="h-10 rounded-md border border-stone bg-rice px-3"
+              onChange={(event) =>
+                setForm({ ...form, name: event.target.value })
+              }
+              placeholder={adminCopy.villagers.name}
+              value={form.name}
+            />
+            <input
+              className="h-10 rounded-md border border-stone bg-rice px-3"
+              onChange={(event) =>
+                setForm({ ...form, phone: event.target.value })
+              }
+              placeholder={adminCopy.villagers.phone}
+              value={form.phone}
+            />
+            <select
+              className="h-10 rounded-md border border-stone bg-rice px-3"
+              onChange={(event) =>
+                setForm({ ...form, nodeId: event.target.value })
+              }
+              value={form.nodeId}
+            >
               <option value="">{adminCopy.villagers.node}</option>
-              {nodes.map((node) => <option key={node.id} value={node.id}>{nodeDisplayName(node.slug, node.nameKey)}</option>)}
+              {nodes.map((node) => (
+                <option key={node.id} value={node.id}>
+                  {nodeDisplayName(node.slug, node.nameKey)}
+                </option>
+              ))}
             </select>
-            <select className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setForm({ ...form, status: event.target.value })} value={form.status}>
+            <select
+              className="h-10 rounded-md border border-stone bg-rice px-3"
+              onChange={(event) =>
+                setForm({ ...form, status: event.target.value })
+              }
+              value={form.status}
+            >
               <option value="active">{adminCopy.villagers.active}</option>
               <option value="inactive">{adminCopy.villagers.inactive}</option>
             </select>
 
             <div>
-              <div className="mb-2 text-xs font-bold text-ink/52">{adminCopy.villagers.skills}</div>
+              <div className="mb-2 text-xs font-bold text-ink/52">
+                {adminCopy.villagers.skills}
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 {skillOptions.map((skill) => (
-                  <label className="flex items-center gap-2 rounded-md border border-stone bg-rice px-3 py-2 text-xs font-bold" key={skill}>
-                    <input checked={form.skills.includes(skill)} onChange={() => toggleSkill(skill)} type="checkbox" />
+                  <label
+                    className="flex items-center gap-2 rounded-md border border-stone bg-rice px-3 py-2 text-xs font-bold"
+                    key={skill}
+                  >
+                    <input
+                      checked={form.skills.includes(skill)}
+                      onChange={() => toggleSkill(skill)}
+                      type="checkbox"
+                    />
                     {adminCopy.villagers.skillOptions[skill]}
                   </label>
                 ))}
@@ -222,20 +347,40 @@ export default function VillagersPage() {
             </div>
           </div>
 
-          <button className="mt-4 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white" onClick={saveVillager} type="button">
+          <button
+            className="mt-4 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white"
+            onClick={saveVillager}
+            type="button"
+          >
             {adminCopy.villagers.save}
           </button>
 
           <div className="mt-5 rounded-md bg-rice p-4">
-            <div className="text-sm font-extrabold">{adminCopy.villagers.earnings}</div>
+            <div className="text-sm font-extrabold">
+              {adminCopy.villagers.earnings}
+            </div>
             <div className="mt-3 grid grid-cols-2 gap-3">
-              <AdminStatCard label={adminCopy.villagers.completedTasks} value={selectedSummary.completedTasks} />
-              <AdminStatCard label={adminCopy.villagers.totalEarnings} value={`¥${selectedSummary.totalEarnings.toFixed(0)}`} />
-              <AdminStatCard label={adminCopy.villagers.monthlyTasks} value={selectedMonthlySummary.completedTasks} />
-              <AdminStatCard label={adminCopy.villagers.monthlyEarnings} value={`¥${selectedMonthlySummary.totalEarnings.toFixed(0)}`} />
+              <AdminStatCard
+                label={adminCopy.villagers.completedTasks}
+                value={selectedSummary.completedTasks}
+              />
+              <AdminStatCard
+                label={adminCopy.villagers.totalEarnings}
+                value={`¥${selectedSummary.totalEarnings.toFixed(0)}`}
+              />
+              <AdminStatCard
+                label={adminCopy.villagers.monthlyTasks}
+                value={selectedMonthlySummary.completedTasks}
+              />
+              <AdminStatCard
+                label={adminCopy.villagers.monthlyEarnings}
+                value={`¥${selectedMonthlySummary.totalEarnings.toFixed(0)}`}
+              />
             </div>
             <p className="mt-3 text-xs font-semibold text-ink/52">
-              {selected ? `${selectedSummary.totalTasks} 个任务记录` : adminCopy.villagers.noSelection}
+              {selected
+                ? `${selectedSummary.totalTasks} 个任务记录`
+                : adminCopy.villagers.noSelection}
             </p>
           </div>
         </section>
@@ -251,6 +396,11 @@ function maskPhone(phone: string) {
 
 function renderSkills(skills: string[]) {
   return skills
-    .map((skill) => adminCopy.villagers.skillOptions[skill as keyof typeof adminCopy.villagers.skillOptions] ?? skill)
+    .map(
+      (skill) =>
+        adminCopy.villagers.skillOptions[
+          skill as keyof typeof adminCopy.villagers.skillOptions
+        ] ?? skill,
+    )
     .join(" / ")
 }

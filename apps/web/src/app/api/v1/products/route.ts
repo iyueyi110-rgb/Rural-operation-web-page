@@ -2,6 +2,7 @@ import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { isAdminRequest } from "@web/lib/tree-records"
+import { publicDemoProducts } from "@web/lib/public-demo-data"
 
 export function OPTIONS(request: Request) {
   return optionsResponse(request)
@@ -22,10 +23,37 @@ export async function GET(request: Request) {
       orderBy: [{ category: "asc" }, { createdAt: "desc" }],
     })
 
-    return jsonResponse(request, { data, meta: { total: data.length } })
+    if (data.length > 0)
+      return jsonResponse(request, { data, meta: { total: data.length } })
+
+    if (!category) {
+      return jsonResponse(request, {
+        data: publicDemoProducts,
+        meta: {
+          degraded: true,
+          demo: true,
+          total: publicDemoProducts.length,
+          reason: "暂无产品记录，已返回降级演示数据",
+        },
+      })
+    }
+
+    return jsonResponse(request, { data: [], meta: { total: 0 } })
   } catch (caughtError) {
     console.error("Products API fallback activated:", caughtError)
-    return jsonResponse(request, { data: [], meta: { total: 0 } })
+    const demo = category ? [] : publicDemoProducts
+    return jsonResponse(request, {
+      data: demo,
+      meta: {
+        degraded: true,
+        demo: demo.length > 0,
+        total: demo.length,
+        reason:
+          demo.length > 0
+            ? "产品服务暂不可用，已返回降级演示数据"
+            : "产品服务暂不可用，无法匹配当前筛选条件",
+      },
+    })
   }
 }
 
@@ -36,16 +64,33 @@ export async function POST(request: Request) {
 
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body)) {
-    return jsonResponse(request, { error: "Invalid product payload" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid product payload" },
+      { status: 400 },
+    )
   }
 
   const name = typeof body.name === "string" ? body.name.trim() : ""
   const category = typeof body.category === "string" ? body.category.trim() : ""
-  const description = typeof body.description === "string" ? body.description.trim() : ""
-  const price = body.price === null || body.price === "" || body.price === undefined ? null : Number(body.price)
+  const description =
+    typeof body.description === "string" ? body.description.trim() : ""
+  const price =
+    body.price === null || body.price === "" || body.price === undefined
+      ? null
+      : Number(body.price)
 
-  if (!name || !category || !description || (price !== null && (!Number.isFinite(price) || price < 0))) {
-    return jsonResponse(request, { error: "Product payload is invalid" }, { status: 400 })
+  if (
+    !name ||
+    !category ||
+    !description ||
+    (price !== null && (!Number.isFinite(price) || price < 0))
+  ) {
+    return jsonResponse(
+      request,
+      { error: "Product payload is invalid" },
+      { status: 400 },
+    )
   }
 
   const data = await prisma.product.create({
@@ -54,11 +99,26 @@ export async function POST(request: Request) {
       category,
       description,
       price,
-      unit: typeof body.unit === "string" && body.unit.trim() ? body.unit.trim() : null,
-      stockStatus: typeof body.stockStatus === "string" && body.stockStatus.trim() ? body.stockStatus.trim() : "available",
-      nodeId: typeof body.nodeId === "string" && body.nodeId.trim() ? body.nodeId.trim() : null,
-      imageUrl: typeof body.imageUrl === "string" && body.imageUrl.trim() ? body.imageUrl.trim() : null,
-      status: typeof body.status === "string" && body.status.trim() ? body.status.trim() : "active",
+      unit:
+        typeof body.unit === "string" && body.unit.trim()
+          ? body.unit.trim()
+          : null,
+      stockStatus:
+        typeof body.stockStatus === "string" && body.stockStatus.trim()
+          ? body.stockStatus.trim()
+          : "available",
+      nodeId:
+        typeof body.nodeId === "string" && body.nodeId.trim()
+          ? body.nodeId.trim()
+          : null,
+      imageUrl:
+        typeof body.imageUrl === "string" && body.imageUrl.trim()
+          ? body.imageUrl.trim()
+          : null,
+      status:
+        typeof body.status === "string" && body.status.trim()
+          ? body.status.trim()
+          : "active",
     },
     include: { node: true },
   })
@@ -73,21 +133,43 @@ export async function PATCH(request: Request) {
 
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body) || typeof body.id !== "string") {
-    return jsonResponse(request, { error: "Invalid product update" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid product update" },
+      { status: 400 },
+    )
   }
 
   const data = await prisma.product.update({
     where: { id: body.id },
     data: {
       ...(typeof body.name === "string" ? { name: body.name.trim() } : {}),
-      ...(typeof body.category === "string" ? { category: body.category.trim() } : {}),
-      ...(typeof body.description === "string" ? { description: body.description.trim() } : {}),
-      ...(body.price === null || body.price === "" ? { price: null } : typeof body.price === "number" ? { price: body.price } : {}),
-      ...(typeof body.unit === "string" ? { unit: body.unit.trim() || null } : {}),
-      ...(typeof body.stockStatus === "string" ? { stockStatus: body.stockStatus.trim() } : {}),
-      ...(typeof body.nodeId === "string" ? { nodeId: body.nodeId.trim() || null } : {}),
-      ...(typeof body.imageUrl === "string" ? { imageUrl: body.imageUrl.trim() || null } : {}),
-      ...(typeof body.status === "string" ? { status: body.status.trim() } : {}),
+      ...(typeof body.category === "string"
+        ? { category: body.category.trim() }
+        : {}),
+      ...(typeof body.description === "string"
+        ? { description: body.description.trim() }
+        : {}),
+      ...(body.price === null || body.price === ""
+        ? { price: null }
+        : typeof body.price === "number"
+          ? { price: body.price }
+          : {}),
+      ...(typeof body.unit === "string"
+        ? { unit: body.unit.trim() || null }
+        : {}),
+      ...(typeof body.stockStatus === "string"
+        ? { stockStatus: body.stockStatus.trim() }
+        : {}),
+      ...(typeof body.nodeId === "string"
+        ? { nodeId: body.nodeId.trim() || null }
+        : {}),
+      ...(typeof body.imageUrl === "string"
+        ? { imageUrl: body.imageUrl.trim() || null }
+        : {}),
+      ...(typeof body.status === "string"
+        ? { status: body.status.trim() }
+        : {}),
     },
     include: { node: true },
   })

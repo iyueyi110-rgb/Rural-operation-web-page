@@ -1416,6 +1416,7 @@
     "messages": {
       "loading": "正在加载产品",
       "loadFailed": "产品暂时不可用",
+      "demoFallback": "真实产品数据暂为空，已切换为降级演示数据。",
       "contactRequired": "请填写联系人和联系电话",
       "submitFailed": "订单提交失败，请重试"
     }
@@ -1461,7 +1462,8 @@
     },
     "messages": {
       "loading": "正在加载农事日历",
-      "empty": "暂无符合条件的农事条目"
+      "empty": "暂无符合条件的农事条目",
+      "demoFallback": "真实农事数据暂为空，已切换为降级演示数据。"
     }
   },
   "activities": {
@@ -1491,6 +1493,8 @@
     "types": {
       "village_feast": "岭上村宴",
       "food_class": "食育课堂",
+      "harvest": "采摘回访",
+      "guided_walk": "古道导览",
       "study": "研学行程",
       "workshop": "共创工坊",
       "exhibition": "展陈导览",
@@ -1528,7 +1532,8 @@
       "bookingFailed": "预约失败，请检查姓名、手机号和人数。",
       "bookingConfirmed": "活动预约已确认。",
       "empty": "暂无符合条件的活动",
-      "emptyBody": "可以调整类型或日期，也可以回到本期主活动查看可预约节点。"
+      "emptyBody": "可以调整类型或日期，也可以回到本期主活动查看可预约节点。",
+      "demoFallback": "真实活动数据暂为空，已切换为降级演示数据。"
     },
     "order": {
       "title": "预约已生成"

@@ -2,8 +2,16 @@ import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { isAdminRequest } from "@web/lib/tree-records"
+import { publicDemoFarmingCalendar } from "@web/lib/public-demo-data"
 
-const activityTypes = ["planting", "pruning", "fertilizing", "harvesting", "processing", "festival"] as const
+const activityTypes = [
+  "planting",
+  "pruning",
+  "fertilizing",
+  "harvesting",
+  "processing",
+  "festival",
+] as const
 const statuses = ["upcoming", "active", "completed"] as const
 
 type FarmingStatus = (typeof statuses)[number]
@@ -34,12 +42,36 @@ export async function GET(request: Request) {
       orderBy: [{ startDate: "asc" }, { createdAt: "desc" }],
     })
 
-    return jsonResponse(request, { data, meta: { total: data.length } })
+    if (data.length > 0)
+      return jsonResponse(request, { data, meta: { total: data.length } })
+
+    if (!status && !from && !to) {
+      return jsonResponse(request, {
+        data: publicDemoFarmingCalendar,
+        meta: {
+          degraded: true,
+          demo: true,
+          total: publicDemoFarmingCalendar.length,
+          reason: "暂无农事记录，已返回降级演示数据",
+        },
+      })
+    }
+
+    return jsonResponse(request, { data: [], meta: { total: 0 } })
   } catch (error) {
     console.error("Farming calendar query failed:", error)
+    const demo = !status && !from && !to ? publicDemoFarmingCalendar : []
     return jsonResponse(request, {
-      data: [],
-      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+      data: demo,
+      meta: {
+        degraded: true,
+        demo: demo.length > 0,
+        total: demo.length,
+        reason:
+          demo.length > 0
+            ? "农事日历服务暂不可用，已返回降级演示数据"
+            : "农事日历服务暂不可用，无法匹配当前筛选条件",
+      },
     })
   }
 }
@@ -51,12 +83,20 @@ export async function POST(request: Request) {
 
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body)) {
-    return jsonResponse(request, { error: "Invalid farming calendar payload" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid farming calendar payload" },
+      { status: 400 },
+    )
   }
 
   const parsed = parseCreatePayload(body)
   if (!parsed) {
-    return jsonResponse(request, { error: "Farming calendar payload is invalid" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Farming calendar payload is invalid" },
+      { status: 400 },
+    )
   }
 
   const data = await prisma.farmingCalendar.create({ data: parsed })
@@ -70,12 +110,20 @@ export async function PATCH(request: Request) {
 
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body) || typeof body.id !== "string") {
-    return jsonResponse(request, { error: "Invalid farming calendar update" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid farming calendar update" },
+      { status: 400 },
+    )
   }
 
   const parsed = parseUpdatePayload(body)
   if (!parsed) {
-    return jsonResponse(request, { error: "Farming calendar update is invalid" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Farming calendar update is invalid" },
+      { status: 400 },
+    )
   }
 
   const data = await prisma.farmingCalendar.update({
@@ -87,14 +135,24 @@ export async function PATCH(request: Request) {
 }
 
 function parseCreatePayload(payload: Record<string, unknown>) {
-  const solarTerm = typeof payload.solarTerm === "string" ? payload.solarTerm.trim() : ""
+  const solarTerm =
+    typeof payload.solarTerm === "string" ? payload.solarTerm.trim() : ""
   const title = typeof payload.title === "string" ? payload.title.trim() : ""
-  const description = typeof payload.description === "string" ? payload.description.trim() : ""
-  const activityType = typeof payload.activityType === "string" ? payload.activityType.trim() : ""
-  const startDate = typeof payload.startDate === "string" ? payload.startDate.trim() : ""
+  const description =
+    typeof payload.description === "string" ? payload.description.trim() : ""
+  const activityType =
+    typeof payload.activityType === "string" ? payload.activityType.trim() : ""
+  const startDate =
+    typeof payload.startDate === "string" ? payload.startDate.trim() : ""
   const status = isStatus(payload.status) ? payload.status : "upcoming"
 
-  if (!solarTerm || !title || !description || !isActivityType(activityType) || !isDateString(startDate)) {
+  if (
+    !solarTerm ||
+    !title ||
+    !description ||
+    !isActivityType(activityType) ||
+    !isDateString(startDate)
+  ) {
     return null
   }
 
@@ -104,18 +162,26 @@ function parseCreatePayload(payload: Record<string, unknown>) {
     description,
     activityType,
     startDate,
-    ...(typeof payload.endDate === "string" ? { endDate: payload.endDate.trim() || null } : {}),
-    ...(typeof payload.treeSpecies === "string" ? { treeSpecies: payload.treeSpecies.trim() || null } : {}),
+    ...(typeof payload.endDate === "string"
+      ? { endDate: payload.endDate.trim() || null }
+      : {}),
+    ...(typeof payload.treeSpecies === "string"
+      ? { treeSpecies: payload.treeSpecies.trim() || null }
+      : {}),
     status,
   }
 }
 
 function parseUpdatePayload(payload: Record<string, unknown>) {
-  const solarTerm = typeof payload.solarTerm === "string" ? payload.solarTerm.trim() : ""
+  const solarTerm =
+    typeof payload.solarTerm === "string" ? payload.solarTerm.trim() : ""
   const title = typeof payload.title === "string" ? payload.title.trim() : ""
-  const description = typeof payload.description === "string" ? payload.description.trim() : ""
-  const activityType = typeof payload.activityType === "string" ? payload.activityType.trim() : ""
-  const startDate = typeof payload.startDate === "string" ? payload.startDate.trim() : ""
+  const description =
+    typeof payload.description === "string" ? payload.description.trim() : ""
+  const activityType =
+    typeof payload.activityType === "string" ? payload.activityType.trim() : ""
+  const startDate =
+    typeof payload.startDate === "string" ? payload.startDate.trim() : ""
 
   if (startDate && !isDateString(startDate)) return null
   if (activityType && !isActivityType(activityType)) return null
@@ -126,8 +192,12 @@ function parseUpdatePayload(payload: Record<string, unknown>) {
     ...(description ? { description } : {}),
     ...(activityType ? { activityType } : {}),
     ...(startDate ? { startDate } : {}),
-    ...(typeof payload.endDate === "string" ? { endDate: payload.endDate.trim() || null } : {}),
-    ...(typeof payload.treeSpecies === "string" ? { treeSpecies: payload.treeSpecies.trim() || null } : {}),
+    ...(typeof payload.endDate === "string"
+      ? { endDate: payload.endDate.trim() || null }
+      : {}),
+    ...(typeof payload.treeSpecies === "string"
+      ? { treeSpecies: payload.treeSpecies.trim() || null }
+      : {}),
     ...(isStatus(payload.status) ? { status: payload.status } : {}),
   }
 }
@@ -136,8 +206,13 @@ function isStatus(value: unknown): value is FarmingStatus {
   return typeof value === "string" && statuses.includes(value as FarmingStatus)
 }
 
-function isActivityType(value: unknown): value is (typeof activityTypes)[number] {
-  return typeof value === "string" && activityTypes.includes(value as (typeof activityTypes)[number])
+function isActivityType(
+  value: unknown,
+): value is (typeof activityTypes)[number] {
+  return (
+    typeof value === "string" &&
+    activityTypes.includes(value as (typeof activityTypes)[number])
+  )
 }
 
 function isDateString(value: string) {

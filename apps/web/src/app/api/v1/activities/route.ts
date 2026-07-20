@@ -2,6 +2,7 @@ import { prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { isAdminRequest } from "@web/lib/tree-records"
+import { publicDemoActivities } from "@web/lib/public-demo-data"
 
 function mapActivity(record: {
   id: string
@@ -17,7 +18,9 @@ function mapActivity(record: {
   bookings?: Array<{ guestCount: number; status: string }>
 }) {
   const bookedCount =
-    record.bookings?.filter((booking) => booking.status === "confirmed").reduce((sum, booking) => sum + booking.guestCount, 0) ?? 0
+    record.bookings
+      ?.filter((booking) => booking.status === "confirmed")
+      .reduce((sum, booking) => sum + booking.guestCount, 0) ?? 0
 
   return {
     id: record.id,
@@ -29,7 +32,10 @@ function mapActivity(record: {
     price: record.price ?? undefined,
     scheduledDate: record.scheduledDate,
     scheduledTime: record.scheduledTime,
-    status: bookedCount >= record.maxCapacity && record.status === "open" ? "full" : record.status,
+    status:
+      bookedCount >= record.maxCapacity && record.status === "open"
+        ? "full"
+        : record.status,
     bookedCount,
   }
 }
@@ -55,10 +61,42 @@ export async function GET(request: Request) {
       orderBy: [{ scheduledDate: "asc" }, { scheduledTime: "asc" }],
     })
 
-    return jsonResponse(request, { data: data.map(mapActivity), meta: { total: data.length } })
+    if (data.length > 0) {
+      return jsonResponse(request, {
+        data: data.map(mapActivity),
+        meta: { total: data.length },
+      })
+    }
+
+    if (!courtyardId && !date && !activityType) {
+      return jsonResponse(request, {
+        data: publicDemoActivities,
+        meta: {
+          degraded: true,
+          demo: true,
+          total: publicDemoActivities.length,
+          reason: "暂无活动记录，已返回降级演示数据",
+        },
+      })
+    }
+
+    return jsonResponse(request, { data: [], meta: { total: 0 } })
   } catch (caughtError) {
     console.error("Activities API fallback activated:", caughtError)
-    return jsonResponse(request, { data: [], meta: { total: 0 } })
+    const demo =
+      !courtyardId && !date && !activityType ? publicDemoActivities : []
+    return jsonResponse(request, {
+      data: demo,
+      meta: {
+        degraded: true,
+        demo: demo.length > 0,
+        total: demo.length,
+        reason:
+          demo.length > 0
+            ? "活动服务暂不可用，已返回降级演示数据"
+            : "活动服务暂不可用，无法匹配当前筛选条件",
+      },
+    })
   }
 }
 
@@ -69,20 +107,43 @@ export async function POST(request: Request) {
 
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body)) {
-    return jsonResponse(request, { error: "Invalid JSON body" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid JSON body" },
+      { status: 400 },
+    )
   }
 
-  const courtyardId = typeof body.courtyardId === "string" ? body.courtyardId.trim() : ""
-  const activityType = typeof body.activityType === "string" ? body.activityType.trim() : ""
+  const courtyardId =
+    typeof body.courtyardId === "string" ? body.courtyardId.trim() : ""
+  const activityType =
+    typeof body.activityType === "string" ? body.activityType.trim() : ""
   const title = typeof body.title === "string" ? body.title.trim() : ""
-  const description = typeof body.description === "string" ? body.description.trim() : ""
+  const description =
+    typeof body.description === "string" ? body.description.trim() : ""
   const maxCapacity = Number(body.maxCapacity)
-  const price = body.price == null || body.price === "" ? null : Number(body.price)
-  const scheduledDate = typeof body.scheduledDate === "string" ? body.scheduledDate.trim() : ""
-  const scheduledTime = typeof body.scheduledTime === "string" ? body.scheduledTime.trim() : ""
+  const price =
+    body.price == null || body.price === "" ? null : Number(body.price)
+  const scheduledDate =
+    typeof body.scheduledDate === "string" ? body.scheduledDate.trim() : ""
+  const scheduledTime =
+    typeof body.scheduledTime === "string" ? body.scheduledTime.trim() : ""
 
-  if (!courtyardId || !activityType || !title || !description || !Number.isInteger(maxCapacity) || maxCapacity < 1 || !scheduledDate || !scheduledTime) {
-    return jsonResponse(request, { error: "Missing activity fields" }, { status: 400 })
+  if (
+    !courtyardId ||
+    !activityType ||
+    !title ||
+    !description ||
+    !Number.isInteger(maxCapacity) ||
+    maxCapacity < 1 ||
+    !scheduledDate ||
+    !scheduledTime
+  ) {
+    return jsonResponse(
+      request,
+      { error: "Missing activity fields" },
+      { status: 400 },
+    )
   }
 
   const record = await prisma.courtyardActivity.create({
@@ -110,18 +171,36 @@ export async function PATCH(request: Request) {
 
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body) || typeof body.id !== "string") {
-    return jsonResponse(request, { error: "Missing activity id" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Missing activity id" },
+      { status: 400 },
+    )
   }
 
   const record = await prisma.courtyardActivity.update({
     where: { id: body.id },
     data: {
       title: typeof body.title === "string" ? body.title.trim() : undefined,
-      description: typeof body.description === "string" ? body.description.trim() : undefined,
-      maxCapacity: Number.isInteger(Number(body.maxCapacity)) ? Number(body.maxCapacity) : undefined,
-      price: body.price == null || body.price === "" ? undefined : Number(body.price),
-      scheduledDate: typeof body.scheduledDate === "string" ? body.scheduledDate.trim() : undefined,
-      scheduledTime: typeof body.scheduledTime === "string" ? body.scheduledTime.trim() : undefined,
+      description:
+        typeof body.description === "string"
+          ? body.description.trim()
+          : undefined,
+      maxCapacity: Number.isInteger(Number(body.maxCapacity))
+        ? Number(body.maxCapacity)
+        : undefined,
+      price:
+        body.price == null || body.price === ""
+          ? undefined
+          : Number(body.price),
+      scheduledDate:
+        typeof body.scheduledDate === "string"
+          ? body.scheduledDate.trim()
+          : undefined,
+      scheduledTime:
+        typeof body.scheduledTime === "string"
+          ? body.scheduledTime.trim()
+          : undefined,
       status: typeof body.status === "string" ? body.status : undefined,
     },
     include: { bookings: true },

@@ -1,8 +1,16 @@
 import { prisma } from "@zouma/database"
-import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
+import {
+  checkRateLimit,
+  getRateLimitKey,
+  rateLimitResponse,
+} from "@web/lib/rate-limit"
 import { isAdminRequest } from "@web/lib/tree-records"
 
-import { getChinaDateString, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
+import {
+  getChinaDateString,
+  jsonResponse,
+  optionsResponse,
+} from "@web/lib/aigc-api"
 import { generateDailyReport } from "@web/lib/report-generator"
 
 function buildFallbackDailyReport(date: string) {
@@ -72,14 +80,40 @@ export async function GET(request: Request) {
       orderBy: { date: "desc" },
     })
 
-    return jsonResponse(request, {
-      data,
-      meta: {
-        total: data.length,
-      },
-    })
+    if (data.length > 0) {
+      return jsonResponse(request, {
+        data,
+        meta: {
+          total: data.length,
+        },
+      })
+    }
+
+    if (!from && !to) {
+      return jsonResponse(request, {
+        data: [buildFallbackDailyReport(getChinaDateString())],
+        meta: {
+          degraded: true,
+          demo: true,
+          total: 1,
+          reason: "暂无日报，已返回降级演示数据",
+        },
+      })
+    }
+
+    return jsonResponse(request, { data: [], meta: { total: 0 } })
   } catch (error) {
     console.error("Daily report query failed:", error)
+    if (from || to) {
+      return jsonResponse(request, {
+        data: [],
+        meta: {
+          degraded: true,
+          total: 0,
+          reason: "日报服务暂不可用，无法匹配当前筛选条件",
+        },
+      })
+    }
     return jsonResponse(request, {
       data: [buildFallbackDailyReport(getChinaDateString())],
       meta: {
@@ -96,11 +130,18 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
   }
 
-  const rateLimit = await checkRateLimit(getRateLimitKey(request, "reports"), 3, 300)
+  const rateLimit = await checkRateLimit(
+    getRateLimitKey(request, "reports"),
+    3,
+    300,
+  )
   if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)
 
   const body = await request.json().catch(() => null)
-  const date = typeof body?.date === "string" && body.date ? body.date : getChinaDateString()
+  const date =
+    typeof body?.date === "string" && body.date
+      ? body.date
+      : getChinaDateString()
 
   try {
     const data = await generateDailyReport(date)
