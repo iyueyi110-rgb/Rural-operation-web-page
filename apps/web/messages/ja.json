@@ -1416,6 +1416,7 @@
     "messages": {
       "loading": "商品を読み込み中",
       "loadFailed": "商品を利用できません",
+      "demoFallback": "実データが空のため、デモ用の商品データを表示しています。",
       "contactRequired": "連絡先名と電話番号を入力してください",
       "submitFailed": "注文送信に失敗しました。もう一度お試しください。"
     }
@@ -1461,7 +1462,8 @@
     },
     "messages": {
       "loading": "Loading farming calendar",
-      "empty": "No farming calendar items match the filters"
+      "empty": "No farming calendar items match the filters",
+      "demoFallback": "実データが空のため、デモ用の農事データを表示しています。"
     }
   },
   "activities": {
@@ -1491,6 +1493,8 @@
     "types": {
       "village_feast": "尾根の食事会",
       "food_class": "食育講座",
+      "harvest": "収穫リビジット",
+      "guided_walk": "古道ガイド",
       "study": "研学行程",
       "workshop": "共創ワークショップ",
       "exhibition": "展示案内",
@@ -1528,7 +1532,8 @@
       "bookingFailed": "予約に失敗しました。氏名、電話番号、人数を確認してください。",
       "bookingConfirmed": "活動予約を確認しました。",
       "empty": "該当する活動はありません",
-      "emptyBody": "タイプや日付を調整するか、本期主活動の予約可能ノードを確認してください。"
+      "emptyBody": "タイプや日付を調整するか、本期主活動の予約可能ノードを確認してください。",
+      "demoFallback": "実データが空のため、デモ用のアクティビティデータを表示しています。"
     },
     "order": {
       "title": "予約を作成しました"

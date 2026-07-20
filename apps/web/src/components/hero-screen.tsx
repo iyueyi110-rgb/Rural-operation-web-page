@@ -55,6 +55,10 @@ export function HeroScreen({
       ? activityHighlights[activeActivityIndex]
       : t("hero.activityShowcase.name")
 
+  function showOperations() {
+    window.dispatchEvent(new Event("zouma:home-deck-next"))
+  }
+
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)")
     const syncPreference = () => setReduceMotion(media.matches)
@@ -119,7 +123,11 @@ export function HeroScreen({
             className="mt-5 max-w-2xl break-words text-[15px] leading-7 text-white/76 [overflow-wrap:anywhere] sm:mt-6 sm:text-lg sm:leading-8"
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
             animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={{ delay: 0.12, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              delay: 0.12,
+              duration: 0.65,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             {t("hero.subtitle")}
           </motion.p>
@@ -127,7 +135,11 @@ export function HeroScreen({
             className="mt-3 max-w-2xl break-words text-sm leading-7 text-white/56 [overflow-wrap:anywhere] sm:mt-4"
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
             animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              delay: 0.2,
+              duration: 0.65,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             {t("hero.positioning")}
           </motion.p>
@@ -271,25 +283,30 @@ export function HeroScreen({
           <div className="relative mt-3 grid gap-3 sm:grid-cols-[1.15fr_0.85fr]">
             <div className="flex items-center gap-4 rounded-lg border border-white/14 bg-white/10 p-4 backdrop-blur-xl">
               <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-white/12">
-              <CloudSun aria-hidden="true" className="h-5 w-5" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-2xl font-extrabold">
-                  {weather.temperature}
-                </span>
-                <span className="rounded-full bg-white/12 px-2.5 py-1 text-xs font-bold text-white/72">
-                  {weatherIsLive ? t("weather.realtime") : t("weather.pending")}
-                </span>
+                <CloudSun aria-hidden="true" className="h-5 w-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-2xl font-extrabold">
+                    {weather.temperature}
+                  </span>
+                  <span className="rounded-full bg-white/12 px-2.5 py-1 text-xs font-bold text-white/72">
+                    {weatherIsLive
+                      ? t("weather.realtime")
+                      : t("weather.pending")}
+                  </span>
+                </div>
+                <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/68 sm:text-sm">
+                  {weather.summary}
+                </p>
               </div>
-              <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/68 sm:text-sm">
-                {weather.summary}
-              </p>
             </div>
-          </div>
             <div className="rounded-lg border border-white/14 bg-white/8 p-4 backdrop-blur-xl">
               <div className="flex items-center gap-2 text-xs font-bold text-white/52">
-                <Network aria-hidden="true" className="h-4 w-4 text-[#d7b56d]" />
+                <Network
+                  aria-hidden="true"
+                  className="h-4 w-4 text-[#d7b56d]"
+                />
                 {t("hero.systemLogic")}
               </div>
               <p className="mt-2 text-sm leading-6 text-white/74">
@@ -304,7 +321,16 @@ export function HeroScreen({
             <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
             {t("hero.location")}
           </span>
-          <span>{t("hero.badge")}</span>
+          <div className="flex items-center gap-4">
+            <span>{t("hero.badge")}</span>
+            <button
+              className="rounded-full border border-white/20 bg-ink/40 px-3 py-1.5 text-white/75 transition hover:border-white/45 hover:bg-ink/60 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white motion-reduce:transition-none"
+              onClick={showOperations}
+              type="button"
+            >
+              查看运营逻辑 ↓
+            </button>
+          </div>
         </div>
       </Section>
     </section>
