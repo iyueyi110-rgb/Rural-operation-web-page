@@ -53,7 +53,7 @@ AIGC 云脑生成路线、导览摘要、天气联动（智能增强）
 
 ### 视觉风格
 
-克制、空间化、可信。低饱和、有层次、有乡村真实感。设计原则见 [PRODUCT.md](PRODUCT.md)。
+克制、空间化、可信。低饱和、有层次、有乡村真实感。设计原则见 [产品定位](../docs/product/PRODUCT_POSITIONING.md)。
 
 ---
 
@@ -200,6 +200,6 @@ README 中必须注明模拟系统的边界：
 
 项目已有文档提供以下可引用内容：
 - [README.md](README.md) — 当前技术文档，保留其中的启动命令和模拟命令
-- [PRD.md](PRD.md) — 产品需求文档，引用功能矩阵和用户旅程
-- [PRODUCT.md](PRODUCT.md) — 产品定位与设计原则，引用品牌个性和"一棵树带动全村运营"理念
-- [PROJECT_RULES.md](PROJECT_RULES.md) — 项目规则
+- [产品需求文档](../docs/product/PRD.md) — 引用功能矩阵和用户旅程
+- [产品定位与设计原则](../docs/product/PRODUCT_POSITIONING.md) — 引用品牌个性和“一棵树带动全村运营”理念
+- [项目执行规则](execution-rules.md) — 当前工程规则

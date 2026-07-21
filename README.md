@@ -15,7 +15,7 @@ Social Preview 制作建议：
 <img src="./docs/assets/social-preview.png" alt="走马村 - 认养一棵树" />
 -->
 
-**快速链接 / Quick Links**：在线演示 <!-- TODO: 填入部署地址 --> · [产品需求](PRD.md) · [产品定位](PRODUCT.md) · [模拟系统](docs/simulation-system.md)
+**快速链接 / Quick Links**：[产品需求](docs/product/PRD.md) · [产品定位](docs/product/PRODUCT_POSITIONING.md) · [模拟系统](docs/simulation/system-design.md) · [文档中心](docs/README.md)
 
 ## 为什么是「认养一棵树」
 
@@ -136,14 +136,14 @@ pnpm build
 
 ## 项目文档
 
-- [产品需求文档（PRD）](PRD.md)：用户旅程、功能矩阵与产品演进
-- [产品定位与设计原则](PRODUCT.md)：品牌个性与「一棵树带动全村运营」理念
-- [项目工程规则](PROJECT_RULES.md)：开发、验证与协作约定
-- [模拟系统设计](docs/simulation-system.md)：模拟边界、数据流与系统结构
-- [模拟指标口径](docs/simulation-metrics.md)：指标定义与统计规则
-- [模拟方法](docs/simulation-methodology.md)：场景、种子与比较方法
-- [认养模拟交付说明](docs/adoption-simulation-delivery.md)：运行和交付说明
+- [产品需求文档（PRD）](docs/product/PRD.md)：用户旅程、功能矩阵与产品演进
+- [产品定位与设计原则](docs/product/PRODUCT_POSITIONING.md)：品牌个性与「一棵树带动全村运营」理念
+- [项目工程规则](.codex/execution-rules.md)：开发、验证与协作约定
+- [模拟系统设计](docs/simulation/system-design.md)：模拟边界、数据流与系统结构
+- [模拟指标口径](docs/simulation/metrics-definition.md)：指标定义与统计规则
+- [模拟方法](docs/simulation/methodology.md)：场景、种子与比较方法
+- [认养模拟交付说明](docs/simulation/delivery-guide.md)：运行和交付说明
 
 ## 贡献与许可
 
-欢迎围绕乡村运营、树木认养和可信 AIGC 体验提出建议。参与开发前，请先阅读 [PROJECT_RULES.md](PROJECT_RULES.md)。本仓库当前未声明开源许可证；未经许可，请勿将项目代码用于再分发或商业用途。
+欢迎围绕乡村运营、树木认养和可信 AIGC 体验提出建议。参与开发前，请先阅读 [项目工程规则](.codex/execution-rules.md)。本仓库当前未声明开源许可证；未经许可，请勿将项目代码用于再分发或商业用途。

@@ -433,9 +433,9 @@ npx markdown-link-check docs/**/*.md
 
 ### 参考文档
 - [简历分析计划](./superpowers/plans/2026-07-17-adoption-simulation-resume-analysis.md)
-- [项目执行规则](../PROJECT_RULES.md)
-- [产品需求文档](../PRD.md)
-- [产品定位](../PRODUCT.md)
+- [项目执行规则](../execution-rules.md)
+- [产品需求文档](../../docs/product/PRD.md)
+- [产品定位](../../docs/product/PRODUCT_POSITIONING.md)
 
 ### 待创建文档
 - `.codex/README.md` - Codex 使用手册

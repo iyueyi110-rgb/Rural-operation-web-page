@@ -309,7 +309,7 @@ console.log(comparison.recommendation) // 'SUPPORT_UPGRADE' | 'NOT_SUPPORT' | ..
 
 ## 相关文档
 
-- [RAG 评测报告](../../docs/adoption-v2/rag-eval-report.md)
+- [RAG 评测报告](../../docs/reports/adoption-v2/rag-eval-report.md)
 - [知识源管理规范](./docs/knowledge-sources.md)
 ```
 
