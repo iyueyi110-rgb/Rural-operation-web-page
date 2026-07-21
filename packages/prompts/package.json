@@ -11,5 +11,13 @@
     "./content-factory": "./content-factory.ts",
     "./fallback-responses": "./fallback-responses.ts",
     "./knowledge-assistant": "./knowledge-assistant/index.ts"
+  },
+  "scripts": {
+    "test": "node --import tsx --test *.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.21",
+    "tsx": "^4.22.4",
+    "typescript": "^5.9.3"
   }
 }

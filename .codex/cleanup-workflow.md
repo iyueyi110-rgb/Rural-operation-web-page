@@ -117,7 +117,7 @@ git status --short
 ## Phase 3：提交优化后的文档
 
 ```bash
-git add CODEX_CLEANUP_INSTRUCTIONS.md docs/superpowers/plans/2026-07-15-project-cleanup.md
+git add .codex/cleanup-workflow.md docs/superpowers/plans/2026-07-15-project-cleanup.md
 git diff --cached --check
 git commit -m "docs: harden project cleanup workflow"
 ```

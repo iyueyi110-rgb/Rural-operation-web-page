@@ -62,7 +62,7 @@ const seedVillagers = [
   {
     id: "villager-dev-001",
     name: "李桂兰",
-    phone: "17732954821",
+    phone: "13800000011",
     skills: ["farming", "logistics"],
     nodeSlug: "lychee-field-core",
   },

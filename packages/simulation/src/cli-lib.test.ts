@@ -1,17 +1,22 @@
 import assert from "node:assert/strict"
+import { execFile } from "node:child_process"
 import { mkdtemp, readFile, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { isAbsolute, join, resolve } from "node:path"
 import test from "node:test"
+import { promisify } from "node:util"
 
 import { REGRESSION_SEEDS, SCENARIOS } from "./config.ts"
 import {
   compareRunFiles,
   parseCliArgs,
+  resolveCliPath,
   runRegressionMatrix,
   writePairArtifacts,
 } from "./cli-lib.ts"
 import { runSimulationPair } from "./comparison.ts"
+
+const execFileAsync = promisify(execFile)
 
 test("parseCliArgs separates a command, flags, and boolean switches", () => {
   assert.deepEqual(
@@ -27,6 +32,45 @@ test("parseCliArgs separates a command, flags, and boolean switches", () => {
       flags: { seed: "20260714", scenario: "CONTINUOUS_RAIN", compact: true },
     },
   )
+})
+
+test("resolveCliPath uses the invocation directory and preserves absolute paths", () => {
+  const invocationCwd = resolve(tmpdir(), "simulation-caller")
+  const relative = resolveCliPath("outputs/pair.json", invocationCwd)
+  const absolute = resolve(tmpdir(), "absolute-pair.json")
+
+  assert.equal(relative, resolve(invocationCwd, "outputs/pair.json"))
+  assert.equal(resolveCliPath(absolute, invocationCwd), absolute)
+  assert.ok(isAbsolute(relative))
+})
+
+test("CLI writes relative output below the explicit caller directory", async () => {
+  const callerDirectory = await mkdtemp(join(tmpdir(), "simulation-caller-"))
+  const output = join(callerDirectory, "nested", "pair.json")
+
+  await execFileAsync(
+    process.execPath,
+    [
+      "--import",
+      "tsx",
+      "src/cli.ts",
+      "run",
+      "--cwd",
+      callerDirectory,
+      "--output",
+      "nested/pair.json",
+      "--seed",
+      "20260713",
+      "--scenario",
+      "NORMAL",
+    ],
+    { cwd: resolve(import.meta.dirname, "..") },
+  )
+
+  const parsed = JSON.parse(await readFile(output, "utf8")) as {
+    pair?: { v0?: { worldHash?: string }; v1?: { worldHash?: string } }
+  }
+  assert.equal(parsed.pair?.v0?.worldHash, parsed.pair?.v1?.worldHash)
 })
 
 test("regression matrix covers five fixed seeds and all eight scenarios reproducibly", () => {

@@ -7,12 +7,15 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
+    "test": "turbo test",
     "type-check": "turbo type-check",
     "format": "prettier --check .",
-    "simulation:run": "pnpm --filter @zouma/simulation cli run",
-    "simulation:regression": "pnpm --filter @zouma/simulation cli regression",
-    "simulation:compare": "pnpm --filter @zouma/simulation cli compare",
-    "simulation:export": "pnpm --filter @zouma/simulation cli export"
+    "docs:check": "node scripts/check-docs.mjs",
+    "quality:gate": "node scripts/quality-gate.mjs",
+    "simulation:run": "pnpm --filter @zouma/simulation cli run --cwd ../..",
+    "simulation:regression": "pnpm --filter @zouma/simulation cli regression --cwd ../..",
+    "simulation:compare": "pnpm --filter @zouma/simulation cli compare --cwd ../..",
+    "simulation:export": "pnpm --filter @zouma/simulation cli export --cwd ../.."
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.48.1",

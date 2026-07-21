@@ -1,5 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises"
-import { join } from "node:path"
+import { join, resolve } from "node:path"
 
 import type {
   ScenarioId,
@@ -28,6 +28,13 @@ export interface RegressionSummary {
   v0WorldHash: string
   v1WorldHash: string
   recommendation: SimulationComparison["recommendation"]
+}
+
+export function resolveCliPath(
+  value: string,
+  invocationCwd = process.env.INIT_CWD ?? process.cwd(),
+): string {
+  return resolve(invocationCwd, value)
 }
 
 export function parseCliArgs(argv: string[]): ParsedCliArgs {

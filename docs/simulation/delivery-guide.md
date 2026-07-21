@@ -52,4 +52,4 @@ pnpm simulation:export --seed 20260713 --scenario NORMAL
 - 当前环境没有可连接的 PostgreSQL，因此未执行真实数据库事务集成测试；Prisma schema 的生成与校验已通过。JSON/内存数据不应作为长期生产审计存储。
 - 不接入大模型、真实图像审核或外部网络；质量判断均为确定性规则。
 
-详细设计见 [模拟系统](simulation-system.md)、[指标口径](simulation-metrics.md) 与 [模拟方法](simulation-methodology.md)。
+详细设计见 [模拟系统](system-design.md)、[指标口径](metrics-definition.md) 与 [模拟方法](methodology.md)。
