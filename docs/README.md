@@ -8,11 +8,14 @@
 
 - [产品需求文档](product/PRD.md)
 - [产品定位与设计原则](product/PRODUCT_POSITIONING.md)
+- [项目亮点](product/HIGHLIGHTS.md)
 - [项目演讲稿](product/pitch-deck.md)
 
 ### 技术与开发
 
+- [架构总览](../ARCHITECTURE.md)
 - [数据结构](tech/database-schema.md)
+- [贡献指南](../CONTRIBUTING.md)
 - [Codex 执行规则](../.codex/execution-rules.md)
 
 ### 规则模拟
