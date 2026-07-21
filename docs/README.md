@@ -24,6 +24,7 @@
 - [指标定义](simulation/metrics-definition.md)
 - [测评方法](simulation/methodology.md)
 - [交付与运行](simulation/delivery-guide.md)
+- [40 组回归证据与简历材料](simulation/resume-analysis.md)
 
 ### 运营与报告
 
