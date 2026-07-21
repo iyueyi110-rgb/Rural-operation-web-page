@@ -1,0 +1,25 @@
+{
+  "name": "@zouma/knowledge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./index": "./generated/knowledge-index.json"
+  },
+  "scripts": {
+    "build-index": "tsx src/build-index.ts",
+    "test": "node --import tsx --test src/*.test.ts",
+    "eval": "tsx src/evaluator.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@zouma/contracts": "workspace:*",
+    "@zouma/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.22.4",
+    "typescript": "^5.9.3"
+  }
+}

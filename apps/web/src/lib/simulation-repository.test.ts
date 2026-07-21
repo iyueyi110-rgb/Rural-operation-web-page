@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { access, mkdtemp, rm } from "node:fs/promises"
+import { access, mkdtemp, rm, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import test from "node:test"
@@ -445,16 +445,26 @@ test("repository factory falls back from Prisma to JSON and reports degraded mod
 })
 
 test("repository factory falls back to memory when both Prisma and JSON are unavailable", async () => {
-  const repository = await createSimulationRepository({
-    prismaProbe: async () => {
-      throw new Error("database unavailable")
-    },
-    fileDirectory: "/dev/null/simulation-store",
-  })
+  const directory = await mkdtemp(
+    path.join(os.tmpdir(), "simulation-unavailable-"),
+  )
+  const blockingFile = path.join(directory, "not-a-directory")
+  await writeFile(blockingFile, "")
 
-  assert.equal(repository.meta.backend, "memory")
-  assert.equal(repository.meta.degraded, true)
-  assert.match(repository.meta.reason ?? "", /database unavailable/)
+  try {
+    const repository = await createSimulationRepository({
+      prismaProbe: async () => {
+        throw new Error("database unavailable")
+      },
+      fileDirectory: path.join(blockingFile, "simulation-store"),
+    })
+
+    assert.equal(repository.meta.backend, "memory")
+    assert.equal(repository.meta.degraded, true)
+    assert.match(repository.meta.reason ?? "", /database unavailable/)
+  } finally {
+    await rm(directory, { recursive: true, force: true })
+  }
 })
 
 test("repository factory fails closed when the launcher requires Prisma", async () => {

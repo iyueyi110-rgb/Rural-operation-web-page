@@ -1,0 +1,20 @@
+[
+  {
+    "id": "heading-k5-v2",
+    "chunking": "heading-400-600",
+    "topK": 5,
+    "prompt": "knowledge-v2"
+  },
+  {
+    "id": "heading-k3-v2",
+    "chunking": "heading-400-600",
+    "topK": 3,
+    "prompt": "knowledge-v2"
+  },
+  {
+    "id": "heading-k8-v1",
+    "chunking": "heading-400-600",
+    "topK": 8,
+    "prompt": "knowledge-v1"
+  }
+]

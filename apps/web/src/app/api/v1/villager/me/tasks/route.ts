@@ -3,6 +3,12 @@ import { prisma } from "@zouma/database"
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { isTaskStatus, mapTask } from "@web/lib/task-records"
 import { getVillagerIdFromToken } from "@web/lib/villager-auth"
+import { isFeatureEnabled } from "@web/lib/feature-flags"
+import {
+  isFulfillmentTaskAction,
+  transitionFulfillmentTask,
+} from "@web/lib/fulfillment-workflow"
+import { WorkflowConflictError } from "@web/lib/workflow-errors"
 
 const villagerTaskStatuses = [
   "pending",
@@ -52,11 +58,7 @@ export async function PATCH(request: Request) {
   }
 
   const body = (await request.json().catch(() => null)) as unknown
-  if (
-    !isPlainObject(body) ||
-    typeof body.id !== "string" ||
-    !isVillagerTaskStatus(body.status)
-  ) {
+  if (!isPlainObject(body) || typeof body.id !== "string") {
     return jsonResponse(
       request,
       { error: "Invalid task update" },
@@ -70,7 +72,53 @@ export async function PATCH(request: Request) {
   if (!existing) {
     return jsonResponse(request, { error: "Task not found" }, { status: 404 })
   }
-  if (!canVillagerMoveTask(existing.status, body.status)) {
+  if (existing.adoptionId && isFeatureEnabled("ADOPTION_V2_ENABLED")) {
+    if (
+      !isFulfillmentTaskAction(body.action) ||
+      !["accept", "start", "report_exception"].includes(body.action) ||
+      !Number.isInteger(body.expectedVersion)
+    ) {
+      return jsonResponse(
+        request,
+        { error: "Invalid fulfillment action" },
+        { status: 400 },
+      )
+    }
+    try {
+      const updated = await transitionFulfillmentTask({
+        taskId: existing.id,
+        action: body.action,
+        expectedVersion: body.expectedVersion as number,
+        actorId: villagerId,
+        actorType: "villager",
+        reason:
+          typeof body.reason === "string" ? body.reason.trim() : undefined,
+        correlationId: request.headers.get("x-correlation-id") ?? undefined,
+      })
+      const data = await prisma.task.findUniqueOrThrow({
+        where: { id: updated.id },
+        include: {
+          villager: { select: { id: true, name: true } },
+          node: { select: { id: true, slug: true, nameKey: true } },
+        },
+      })
+      return jsonResponse(request, { data: mapTask(data) })
+    } catch (error) {
+      if (error instanceof WorkflowConflictError) {
+        return jsonResponse(
+          request,
+          { error: error.message, code: error.code },
+          { status: 409 },
+        )
+      }
+      throw error
+    }
+  }
+
+  if (
+    !isVillagerTaskStatus(body.status) ||
+    !canVillagerMoveTask(existing.status, body.status)
+  ) {
     return jsonResponse(
       request,
       { error: "Invalid task status transition" },

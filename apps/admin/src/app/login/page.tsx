@@ -1,4 +1,24 @@
-export default function AdminLoginPage() {
+const loginErrorMessages = {
+  invalid_credentials: "口令不正确，请检查后重新输入。",
+  not_configured: "后台登录尚未配置，请通过根目录 start.cmd 重新启动演示。",
+  rate_limited: "尝试次数过多，请稍后再试。",
+} as const
+
+export default function AdminLoginPage({
+  searchParams,
+}: {
+  searchParams?: { error?: string }
+}) {
+  const errorMessage =
+    searchParams?.error && searchParams.error in loginErrorMessages
+      ? loginErrorMessages[
+          searchParams.error as keyof typeof loginErrorMessages
+        ]
+      : null
+  const showLocalDemoPassword =
+    process.env.NODE_ENV !== "production" &&
+    process.env.ADMIN_LOGIN_PASSWORD === "zouma-demo-local"
+
   return (
     <main className="grid min-h-screen place-items-center bg-rice px-5 text-ink">
       <form
@@ -13,6 +33,21 @@ export default function AdminLoginPage() {
         <p className="mt-2 text-sm leading-6 text-ink/60">
           登录后浏览器仅保存 HttpOnly 会话，不会接触 Web API 服务密钥。
         </p>
+        {errorMessage ? (
+          <p
+            aria-live="polite"
+            className="mt-4 rounded-lg border border-lychee/25 bg-lychee/8 px-3 py-2 text-sm font-bold leading-6 text-lychee"
+            role="alert"
+          >
+            {errorMessage}
+          </p>
+        ) : null}
+        {showLocalDemoPassword ? (
+          <p className="mt-4 rounded-lg border border-moss/20 bg-moss/8 px-3 py-2 text-sm leading-6 text-ink/72">
+            本地演示口令：
+            <code className="ml-1 font-bold text-canopy">zouma-demo-local</code>
+          </p>
+        ) : null}
         <label className="mt-6 grid gap-2 text-sm font-bold">
           管理员口令
           <input

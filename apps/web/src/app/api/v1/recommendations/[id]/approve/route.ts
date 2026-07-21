@@ -5,6 +5,7 @@ import {
   getRecommendationReviewStatus,
   isAllowedRecommendationEndpoint,
 } from "@web/lib/recommendation-generator"
+import { shouldExecuteRecommendationActions } from "@web/lib/adoption-agent-schema"
 import { isAdminRequest } from "@web/lib/tree-records"
 
 interface ActionTrigger {
@@ -100,6 +101,12 @@ export async function POST(
     where: { id: existing.id },
     data: { status: "approved", approvedBy, approvedAt: new Date() },
   })
+  if (!shouldExecuteRecommendationActions(existing.type)) {
+    return jsonResponse(request, {
+      data,
+      meta: { triggers: [], shadowMode: true },
+    })
+  }
   const triggerResults = await executeActionTriggers(request, triggers)
 
   return jsonResponse(request, { data, meta: { triggers: triggerResults } })

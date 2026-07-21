@@ -1,30 +1,11 @@
 import type { ReactNode } from "react"
-import { Noto_Sans_SC, Noto_Serif_SC } from "next/font/google"
-
 import "leaflet/dist/leaflet.css"
 import "./globals.css"
 import { OfflineBanner } from "@web/components/offline-banner"
 
-const notoSansSc = Noto_Sans_SC({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-  variable: "--font-sans",
-})
-
-const notoSerifSc = Noto_Serif_SC({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-  variable: "--font-serif",
-})
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html
-      lang="zh-CN"
-      className={`${notoSansSc.variable} ${notoSerifSc.variable}`}
-    >
+    <html lang="zh-CN">
       <body>
         <noscript>
           <div

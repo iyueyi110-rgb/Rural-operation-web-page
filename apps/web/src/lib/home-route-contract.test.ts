@@ -73,3 +73,11 @@ test("supports button, wheel, keyboard and touch page navigation", () => {
   assert.match(pageDeckSource, /aria-current/)
   assert.match(pageDeckSource, /overflow-clip/)
 })
+
+test("keeps essential hero copy visible when reduced motion is enabled", () => {
+  const visibleMotionTargets =
+    heroSource.match(/animate=\{\{ opacity: 1, y: 0 \}\}/g) ?? []
+
+  assert.equal(visibleMotionTargets.length, 3)
+  assert.doesNotMatch(heroSource, /animate=\{reduceMotion \? undefined/)
+})

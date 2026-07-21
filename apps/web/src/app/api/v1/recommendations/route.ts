@@ -9,6 +9,11 @@ const types = [
   "crowd_diversion",
   "inventory_alert",
   "maintenance",
+  "adoption_deadline_risk",
+  "adoption_unclaimed_task",
+  "adoption_evidence_incomplete",
+  "adoption_weather_delay",
+  "adoption_repeated_exception",
 ] as const
 
 export function OPTIONS(request: Request) {
@@ -55,7 +60,11 @@ export async function GET(request: Request) {
     console.error("Recommendations query failed:", error)
     return jsonResponse(request, {
       data: [],
-      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+      meta: {
+        degraded: true,
+        total: 0,
+        reason: "数据库暂不可用，已返回降级演示数据",
+      },
     })
   }
 }

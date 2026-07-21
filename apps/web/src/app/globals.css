@@ -8,6 +8,10 @@
   --foreground: #19201b;
   --surface: #fbfaf6;
   --line: #cfc4b1;
+  --font-sans: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC",
+    "Noto Sans CJK SC", "Source Han Sans SC", system-ui, sans-serif;
+  --font-serif: "SimSun", "Songti SC", "STSong", "Noto Serif CJK SC",
+    "Source Han Serif SC", Georgia, serif;
 }
 
 * {
@@ -25,7 +29,7 @@ body {
     radial-gradient(circle at 86% 88%, rgba(47, 118, 134, 0.055), transparent 24rem),
     linear-gradient(180deg, #f5f0e6 0%, #ebe2d3 52%, #f8f5ee 100%);
   color: var(--foreground);
-  font-family: var(--font-sans), "Noto Sans SC", system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 a {
@@ -43,7 +47,7 @@ a {
 }
 
 .hero-serif {
-  font-family: var(--font-serif), "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  font-family: var(--font-serif);
 }
 
 .hero-grain {

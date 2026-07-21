@@ -175,6 +175,23 @@ test("the login route creates a hardened HttpOnly cookie only for valid credenti
     )
     assert.equal(denied.status, 401)
     assert.equal(denied.headers.has("set-cookie"), false)
+
+    const browserDenied = await createSessionRoute(
+      new Request("http://admin.local/api/admin/session", {
+        method: "POST",
+        headers: {
+          accept: "text/html,application/xhtml+xml",
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ password: "wrong" }),
+      }),
+    )
+    assert.equal(browserDenied.status, 303)
+    assert.equal(
+      browserDenied.headers.get("location"),
+      "http://admin.local/login?error=invalid_credentials",
+    )
+    assert.equal(browserDenied.headers.has("set-cookie"), false)
   } finally {
     if (previousPassword === undefined) delete process.env.ADMIN_LOGIN_PASSWORD
     else process.env.ADMIN_LOGIN_PASSWORD = previousPassword

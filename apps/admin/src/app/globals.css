@@ -20,6 +20,8 @@ body {
     radial-gradient(circle at 10% 0%, rgba(70, 98, 74, 0.08), transparent 24rem),
     linear-gradient(180deg, #f3eee4 0%, #e9e0d2 100%);
   color: var(--admin-ink);
+  font-family: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC",
+    "Noto Sans CJK SC", "Source Han Sans SC", system-ui, sans-serif;
 }
 
 button,

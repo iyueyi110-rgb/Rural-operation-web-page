@@ -1,12 +1,43 @@
-import type { TaskData, TaskStatus, TaskType, VillagerTaskSummary } from "@zouma/contracts"
+import type {
+  TaskData,
+  TaskStatus,
+  TaskType,
+  VillagerTaskSummary,
+} from "@zouma/contracts"
 
-export const taskTypes = ["farming", "guiding", "logistics", "maintenance", "service"] as const
-export const taskStatuses = ["pending", "accepted", "in_progress", "completed", "cancelled"] as const
+export const taskTypes = [
+  "farming",
+  "guiding",
+  "logistics",
+  "maintenance",
+  "service",
+] as const
+export const taskStatuses = [
+  "pending",
+  "accepted",
+  "in_progress",
+  "submitted",
+  "rejected",
+  "resubmitted",
+  "approved",
+  "settled",
+  "exception_reported",
+  "overdue",
+  "completed",
+  "cancelled",
+] as const
 
 const taskTransitions: Record<TaskStatus, TaskStatus[]> = {
   pending: ["accepted", "cancelled"],
   accepted: ["in_progress", "cancelled"],
   in_progress: ["completed", "cancelled"],
+  submitted: [],
+  rejected: [],
+  resubmitted: [],
+  approved: [],
+  settled: [],
+  exception_reported: [],
+  overdue: [],
   completed: [],
   cancelled: [],
 }
@@ -24,7 +55,9 @@ export function canMoveTaskStatus(current: string, next: string) {
   return current === next || taskTransitions[current].includes(next)
 }
 
-export function summarizeTasks(tasks: Array<{ status: string; earnings: number }>): VillagerTaskSummary {
+export function summarizeTasks(
+  tasks: Array<{ status: string; earnings: number }>,
+): VillagerTaskSummary {
   return {
     totalTasks: tasks.length,
     completedTasks: tasks.filter((task) => task.status === "completed").length,
@@ -43,6 +76,14 @@ export function mapTask(task: {
   villagerId: string | null
   nodeId: string | null
   scheduledDate: string | null
+  adoptionId?: string | null
+  treeId?: string | null
+  deadlineAt?: Date | null
+  acceptedAt?: Date | null
+  submittedAt?: Date | null
+  completedAt?: Date | null
+  evidenceRequirements?: unknown
+  version?: number
   earnings: number
   createdAt: Date
   updatedAt: Date
@@ -61,6 +102,17 @@ export function mapTask(task: {
     villagerId: task.villagerId ?? undefined,
     nodeId: task.nodeId ?? undefined,
     scheduledDate: task.scheduledDate ?? undefined,
+    adoptionId: task.adoptionId ?? undefined,
+    treeId: task.treeId ?? undefined,
+    deadlineAt: task.deadlineAt?.toISOString(),
+    acceptedAt: task.acceptedAt?.toISOString(),
+    submittedAt: task.submittedAt?.toISOString(),
+    completedAt: task.completedAt?.toISOString(),
+    evidenceRequirements:
+      task.evidenceRequirements && typeof task.evidenceRequirements === "object"
+        ? (task.evidenceRequirements as Record<string, unknown>)
+        : undefined,
+    version: task.version,
     earnings: task.earnings,
     createdAt: task.createdAt.toISOString(),
     updatedAt: task.updatedAt.toISOString(),

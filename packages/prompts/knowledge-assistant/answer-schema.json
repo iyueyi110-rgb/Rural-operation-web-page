@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "answer",
+    "status",
+    "citations",
+    "allowedRoles",
+    "requiresHuman"
+  ],
+  "properties": {
+    "answer": { "type": "string" },
+    "status": {
+      "enum": [
+        "answered",
+        "knowledge_not_published",
+        "insufficient_evidence",
+        "permission_denied",
+        "conflicting_rules",
+        "specific_case_requires_operator",
+        "prohibited_action"
+      ]
+    },
+    "citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["documentId", "title", "version", "section", "quote"],
+        "properties": {
+          "documentId": { "type": "string" },
+          "title": { "type": "string" },
+          "version": { "type": "string" },
+          "section": { "type": "string" },
+          "quote": { "type": "string" }
+        }
+      }
+    },
+    "allowedRoles": {
+      "type": "array",
+      "items": { "enum": ["operator", "villager"] }
+    },
+    "requiresHuman": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}
