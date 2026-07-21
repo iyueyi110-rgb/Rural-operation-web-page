@@ -23,6 +23,15 @@ interface ChatItem {
   requiresHuman?: boolean
 }
 
+interface AssistantAnswer {
+  question?: string
+  answer: string
+  status?: string
+  citations?: ChatItem["citations"]
+  allowedRoles?: string[]
+  requiresHuman?: boolean
+}
+
 type AssistantMode = "knowledge" | "operations"
 
 export default function AiAssistantPage() {
@@ -42,21 +51,19 @@ export default function AiAssistantPage() {
 
     try {
       const path = mode === "knowledge" ? "/knowledge/query" : "/ai/query"
-      const payload = await fetchAdminApi<{
-        data?: {
-          question?: string
-          answer: string
-          status?: string
-          citations?: ChatItem["citations"]
-          allowedRoles?: string[]
-          requiresHuman?: boolean
+      const payload = await fetchAdminApi<
+        AssistantAnswer & {
+          data?: AssistantAnswer
+          error?: string | { message?: string }
         }
-        error?: string | { message?: string }
-      }>(path, {
+      >(path, {
         method: "POST",
         body: JSON.stringify({ question: trimmed }),
       })
-      if (!payload.data)
+      const answer =
+        payload.data ??
+        (typeof payload.answer === "string" ? payload : undefined)
+      if (!answer)
         throw new Error(
           typeof payload.error === "string"
             ? payload.error
@@ -65,12 +72,12 @@ export default function AiAssistantPage() {
 
       const item: ChatItem = {
         id: `${Date.now()}`,
-        question: payload.data.question ?? trimmed,
-        answer: payload.data.answer,
-        status: payload.data.status,
-        citations: payload.data.citations,
-        allowedRoles: payload.data.allowedRoles,
-        requiresHuman: payload.data.requiresHuman,
+        question: answer.question ?? trimmed,
+        answer: answer.answer,
+        status: answer.status,
+        citations: answer.citations,
+        allowedRoles: answer.allowedRoles,
+        requiresHuman: answer.requiresHuman,
       }
       setItems((current) => [item, ...current])
       setQuestion("")
