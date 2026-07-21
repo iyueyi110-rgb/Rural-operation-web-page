@@ -81,3 +81,8 @@ test("keeps essential hero copy visible when reduced motion is enabled", () => {
   assert.equal(visibleMotionTargets.length, 3)
   assert.doesNotMatch(heroSource, /animate=\{reduceMotion \? undefined/)
 })
+
+test("keeps the start browsing action functional outside desktop deck mode", () => {
+  assert.match(heroSource, /buildExploreHref\(locale\)/)
+  assert.match(heroSource, /md:hidden/)
+})
