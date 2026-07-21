@@ -34,6 +34,7 @@
 - [知识库评测报告](reports/adoption-v2/rag-eval-report.md)
 - [Agent 评测报告](reports/adoption-v2/agent-eval-report.md)
 - [视觉回归报告](reports/adoption-v2/visual-regression-report.md)
+- [私有项目发布检查清单](operations/private-release-checklist.md)
 
 ### 历史材料
 
