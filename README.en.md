@@ -1,5 +1,7 @@
 # Adopt a Tree, Connect with a Village
 
+[![CI](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/ci.yml/badge.svg)](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/ci.yml) [![Docs](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/docs-check.yml/badge.svg)](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/docs-check.yml) [![Simulation regression](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/simulation-regression.yml/badge.svg)](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/simulation-regression.yml)
+
 [简体中文](README.md) · [Documentation](docs/README.md) · [Product Requirements](docs/product/PRD.md) · [Rule Simulation](packages/simulation/README.md)
 
 ![Adopt a Tree project preview](docs/assets/social-preview.png)

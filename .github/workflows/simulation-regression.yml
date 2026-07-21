@@ -1,0 +1,28 @@
+name: Simulation regression
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 2 * * 1"
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.6.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm simulation:regression --output outputs/simulation/regression-summary.json
+      - run: node scripts/validate-regression.mjs outputs/simulation/regression-summary.json
+      - name: Upload regression evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: simulation-regression-${{ github.run_id }}
+          path: outputs/simulation/regression-summary.json
+          retention-days: 14

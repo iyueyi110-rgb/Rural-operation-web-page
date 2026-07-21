@@ -1,5 +1,7 @@
 # 认养一棵树，连接一个村
 
+[![CI](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/ci.yml/badge.svg)](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/ci.yml) [![Docs](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/docs-check.yml/badge.svg)](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/docs-check.yml) [![Simulation regression](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/simulation-regression.yml/badge.svg)](https://github.com/iyueyi110-rgb/Rural-operation-web-page/actions/workflows/simulation-regression.yml)
+
 [English](README.en.md) · [文档中心](docs/README.md) · [产品需求](docs/product/PRD.md) · [规则模拟](packages/simulation/README.md)
 
 ![认养一棵树项目预览](docs/assets/social-preview.png)
