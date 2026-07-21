@@ -24,7 +24,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$RootDir = $PSScriptRoot
+$RootDir = Split-Path -Parent $PSScriptRoot
 Set-Location $RootDir
 
 try { $Host.UI.RawUI.WindowTitle = "Zouma Village Cloud Brain Startup" } catch { }

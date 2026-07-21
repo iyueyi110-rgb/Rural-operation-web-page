@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process"
 
 const pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm"
 const steps = [
+  [process.execPath, ["scripts/check-launchers.mjs"]],
   [pnpm, ["type-check"]],
   [pnpm, ["test"]],
   [pnpm, ["docs:check"]],
