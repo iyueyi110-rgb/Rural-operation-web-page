@@ -27,7 +27,7 @@ for (const [command, args] of steps) {
   const result = spawnSync(command, args, {
     cwd: process.cwd(),
     env: process.env,
-    shell: process.platform === "win32",
+    shell: process.platform === "win32" && command.endsWith(".cmd"),
     stdio: "inherit",
     windowsHide: true,
   })
