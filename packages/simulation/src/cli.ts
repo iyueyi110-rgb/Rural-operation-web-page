@@ -12,6 +12,7 @@ import { compareSimulationRuns, runSimulationPair } from "./comparison.ts"
 import {
   compareRunFiles,
   parseCliArgs,
+  resolveCliPath,
   runRegressionMatrix,
   writePairArtifacts,
 } from "./cli-lib.ts"
@@ -60,10 +61,14 @@ function simulationConfig(
   return config
 }
 
-async function emit(value: unknown, output?: string): Promise<void> {
+async function emit(
+  value: unknown,
+  output: string | undefined,
+  invocationCwd: string,
+): Promise<void> {
   const contents = `${JSON.stringify(value, null, 2)}\n`
   if (output) {
-    const path = resolve(output)
+    const path = resolveCliPath(output, invocationCwd)
     await mkdir(dirname(path), { recursive: true })
     await writeFile(path, contents, "utf8")
     process.stdout.write(`${path}\n`)
@@ -74,6 +79,9 @@ async function emit(value: unknown, output?: string): Promise<void> {
 
 async function main(): Promise<void> {
   const { command, flags } = parseCliArgs(process.argv.slice(2))
+  const invocationCwd = resolve(
+    stringFlag(flags, "cwd") ?? process.env.INIT_CWD ?? process.cwd(),
+  )
   if (command === "help" || flags.help === true) {
     process.stdout.write(HELP)
     return
@@ -83,6 +91,7 @@ async function main(): Promise<void> {
     await emit(
       { pair, comparison: compareSimulationRuns(pair.v0, pair.v1) },
       stringFlag(flags, "output"),
+      invocationCwd,
     )
     return
   }
@@ -96,6 +105,7 @@ async function main(): Promise<void> {
       },
       stringFlag(flags, "output") ??
         "outputs/simulation/regression-summary.json",
+      invocationCwd,
     )
     return
   }
@@ -104,17 +114,24 @@ async function main(): Promise<void> {
     const v1 = stringFlag(flags, "v1")
     if (!v0 || !v1) throw new Error("compare requires --v0 and --v1 JSON files")
     await emit(
-      await compareRunFiles(resolve(v0), resolve(v1)),
+      await compareRunFiles(
+        resolveCliPath(v0, invocationCwd),
+        resolveCliPath(v1, invocationCwd),
+      ),
       stringFlag(flags, "output"),
+      invocationCwd,
     )
     return
   }
   if (command === "export") {
     const result = await writePairArtifacts(
       runSimulationPair(simulationConfig(flags)),
-      resolve(stringFlag(flags, "output-root") ?? "outputs/simulation"),
+      resolveCliPath(
+        stringFlag(flags, "output-root") ?? "outputs/simulation",
+        invocationCwd,
+      ),
     )
-    await emit(result)
+    await emit(result, undefined, invocationCwd)
     return
   }
   throw new Error(`Unknown command: ${command}\n\n${HELP}`)
