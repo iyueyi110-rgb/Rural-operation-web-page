@@ -119,6 +119,41 @@ test("only the authenticated server proxy adds the Web admin token", async () =>
   assert.equal(upstream?.headers.has("cookie"), false)
 })
 
+test("the BFF removes stale upstream compression headers", async () => {
+  const secret = "s".repeat(32)
+  const session = await createAdminSession(secret, Date.now(), 60_000)
+  const response = await proxyAdminRequest(
+    new Request("http://admin.local/api/admin/knowledge/query", {
+      method: "POST",
+      headers: {
+        cookie: `${ADMIN_SESSION_COOKIE}=${session}`,
+        origin: "http://admin.local",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ question: "养护照片不清晰时怎么办？" }),
+    }),
+    ["knowledge", "query"],
+    {
+      sessionSecret: secret,
+      webApiBase: "http://web.local/api/v1",
+      adminApiToken: "web-service-token",
+      fetcher: async () =>
+        new Response(JSON.stringify({ answer: "知识尚未发布" }), {
+          headers: {
+            "content-type": "application/json",
+            "content-encoding": "gzip",
+            "transfer-encoding": "chunked",
+          },
+        }),
+    },
+  )
+
+  assert.equal(response.status, 200)
+  assert.equal(response.headers.has("content-encoding"), false)
+  assert.equal(response.headers.has("transfer-encoding"), false)
+  assert.deepEqual(await response.json(), { answer: "知识尚未发布" })
+})
+
 test("the BFF rejects cross-origin mutations before forwarding", async () => {
   const secret = "s".repeat(32)
   const session = await createAdminSession(secret)

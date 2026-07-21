@@ -67,6 +67,11 @@ export async function proxyAdminRequest(
   const responseHeaders = new Headers(upstream.headers)
   responseHeaders.delete("set-cookie")
   responseHeaders.delete("content-length")
+  // Node's fetch transparently decompresses upstream responses while keeping
+  // the original transport headers. Forwarding those headers would make the
+  // browser attempt to decompress the already-decoded body a second time.
+  responseHeaders.delete("content-encoding")
+  responseHeaders.delete("transfer-encoding")
   return new Response(upstream.body, {
     status: upstream.status,
     statusText: upstream.statusText,
