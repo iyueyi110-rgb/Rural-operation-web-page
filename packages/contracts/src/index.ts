@@ -265,6 +265,13 @@ export type TaskStatus =
   | "pending"
   | "accepted"
   | "in_progress"
+  | "submitted"
+  | "rejected"
+  | "resubmitted"
+  | "approved"
+  | "settled"
+  | "exception_reported"
+  | "overdue"
   | "completed"
   | "cancelled"
 
@@ -295,6 +302,14 @@ export interface TaskData {
   villagerId?: string
   nodeId?: string
   scheduledDate?: string
+  adoptionId?: string
+  treeId?: string
+  deadlineAt?: string
+  acceptedAt?: string
+  submittedAt?: string
+  completedAt?: string
+  evidenceRequirements?: Record<string, unknown>
+  version?: number
   earnings: number
   createdAt: string
   updatedAt: string
@@ -411,6 +426,106 @@ export interface TreeAdoptionData {
   createdAt: string
   updatedAt: string
   harvestBookings?: HarvestBookingData[]
+}
+
+export type AdoptionWorkflowStatus =
+  | "pending_payment"
+  | "active"
+  | "benefit_pending"
+  | "fulfilled"
+  | "renewal_pending"
+  | "renewed"
+  | "expired"
+  | "cancelled"
+  | "refund_requested"
+  | "refund_reviewing"
+  | "refunded"
+  | "refund_rejected"
+
+export type FulfillmentTaskAction =
+  | "accept"
+  | "start"
+  | "submit_evidence"
+  | "resubmit"
+  | "report_exception"
+  | "approve"
+  | "reject"
+  | "settle"
+  | "mark_overdue"
+
+export interface FulfillmentMediaItem {
+  url: string
+  hash: string
+  mimeType: "image/jpeg" | "image/png" | "image/webp"
+  size: number
+}
+
+export interface FulfillmentEvidenceData {
+  id: string
+  adoptionId: string
+  taskId: string
+  submittedBy: string
+  description: string
+  media: FulfillmentMediaItem[]
+  version: number
+  status: "submitted" | "approved" | "rejected"
+  submittedAt: string
+}
+
+export type KnowledgeAnswerStatus =
+  | "answered"
+  | "knowledge_not_published"
+  | "insufficient_evidence"
+  | "permission_denied"
+  | "conflicting_rules"
+  | "specific_case_requires_operator"
+  | "prohibited_action"
+
+export interface KnowledgeCitation {
+  documentId: string
+  title: string
+  version: string
+  section: string
+  quote: string
+}
+
+export interface KnowledgeAnswerData {
+  answer: string
+  status: KnowledgeAnswerStatus
+  citations: KnowledgeCitation[]
+  allowedRoles: Array<"operator" | "villager">
+  requiresHuman: boolean
+}
+
+export type AdoptionRecommendationType =
+  | "adoption_deadline_risk"
+  | "adoption_unclaimed_task"
+  | "adoption_evidence_incomplete"
+  | "adoption_weather_delay"
+  | "adoption_repeated_exception"
+
+export interface AdoptionAgentSuggestion {
+  runId: string
+  riskLevel: "low" | "medium" | "high"
+  adoptionId: string
+  taskId: string
+  riskType:
+    | "deadline"
+    | "unclaimed"
+    | "evidence"
+    | "weather"
+    | "repeated_exception"
+  evidenceRefs: string[]
+  summary: string
+  recommendedAction:
+    | "remind"
+    | "reassign"
+    | "extend"
+    | "manual_review"
+    | "no_action"
+  reason: string
+  confidence: number
+  requiresHumanApproval: true
 }
 
 export type InteractionTaskType =

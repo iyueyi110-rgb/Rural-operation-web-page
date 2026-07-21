@@ -1596,6 +1596,21 @@
         "pending": "接取任务",
         "accepted": "开始任务",
         "in_progress": "完成任务"
+      },
+      "knowledge": {
+        "open": "询问养护规则",
+        "placeholder": "输入与当前任务相关的规则问题",
+        "ask": "发送问题",
+        "asking": "查询中",
+        "failed": "暂时无法查询养护规则"
+      },
+      "evidence": {
+        "title": "提交履约凭证",
+        "help": "至少上传两张能够识别养护对象和操作结果的图片。",
+        "placeholder": "说明实际完成的养护动作",
+        "submit": "提交凭证",
+        "requirements": "请选择至少两张图片并填写养护说明。",
+        "failed": "凭证提交失败，请检查图片后重试。"
       }
     },
     "earnings": {

@@ -17,10 +17,20 @@ model FeedbackTicket {
   status          String                   @default("submitted")
   assignee        String?
   resolution      String?                  @db.Text
+  adoptionId      String?                  @map("adoption_id")
+  taskId          String?                  @map("task_id")
+  ticketType      String?                  @map("ticket_type")
+  requestedAction String?                  @map("requested_action")
+  correlationId   String?                  @map("correlation_id")
   createdAt       DateTime                 @default(now()) @map("created_at")
   updatedAt       DateTime                 @updatedAt @map("updated_at")
   handlingRecords FeedbackHandlingRecord[]
+  adoption        TreeAdoption?            @relation(fields: [adoptionId], references: [id], onDelete: SetNull)
+  task            Task?                    @relation(fields: [taskId], references: [id], onDelete: SetNull)
 
+  @@index([adoptionId, createdAt])
+  @@index([taskId, createdAt])
+  @@index([ticketType, status])
   @@map("feedback_ticket")
 }
 
@@ -99,42 +109,58 @@ model SpaceNode {
 }
 
 model Villager {
-  id        String     @id @default(cuid())
-  name      String
-  phone     String
-  skills    Json       @default("[]")
-  nodeId    String?
-  status    String     @default("active")
+  id          String                  @id @default(cuid())
+  name        String
+  phone       String
+  skills      Json                    @default("[]")
+  nodeId      String?
+  status      String                  @default("active")
   // TODO: 迁入统一登录系统后废弃
-  otpCode   String?
+  otpCode     String?
   // TODO: 迁入统一登录系统后废弃
-  otpExpiry DateTime?
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
-  node      SpaceNode? @relation(fields: [nodeId], references: [id])
-  tasks     Task[]
+  otpExpiry   DateTime?
+  createdAt   DateTime                @default(now()) @map("created_at")
+  updatedAt   DateTime                @updatedAt @map("updated_at")
+  node        SpaceNode?              @relation(fields: [nodeId], references: [id])
+  tasks       Task[]
+  settlements FulfillmentSettlement[]
 
   @@index([status, nodeId])
   @@map("villager")
 }
 
 model Task {
-  id            String     @id @default(cuid())
-  title         String
-  description   String?    @db.Text
-  taskType      String
-  status        String     @default("pending")
-  villagerId    String?
-  nodeId        String?
-  scheduledDate String?
-  earnings      Float      @default(0)
-  createdAt     DateTime   @default(now()) @map("created_at")
-  updatedAt     DateTime   @updatedAt @map("updated_at")
-  villager      Villager?  @relation(fields: [villagerId], references: [id])
-  node          SpaceNode? @relation(fields: [nodeId], references: [id])
+  id                   String                  @id @default(cuid())
+  title                String
+  description          String?                 @db.Text
+  taskType             String
+  status               String                  @default("pending")
+  villagerId           String?
+  nodeId               String?
+  scheduledDate        String?
+  adoptionId           String?                 @map("adoption_id")
+  treeId               String?                 @map("tree_id")
+  deadlineAt           DateTime?               @map("deadline_at")
+  acceptedAt           DateTime?               @map("accepted_at")
+  submittedAt          DateTime?               @map("submitted_at")
+  completedAt          DateTime?               @map("completed_at")
+  evidenceRequirements Json?                   @map("evidence_requirements_json")
+  version              Int                     @default(1)
+  earnings             Float                   @default(0)
+  createdAt            DateTime                @default(now()) @map("created_at")
+  updatedAt            DateTime                @updatedAt @map("updated_at")
+  villager             Villager?               @relation(fields: [villagerId], references: [id])
+  node                 SpaceNode?              @relation(fields: [nodeId], references: [id])
+  adoption             TreeAdoption?           @relation(fields: [adoptionId], references: [id], onDelete: SetNull)
+  tree                 OrchardTree?            @relation(fields: [treeId], references: [id], onDelete: SetNull)
+  evidences            FulfillmentEvidence[]
+  settlements          FulfillmentSettlement[]
+  feedbackTickets      FeedbackTicket[]
 
   @@index([status, taskType])
   @@index([villagerId, createdAt])
+  @@index([adoptionId, status])
+  @@index([treeId, deadlineAt])
   @@map("task")
 }
 
@@ -249,9 +275,11 @@ model Recommendation {
   approvedAt     DateTime? @map("approved_at")
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
+  agentRunId     String?   @map("agent_run_id")
 
   @@index([bizDate, status])
   @@index([type, createdAt])
+  @@index([agentRunId])
   @@map("recommendation")
 }
 
@@ -400,6 +428,7 @@ model OrchardTree {
   adoptions        TreeAdoption[]
   harvestBookings  HarvestBooking[]
   interactionTasks VisitorInteractionTask[]
+  fulfillmentTasks Task[]
 
   @@map("orchard_tree")
 }
@@ -419,24 +448,167 @@ model TreeCareLog {
 }
 
 model TreeAdoption {
-  id                String                   @id @default(cuid())
-  treeId            String
-  plan              String
-  adopterName       String?
-  adopterPhone      String?
-  adopterId         String?
-  rightsJson        Json?
-  status            String                   @default("pending_payment")
-  createdAt         DateTime                 @default(now()) @map("created_at")
-  updatedAt         DateTime                 @updatedAt @map("updated_at")
-  tree              OrchardTree              @relation(fields: [treeId], references: [id])
-  adopter           User?                    @relation(fields: [adopterId], references: [id])
-  interactionTasks  VisitorInteractionTask[]
-  pointsAccount     AdoptionPoints?
-  redemptionRecords RedemptionRecord[]
+  id                  String                   @id @default(cuid())
+  adoptionCode        String?                  @unique @map("adoption_code")
+  treeId              String
+  plan                String
+  adopterName         String?
+  adopterPhone        String?
+  adopterId           String?
+  rightsJson          Json?
+  status              String                   @default("pending_payment")
+  agreementVersion    String                   @default("v1") @map("agreement_version")
+  paidAt              DateTime?                @map("paid_at")
+  activatedAt         DateTime?                @map("activated_at")
+  nextCareAt          DateTime?                @map("next_care_at")
+  renewalAt           DateTime?                @map("renewal_at")
+  version             Int                      @default(1)
+  createdAt           DateTime                 @default(now()) @map("created_at")
+  updatedAt           DateTime                 @updatedAt @map("updated_at")
+  tree                OrchardTree              @relation(fields: [treeId], references: [id])
+  adopter             User?                    @relation(fields: [adopterId], references: [id])
+  interactionTasks    VisitorInteractionTask[]
+  pointsAccount       AdoptionPoints?
+  redemptionRecords   RedemptionRecord[]
+  fulfillmentTasks    Task[]
+  fulfillmentEvidence FulfillmentEvidence[]
+  benefits            AdoptionBenefit[]
+  settlements         FulfillmentSettlement[]
+  previousRenewals    AdoptionRenewal[]        @relation("RenewalPreviousAdoption")
+  renewedFrom         AdoptionRenewal[]        @relation("RenewalNewAdoption")
+  feedbackTickets     FeedbackTicket[]
 
   @@index([adopterPhone, createdAt])
   @@map("tree_adoption")
+}
+
+model FulfillmentEvidence {
+  id          String              @id @default(cuid())
+  adoptionId  String              @map("adoption_id")
+  taskId      String              @map("task_id")
+  submittedBy String              @map("submitted_by")
+  description String              @db.Text
+  mediaJson   Json                @map("media_json")
+  version     Int
+  status      String              @default("submitted")
+  submittedAt DateTime            @default(now()) @map("submitted_at")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  adoption    TreeAdoption        @relation(fields: [adoptionId], references: [id], onDelete: Restrict)
+  task        Task                @relation(fields: [taskId], references: [id], onDelete: Restrict)
+  reviews     FulfillmentReview[]
+
+  @@unique([taskId, version])
+  @@index([adoptionId, submittedAt])
+  @@index([status, submittedAt])
+  @@map("fulfillment_evidence")
+}
+
+model FulfillmentReview {
+  id         String              @id @default(cuid())
+  evidenceId String              @map("evidence_id")
+  reviewerId String              @map("reviewer_id")
+  decision   String
+  reasonCode String?             @map("reason_code")
+  note       String?             @db.Text
+  createdAt  DateTime            @default(now()) @map("created_at")
+  evidence   FulfillmentEvidence @relation(fields: [evidenceId], references: [id], onDelete: Restrict)
+
+  @@index([evidenceId, createdAt])
+  @@map("fulfillment_review")
+}
+
+model AdoptionBenefit {
+  id          String       @id @default(cuid())
+  adoptionId  String       @map("adoption_id")
+  benefitKey  String       @map("benefit_key")
+  type        String
+  status      String       @default("locked")
+  detailsJson Json         @default("{}") @map("details_json")
+  selectedAt  DateTime?    @map("selected_at")
+  fulfilledAt DateTime?    @map("fulfilled_at")
+  confirmedAt DateTime?    @map("confirmed_at")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  adoption    TreeAdoption @relation(fields: [adoptionId], references: [id], onDelete: Restrict)
+
+  @@unique([adoptionId, benefitKey])
+  @@index([adoptionId, status])
+  @@map("adoption_benefit_v2")
+}
+
+model FulfillmentSettlement {
+  id         String       @id @default(cuid())
+  adoptionId String       @map("adoption_id")
+  taskId     String       @map("task_id")
+  villagerId String       @map("villager_id")
+  amount     Float
+  status     String       @default("draft")
+  approvedBy String?      @map("approved_by")
+  approvedAt DateTime?    @map("approved_at")
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  adoption   TreeAdoption @relation(fields: [adoptionId], references: [id], onDelete: Restrict)
+  task       Task         @relation(fields: [taskId], references: [id], onDelete: Restrict)
+  villager   Villager     @relation(fields: [villagerId], references: [id], onDelete: Restrict)
+
+  @@unique([taskId])
+  @@index([adoptionId, status])
+  @@index([villagerId, status])
+  @@map("fulfillment_settlement")
+}
+
+model AdoptionRenewal {
+  id                 String        @id @default(cuid())
+  previousAdoptionId String        @map("previous_adoption_id")
+  newAdoptionId      String?       @map("new_adoption_id")
+  status             String        @default("pending")
+  dueAt              DateTime      @map("due_at")
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  previousAdoption   TreeAdoption  @relation("RenewalPreviousAdoption", fields: [previousAdoptionId], references: [id], onDelete: Restrict)
+  newAdoption        TreeAdoption? @relation("RenewalNewAdoption", fields: [newAdoptionId], references: [id], onDelete: SetNull)
+
+  @@unique([previousAdoptionId])
+  @@index([status, dueAt])
+  @@map("adoption_renewal")
+}
+
+model AgentRun {
+  id            String          @id @default(cuid())
+  adoptionId    String?         @map("adoption_id")
+  taskId        String?         @map("task_id")
+  triggerType   String          @map("trigger_type")
+  status        String
+  modelProvider String?         @map("model_provider")
+  modelName     String?         @map("model_name")
+  promptVersion String?         @map("prompt_version")
+  stepCount     Int             @default(0) @map("step_count")
+  tokenUsage    Int?            @map("token_usage")
+  latencyMs     Int?            @map("latency_ms")
+  errorCode     String?         @map("error_code")
+  startedAt     DateTime        @default(now()) @map("started_at")
+  finishedAt    DateTime?       @map("finished_at")
+  toolCalls     AgentToolCall[]
+
+  @@index([adoptionId, startedAt])
+  @@index([status, startedAt])
+  @@map("agent_run")
+}
+
+model AgentToolCall {
+  id                 String   @id @default(cuid())
+  runId              String   @map("run_id")
+  toolName           String   @map("tool_name")
+  argumentsRedacted  Json     @default("{}") @map("arguments_redacted")
+  permissionDecision String   @map("permission_decision")
+  resultStatus       String   @map("result_status")
+  latencyMs          Int      @map("latency_ms")
+  createdAt          DateTime @default(now()) @map("created_at")
+  run                AgentRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, createdAt])
+  @@map("agent_tool_call")
 }
 
 model HarvestBooking {
@@ -931,17 +1103,22 @@ model ConsentRecord {
 }
 
 model AuditLog {
-  id         String   @id @default(cuid())
-  actorId    String
-  action     String
-  targetType String
-  targetId   String?
-  detail     Json     @default("{}")
-  ipAddress  String?
-  createdAt  DateTime @default(now()) @map("created_at")
+  id            String   @id @default(cuid())
+  actorId       String
+  action        String
+  targetType    String
+  targetId      String?
+  adoptionId    String?  @map("adoption_id")
+  actorType     String?  @map("actor_type")
+  correlationId String?  @map("correlation_id")
+  detail        Json     @default("{}")
+  ipAddress     String?
+  createdAt     DateTime @default(now()) @map("created_at")
 
   @@index([actorId, createdAt])
   @@index([action, createdAt])
+  @@index([adoptionId, createdAt])
+  @@index([correlationId])
   @@map("audit_log")
 }
 

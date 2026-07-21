@@ -1596,6 +1596,21 @@
         "pending": "Accept task",
         "accepted": "Start task",
         "in_progress": "Complete task"
+      },
+      "knowledge": {
+        "open": "Ask about care rules",
+        "placeholder": "Enter a rule question related to this task",
+        "ask": "Send question",
+        "asking": "Searching",
+        "failed": "Care rules are temporarily unavailable"
+      },
+      "evidence": {
+        "title": "Submit fulfillment evidence",
+        "help": "Upload at least two images showing the care target and the result.",
+        "placeholder": "Describe the care work actually completed",
+        "submit": "Submit evidence",
+        "requirements": "Select at least two images and enter a care description.",
+        "failed": "Evidence submission failed. Check the images and try again."
       }
     },
     "earnings": {

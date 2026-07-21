@@ -27,12 +27,12 @@ $ErrorActionPreference = "Stop"
 $RootDir = $PSScriptRoot
 Set-Location $RootDir
 
-$Host.UI.RawUI.WindowTitle = "Zouma Village Cloud Brain Startup"
+try { $Host.UI.RawUI.WindowTitle = "Zouma Village Cloud Brain Startup" } catch { }
 
 $FrontendUrl = "http://localhost:3000/zh-CN"
-$AdminUrl    = "http://localhost:3001/dashboard"
+$AdminUrl    = "http://localhost:3001/login"
 $FrontendHealthUrl = "http://localhost:3000"
-$AdminHealthUrl    = "http://localhost:3001/dashboard"
+$AdminHealthUrl    = "http://localhost:3001/login"
 $ComposeFile = "infra/docker/docker-compose.dev.yml"
 $DevCommand = "pnpm turbo dev --filter=@zouma/web --filter=@zouma/admin"
 
@@ -41,6 +41,33 @@ function Step([string]$msg)  { Write-Host "`n---- $msg ----" -ForegroundColor Cy
 function Ok([string]$msg)    { Write-Host "  [OK]    $msg" -ForegroundColor Green }
 function Warn([string]$msg)  { Write-Host "  [WARN]  $msg" -ForegroundColor Yellow }
 function Fail([string]$msg)  { Write-Host "  [ERR]   $msg" -ForegroundColor Red; exit 1 }
+
+function Import-DotEnv([string]$path) {
+  $loaded = 0
+  foreach ($rawLine in Get-Content -LiteralPath $path -Encoding UTF8) {
+    $line = $rawLine.Trim()
+    if (-not $line -or $line.StartsWith("#")) { continue }
+
+    $separator = $line.IndexOf("=")
+    if ($separator -lt 1) { continue }
+
+    $name = $line.Substring(0, $separator).Trim().TrimStart([char]0xFEFF)
+    if ($name -notmatch '^[A-Za-z_][A-Za-z0-9_]*$') { continue }
+
+    $value = $line.Substring($separator + 1).Trim()
+    if ($value.Length -ge 2) {
+      $first = $value[0]
+      $last = $value[$value.Length - 1]
+      if (($first -eq '"' -and $last -eq '"') -or ($first -eq "'" -and $last -eq "'")) {
+        $value = $value.Substring(1, $value.Length - 2)
+      }
+    }
+
+    [Environment]::SetEnvironmentVariable($name, $value, "Process")
+    $loaded++
+  }
+  return $loaded
+}
 
 # Run a native command without tripping PowerShell's error handling on stderr
 function Invoke-Native([string]$cmd) {
@@ -118,6 +145,22 @@ if (-not (Test-Path ".env.local")) {
   Warn "Edit .env.local and set DEEPSEEK_API_KEY / QWEATHER_API_KEY for AI + weather features"
 }
 
+$envCount = Import-DotEnv (Join-Path $RootDir ".env.local")
+Ok "Loaded $envCount settings from .env.local"
+
+if ([string]::IsNullOrWhiteSpace($env:ADMIN_API_TOKEN)) {
+  $env:ADMIN_API_TOKEN = [guid]::NewGuid().ToString("N")
+  Warn "ADMIN_API_TOKEN is empty; generated a temporary token for this local session"
+}
+if ([string]::IsNullOrWhiteSpace($env:ADMIN_SESSION_SECRET)) {
+  $env:ADMIN_SESSION_SECRET = ([guid]::NewGuid().ToString("N") + [guid]::NewGuid().ToString("N"))
+  Warn "ADMIN_SESSION_SECRET is empty; generated a temporary secret for this local session"
+}
+if ([string]::IsNullOrWhiteSpace($env:ADMIN_LOGIN_PASSWORD)) {
+  $env:ADMIN_LOGIN_PASSWORD = "zouma-demo-local"
+  Warn "ADMIN_LOGIN_PASSWORD is empty; local demo password: zouma-demo-local"
+}
+
 Step "Stop existing dev servers"
 @(3000, 3001) | ForEach-Object { Stop-PortUsage $_ }
 Ok "Ports 3000/3001 available"
@@ -127,11 +170,11 @@ Ok "Ports 3000/3001 available"
 # ============================================================
 Step "Dependencies"
 
-if (-not $SkipInstall -and -not (Test-Path "node_modules")) {
-  pnpm install
+if (-not $SkipInstall) {
+  pnpm install --frozen-lockfile
   if ($LASTEXITCODE -ne 0) { Fail "pnpm install failed" }
 } else {
-  Ok "Skipped (already installed or -SkipInstall)"
+  Ok "Skipped (-SkipInstall)"
 }
 
 # ============================================================
@@ -140,7 +183,7 @@ if (-not $SkipInstall -and -not (Test-Path "node_modules")) {
 Step "Prisma Client"
 
 Push-Location "$RootDir/packages/database"
-if (-not (Invoke-Native "npx prisma generate")) { Fail "prisma generate failed" }
+if (-not (Invoke-Native "pnpm exec prisma generate")) { Fail "prisma generate failed" }
 Pop-Location
 Ok "Prisma Client generated"
 
@@ -192,10 +235,10 @@ if (-not $SkipDB) {
   # migrations + seed
   Step "Database migration & seed"
   Push-Location "$RootDir/packages/database"
-  if (-not (Invoke-Native "npx prisma migrate deploy")) { Fail "prisma migrate deploy failed" }
+  if (-not (Invoke-Native "pnpm exec prisma migrate deploy")) { Fail "prisma migrate deploy failed" }
   Ok "Migration done"
 
-  if (-not (Invoke-Native "npx prisma db seed")) { Warn "Seed may already exist (non-fatal)" }
+  if (-not (Invoke-Native "pnpm exec prisma db seed")) { Fail "database seed failed" }
   Pop-Location
   Ok "Database ready"
 }

@@ -24,6 +24,10 @@ export interface VillagerTask {
   villagerId?: string
   nodeId?: string
   scheduledDate?: string
+  adoptionId?: string
+  treeId?: string
+  deadlineAt?: string
+  version?: number
   earnings: number
   createdAt: string
   updatedAt: string

@@ -13,6 +13,7 @@
   "dependencies": {
     "@zouma/contracts": "workspace:*",
     "@zouma/database": "workspace:*",
+    "@zouma/knowledge": "workspace:*",
     "@zouma/prompts": "workspace:*",
     "@zouma/simulation": "workspace:*",
     "@zouma/ui": "workspace:*",

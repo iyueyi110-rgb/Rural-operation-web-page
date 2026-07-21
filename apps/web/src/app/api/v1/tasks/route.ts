@@ -1,8 +1,13 @@
-import { prisma } from "@zouma/database"
+import { prisma, type Prisma } from "@zouma/database"
 
 import { isPlainObject, jsonResponse, optionsResponse } from "@web/lib/aigc-api"
 import { isAdminRequest } from "@web/lib/tree-records"
-import { canMoveTaskStatus, isTaskStatus, isTaskType, mapTask } from "@web/lib/task-records"
+import {
+  canMoveTaskStatus,
+  isTaskStatus,
+  isTaskType,
+  mapTask,
+} from "@web/lib/task-records"
 
 export async function OPTIONS(request: Request) {
   return optionsResponse(request)
@@ -28,12 +33,19 @@ export async function GET(request: Request) {
       orderBy: { createdAt: "desc" },
     })
 
-    return jsonResponse(request, { data: data.map(mapTask), meta: { total: data.length } })
+    return jsonResponse(request, {
+      data: data.map(mapTask),
+      meta: { total: data.length },
+    })
   } catch (error) {
     console.error("Tasks query failed:", error)
     return jsonResponse(request, {
       data: [],
-      meta: { degraded: true, total: 0, reason: "数据库暂不可用，已返回降级演示数据" },
+      meta: {
+        degraded: true,
+        total: 0,
+        reason: "数据库暂不可用，已返回降级演示数据",
+      },
     })
   }
 }
@@ -45,37 +57,109 @@ export async function POST(request: Request) {
 
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body)) {
-    return jsonResponse(request, { error: "Invalid task payload" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid task payload" },
+      { status: 400 },
+    )
   }
 
   const title = typeof body.title === "string" ? body.title.trim() : ""
   const taskType = isTaskType(body.taskType) ? body.taskType : undefined
-  const villagerId = typeof body.villagerId === "string" && body.villagerId.trim() ? body.villagerId.trim() : null
-  const nodeId = typeof body.nodeId === "string" && body.nodeId.trim() ? body.nodeId.trim() : null
-  const earnings = typeof body.earnings === "number" ? body.earnings : Number(body.earnings ?? 0)
+  const villagerId =
+    typeof body.villagerId === "string" && body.villagerId.trim()
+      ? body.villagerId.trim()
+      : null
+  const nodeId =
+    typeof body.nodeId === "string" && body.nodeId.trim()
+      ? body.nodeId.trim()
+      : null
+  const earnings =
+    typeof body.earnings === "number"
+      ? body.earnings
+      : Number(body.earnings ?? 0)
+  const adoptionId =
+    typeof body.adoptionId === "string" && body.adoptionId.trim()
+      ? body.adoptionId.trim()
+      : null
+  const treeId =
+    typeof body.treeId === "string" && body.treeId.trim()
+      ? body.treeId.trim()
+      : null
 
   if (!title || !taskType || !Number.isFinite(earnings) || earnings < 0) {
-    return jsonResponse(request, { error: "title, taskType and earnings are required" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "title, taskType and earnings are required" },
+      { status: 400 },
+    )
   }
 
   if (villagerId) {
-    const villager = await prisma.villager.findUnique({ where: { id: villagerId }, select: { id: true } })
-    if (!villager) return jsonResponse(request, { error: "Villager was not found" }, { status: 400 })
+    const villager = await prisma.villager.findUnique({
+      where: { id: villagerId },
+      select: { id: true },
+    })
+    if (!villager)
+      return jsonResponse(
+        request,
+        { error: "Villager was not found" },
+        { status: 400 },
+      )
   }
 
   if (nodeId) {
-    const node = await prisma.spaceNode.findUnique({ where: { id: nodeId }, select: { id: true } })
-    if (!node) return jsonResponse(request, { error: "Space node was not found" }, { status: 400 })
+    const node = await prisma.spaceNode.findUnique({
+      where: { id: nodeId },
+      select: { id: true },
+    })
+    if (!node)
+      return jsonResponse(
+        request,
+        { error: "Space node was not found" },
+        { status: 400 },
+      )
+  }
+  if (adoptionId) {
+    const adoption = await prisma.treeAdoption.findUnique({
+      where: { id: adoptionId },
+      select: { id: true, treeId: true },
+    })
+    if (!adoption)
+      return jsonResponse(
+        request,
+        { error: "Adoption was not found" },
+        { status: 400 },
+      )
+    if (treeId && adoption.treeId !== treeId)
+      return jsonResponse(
+        request,
+        { error: "Tree does not belong to adoption" },
+        { status: 400 },
+      )
   }
 
   const data = await prisma.task.create({
     data: {
       title,
       taskType,
-      description: typeof body.description === "string" ? body.description.trim() : null,
+      description:
+        typeof body.description === "string" ? body.description.trim() : null,
       villagerId,
       nodeId,
-      scheduledDate: typeof body.scheduledDate === "string" ? body.scheduledDate.trim() : null,
+      adoptionId,
+      treeId,
+      deadlineAt:
+        typeof body.deadlineAt === "string" && body.deadlineAt
+          ? new Date(body.deadlineAt)
+          : null,
+      evidenceRequirements: isPlainObject(body.evidenceRequirements)
+        ? (body.evidenceRequirements as Prisma.InputJsonValue)
+        : undefined,
+      scheduledDate:
+        typeof body.scheduledDate === "string"
+          ? body.scheduledDate.trim()
+          : null,
       earnings,
       status: "pending",
     },
@@ -101,33 +185,70 @@ export async function PATCH(request: Request) {
 
   const body = (await request.json().catch(() => null)) as unknown
   if (!isPlainObject(body) || typeof body.id !== "string") {
-    return jsonResponse(request, { error: "Invalid task update" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid task update" },
+      { status: 400 },
+    )
   }
 
   const existing = await prisma.task.findUnique({ where: { id: body.id } })
   if (!existing) {
-    return jsonResponse(request, { error: "Task was not found" }, { status: 404 })
+    return jsonResponse(
+      request,
+      { error: "Task was not found" },
+      { status: 404 },
+    )
   }
 
   const nextStatus = isTaskStatus(body.status) ? body.status : existing.status
+  if (existing.adoptionId && body.status !== undefined) {
+    return jsonResponse(
+      request,
+      { error: "Adoption task status requires a fulfillment action" },
+      { status: 400 },
+    )
+  }
   if (!canMoveTaskStatus(existing.status, nextStatus)) {
-    return jsonResponse(request, { error: "Invalid task status transition" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid task status transition" },
+      { status: 400 },
+    )
   }
 
-  const earnings = typeof body.earnings === "number" ? body.earnings : Number(body.earnings ?? existing.earnings)
+  const earnings =
+    typeof body.earnings === "number"
+      ? body.earnings
+      : Number(body.earnings ?? existing.earnings)
   if (!Number.isFinite(earnings) || earnings < 0) {
-    return jsonResponse(request, { error: "Invalid task earnings" }, { status: 400 })
+    return jsonResponse(
+      request,
+      { error: "Invalid task earnings" },
+      { status: 400 },
+    )
   }
 
   const data = await prisma.task.update({
     where: { id: existing.id },
     data: {
       ...(typeof body.title === "string" ? { title: body.title.trim() } : {}),
-      ...(typeof body.description === "string" ? { description: body.description.trim() } : {}),
+      ...(typeof body.description === "string"
+        ? { description: body.description.trim() }
+        : {}),
       ...(isTaskType(body.taskType) ? { taskType: body.taskType } : {}),
-      ...(typeof body.villagerId === "string" ? { villagerId: body.villagerId.trim() || null } : {}),
-      ...(typeof body.nodeId === "string" ? { nodeId: body.nodeId.trim() || null } : {}),
-      ...(typeof body.scheduledDate === "string" ? { scheduledDate: body.scheduledDate.trim() || null } : {}),
+      ...(typeof body.villagerId === "string"
+        ? { villagerId: body.villagerId.trim() || null }
+        : {}),
+      ...(typeof body.nodeId === "string"
+        ? { nodeId: body.nodeId.trim() || null }
+        : {}),
+      ...(typeof body.scheduledDate === "string"
+        ? { scheduledDate: body.scheduledDate.trim() || null }
+        : {}),
+      ...(typeof body.deadlineAt === "string"
+        ? { deadlineAt: body.deadlineAt ? new Date(body.deadlineAt) : null }
+        : {}),
       earnings,
       status: nextStatus,
     },

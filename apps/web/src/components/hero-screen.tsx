@@ -109,8 +109,11 @@ export function HeroScreen({
             aria-label={heroTitle}
             className="hero-serif max-w-4xl text-[2.35rem] font-semibold leading-[1.1] tracking-normal text-white text-balance min-[390px]:text-[2.5rem] sm:text-6xl xl:text-7xl"
             initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-            animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.7,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             <span className="block sm:hidden">
               <span className="block">云脉寿岭,</span>
@@ -122,10 +125,10 @@ export function HeroScreen({
           <motion.p
             className="mt-5 max-w-2xl break-words text-[15px] leading-7 text-white/76 [overflow-wrap:anywhere] sm:mt-6 sm:text-lg sm:leading-8"
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
-              delay: 0.12,
-              duration: 0.65,
+              delay: reduceMotion ? 0 : 0.12,
+              duration: reduceMotion ? 0 : 0.65,
               ease: [0.22, 1, 0.36, 1],
             }}
           >
@@ -134,10 +137,10 @@ export function HeroScreen({
           <motion.p
             className="mt-3 max-w-2xl break-words text-sm leading-7 text-white/56 [overflow-wrap:anywhere] sm:mt-4"
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
-              delay: 0.2,
-              duration: 0.65,
+              delay: reduceMotion ? 0 : 0.2,
+              duration: reduceMotion ? 0 : 0.65,
               ease: [0.22, 1, 0.36, 1],
             }}
           >

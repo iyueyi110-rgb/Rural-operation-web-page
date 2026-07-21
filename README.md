@@ -67,6 +67,18 @@ apps/web（Next.js PWA）            apps/admin（运营后台）
 | 工程组织 | pnpm workspace、Turborepo |
 | 特色能力 | 荔枝树认养、认养履约规则模拟、AIGC 路线生成 |
 
+## Windows 一键演示
+
+安装 Node.js 和 Docker Desktop 后，双击根目录的 `start.cmd`；脚本会读取 `.env.local`、按锁文件安装依赖、生成 Prisma Client、启动数据库及前台/后台，并自动打开浏览器。首次运行若没有 `.env.local`，会从 `.env.example` 创建；后台登录口令留空时，本次本地会话使用 `zouma-demo-local`。
+
+也可以在 PowerShell 中运行：
+
+```powershell
+.\start.ps1 -SkipBrowser
+```
+
+若现场电脑没有 Docker，但只需演示自带的公开降级数据，可运行 `.\start.ps1 -SkipDB`。保持终端打开，按 `Ctrl+C` 停止前台和后台。
+
 ## macOS 一键启动规则模拟工作台
 
 先启动 Docker Desktop，再双击桌面的 `启动认养一棵树规则模拟.command`。启动器只运行 PostgreSQL、Web 模拟 API 与 Admin，不会启动 Redis；三个端口分别只监听 `127.0.0.1:5432`、`127.0.0.1:3000` 和 `127.0.0.1:3001`。验证数据库迁移和模拟只读接口确实使用 Prisma 后，启动器才会自动打开登录页；本地登录口令为 `zouma-simulation-local`。

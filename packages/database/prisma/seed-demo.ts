@@ -599,28 +599,33 @@ async function seedDemoTreeOperations() {
   const lz018 = await treeId("lz018")
   const lz026 = await treeId("lz026")
 
-  await prisma.treeAdoption.upsert({
+  const existingAdoption = await prisma.treeAdoption.findUnique({
     where: { id: "demo-adoption-001" },
-    create: {
-      id: "demo-adoption-001",
-      treeId: lz018,
-      plan: "annual",
-      adopterName: "林女士",
-      adopterPhone: "138****0001",
-      adopterId: "demo-user-001",
-      rightsJson: { harvest: true, careLog: true, interaction: true },
-      status: "active",
-    },
-    update: {
-      treeId: lz018,
-      plan: "annual",
-      adopterName: "林女士",
-      adopterPhone: "138****0001",
-      adopterId: "demo-user-001",
-      rightsJson: { harvest: true, careLog: true, interaction: true },
-      status: "active",
-    },
+    select: { id: true },
   })
+  const adoptionData = {
+    treeId: lz018,
+    plan: "annual",
+    adopterName: "林女士",
+    adopterPhone: "138****0001",
+    adopterId: "demo-user-001",
+    rightsJson: { harvest: true, careLog: true, interaction: true },
+    status: "active",
+  }
+
+  if (existingAdoption) {
+    await prisma.treeAdoption.update({
+      where: { id: existingAdoption.id },
+      data: adoptionData,
+    })
+  } else {
+    await prisma.treeAdoption.create({
+      data: {
+        id: "demo-adoption-001",
+        ...adoptionData,
+      },
+    })
+  }
 
   await prisma.orchardTree.update({
     where: { id: lz018 },

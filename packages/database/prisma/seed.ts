@@ -5,13 +5,15 @@ import { seedFarmingCalendar } from "./seed-farming-calendar"
 import { seedTrees } from "./seed-trees"
 import { seedDemoData } from "./seed-demo"
 import { seedRenovation } from "./seed-renovation"
+import { seedAdoptionFulfillment } from "./seed-adoption-fulfillment"
 
 const seedTickets = [
   {
     id: "FB-20260612-001",
     category: "facility",
     severity: "medium",
-    content: "游客中心到陶家湾停车点的指示牌还可以更明显，老人找路时需要工作人员二次说明。",
+    content:
+      "游客中心到陶家湾停车点的指示牌还可以更明显，老人找路时需要工作人员二次说明。",
     rating: 4,
     status: "processing",
     source: "web",
@@ -162,6 +164,7 @@ async function main() {
   await seedFarmingCalendar()
   await seedDemoData()
   await seedRenovation()
+  await seedAdoptionFulfillment(prisma)
 }
 
 main()

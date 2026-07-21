@@ -5,12 +5,18 @@ import {
   optionsResponse,
 } from "@web/lib/aigc-api"
 import { getFallbackResponse } from "@zouma/prompts/fallback-responses"
-import { checkRateLimit, getRateLimitKey, rateLimitResponse } from "@web/lib/rate-limit"
+import {
+  checkRateLimit,
+  getRateLimitKey,
+  rateLimitResponse,
+} from "@web/lib/rate-limit"
 import {
   generateRecommendations,
   isValidRecommendationDate,
 } from "@web/lib/recommendation-generator"
 import { isAdminRequest } from "@web/lib/tree-records"
+import { runAdoptionAgent } from "@web/lib/adoption-agent"
+import { isFeatureEnabled } from "@web/lib/feature-flags"
 
 export function OPTIONS(request: Request) {
   return optionsResponse(request)
@@ -21,7 +27,11 @@ export async function POST(request: Request) {
     return jsonResponse(request, { error: "Unauthorized" }, { status: 401 })
   }
 
-  const rateLimit = await checkRateLimit(getRateLimitKey(request, "recommendations-generate"), 5, 300)
+  const rateLimit = await checkRateLimit(
+    getRateLimitKey(request, "recommendations-generate"),
+    5,
+    300,
+  )
   if (!rateLimit.allowed) return rateLimitResponse(request, rateLimit.resetAt)
 
   const rawBody = await request.text()
@@ -43,6 +53,32 @@ export async function POST(request: Request) {
       { error: "Invalid generation payload" },
       { status: 400 },
     )
+  }
+
+  if (body.mode === "adoption_fulfillment") {
+    if (!isFeatureEnabled("ADOPTION_AGENT_SHADOW_ENABLED")) {
+      return jsonResponse(
+        request,
+        { error: "Adoption agent shadow mode is disabled" },
+        { status: 503 },
+      )
+    }
+    const data = await runAdoptionAgent({
+      triggerType: "manual",
+      adoptionId:
+        typeof body.adoptionId === "string"
+          ? body.adoptionId.trim() || undefined
+          : undefined,
+      taskId:
+        typeof body.taskId === "string"
+          ? body.taskId.trim() || undefined
+          : undefined,
+      limit: 10,
+    })
+    return jsonResponse(request, {
+      data,
+      meta: { created: data.filter((item) => item.recommendationId).length },
+    })
   }
 
   const date =
@@ -69,12 +105,19 @@ export async function POST(request: Request) {
         bizDate: date,
         type: "fallback",
         message: fallback.content,
-        actionSteps: ["复核天气、客流、设备与工单数据", "待 AI 服务恢复后重新生成智策"],
+        actionSteps: [
+          "复核天气、客流、设备与工单数据",
+          "待 AI 服务恢复后重新生成智策",
+        ],
         ownerRole: "operator",
         confidence: 0,
         status: "draft",
       },
-      meta: { created: false, degraded: true, reason: "AI 服务暂时不可用，显示预设内容" },
+      meta: {
+        created: false,
+        degraded: true,
+        reason: "AI 服务暂时不可用，显示预设内容",
+      },
     })
   }
 }

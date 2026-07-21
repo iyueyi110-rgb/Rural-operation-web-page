@@ -198,6 +198,11 @@ function recommendationTypeLabel(type: string) {
     crowd_diversion: "客流疏导",
     inventory_alert: "库存提醒",
     maintenance: "设施维护",
+    adoption_deadline_risk: "认养截止风险",
+    adoption_unclaimed_task: "认养任务待接取",
+    adoption_evidence_incomplete: "履约凭证不完整",
+    adoption_weather_delay: "天气延误风险",
+    adoption_repeated_exception: "重复履约异常",
   }
   return labels[type] ?? type
 }

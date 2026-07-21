@@ -22,12 +22,36 @@ interface AdminSessionHandlerDependencies {
   identifyClient?: (request: Request) => string
 }
 
-function rateLimitedResponse(retryAfterSeconds: number) {
+function loginErrorResponse(
+  request: Request,
+  options: {
+    code: "invalid_credentials" | "not_configured" | "rate_limited"
+    message: string
+    status: number
+    retryAfterSeconds?: number
+  },
+) {
+  const acceptsHtml = request.headers.get("accept")?.includes("text/html")
+  if (acceptsHtml) {
+    const loginUrl = new URL("/login", request.url)
+    loginUrl.searchParams.set("error", options.code)
+    if (options.retryAfterSeconds) {
+      loginUrl.searchParams.set("retryAfter", String(options.retryAfterSeconds))
+    }
+    const response = NextResponse.redirect(loginUrl, 303)
+    if (options.retryAfterSeconds) {
+      response.headers.set("Retry-After", String(options.retryAfterSeconds))
+    }
+    return response
+  }
+
   return Response.json(
-    { error: "Too many login attempts" },
+    { error: options.message },
     {
-      status: 429,
-      headers: { "Retry-After": String(retryAfterSeconds) },
+      status: options.status,
+      ...(options.retryAfterSeconds
+        ? { headers: { "Retry-After": String(options.retryAfterSeconds) } }
+        : {}),
     },
   )
 }
@@ -51,17 +75,23 @@ export function createAdminSessionHandler(
     const sessionSecret =
       dependencies.sessionSecret ?? process.env.ADMIN_SESSION_SECRET ?? ""
     if (!expectedPassword || sessionSecret.length < 32) {
-      return Response.json(
-        { error: "Admin session is not configured" },
-        { status: 503 },
-      )
+      return loginErrorResponse(request, {
+        code: "not_configured",
+        message: "Admin session is not configured",
+        status: 503,
+      })
     }
 
     const clientId = identifyClient(request)
     const startedAt = now()
     const decision = limiter.reserveAttempt(clientId, startedAt)
     if (!decision.allowed) {
-      return rateLimitedResponse(decision.retryAfterSeconds)
+      return loginErrorResponse(request, {
+        code: "rate_limited",
+        message: "Too many login attempts",
+        status: 429,
+        retryAfterSeconds: decision.retryAfterSeconds,
+      })
     }
 
     const form = await request.formData().catch(() => null)
@@ -72,7 +102,11 @@ export function createAdminSessionHandler(
     const remainingDelay = minimumDelayMs - (now() - startedAt)
     if (remainingDelay > 0) await sleep(remainingDelay)
     if (!authenticated) {
-      return Response.json({ error: "Invalid credentials" }, { status: 401 })
+      return loginErrorResponse(request, {
+        code: "invalid_credentials",
+        message: "Invalid credentials",
+        status: 401,
+      })
     }
 
     const session = await createAdminSession(sessionSecret)
