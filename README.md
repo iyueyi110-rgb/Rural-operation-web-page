@@ -120,7 +120,7 @@ pnpm quality:gate
 - [技术架构](ARCHITECTURE.md)
 - [模拟系统设计](docs/simulation/system-design.md)
 - [指标口径](docs/simulation/metrics-definition.md)
-- [回归结论与简历材料](docs/simulation/resume-analysis.md)
+- [回归结论](docs/simulation/resume-analysis.md)
 - [贡献指南](CONTRIBUTING.md)
 
 ## 使用边界
