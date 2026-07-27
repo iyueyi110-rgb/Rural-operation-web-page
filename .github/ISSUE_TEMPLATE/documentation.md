@@ -1,7 +1,7 @@
 ---
-name: Documentation issue
+name: 文档问题
 about: 报告文档错误或缺失
-title: "[Docs] "
+title: "[文档] "
 labels: documentation
 ---
 

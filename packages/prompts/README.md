@@ -1,8 +1,8 @@
-# @zouma/prompts
+# `@zouma/prompts` 提示词
 
 版本化提示词、结构化输出约束和人工审核过的降级响应。
 
-## Exports
+## 导出入口
 
 - `@zouma/prompts/daily-report`
 - `@zouma/prompts/content-factory`
