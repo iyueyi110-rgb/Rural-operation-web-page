@@ -1,0 +1,1759 @@
+{
+  "metadata": {
+    "home": {
+      "title": "Zouma Village Portal",
+      "description": "A placeholder English experience for the Zouma Village Web/PWA."
+    },
+    "explore": {
+      "title": "Explore Zouma Village",
+      "description": "Open a second-level journey through Zouma Village history, weather and the Four Realms map."
+    },
+    "routes": {
+      "title": "Zouma Route Generator",
+      "description": "Generate explainable routes by duration, audience and weather."
+    },
+    "booking": {
+      "title": "Zouma Courtyard Booking",
+      "description": "Review courtyard inventory, dates, guests, booking notices and pending payment confirmation."
+    },
+    "feedback": {
+      "title": "Zouma Feedback",
+      "description": "Submit content, service, facility, payment or other feedback and create a trackable ticket."
+    },
+    "trees": {
+      "title": "Zouma Tree Adoption",
+      "description": "View adoptable lychee trees, blurred locations, rights and growth records."
+    },
+    "tickets": {
+      "title": "Zouma Tickets",
+      "description": "Preview ticket and activity preorder products."
+    },
+    "me": {
+      "title": "Zouma Member Center",
+      "description": "Preview booking, adoption and ticket order placeholders."
+    },
+    "privacy": {
+      "title": "Zouma Privacy Center",
+      "description": "Preview consent and privacy management items."
+    },
+    "products": {
+      "title": "Zouma Village Products | Offline confirmation order",
+      "description": "Browse Zouma Village products, gifts, and village meal offers, then submit an offline confirmation order."
+    },
+    "calendar": {
+      "title": "Zouma Farming Calendar",
+      "description": "View Zouma Village farming activities by solar term and season."
+    },
+    "activities": {
+      "title": "Zouma Village Activities",
+      "description": "Explore the lychee harvest learning festival, courtyard events, study workshops and co-living bookings."
+    }
+  },
+  "trees": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Tree adoption phase"
+    },
+    "hero": {
+      "eyebrow": "Tree Adoption",
+      "title": "Adoption is a long-term relationship with a tree",
+      "body": "This phase shows adoptable trees, profiles, rights, agreement and growth records. Payment remains a reserved entry."
+    },
+    "guardrail": {
+      "locationTitle": "Blurred locations only",
+      "locationBody": "Precise GPS is not shown publicly.",
+      "paymentTitle": "Payment pending",
+      "paymentBody": "Only pending payment confirmation is shown in this phase."
+    },
+    "list": {
+      "eyebrow": "Adoptable trees",
+      "title": "Choose a documented lychee tree",
+      "body": "Tree data is local and can later migrate to /api/v1/trees.",
+      "species": "Species",
+      "age": "Age",
+      "ageValue": "{count} years",
+      "health": "Health",
+      "select": "Select",
+      "selected": "Selected"
+    },
+    "availability": {
+      "available": "Available",
+      "limited": "Limited",
+      "maintenance": "Under care"
+    },
+    "health": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "fair": "Observed",
+      "poor": "Needs care"
+    },
+    "profile": {
+      "eyebrow": "Tree profile",
+      "planTitle": "Plan",
+      "selectCta": "Select adoption",
+      "fireMemoryTitle": "Fire memory",
+      "fireMemoryEmpty": "No fire memory has been entered by operations yet.",
+      "newShootsTitle": "New shoot record",
+      "newShootsEmpty": "No new shoot record has been entered by operations yet.",
+      "growthPhotosTitle": "Growth photos",
+      "growthPhotoAlt": "{name} growth photo {index}",
+      "growthPhotosEmpty": "No growth photos yet. They will appear after upload.",
+      "fruitDestinationTitle": "Fruit destination",
+      "fruitDestinationFallback": "Operations recorded the destination for this harvest.",
+      "fruitDestinationEmpty": "No fruit destination record yet. It can be added after harvest.",
+      "careLogsEmpty": "No care logs yet. New logs will appear in reverse chronological order."
+    },
+    "experience": {
+      "environment": {
+        "eyebrow": "Orchard microclimate",
+        "title": "Under-tree conditions",
+        "description": "Live LoRa readings are preferred. Seasonal climate baselines take over while sensors are offline or under maintenance.",
+        "status": {
+          "loading": "Reading sensors",
+          "active": "Live LoRa",
+          "warning": "Sensor offline",
+          "inactive": "Device maintenance"
+        },
+        "metrics": {
+          "soilMoisture": "Soil moisture",
+          "airHumidity": "Air humidity",
+          "lightIntensity": "Light intensity"
+        },
+        "progressAria": "{label} indicator",
+        "baselineNote": "Seasonal climate baselines are shown until the live sensor connection returns.",
+        "inactiveNote": "The device is under maintenance, so baseline indicators are muted."
+      },
+      "rights": {
+        "eyebrow": "Adoption Rights",
+        "title": "Rights for this adoption",
+        "description": "Harvest, visits, a custom nameplate and delivery unlock with the adoption status.",
+        "state": {
+          "unlocked": "Active",
+          "locked": "Pending payment",
+          "preview": "Preview"
+        },
+        "cards": {
+          "harvestQuota": {
+            "title": "Minimum harvest",
+            "body": "Receive {quota} of harvest or equivalent farm produce this cycle."
+          },
+          "onsiteBooking": {
+            "title": "On-site picking",
+            "body": "Choose a priority picking slot during harvest season."
+          },
+          "nameplate": {
+            "title": "Custom tree plate",
+            "body": "Add a personal name and message to your adopted tree."
+          },
+          "coldChain": {
+            "title": "Cold-chain delivery",
+            "body": "Have the harvest packed and shipped when you cannot visit."
+          }
+        },
+        "lockedNote": "All four rights become available after payment is completed.",
+        "previewNote": "Complete an adoption to unlock the rights included in your plan."
+      },
+      "growth": {
+        "eyebrow": "Growth Timeline",
+        "title": "A lychee's journey",
+        "description": "Swipe through flowering, fruiting, ripening and harvest to explore each stage.",
+        "timelineAria": "Lychee growth stages",
+        "stages": {
+          "flowering": {
+            "label": "Flowering",
+            "body": "Blossoms open for pollination.",
+            "detail": "Temperature, humidity and rainfall guide canopy ventilation and blossom protection."
+          },
+          "fruiting": {
+            "label": "Fruiting",
+            "body": "Young fruit enters its stable phase.",
+            "detail": "Fruit density, branch load and soil moisture shape the next care actions."
+          },
+          "ripening": {
+            "label": "Ripening",
+            "body": "Color and sweetness develop.",
+            "detail": "Light, fruit color and weather are monitored while picking reservations are prepared."
+          },
+          "harvest": {
+            "label": "Harvest",
+            "body": "Ripe fruit fulfills adoption rights.",
+            "detail": "Pick during a reserved visit or choose cold-chain delivery, with every destination recorded."
+          }
+        }
+      }
+    },
+    "plans": {
+      "seasonal": {
+        "label": "Seasonal",
+        "body": "For first-time adoption with staged updates."
+      },
+      "annual": {
+        "label": "Annual",
+        "body": "For long-term care records, activities and certificate."
+      }
+    },
+    "rights": {
+      "title": "Rights",
+      "harvestBox": "Seasonal harvest box",
+      "careUpdates": "Care updates and photos",
+      "certificate": "Digital certificate",
+      "farmEvent": "Priority farm event access",
+      "familyClass": "Family class priority"
+    },
+    "timeline": {
+      "title": "Growth records",
+      "spring": {
+        "date": "Mar 2026",
+        "title": "Spring shoot",
+        "body": "New shoots are stable."
+      },
+      "pruning": {
+        "date": "Apr 2026",
+        "title": "Light pruning",
+        "body": "Ventilation branches were adjusted."
+      },
+      "photo": {
+        "date": "Jun 2026",
+        "title": "Photo update",
+        "body": "Profile photos were updated."
+      },
+      "flower": {
+        "date": "Apr 2026",
+        "title": "Flowering",
+        "body": "Good flowering condition."
+      },
+      "care": {
+        "date": "May 2026",
+        "title": "Care observation",
+        "body": "Adoption confirmation is paused."
+      },
+      "note": {
+        "date": "Jun 2026",
+        "title": "Maintenance note",
+        "body": "Reopen after the next review."
+      }
+    },
+    "agreement": {
+      "title": "Agreement",
+      "body": "I understand the rights, update rhythm, harvest method and pending payment state."
+    },
+    "messages": {
+      "unavailable": "This tree is not open for confirmation.",
+      "needAgreement": "Accept the agreement before confirming.",
+      "submitFailed": "Adoption submission failed. Please try again later."
+    },
+    "form": {
+      "confirm": "Confirm adoption",
+      "confirming": "Creating adoption"
+    },
+    "order": {
+      "title": "Adoption created",
+      "body": "The adoption order is pending payment.",
+      "status": "Order status: pending payment",
+      "paymentStatus": "Payment status: not connected",
+      "paymentEntry": "Payment pending",
+      "idLabel": "Adoption ID",
+      "createdAtLabel": "Created at"
+    },
+    "trees": {
+      "lz018": {
+        "name": "Yunli 018",
+        "species": "Feizixiao lychee",
+        "summary": "Stable and well documented.",
+        "location": "North lychee orchard area, precise coordinates hidden.",
+        "imageAlt": "Yunli 018, a twelve-year-old Feizixiao lychee tree",
+        "prices": {
+          "seasonal": "¥399",
+          "annual": "¥999"
+        }
+      },
+      "lz026": {
+        "name": "Yunli 026",
+        "species": "Guiwei lychee",
+        "summary": "Good for family adoption and classes.",
+        "location": "Central orchard area near class route.",
+        "imageAlt": "Yunli 026, an eight-year-old Guiwei lychee tree",
+        "prices": {
+          "seasonal": "¥359",
+          "annual": "¥899"
+        }
+      },
+      "lz041": {
+        "name": "Yunli 041",
+        "species": "Old lychee tree",
+        "summary": "Older tree under observation.",
+        "location": "Southern old-tree area, coordinates internal only.",
+        "imageAlt": "Yunli 041, a twenty-three-year-old lychee tree under observation",
+        "prices": {
+          "seasonal": "TBD",
+          "annual": "TBD"
+        }
+      }
+    },
+    "shipment": {
+      "title": "Pick and ship",
+      "body": "Submit a picking time and delivery address from the tree profile. Public logistics details are masked.",
+      "enableLabel": "I need picked fruit shipped",
+      "dateLabel": "Picking date",
+      "timeSlotLabel": "Time slot",
+      "guestCountLabel": "Guest count",
+      "recipientNameLabel": "Recipient",
+      "recipientPhoneLabel": "Phone",
+      "recipientAddressLabel": "Delivery address",
+      "submit": "Submit shipment request",
+      "submitting": "Submitting",
+      "success": "Shipment request created. The team will confirm picking and logistics.",
+      "failed": "Submission failed. Please check the form and try again.",
+      "destination": "Pick and ship",
+      "destinationNote": "Visitor chose pick-and-ship from the tree profile.",
+      "statusTitle": "Shipment status",
+      "courier": "Courier",
+      "trackingNumber": "Tracking number",
+      "statuses": {
+        "pending": "Pending",
+        "picking": "Picking",
+        "shipping": "Shipping",
+        "delivered": "Delivered"
+      }
+    }
+  },
+  "tickets": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Tickets MVP"
+    },
+    "hero": {
+      "eyebrow": "Tickets",
+      "title": "Preorder placeholders for tickets and activities",
+      "body": "This phase shows product structure before real payment and verification are connected."
+    },
+    "card": {
+      "price": "Price",
+      "stock": "Stock",
+      "pendingPayment": "Payment pending"
+    },
+    "notice": {
+      "title": "Preorder note",
+      "body": "No real ticket code is generated yet."
+    },
+    "products": {
+      "ancientRoad": {
+        "scene": "Ancient road",
+        "name": "Audio guide pass",
+        "summary": "Guide device and tea break placeholder.",
+        "price": "From ¥39",
+        "stock": "40 daily slots"
+      },
+      "lycheeClass": {
+        "scene": "Lychee field",
+        "name": "Family lychee class",
+        "summary": "Tree profile, picking knowledge and processing activity.",
+        "price": "From ¥98",
+        "stock": "Limited weekends"
+      },
+      "resilienceWorkshop": {
+        "scene": "Resilience valley",
+        "name": "Rainwater workshop",
+        "summary": "Water safety and ecological restoration course.",
+        "price": "From ¥128",
+        "stock": "Team booking"
+      }
+    },
+    "list": {
+      "eyebrow": "Preorder products",
+      "title": "Choose a ticket or activity",
+      "body": "These are product placeholders before real inventory and ticket codes are connected.",
+      "select": "Select preorder",
+      "selected": "Selected"
+    },
+    "form": {
+      "eyebrow": "Preorder info",
+      "title": "Choose date and quantity",
+      "dateLabel": "Date",
+      "quantityLabel": "Quantity",
+      "quantityValue": "{count} tickets",
+      "confirm": "Confirm preorder",
+      "confirming": "Creating preorder"
+    },
+    "summary": {
+      "title": "Order summary",
+      "product": "Product",
+      "date": "Date",
+      "quantity": "Quantity"
+    },
+    "order": {
+      "title": "Preorder created",
+      "body": "The ticket preorder is now pending payment. Payment is not connected yet.",
+      "status": "Order status: pending payment",
+      "paymentEntry": "Payment entry pending",
+      "idLabel": "Order ID"
+    },
+    "messages": {
+      "submitFailed": "Preorder submission failed. Please try again."
+    },
+    "dates": {
+      "jun21": "June 21, 2026",
+      "jun28": "June 28, 2026",
+      "jul05": "July 5, 2026"
+    }
+  },
+  "me": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Member MVP"
+    },
+    "hero": {
+      "eyebrow": "Member Center",
+      "title": "Order list placeholder",
+      "body": "Bookings, tree adoption and ticket orders are grouped here."
+    },
+    "orders": {
+      "booking": {
+        "type": "Booking",
+        "title": "Ridge courtyard · pending",
+        "status": "Payment pending",
+        "date": "Jun 20, 2026"
+      },
+      "tree": {
+        "type": "Tree",
+        "title": "Yunli 018 · seasonal",
+        "status": "Pending",
+        "date": "Jun 12, 2026"
+      },
+      "ticket": {
+        "type": "Ticket",
+        "title": "Rainwater workshop · placeholder",
+        "status": "Unused",
+        "date": "TBD"
+      }
+    },
+    "reminder": {
+      "title": "Lychee harvest season reminder",
+      "body": "In-app banners stand in for push notifications for now. Adoption users can review care logs, activity bookings and offline redemption notes before harvest season."
+    },
+    "lookup": {
+      "title": "My adoptions",
+      "initialMessage": "Enter the phone number left during adoption. The system searches with masked identity data.",
+      "found": "Adoption records found.",
+      "empty": "No matching adoption records.",
+      "failed": "Lookup failed. Try again later.",
+      "phonePlaceholder": "Enter phone number",
+      "loading": "Searching",
+      "submit": "Search adoptions",
+      "tree": "Tree",
+      "plan": "Plan",
+      "status": "Status",
+      "noShipment": "No pick-and-ship logistics yet.",
+      "shipmentTitle": "Pick-and-ship logistics",
+      "signed": "Delivered",
+      "harvestBooking": "Harvest booking: {date} / {status}",
+      "steps": {
+        "pending": "Pending",
+        "picking": "Picking",
+        "shipping": "Shipping",
+        "delivered": "Delivered"
+      }
+    }
+  },
+  "privacy": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Privacy MVP"
+    },
+    "hero": {
+      "eyebrow": "Privacy",
+      "title": "Consent placeholders",
+      "body": "Privacy policy, data collection and AI processing consent are reserved here."
+    },
+    "items": {
+      "policy": {
+        "title": "Privacy policy",
+        "body": "Shows policy version and confirmation status.",
+        "status": "Confirmed"
+      },
+      "data": {
+        "title": "Data collection",
+        "body": "Explains trip, booking and feedback data scope.",
+        "status": "Manageable"
+      },
+      "ai": {
+        "title": "AI processing",
+        "body": "AI inputs must be sanitized first.",
+        "status": "Off by default"
+      },
+      "location": {
+        "title": "Location data",
+        "body": "Routes and tree profiles use area-level location; precise coordinates are not sent to external AI services.",
+        "status": "Revocable"
+      }
+    }
+  },
+  "common": {
+    "back": "Back",
+    "loading": "Preparing today's Zouma Village content",
+    "errorTitle": "The page could not load",
+    "errorBody": "Please try again later.",
+    "retry": "Retry",
+    "updatedAt": "Updated {date}"
+  },
+  "home": {
+    "nav": {
+      "homeAria": "Back to top",
+      "aria": "Home navigation",
+      "mark": "Z",
+      "brand": "Zouma Village",
+      "realms": "Realms",
+      "weather": "Weather",
+      "routes": "Routes",
+      "booking": "Courtyards",
+      "tickets": "Tickets",
+      "adoption": "Adoption",
+      "me": "Me",
+      "privacy": "Privacy",
+      "login": "Login",
+      "start": "Start",
+      "products": "Products",
+      "calendar": "Calendar",
+      "more": "More",
+      "menu": "Open navigation menu",
+      "closeMenu": "Close navigation menu",
+      "activities": "Activities",
+      "interactions": "Tasks"
+    },
+    "hero": {
+      "badge": "AIGC-enabled resilient mountain village",
+      "title": "Cloud Veins, Lychee Waters, Zouma",
+      "subtitle": "Start with one adopted tree, then connect visitors, villagers, operations and spatial renewal to one village cloud brain.",
+      "primaryCta": "View realms",
+      "secondaryCta": "Today",
+      "imageAlt": "Aerial view of Zouma Village",
+      "startBrowsing": "Start exploring",
+      "videoAlt": "Aerial view of the Longxi River, mountain ridges and Zouma Village",
+      "tagline1": "Mountain village - AIGC resilient renewal",
+      "tagline2": "Four operable realm experiences",
+      "tagline3": "Browse · Book · Adopt · Return",
+      "systemLogic": "AIGC cloud brain · five-flow operations",
+      "location": "Zouma Village, Fengcheng, Changshou, Chongqing",
+      "narrative": "Adoption relationship -> villager tasks -> operation advice -> spatial renewal",
+      "metricAbout": "About",
+      "metricUnits": {
+        "0": "km?",
+        "1": "mu",
+        "2": "mu"
+      },
+      "scrollHint": "Scroll to the next screen",
+      "positioning": "A reporting-ready and pilot-ready rural operating system: the front end builds long-term relationships, while the back office turns them into tasks, data and spatial decisions.",
+      "spatialSystem": "Mountain village operation section",
+      "nodes": {
+        "0": "Visitor adoption entry",
+        "1": "Villager care tasks",
+        "2": "Operator review loop",
+        "3": "Architectural renewal"
+      },
+      "activityShowcase": {
+        "name": "Lychee Harvest Day",
+        "kicker": "Village activity feature",
+        "summary": "A weekend village program connecting orchard picking, food education, ridge meals and adopted-tree visits.",
+        "date": "Jun 28, Sun 09:30",
+        "location": "Lychee co-living realm",
+        "highlights": {
+          "0": "Family picking",
+          "1": "Lychee food class",
+          "2": "Ridge village meal",
+          "3": "Adopted-tree visit"
+        }
+      }
+    },
+    "history": {
+      "eyebrow": "Layers of history",
+      "title": "Four chapters along one mountain ridge",
+      "description": "A source-reviewed village narrative, from regional gazetteers and a physical road marker to today's Four Realms plan.",
+      "sections": {
+        "tang": {
+          "title": "Tang-era Lewen County: a regional horizon",
+          "body": "The Changshou District Gazetteer records the establishment of Lewen County in the Tang era, providing a time marker for the wider region. It is presented here as regional context, without equating an ancient county boundary or seat with present-day Zouma Village.",
+          "source": "Basis: administrative-history entries in the Changshou District Gazetteer; reviewed as regional history."
+        },
+        "lychee": {
+          "title": "The lychee road: clues from Feiziyuan",
+          "body": "The Fuzhou Gazetteer preserves a Tianbao-era reference to Feiziyuan, offering evidence of the historical relationship between lychee cultivation and mountain travel in the Changshou area. The Zouma ridge story connects orchard, road and seasonal journeys without inventing an exact route.",
+          "source": "Basis: the Tianbao-era Feiziyuan entry in the Fuzhou Gazetteer; documentary clues are not presented as a proven route."
+        },
+        "milestone": {
+          "title": "1897: a stone guidepost",
+          "body": "A guidepost dated to the twenty-third year of the Guangxu reign and unearthed on Zouma ridge is tangible evidence of historic movement. It brings the broad chronology of gazetteers down to the everyday scale of villagers and travelers finding their way.",
+          "source": "Basis: the Guangxu 23 guidepost unearthed on Zouma ridge; future interpretation follows verified artifact records."
+        },
+        "modern": {
+          "title": "Zouma today: Four Realms growing together",
+          "body": "Zouma Village in Fengcheng Subdistrict, Changshou District now organizes its rural experience through the Ancient Road, Lychee Field, Resilience Valley and Ridge Dwelling realms. This village is not Zouma Ancient Town in Jiulongpo District; they are separate places.",
+          "source": "Basis: the contemporary Four Realms plan; location verified as Zouma Village, Fengcheng Subdistrict, Changshou District, Chongqing."
+        }
+      },
+      "audio": {
+        "tang": "Listen to the Lewen County chapter",
+        "lychee": "Listen to the lychee road chapter",
+        "milestone": "Listen to the guidepost chapter",
+        "modern": "Listen to the Four Realms chapter",
+        "pending": "Audio in production"
+      }
+    },
+    "quickActions": {
+      "tickets": "Ticket preorder",
+      "me": "Member center",
+      "villager": "Villager",
+      "privacy": "Privacy center"
+    },
+    "stats": {
+      "area": {
+        "value": "About 1.8 km²",
+        "label": "Concept area"
+      },
+      "forest": {
+        "value": "3107 mu",
+        "label": "Forest base"
+      },
+      "fields": {
+        "value": "2383 mu",
+        "label": "Fields and orchards"
+      }
+    },
+    "weather": {
+      "eyebrow": "Weather and trip note",
+      "temperature": "19.7℃",
+      "summary": "Weather integration is reserved for a later step.",
+      "realtime": "Zouma Village, Changshou",
+      "pending": "Pending config",
+      "configureHint": "Configure QWEATHER_API_KEY to switch to live weather automatically",
+      "configureLink": "View route advice"
+    },
+    "playCards": {
+      "route": {
+        "title": "Half-day route",
+        "body": "A lightweight first-visit route placeholder.",
+        "link": "Generate route"
+      },
+      "courtyard": {
+        "title": "Courtyard preview",
+        "body": "Inventory will be connected in a later step.",
+        "link": "View courtyards"
+      },
+      "tree": {
+        "title": "Tree adoption",
+        "body": "A yearly relationship built around tree records.",
+        "link": "View adoption"
+      }
+    },
+    "guardrails": {
+      "title": "Light platform first",
+      "body": "The first screen organizes real resources without overbuilding."
+    },
+    "realms": {
+      "eyebrow": "Four Realms",
+      "title": "Four operational rural experiences",
+      "description": "Each realm connects content, route, booking or adoption.",
+      "ancientRoad": {
+        "title": "Ancient Road",
+        "summary": "A walking story line for road heritage and local memory.",
+        "cta": "Details next",
+        "titleImageAlt": "Mountain road scene"
+      },
+      "lycheeField": {
+        "title": "Lychee Field",
+        "summary": "From one tree to one table.",
+        "cta": "Adoption preview",
+        "titleImageAlt": "Field and orchard view"
+      },
+      "resilienceValley": {
+        "title": "Resilience Valley",
+        "summary": "Water ecology and study experience.",
+        "cta": "Weather note",
+        "titleImageAlt": "Waterfront valley scene"
+      },
+      "ridgeDwelling": {
+        "title": "Ridge Dwelling",
+        "summary": "Courtyards for stays, workshops and shared life.",
+        "cta": "Courtyard preview",
+        "titleImageAlt": "Courtyard scene"
+      }
+    },
+    "mapGateway": {
+      "eyebrow": "Four Realms",
+      "title": "Choose a direction to explore",
+      "description": "Enter four rural experiences through the map. Select a realm polygon or its accessible link to continue to scenes, routes, bookings and adoption.",
+      "mapAria": "Interactive map of Zouma Village's Four Realms",
+      "legendAria": "Four Realms scene links",
+      "locationLabel": "Zouma Village, Changshou District, Chongqing",
+      "anchorHint": "Guidepost, ancient tree and herbal courtyard",
+      "provider": {
+        "loading": "Loading map",
+        "amap": "AMap satellite",
+        "leaflet": "Leaflet map"
+      },
+      "anchors": {
+        "milestone": "Guangxu guidepost",
+        "ancientTree": "Ancient lychee tree",
+        "courtyard": "Herbal courtyard"
+      }
+    },
+    "booking": {
+      "eyebrow": "Courtyard Preview",
+      "title": "Courtyard booking starts with a clear stay entry",
+      "body": "Calendar and inventory will be added later.",
+      "status": "Booking flow opens in a later step",
+      "imageAlt": "Traditional stone courtyard"
+    },
+    "adoption": {
+      "eyebrow": "Tree Adoption Preview",
+      "title": "Tree adoption needs ceremony and trust",
+      "body": "A long-term relationship around tree files and care logs.",
+      "imageAlt": "Adoptable lychee trees in Zouma Village orchard",
+      "imageBadge": "One tree, one lasting relationship",
+      "cta": "Adopt a tree now",
+      "ctaHint": "Go directly to available trees, profiles, rights and growth records.",
+      "steps": {
+        "1": {
+          "title": "Tree file",
+          "body": "Species, age, health and blurred location."
+        },
+        "2": {
+          "title": "Growth logs",
+          "body": "Care events and seasonal photos."
+        },
+        "3": {
+          "title": "Rights",
+          "body": "Events, harvest and certificate."
+        }
+      }
+    },
+    "deck": {
+      "page1": "Cloud Brain",
+      "page2": "Operating Logic",
+      "page3": "History and Realms",
+      "page4": "Adoption Entry"
+    },
+    "systemModules": {
+      "kicker": "System modules",
+      "title": "Not a showcase site, a rural operating system",
+      "body": "Every visit, adoption, booking and feedback event on the front end becomes evidence for back-office decisions on space, tasks, activities and local industry.",
+      "items": {
+        "0": {
+          "tag": "Relationship entry",
+          "title": "Lychee tree adoption",
+          "body": "Tree profiles, rights, growth records and harvest fulfillment turn one visit into a year-long return relationship.",
+          "status": "Connected"
+        },
+        "1": {
+          "tag": "Visitor service",
+          "title": "Route recommendation",
+          "body": "Weather, audience, duration and node capacity combine into explainable mountain-village routes.",
+          "status": "Available"
+        },
+        "2": {
+          "tag": "Spatial business",
+          "title": "Courtyard booking",
+          "body": "Ridge courtyards, food classrooms and ancient-road stations become bookable operation units.",
+          "status": "MVP"
+        },
+        "3": {
+          "tag": "Collaboration network",
+          "title": "Villager tasks",
+          "body": "Adoption, activities and feedback create low-training tasks for care, guiding, meals and logistics.",
+          "status": "Linked"
+        },
+        "4": {
+          "tag": "Cloud decision",
+          "title": "Operation advice",
+          "body": "Visitor flow, spending, feedback, ecology and production data become reviewable action cards.",
+          "status": "Back office live"
+        },
+        "5": {
+          "tag": "Architectural result",
+          "title": "Spatial renewal",
+          "body": "Dwell time, risk and industry demand guide priorities for stations, courtyards, workshops and waterfront repair.",
+          "status": "Planning input"
+        }
+      }
+    },
+    "cloudPreview": {
+      "kicker": "AIGC Cloud Brain",
+      "title": "Five-flow operation view",
+      "cards": {
+        "0": {
+          "label": "Visitor relationship",
+          "value": "Adoption return",
+          "body": "Tree profiles, events, notifications and orders form long-term reach."
+        },
+        "1": {
+          "label": "Field collaboration",
+          "value": "Task dispatch",
+          "body": "Villagers, nodes, earnings and care records close the loop in the back office."
+        },
+        "2": {
+          "label": "Spatial decision",
+          "value": "Renewal evidence",
+          "body": "Visitor flow, risk and feedback set priorities for architectural nodes."
+        }
+      }
+    },
+    "operationFlow": {
+      "kicker": "Operation logic",
+      "title": "How one tree moves the whole village system",
+      "body": "Adoption is not the end of a page. It starts visitor relationships, villager collaboration, operational review and architectural renewal.",
+      "steps": {
+        "0": {
+          "label": "Visitor side",
+          "title": "Adopt one tree",
+          "body": "The user enters a tree profile, confirms rights and growth records, and leaves a year-long return relationship."
+        },
+        "1": {
+          "label": "Villager side",
+          "title": "Create care tasks",
+          "body": "Watering, pruning, photos, guiding, picking and logistics become executable tasks."
+        },
+        "2": {
+          "label": "Operator side",
+          "title": "Collect orders and feedback",
+          "body": "Bookings, spending, activities, satisfaction and field issues enter one operation view."
+        },
+        "3": {
+          "label": "Cloud brain",
+          "title": "Generate advice cards",
+          "body": "AIGC summarizes five-flow data and proposes route, activity, facility and risk actions."
+        },
+        "4": {
+          "label": "Built space",
+          "title": "Guide renewal nodes",
+          "body": "High-frequency stays, industry needs and risk points guide courtyard, station, workshop and waterfront updates."
+        }
+      },
+      "result": "Architectural space is not scenic decoration in advance. It appears from continuous operation: where people gather, tasks happen and risks emerge, renewal becomes necessary."
+    }
+  },
+  "booking": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Courtyard booking phase"
+    },
+    "hero": {
+      "eyebrow": "Courtyard Booking",
+      "title": "Make availability, stay rules and pending payment clear",
+      "body": "This phase uses local structured inventory and does not connect real payment. Visitors can choose courtyard, date, guests and payment mode, then create a pending-payment confirmation."
+    },
+    "guardrail": {
+      "title": "Payment entry pending",
+      "body": "The page only shows booking confirmation and pending payment. Real payment must later use a unified payment order, idempotency key and sandbox mode."
+    },
+    "list": {
+      "eyebrow": "Courtyard list",
+      "title": "Choose a courtyard for this booking",
+      "body": "Courtyards are organized as ridge stay, lychee food class and ancient road station resources before moving to /api/v1/courtyards.",
+      "capacity": "Capacity",
+      "price": "Price note",
+      "minNights": "Min nights",
+      "select": "Select",
+      "selected": "Selected"
+    },
+    "form": {
+      "eyebrow": "Booking info",
+      "title": "Confirm date, guests and payment mode",
+      "dateLabel": "Stay or use date",
+      "guestsLabel": "Guests",
+      "guestsValue": "{count} guests",
+      "paymentModeLabel": "Payment mode",
+      "confirm": "Confirm booking",
+      "confirming": "Creating booking"
+    },
+    "dates": {
+      "jun20": "June 20, 2026",
+      "jun21": "June 21, 2026",
+      "jun27": "June 27, 2026",
+      "jun28": "June 28, 2026"
+    },
+    "inventory": {
+      "available": "Available",
+      "limited": "Limited",
+      "booked": "Booked",
+      "maintenance": "Maintenance"
+    },
+    "paymentModes": {
+      "deposit": "Deposit",
+      "full": "Full payment"
+    },
+    "summary": {
+      "title": "Order summary",
+      "courtyard": "Courtyard",
+      "date": "Date",
+      "guests": "Guests",
+      "paymentMode": "Payment mode"
+    },
+    "notice": {
+      "title": "Booking notice",
+      "activitiesTitle": "Recent activities",
+      "activitiesEmpty": "No recent activities for this courtyard."
+    },
+    "messages": {
+      "capacityExceeded": "The guest count exceeds this courtyard capacity. Reduce guests or choose a larger courtyard.",
+      "submitFailed": "Booking submission failed. Please try again later."
+    },
+    "order": {
+      "title": "Booking created",
+      "body": "The order is now pending payment. The payment entry is not connected yet, so no real charge occurs.",
+      "status": "Order status: pending payment",
+      "paymentStatus": "Payment status: payment pending integration",
+      "paymentEntry": "Payment entry pending",
+      "idLabel": "Order ID",
+      "createdAtLabel": "Created at"
+    },
+    "courtyards": {
+      "ridgeShared": {
+        "name": "Ridge Shared Courtyard",
+        "summary": "A stay and co-creation courtyard for small teams, connected to village meals, morning farm activity and ridge walks.",
+        "location": "Ridge Dwelling Realm · Near Chengjiawan and Tujiawan",
+        "price": "From ¥680",
+        "notice": "Confirm arrival one day ahead. Overnight stays require valid ID, with parking followed by shuttle or short walk.",
+        "imageAlt": "Ridge shared courtyard space"
+      },
+      "lycheeFood": {
+        "name": "Lychee Shared Courtyard",
+        "summary": "For family food education groups, picking, class prep, village meals and short stays.",
+        "location": "Lychee Field Realm · Near lychee and longan orchards",
+        "price": "From ¥298",
+        "notice": "Food class materials should be confirmed ahead. Rain keeps indoor class and cancels muddy picking.",
+        "imageAlt": "Lychee shared courtyard and stone house"
+      },
+      "ancientStation": {
+        "name": "Ancient Road Station Courtyard",
+        "summary": "Supports light ancient road walks, audio guides and tea breaks. It is currently under preparation.",
+        "location": "Ancient Road Realm · Near Zouma Ridge road node",
+        "price": "TBD",
+        "notice": "This courtyard is under maintenance and cannot be confirmed yet. Please choose another courtyard.",
+        "imageAlt": "Ancient road station courtyard"
+      }
+    },
+    "amenities": {
+      "sharedKitchen": "Shared kitchen",
+      "courtyardTea": "Courtyard tea",
+      "lowCarbonRoom": "Low-carbon room",
+      "parkingTransfer": "Parking transfer",
+      "foodClassroom": "Food classroom",
+      "harvestTable": "Harvest table",
+      "familyFriendly": "Family friendly",
+      "rainShelter": "Rain fallback",
+      "audioGuide": "Audio guide",
+      "teaBreak": "Tea break",
+      "lightWalk": "Light walk",
+      "historyWall": "Story wall"
+    }
+  },
+  "feedback": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Feedback and admin phase"
+    },
+    "hero": {
+      "eyebrow": "Feedback",
+      "title": "Turn field feedback into trackable operation tickets",
+      "body": "This phase opens the visitor feedback entry with category, severity, rating and written notes. A ticket id is created after submission and appears in the admin feedback list."
+    },
+    "guardrail": {
+      "title": "Feedback is sanitized first",
+      "body": "Phone numbers and precise coordinates are masked before entering the ticket flow. Future AI summaries must also pass sanitization and the backend model adapter."
+    },
+    "form": {
+      "eyebrow": "Submit feedback",
+      "title": "Tell us what needs follow-up",
+      "body": "Describe the location, time and issue as clearly as possible. The system creates a pending ticket and does not publish your feedback.",
+      "categoryLabel": "Category",
+      "severityLabel": "Severity",
+      "ratingLabel": "Rating",
+      "ratingAria": "{count} star rating",
+      "contentLabel": "Feedback",
+      "contentPlaceholder": "Example: The sign from the visitor center to Taojiawan parking point is not clear enough.",
+      "remaining": "{count} characters left",
+      "submit": "Submit feedback",
+      "submitting": "Submitting"
+    },
+    "categories": {
+      "content": "Content",
+      "service": "Service",
+      "facility": "Facility",
+      "payment": "Payment",
+      "other": "Other"
+    },
+    "severities": {
+      "low": "Record",
+      "medium": "Follow-up",
+      "high": "Experience impact",
+      "urgent": "On-site urgent"
+    },
+    "statuses": {
+      "submitted": "Submitted",
+      "assigned": "Assigned",
+      "processing": "Processing",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "messages": {
+      "contentRequired": "Please enter at least 8 characters.",
+      "submitFailed": "Feedback could not be submitted. Please try again later."
+    },
+    "result": {
+      "title": "Submission result",
+      "body": "After success, the ticket id and current status are shown here. Admin can update handling records.",
+      "empty": "Submit the form to create a trackable ticket.",
+      "success": "Feedback submitted",
+      "ticketId": "Ticket id",
+      "status": "Current status"
+    }
+  },
+  "routes": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Route generation phase"
+    },
+    "hero": {
+      "eyebrow": "Route Generator",
+      "title": "Generate explainable routes by duration, audience and weather",
+      "body": "The first version uses rule-based templates and does not call AI or map APIs.",
+      "summaryTime": "Estimated 3-minute browse",
+      "summaryLocation": "Changshou, Chongqing · Zouma Village"
+    },
+    "form": {
+      "eyebrow": "Inputs",
+      "title": "Tell the system how to walk",
+      "body": "Use the provided planning scope and satellite map to produce an MVP route card.",
+      "durationLabel": "Duration",
+      "durationOptions": {
+        "halfDay": "Half day",
+        "oneDay": "One day",
+        "twoDays": "Two days"
+      },
+      "audienceLabel": "Audience",
+      "audienceOptions": {
+        "senior": "Senior friendly",
+        "family": "Family",
+        "regular": "Regular visitor"
+      },
+      "weatherLabel": "Weather",
+      "weatherOptions": {
+        "sunny": "Sunny",
+        "rainy": "Rainy",
+        "hot": "Hot"
+      },
+      "ruleTitle": "Generated through backend adapter",
+      "ruleBody": "The frontend sends duration, audience and weather tags to /api/v1/routes/generate. The backend calls DeepSeek through ModelProviderAdapter and returns the recommended route.",
+      "generate": "Generate route",
+      "generating": "Generating"
+    },
+    "map": {
+      "eyebrow": "Map base",
+      "title": "Scope and satellite comparison",
+      "scope": "Scope",
+      "satellite": "Satellite",
+      "scopeAlt": "Zouma planning scope map",
+      "satelliteAlt": "Zouma satellite map"
+    },
+    "result": {
+      "eyebrow": "Recommended result",
+      "totalTime": "Total time",
+      "mobility": "Mobility",
+      "weather": "Weather strategy",
+      "waypoints": "Waypoints",
+      "reservationNodes": "Reserve ahead",
+      "fallback": "Rain fallback",
+      "notice": "Trip notice",
+      "bookingCta": "View reservable nodes",
+      "provider": "Source: {provider}",
+      "providerFallback": "AI call is temporarily unavailable. Showing the local route recommendation.",
+      "providerOnline": "AI recommendation ? {provider}",
+      "providerPreview": "AI is connected. Generate a route to get a model recommendation."
+    },
+    "waypoints": {
+      "visitorCenter": "Visitor Center",
+      "taojiawan": "Taojiawan parking",
+      "ancientRoad": "Zouma Ridge ancient road",
+      "lycheeGarden": "Lychee and longan orchard",
+      "waterfrontRest": "Longxi waterfront rest",
+      "foodClassroom": "Lychee food classroom",
+      "treeAdoption": "Digital tree adoption node",
+      "resilienceWorkshop": "Longxi resilience workshop",
+      "ridgeCourtyard": "Ridge courtyard",
+      "indoorStory": "Indoor ancient road story",
+      "shadedAncientRoad": "Shaded short ancient road",
+      "villageMeal": "Village meal and product display",
+      "morningFarm": "Morning farm activity",
+      "xikouStation": "Xikou relay station",
+      "lingwangTeaRoom": "Lingwang tea room",
+      "fengwangTeaRoom": "Fengwang tea room",
+      "lijingCoCreationCenter": "Lijing co-creation center",
+      "zoumaCultureCenter": "Zouma culture center",
+      "zoumaStation": "Zouma relay station",
+      "integratedServiceCenter": "Integrated service center",
+      "researchCenter": "Study center",
+      "ecologicalDemoCenter": "Ecological demonstration center",
+      "ecologicalRestaurant": "Ecological restaurant",
+      "ancientLycheePavilion": "Ancient lychee pavilion",
+      "experienceField": "Experience field",
+      "tianyuanExperiencePoint": "Pastoral experience point",
+      "camp": "Camp",
+      "homestay": "Homestay",
+      "viewingPlatform": "Viewing platform",
+      "researchWorkshop": "Study workshop",
+      "studyHomestay": "Study homestay",
+      "studyNode": "Study node",
+      "homestayCluster": "Homestay cluster"
+    },
+    "reservationNodes": {
+      "audioGuide": "Audio guide device",
+      "shuttle": "Shuttle or short transfer",
+      "foodClass": "Family food class",
+      "treeAdoption": "Tree adoption quota",
+      "villageMeal": "Village meal seats",
+      "courtyardTea": "Courtyard tea break",
+      "indoorWorkshop": "Indoor study workshop",
+      "rainGear": "Rain gear and anti-slip notice",
+      "coolRest": "Cooling rest point",
+      "courtyardStay": "Ridge courtyard stay",
+      "xikouParking": "Xikou arrival and parking",
+      "teaRoom": "Lingwang tea room reception",
+      "lycheeWorkshop": "Lychee processing and adoption briefing",
+      "serviceCenterMeal": "Integrated service center dining seats",
+      "serviceCenterStay": "Integrated service center stay and parking",
+      "researchWorkshop": "Study center course and workshop"
+    },
+    "plans": {
+      "gentleAncientRoad": {
+        "title": "Senior-friendly ancient road light route",
+        "summary": "A gentle route through visitor center, Taojiawan, ancient road story and waterfront rest.",
+        "totalTime": "2.5 hours",
+        "mobility": "Low",
+        "weather": "Sunny first",
+        "rainFallback": "Shorten the ancient road section and move to indoor story and courtyard tea.",
+        "notice": "Avoid noon and prefer nearby parking."
+      },
+      "familyLycheeClass": {
+        "title": "Family lychee food route",
+        "summary": "Orchard, food classroom and adoption entry with reduced climbing.",
+        "totalTime": "3 hours",
+        "mobility": "Low-mid",
+        "weather": "Sunny friendly",
+        "rainFallback": "Keep food class and tree profile, cancel muddy picking.",
+        "notice": "Reserve food class and keep children away from waterfront edges."
+      },
+      "regularFourRealms": {
+        "title": "One-day four-realms route",
+        "summary": "A full first-visit route connecting ancient road, orchard, water and ridge courtyard.",
+        "totalTime": "6 hours",
+        "mobility": "Medium",
+        "weather": "Best sunny",
+        "rainFallback": "Switch to short road, food class, workshop and courtyard stay.",
+        "notice": "Reserve lunch and rest time."
+      },
+      "rainStudyRoute": {
+        "title": "Rainy resilience study route",
+        "summary": "A lower-risk indoor and workshop route for rainy days.",
+        "totalTime": "2.5 hours",
+        "mobility": "Low",
+        "weather": "Rain fallback",
+        "rainFallback": "If warning is active, keep only visitor center and indoor workshop.",
+        "notice": "Avoid waterfront and unpaved slopes."
+      },
+      "hotLowRiskRoute": {
+        "title": "Hot-weather low-risk route",
+        "summary": "Shade, courtyard and waterfront rest with reduced exposed walking.",
+        "totalTime": "2 hours",
+        "mobility": "Low",
+        "weather": "Heat shade",
+        "rainFallback": "Move to courtyard tea and indoor narration after showers.",
+        "notice": "Travel in morning or evening and prioritize hydration."
+      },
+      "twoDayCourtyard": {
+        "title": "Two-day ridge courtyard route",
+        "summary": "Four realms and village meal on day one, morning farm and workshop on day two.",
+        "totalTime": "2 days",
+        "mobility": "Medium",
+        "weather": "Best sunny",
+        "rainFallback": "Keep courtyard, meal, workshop and indoor classes.",
+        "notice": "Reserve stay, meal and study quota."
+      },
+      "narrativeSixStops": {
+        "title": "Six-stop Narrative Route",
+        "summary": "A six-stop route connecting the ancient road, lychee fields, waterside rest, ridge courtyards, and resilience workshop.",
+        "totalTime": "5.5 hours",
+        "mobility": "Moderate",
+        "weather": "Best in clear weather",
+        "rainFallback": "On rainy days, shorten the waterside stop and move more time into indoor workshops and courtyard tea.",
+        "notice": "Reserve lunch and workshop capacity ahead of time."
+      }
+    }
+  },
+  "scenes": {
+    "detail": {
+      "backHome": "Back home",
+      "ruleTitle": "Content boundary",
+      "ruleBody": "This page uses prepared project material only. Later AI narration must include source, update time and confidence.",
+      "nextTitle": "Next experience",
+      "nextBody": "The realm pages first provide structured content and action entries. Routes, booking, adoption and feedback will be connected later."
+    },
+    "ancientRoad": {
+      "eyebrow": "Ancient road, relay station and longevity culture",
+      "title": "Ancient Road Realm",
+      "summary": "A walkable and narratable heritage route based on Zouma Ridge road memory.",
+      "imageAlt": "Ancient mountain road scene",
+      "tags": {
+        "heritage": "Heritage",
+        "walk": "Walking route",
+        "audio": "Audio guide"
+      },
+      "metrics": {
+        "length": {
+          "value": "About 670m",
+          "label": "Existing road clue"
+        },
+        "nodes": {
+          "value": "3 types",
+          "label": "Road, spring and station"
+        },
+        "audience": {
+          "value": "Light effort",
+          "label": "First-visit friendly"
+        }
+      },
+      "blocks": {
+        "story": {
+          "title": "Make history walkable",
+          "body": "Organize road, station, signpost, spring and local memory into a clear visitor sequence."
+        },
+        "experience": {
+          "title": "Beyond static panels",
+          "body": "Future steps connect audio guides, AI summaries, study cards and booking nodes."
+        },
+        "operation": {
+          "title": "Low-intervention first",
+          "body": "Protect boundaries, repair lightly and keep village life present."
+        }
+      },
+      "ctas": {
+        "route": "Generate road route",
+        "booking": "View nearby courtyards"
+      }
+    },
+    "lycheeField": {
+      "eyebrow": "Lychee, food education and adoption",
+      "title": "Lychee Field Realm",
+      "summary": "Turn lychee from a single crop into adoption, picking, processing, food education and repeat visits.",
+      "imageAlt": "Lychee field and rural landscape",
+      "tags": {
+        "adoption": "Tree file",
+        "food": "Food workshop",
+        "festival": "Seasonal event"
+      },
+      "metrics": {
+        "tree": {
+          "value": "One tree",
+          "label": "Relationship start"
+        },
+        "season": {
+          "value": "Four seasons",
+          "label": "Farm rhythm"
+        },
+        "family": {
+          "value": "Family",
+          "label": "Picking and food education"
+        }
+      },
+      "blocks": {
+        "tree": {
+          "title": "A long-term tree relationship",
+          "body": "Future adoption pages show tree profile, health, blurred location, care logs and certificate rights."
+        },
+        "table": {
+          "title": "From tree to table",
+          "body": "Picking, processing, drinks, gifts, meals and family courses form a complete experience chain."
+        },
+        "trust": {
+          "title": "Rights must be clear",
+          "body": "Events, harvest pickup, delivery feedback and care update frequency should be explicit."
+        }
+      },
+      "ctas": {
+        "adoption": "Open adoption preview",
+        "route": "Generate family route"
+      }
+    },
+    "resilienceValley": {
+      "eyebrow": "Longxi water, rain flood and study",
+      "title": "Resilience Valley Realm",
+      "summary": "Turn water management into a resilient corridor, waterfront experience and nature classroom.",
+      "imageAlt": "Water valley and ecological workshop",
+      "tags": {
+        "water": "Water repair",
+        "study": "Nature study",
+        "weather": "Weather fallback"
+      },
+      "metrics": {
+        "system": {
+          "value": "6 types",
+          "label": "Roof, yard, terrace, pond, wetland and riverbank"
+        },
+        "safety": {
+          "value": "Alert first",
+          "label": "Rain and heat notice"
+        },
+        "course": {
+          "value": "Study ready",
+          "label": "Water safety course"
+        }
+      },
+      "blocks": {
+        "water": {
+          "title": "Ecology as foundation",
+          "body": "Rain gardens, ecological ditches, pond purification and wetland buffers form a maintainable water system."
+        },
+        "learning": {
+          "title": "Governance becomes courseware",
+          "body": "Water level, quality, flood paths and hydropower memory can become study content."
+        },
+        "weather": {
+          "title": "Routes respond to weather",
+          "body": "Later route generation will reduce risk for rain, heat and warnings."
+        }
+      },
+      "ctas": {
+        "route": "Generate rainy route",
+        "feedback": "Submit feedback"
+      }
+    },
+    "ridgeDwelling": {
+      "eyebrow": "Ridge courtyards, stays and shared life",
+      "title": "Ridge Dwelling Realm",
+      "summary": "Reuse courtyards for village life, visitor stays, youth creation and low-carbon operations.",
+      "imageAlt": "Ridge courtyard scene",
+      "tags": {
+        "stay": "Courtyard stay",
+        "lowCarbon": "Green retrofit",
+        "shared": "Shared village life"
+      },
+      "metrics": {
+        "courtyard": {
+          "value": "Many yards",
+          "label": "Distributed units"
+        },
+        "stay": {
+          "value": "Half day to two days",
+          "label": "Stay products"
+        },
+        "community": {
+          "value": "Shared benefit",
+          "label": "Future revenue rules"
+        }
+      },
+      "blocks": {
+        "renovation": {
+          "title": "Low-intervention retrofit",
+          "body": "Keep roofs, stone bases, courtyards and terraces while improving safety and comfort."
+        },
+        "life": {
+          "title": "Courtyards are not backdrops",
+          "body": "Stays, workshops, shared kitchens and product display should support real life."
+        },
+        "operation": {
+          "title": "From bookable to revisitable",
+          "body": "Future booking adds calendar inventory, notices, order confirmation and payment entry."
+        }
+      },
+      "ctas": {
+        "booking": "View booking",
+        "route": "Generate two-day route"
+      }
+    }
+  },
+  "products": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Products MVP"
+    },
+    "hero": {
+      "eyebrow": "Products",
+      "title": "Turn village products into browseable and revisitable orders",
+      "body": "Payments are not connected yet. Visitors can choose a product, leave contact details, and create an offline confirmation order."
+    },
+    "list": {
+      "eyebrow": "Products",
+      "title": "Choose a product or meal service",
+      "body": "Products come from the admin Product table and can be linked to consumption nodes. Empty prices appear as negotiable.",
+      "select": "Select",
+      "selected": "Selected",
+      "negotiable": "Negotiable"
+    },
+    "form": {
+      "eyebrow": "Order info",
+      "title": "Fill offline confirmation details",
+      "nameLabel": "Contact name",
+      "phoneLabel": "Phone",
+      "quantityLabel": "Quantity",
+      "quantityValue": "{count} pcs",
+      "confirm": "Create offline order",
+      "submitting": "Creating"
+    },
+    "summary": {
+      "title": "Order summary",
+      "product": "Product",
+      "quantity": "Quantity",
+      "amount": "Amount"
+    },
+    "notice": {
+      "title": "Notice",
+      "body": "This order is pending offline confirmation and will not charge payment. Operators can continue processing it in admin orders."
+    },
+    "order": {
+      "title": "Order created",
+      "body": "The product order is pending offline confirmation.",
+      "status": "Status: pending offline confirmation",
+      "idLabel": "Order ID"
+    },
+    "messages": {
+      "loading": "Loading products",
+      "loadFailed": "Products are unavailable",
+      "demoFallback": "Live product data is empty, so demo fallback data is shown.",
+      "contactRequired": "Please fill contact name and phone",
+      "submitFailed": "Order submission failed. Please retry."
+    }
+  },
+  "calendar": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Farming Calendar MVP"
+    },
+    "hero": {
+      "eyebrow": "Farming Calendar",
+      "title": "Follow Zouma Village through the seasonal farming calendar",
+      "body": "View pruning, fertilizing, harvest, processing and seasonal events on one clear timeline.",
+      "summaryTime": "Estimated 3-minute browse",
+      "summaryLocation": "Changshou, Chongqing · Zouma Village"
+    },
+    "filters": {
+      "title": "Filters",
+      "all": "All",
+      "activityType": "Activity type",
+      "status": "Status",
+      "treeSpecies": "Tree species"
+    },
+    "timeline": {
+      "title": "Solar term timeline"
+    },
+    "activityTypes": {
+      "planting": "Planting",
+      "pruning": "Pruning",
+      "fertilizing": "Fertilizing",
+      "harvesting": "Harvesting",
+      "processing": "Processing",
+      "festival": "Festival"
+    },
+    "statuses": {
+      "upcoming": "Upcoming",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "species": {
+      "lychee": "Lychee",
+      "longan": "Longan"
+    },
+    "messages": {
+      "loading": "Loading farming calendar",
+      "empty": "No farming calendar items match the filters",
+      "demoFallback": "Live farming data is empty, so demo fallback data is shown."
+    }
+  },
+  "activities": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Village activity showcase"
+    },
+    "hero": {
+      "eyebrow": "Village activities",
+      "title": "Activities turn adoption into an on-site relationship",
+      "body": "Harvesting, food learning, courtyard meals and co-living experiences make one adopted tree part of a repeatable village operation.",
+      "summaryTime": "3 min preview",
+      "summaryLocation": "Zouma Village, Changshou"
+    },
+    "showcase": {
+      "label": "Featured event",
+      "name": "Lychee Harvest Learning Festival",
+      "date": "Late June · Orchards and ridge courtyards",
+      "body": "Family harvesting, food learning, fruit grading, village meals and adoption revisits form a compact weekend event."
+    },
+    "filters": {
+      "title": "Filter activities",
+      "type": "Activity type",
+      "date": "Activity date",
+      "all": "All types"
+    },
+    "types": {
+      "village_feast": "Ridge feast",
+      "food_class": "Food class",
+      "harvest": "Harvest revisit",
+      "guided_walk": "Ancient-road walk",
+      "study": "Study tour",
+      "workshop": "Workshop",
+      "exhibition": "Exhibition walk",
+      "co_living": "Co-living"
+    },
+    "statuses": {
+      "open": "Open",
+      "full": "Full",
+      "cancelled": "Cancelled",
+      "draft": "Preparing",
+      "closed": "Closed"
+    },
+    "card": {
+      "capacity": "{booked}/{max} guests",
+      "offlinePrice": "Offline confirmation"
+    },
+    "actions": {
+      "book": "Book activity",
+      "full": "Full",
+      "cancelled": "Cancelled",
+      "closed": "Closed",
+      "draft": "Preparing"
+    },
+    "form": {
+      "title": "Booking details",
+      "body": "Leave a contact to submit an activity booking. Operations can confirm capacity and on-site arrangements.",
+      "name": "Name",
+      "phone": "Phone",
+      "guestCount": "Guests",
+      "guestCountValue": "{count} guests",
+      "noteTitle": "Operations note",
+      "noteBody": "Activity bookings enter the operations console and can become villager tasks, notifications and hosting plans."
+    },
+    "messages": {
+      "bookingFailed": "Booking failed. Check the name, phone and guest count.",
+      "bookingConfirmed": "Activity booking confirmed.",
+      "empty": "No matching activities",
+      "emptyBody": "Adjust the type or date, or return to the featured event for available booking nodes.",
+      "demoFallback": "Live activity data is empty, so demo fallback data is shown."
+    },
+    "order": {
+      "title": "Booking created"
+    }
+  },
+  "villagerSystem": {
+    "common": {
+      "loading": "Loading",
+      "error": "This page is temporarily unavailable",
+      "retry": "Try again",
+      "refresh": "Refresh",
+      "saving": "Saving"
+    },
+    "nav": {
+      "back": "Back",
+      "dashboard": "Dashboard",
+      "tasks": "Tasks",
+      "earnings": "Earnings",
+      "notifications": "Alerts",
+      "logout": "Log out"
+    },
+    "login": {
+      "eyebrow": "Villager portal",
+      "title": "Villager sign in",
+      "body": "Use your registered phone number to access tasks and earnings.",
+      "phone": "Phone",
+      "phonePlaceholder": "Registered phone number",
+      "otp": "Verification code",
+      "otpPlaceholder": "6-digit code",
+      "request": "Get code",
+      "requesting": "Generating",
+      "verify": "Sign in",
+      "verifying": "Verifying",
+      "developmentOtp": "Demo mode: SMS is unavailable. Use code {otp}.",
+      "requestError": "No active villager matches this phone",
+      "verifyError": "The code is invalid or expired"
+    },
+    "dashboard": {
+      "eyebrow": "Today's work",
+      "greeting": "Hello, {name}",
+      "monthlyCompleted": "Done this month",
+      "monthlyEarnings": "Monthly earnings",
+      "pendingTasks": "To do",
+      "latestTasks": "Recent tasks",
+      "latestNotifications": "Latest alerts"
+    },
+    "tasks": {
+      "eyebrow": "Task collaboration",
+      "title": "My tasks",
+      "empty": "No tasks here",
+      "noNode": "No location",
+      "noDescription": "No task description",
+      "noDeadline": "No due date",
+      "filters": {
+        "pending": "Available",
+        "active": "In progress",
+        "completed": "Completed"
+      },
+      "actions": {
+        "pending": "Accept task",
+        "accepted": "Start task",
+        "in_progress": "Complete task"
+      },
+      "knowledge": {
+        "open": "Ask about care rules",
+        "placeholder": "Enter a rule question related to this task",
+        "ask": "Send question",
+        "asking": "Searching",
+        "failed": "Care rules are temporarily unavailable"
+      },
+      "evidence": {
+        "title": "Submit fulfillment evidence",
+        "help": "Upload at least two images showing the care target and the result.",
+        "placeholder": "Describe the care work actually completed",
+        "submit": "Submit evidence",
+        "requirements": "Select at least two images and enter a care description.",
+        "failed": "Evidence submission failed. Check the images and try again."
+      }
+    },
+    "earnings": {
+      "eyebrow": "Work earnings",
+      "title": "My earnings",
+      "total": "Total earnings",
+      "monthly": "This month",
+      "trend": "Recent earnings",
+      "completedTasks": "Completed tasks",
+      "empty": "Earnings will appear after tasks are completed"
+    },
+    "notifications": {
+      "eyebrow": "Message center",
+      "title": "My alerts",
+      "markAll": "Mark all as read",
+      "empty": "No notifications"
+    },
+    "touristNotifications": {
+      "open": "Open notifications",
+      "eyebrow": "Orchard updates",
+      "title": "Notification center",
+      "body": "See the latest tree and activity updates.",
+      "noIdentity": "Leave your phone number during adoption, booking, or ticket purchase to receive updates.",
+      "categories": {
+        "all": "All",
+        "tree": "Trees",
+        "activity": "Activities"
+      }
+    },
+    "touristIdentity": {
+      "phone": "Contact phone",
+      "phonePlaceholder": "11-digit mobile number"
+    },
+    "interactions": {
+      "eyebrow": "Adoption activities",
+      "title": "My interactions",
+      "body": "Complete orchard activities and keep your care record.",
+      "empty": "No pending interaction tasks",
+      "notePlaceholder": "Optional care note",
+      "upload": "Upload photo and complete",
+      "shareText": "I adopted tree {treeCode} in Zouma Village. Follow its growth with me.",
+      "points": {
+        "watering": "10 pts",
+        "fertilizing": "10 pts",
+        "photo_upload": "15 pts",
+        "diary": "20 pts",
+        "share": "15 pts"
+      },
+      "descriptions": {
+        "watering": "Water your adopted tree",
+        "fertilizing": "Record a fertilizing session",
+        "photo_upload": "Upload a recent growth photo",
+        "diary": "Write a care observation",
+        "share": "Share the tree's progress"
+      },
+      "actions": {
+        "watering": "Finish watering",
+        "fertilizing": "Finish fertilizing",
+        "photo_upload": "Upload photo",
+        "diary": "Submit diary",
+        "share": "Copy and complete"
+      },
+      "dashboard": {
+        "metaTitle": "Interaction tasks | Zouma Village",
+        "metaDescription": "View adopted-tree tasks, points, and redemption records.",
+        "phase": "Adoption interactions",
+        "title": "Interaction task system",
+        "body": "Manage care tasks, points, and return visits around your adopted tree.",
+        "entryTitle": "This month's tasks",
+        "entryBody": "Check progress and quickly complete watering or photo tasks.",
+        "currentAdoption": "Current adoption",
+        "totalPoints": "Available points",
+        "availablePoints": "Available points",
+        "totalEarned": "Total earned",
+        "monthlyProgress": "Monthly progress",
+        "pending": "Pending",
+        "pointsTitle": "Points center",
+        "tasksTitle": "Care tasks",
+        "viewAll": "Open interactions",
+        "quickWater": "Quick watering",
+        "quickPhoto": "Quick photo"
+      },
+      "identity": {
+        "title": "Find your adoption",
+        "body": "Enter the phone number used for adoption to load active trees and interaction tasks.",
+        "phone": "Adoption phone",
+        "lookup": "Find adoption",
+        "adoptCta": "Adopt a tree"
+      },
+      "timeline": {
+        "title": "Care timeline",
+        "empty": "No care records yet"
+      },
+      "redemption": {
+        "title": "Point redemption",
+        "empty": "No redemption options yet",
+        "redeem": "Redeem",
+        "success": "Redemption submitted",
+        "insufficient": "Not enough points"
+      },
+      "season": {
+        "eventTag": "Seasonal task",
+        "bonusPoints": "Bonus +{points} pts",
+        "endsIn": "{days} days left"
+      },
+      "states": {
+        "loadFailed": "Interaction data could not load. Please try again later.",
+        "noActiveAdoption": "No active adoption was found for this phone number.",
+        "lookupFailed": "Adoption lookup failed. Check the phone number and try again.",
+        "completed": "Task completed and points added.",
+        "uploadFailed": "Photo upload or submission failed. Please choose the photo again.",
+        "completeFailed": "Task submission failed. Please try again later.",
+        "demoFallback": "Live interaction data is empty, so demo fallback data is shown.",
+        "demoNotice": "Demo mode: tasks, points, and redemption are shown only to demonstrate the full interaction flow and are not written to the database.",
+        "demoCompleted": "Demo task completed and points were added locally.",
+        "done": "Done"
+      }
+    },
+    "metadata": {
+      "login": {
+        "title": "Villager sign in | Zouma Village",
+        "description": "Sign in to the villager portal"
+      },
+      "dashboard": {
+        "title": "Villager dashboard | Zouma Village",
+        "description": "View tasks, earnings, and alerts"
+      },
+      "tasks": {
+        "title": "Villager tasks | Zouma Village",
+        "description": "Manage villager task progress"
+      },
+      "earnings": {
+        "title": "Villager earnings | Zouma Village",
+        "description": "View villager work earnings"
+      },
+      "notifications": {
+        "title": "Villager alerts | Zouma Village",
+        "description": "View villager task alerts"
+      },
+      "touristNotifications": {
+        "title": "Notifications | Zouma Village",
+        "description": "View tree and activity updates"
+      }
+    }
+  }
+}

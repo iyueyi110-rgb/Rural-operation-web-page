@@ -1,0 +1,306 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --background: #f3eee3;
+  --foreground: #19201b;
+  --surface: #fbfaf6;
+  --line: #cfc4b1;
+  --font-sans: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC",
+    "Noto Sans CJK SC", "Source Han Sans SC", system-ui, sans-serif;
+  --font-serif: "SimSun", "Songti SC", "STSong", "Noto Serif CJK SC",
+    "Source Han Serif SC", Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(70, 98, 74, 0.08), transparent 26rem),
+    radial-gradient(circle at 86% 88%, rgba(47, 118, 134, 0.055), transparent 24rem),
+    linear-gradient(180deg, #f5f0e6 0%, #ebe2d3 52%, #f8f5ee 100%);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+a {
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid #b93835;
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #b93835;
+  color: white;
+}
+
+.hero-serif {
+  font-family: var(--font-serif);
+}
+
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
+}
+
+.terrain-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(90deg, transparent 0%, black 16%, black 84%, transparent 100%);
+}
+
+.contour-field {
+  background:
+    radial-gradient(ellipse at 22% 28%, transparent 0 16%, rgba(255, 255, 255, 0.20) 16.4% 16.7%, transparent 17% 28%, rgba(255, 255, 255, 0.14) 28.4% 28.7%, transparent 29%),
+    radial-gradient(ellipse at 76% 62%, transparent 0 14%, rgba(255, 255, 255, 0.18) 14.4% 14.8%, transparent 15% 26%, rgba(255, 255, 255, 0.12) 26.4% 26.8%, transparent 27%),
+    radial-gradient(ellipse at 58% 22%, transparent 0 10%, rgba(255, 255, 255, 0.12) 10.4% 10.8%, transparent 11%);
+}
+
+.data-path {
+  background:
+    linear-gradient(90deg, transparent, rgba(224, 185, 112, 0.72), transparent),
+    linear-gradient(90deg, transparent, rgba(114, 166, 143, 0.62), transparent);
+  background-size: 220px 1px, 160px 1px;
+  background-position: 0 38%, 80px 62%;
+  background-repeat: repeat-x;
+}
+
+.realm-region-marker {
+  border: 0;
+  background: transparent;
+}
+
+.realm-region-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  background: rgba(25, 32, 27, 0.82);
+  padding: 7px 10px;
+  color: white;
+  box-shadow: 0 4px 14px rgba(8, 16, 10, 0.28);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.realm-region-label__dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@keyframes treeGrowthPulse {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.78) rotate(-5deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+.tree-growth-pulse {
+  animation: treeGrowthPulse 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@layer components {
+  .card-primary {
+    @apply rounded-xl border border-line/80 bg-surface shadow-[0_12px_28px_rgba(25,32,27,0.08)];
+  }
+
+  .card-secondary {
+    @apply rounded-lg border border-line/70 bg-surface/80;
+  }
+
+  .card-tertiary {
+    @apply rounded-lg bg-rice/70;
+  }
+
+  .card-dark {
+    @apply rounded-xl border border-white/10 bg-canopy text-white shadow-soft;
+  }
+
+  .card-hover {
+    @apply transition duration-300 ease-out motion-reduce:transition-none;
+  }
+
+  .card-hover:hover {
+    @apply -translate-y-0.5 motion-reduce:translate-y-0;
+  }
+
+  .btn-primary {
+    @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-lychee px-6 text-sm font-bold text-white transition hover:bg-[#a8312f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-[rgba(25,32,27,0.2)] disabled:text-[rgba(25,32,27,0.45)] motion-reduce:transition-none motion-reduce:active:scale-100;
+  }
+
+  .btn-secondary {
+    @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line bg-surface px-6 text-sm font-bold text-ink transition hover:bg-rice focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:border-line/70 disabled:bg-muted/70 disabled:text-[rgba(25,32,27,0.38)] motion-reduce:transition-none motion-reduce:active:scale-100;
+  }
+
+  .btn-ghost {
+    @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-white/20 bg-white/10 px-5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100;
+  }
+
+  .btn-sm {
+    @apply h-9 px-4 text-xs;
+  }
+
+  .form-control {
+    @apply min-w-0 rounded-lg border border-line bg-surface px-3 text-sm font-semibold text-ink outline-none transition placeholder:text-[rgba(25,32,27,0.42)] focus:border-water focus:ring-2 focus:ring-water/15 disabled:cursor-not-allowed disabled:bg-muted/70 disabled:text-[rgba(25,32,27,0.4)] motion-reduce:transition-none;
+  }
+
+  .input-control,
+  .select-control {
+    @apply form-control h-12;
+  }
+
+  .textarea-control {
+    @apply form-control min-h-32 py-3 leading-7;
+  }
+
+  .choice-card {
+    @apply rounded-xl border border-line bg-surface p-5 transition hover:border-ink/35 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100;
+  }
+
+  .choice-card-active {
+    @apply border-ink bg-white shadow-[inset_0_0_0_1px_rgba(25,32,27,0.92)];
+  }
+
+  .status-chip {
+    @apply inline-flex items-center justify-center rounded-full border px-3 py-1 text-xs font-bold;
+  }
+}
+
+@keyframes heroVideoDrift {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes ctaAura {
+  0%,
+  100% {
+    box-shadow: 0 18px 48px rgba(185, 56, 53, 0.22);
+  }
+  50% {
+    box-shadow: 0 18px 58px rgba(185, 56, 53, 0.42);
+  }
+}
+
+@keyframes scrollHintFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  22%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.hero-video-drift {
+  animation: heroVideoDrift 20s ease-in-out infinite;
+}
+
+.cta-aura {
+  animation: ctaAura 2.8s ease-in-out 1.5s infinite;
+}
+
+.scroll-hint-float {
+  animation: scrollHintFloat 3s ease-out 1.5s both;
+}
+
+.section-card,
+.scene-card,
+.route-card,
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}
+
+@media (prefers-reduced-data: reduce) {
+  video {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #19201b;
+    --foreground: #f3eee3;
+    --surface: #1e2722;
+    --line: #3a4a3d;
+  }
+
+  body {
+    background: #19201b;
+    color: var(--foreground);
+  }
+
+  img,
+  video {
+    opacity: 0.92;
+  }
+}
+
+@media print {
+  .no-print,
+  header,
+  nav,
+  footer {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: #19201b !important;
+  }
+}

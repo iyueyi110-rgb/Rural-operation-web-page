@@ -1,0 +1,1228 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FeedbackTicket {
+  id              String                   @id
+  source          String
+  category        String
+  severity        String
+  content         String                   @db.Text
+  rating          Int
+  status          String                   @default("submitted")
+  assignee        String?
+  resolution      String?                  @db.Text
+  adoptionId      String?                  @map("adoption_id")
+  taskId          String?                  @map("task_id")
+  ticketType      String?                  @map("ticket_type")
+  requestedAction String?                  @map("requested_action")
+  correlationId   String?                  @map("correlation_id")
+  createdAt       DateTime                 @default(now()) @map("created_at")
+  updatedAt       DateTime                 @updatedAt @map("updated_at")
+  handlingRecords FeedbackHandlingRecord[]
+  adoption        TreeAdoption?            @relation(fields: [adoptionId], references: [id], onDelete: SetNull)
+  task            Task?                    @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  @@index([adoptionId, createdAt])
+  @@index([taskId, createdAt])
+  @@index([ticketType, status])
+  @@map("feedback_ticket")
+}
+
+model FeedbackHandlingRecord {
+  id        String         @id
+  ticket    FeedbackTicket @relation(fields: [ticketId], references: [id])
+  ticketId  String         @map("ticket_id")
+  status    String
+  note      String         @db.Text
+  operator  String
+  createdAt DateTime       @default(now()) @map("created_at")
+
+  @@map("feedback_handling_record")
+}
+
+// ==== AIGC 云脑模型 ====
+
+model SpaceNode {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  nameKey       String
+  realm         String
+  nodeType      String
+  lat           Float?
+  lng           Float?
+  capacity      Int      @default(50)
+  terrainRisk   Float    @default(0)
+  watersideRisk Float    @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // ==== 建筑空间扩展字段（改造策略系统） ====
+  // 基础建筑信息
+  buildingAge         Int?    @map("building_age")
+  buildingMaterial    String? @map("building_material")
+  buildingFloors      Int?    @map("building_floors")
+  buildingArea        Float?  @map("building_area")
+  buildingOrientation String? @map("building_orientation")
+  heritageStatus      String? @map("heritage_status")
+  lastRenovationAt    String? @map("last_renovation_at")
+
+  // 建筑状况评分 (1-5)
+  structuralCondition String? @map("structural_condition")
+  aestheticCondition  String? @map("aesthetic_condition")
+  functionalCondition String? @map("functional_condition")
+
+  // 节能相关
+  energyScore          Float?  @map("energy_score")
+  insulationQuality    String? @map("insulation_quality")
+  ventilationQuality   String? @map("ventilation_quality")
+  solarPotential       String? @map("solar_potential")
+  energyConsumptionEst Float?  @map("energy_consumption_est")
+
+  // 生态相关
+  greeneryCoverage  Float?  @map("greenery_coverage")
+  waterPermeability String? @map("water_permeability")
+  biodiversityIndex String? @map("biodiversity_index")
+  microclimateZone  String? @map("microclimate_zone")
+
+  // 照片与文档
+  photos Json @default("[]")
+
+  presenceLogs         PresenceLog[]
+  dailyScores          NodeDailyScore[]
+  orders               UnifiedOrder[]
+  devices              Device[]
+  products             Product[]
+  villagers            Villager[]
+  tasks                Task[]
+  assessments          BuildingAssessment[]
+  diagnoses            SpatialDiagnosis[]
+  renovationStrategies RenovationStrategy[]
+  sitePotentials       SitePotential[]
+
+  @@map("space_node")
+}
+
+model Villager {
+  id          String                  @id @default(cuid())
+  name        String
+  phone       String
+  skills      Json                    @default("[]")
+  nodeId      String?
+  status      String                  @default("active")
+  // TODO: 迁入统一登录系统后废弃
+  otpCode     String?
+  // TODO: 迁入统一登录系统后废弃
+  otpExpiry   DateTime?
+  createdAt   DateTime                @default(now()) @map("created_at")
+  updatedAt   DateTime                @updatedAt @map("updated_at")
+  node        SpaceNode?              @relation(fields: [nodeId], references: [id])
+  tasks       Task[]
+  settlements FulfillmentSettlement[]
+
+  @@index([status, nodeId])
+  @@map("villager")
+}
+
+model Task {
+  id                   String                  @id @default(cuid())
+  title                String
+  description          String?                 @db.Text
+  taskType             String
+  status               String                  @default("pending")
+  villagerId           String?
+  nodeId               String?
+  scheduledDate        String?
+  adoptionId           String?                 @map("adoption_id")
+  treeId               String?                 @map("tree_id")
+  deadlineAt           DateTime?               @map("deadline_at")
+  acceptedAt           DateTime?               @map("accepted_at")
+  submittedAt          DateTime?               @map("submitted_at")
+  completedAt          DateTime?               @map("completed_at")
+  evidenceRequirements Json?                   @map("evidence_requirements_json")
+  version              Int                     @default(1)
+  earnings             Float                   @default(0)
+  createdAt            DateTime                @default(now()) @map("created_at")
+  updatedAt            DateTime                @updatedAt @map("updated_at")
+  villager             Villager?               @relation(fields: [villagerId], references: [id])
+  node                 SpaceNode?              @relation(fields: [nodeId], references: [id])
+  adoption             TreeAdoption?           @relation(fields: [adoptionId], references: [id], onDelete: SetNull)
+  tree                 OrchardTree?            @relation(fields: [treeId], references: [id], onDelete: SetNull)
+  evidences            FulfillmentEvidence[]
+  settlements          FulfillmentSettlement[]
+  feedbackTickets      FeedbackTicket[]
+
+  @@index([status, taskType])
+  @@index([villagerId, createdAt])
+  @@index([adoptionId, status])
+  @@index([treeId, deadlineAt])
+  @@map("task")
+}
+
+model FarmingCalendar {
+  id           String   @id @default(cuid())
+  solarTerm    String
+  title        String
+  description  String   @db.Text
+  activityType String
+  startDate    String
+  endDate      String?
+  treeSpecies  String?
+  status       String   @default("upcoming")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([startDate])
+  @@map("farming_calendar")
+}
+
+model PresenceLog {
+  id          String   @id @default(cuid())
+  nodeId      String
+  visitorId   String?
+  timestamp   DateTime @default(now())
+  peopleCount Int
+  dwellAvgMin Float?
+  source      String   @default("wifi_probe")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  node    SpaceNode @relation(fields: [nodeId], references: [id])
+  visitor Visitor?  @relation(fields: [visitorId], references: [id])
+
+  @@index([nodeId, timestamp])
+  @@index([visitorId, timestamp])
+  @@map("presence_log")
+}
+
+model Visitor {
+  id           String        @id @default(cuid())
+  fingerprint  String        @unique
+  userAgent    String?
+  screenSize   String?
+  timezone     String?
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  presenceLogs PresenceLog[]
+
+  @@map("visitor")
+}
+
+model User {
+  id          String         @id @default(cuid())
+  mobile      String         @unique
+  nickname    String?
+  role        String         @default("visitor")
+  locale      String         @default("zh-CN")
+  otpCode     String?
+  otpExpiry   DateTime?
+  jwtSalt     String?
+  lastLoginAt DateTime?
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  profile     UserProfile?
+  adoptions   TreeAdoption[]
+  routePlans  RoutePlan[]
+
+  @@index([mobile, role])
+  @@map("user")
+}
+
+model UserProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique @map("user_id")
+  ageGroup      String?
+  travelPref    Json?
+  mobilityLevel String?
+  childFlag     Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@map("user_profile")
+}
+
+model RoutePlan {
+  id                String   @id @default(cuid())
+  userId            String
+  inputsJson        Json
+  outputJson        Json
+  weatherSnapshotId String?
+  createdAt         DateTime @default(now()) @map("created_at")
+  user              User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@map("route_plan")
+}
+
+model Recommendation {
+  id             String    @id @default(cuid())
+  bizDate        String    @map("biz_date")
+  type           String
+  targetObject   String?   @map("target_object")
+  evidenceJson   Json      @map("evidence_json")
+  message        String    @db.Text
+  actionSteps    Json      @map("action_steps")
+  ownerRole      String    @map("owner_role")
+  expectedImpact String?   @map("expected_impact") @db.Text
+  confidence     Float     @default(0)
+  status         String    @default("draft")
+  approvedBy     String?   @map("approved_by")
+  approvedAt     DateTime? @map("approved_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  agentRunId     String?   @map("agent_run_id")
+
+  @@index([bizDate, status])
+  @@index([type, createdAt])
+  @@index([agentRunId])
+  @@map("recommendation")
+}
+
+model NodeDailyScore {
+  id               String   @id @default(cuid())
+  nodeId           String
+  date             String
+  totalVisitors    Int      @default(0)
+  peakPeopleCount  Int      @default(0)
+  avgDwellMin      Float    @default(0)
+  attractiveness   Float    @default(0)
+  safetyRisk       Float    @default(0)
+  weatherCondition String?
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  node SpaceNode @relation(fields: [nodeId], references: [id])
+
+  @@unique([nodeId, date])
+  @@map("node_daily_score")
+}
+
+model UnifiedOrder {
+  id          String   @id @default(cuid())
+  orderType   String
+  productId   String
+  productName String
+  quantity    Int      @default(1)
+  totalAmount Float    @default(0)
+  userId      String?
+  status      String   @default("pending_payment")
+  nodeId      String?
+  metadata    Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  node SpaceNode? @relation(fields: [nodeId], references: [id])
+
+  @@index([nodeId, createdAt])
+  @@index([userId, createdAt])
+  @@map("unified_order")
+}
+
+model DailyReport {
+  id          String   @id @default(cuid())
+  date        String   @unique
+  title       String
+  summary     String   @db.Text
+  sections    Json
+  metrics     Json
+  actionItems Json
+  status      String   @default("published")
+  generatedAt DateTime @default(now())
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("daily_report")
+}
+
+model SensorReading {
+  id        String   @id @default(cuid())
+  sensorId  String
+  type      String
+  value     Float
+  unit      String
+  nodeId    String?
+  source    String   @default("iot_gateway")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([sensorId, createdAt])
+  @@map("sensor_reading")
+}
+
+model Device {
+  id         String          @id @default(cuid())
+  deviceId   String          @unique
+  name       String
+  type       String
+  status     String          @default("active")
+  nodeId     String?
+  location   String?
+  lastSeenAt DateTime?
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @updatedAt @map("updated_at")
+  node       SpaceNode?      @relation(fields: [nodeId], references: [id])
+  readings   DeviceReading[]
+
+  @@index([status, lastSeenAt])
+  @@map("device")
+}
+
+model DeviceReading {
+  id        String   @id @default(cuid())
+  deviceId  String
+  type      String
+  value     Float
+  unit      String
+  raw       Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  device    Device   @relation(fields: [deviceId], references: [deviceId])
+
+  @@index([deviceId, createdAt])
+  @@map("device_reading")
+}
+
+model Product {
+  id          String     @id @default(cuid())
+  name        String
+  category    String
+  description String     @db.Text
+  price       Float?
+  unit        String?
+  stockStatus String     @default("available")
+  nodeId      String?
+  imageUrl    String?
+  status      String     @default("active")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  node        SpaceNode? @relation(fields: [nodeId], references: [id])
+
+  @@index([category, status])
+  @@map("product")
+}
+
+// ==== P1 树木与养护 ====
+
+model OrchardTree {
+  id               String                   @id @default(cuid())
+  treeCode         String                   @unique
+  species          String
+  age              Int
+  healthStatus     String                   @default("good")
+  blurredLocation  String
+  lat              Float?
+  lng              Float?
+  hiddenGeo        String?
+  version          Int                      @default(1)
+  fireMemory       String?                  @db.Text
+  newShootsRecord  String?                  @db.Text
+  growthPhotos     Json                     @default("[]")
+  adoptStatus      String                   @default("available")
+  adoptPrice       Float?
+  harvestSeason    String?
+  fruitVariety     String?
+  createdAt        DateTime                 @default(now()) @map("created_at")
+  updatedAt        DateTime                 @updatedAt @map("updated_at")
+  careLogs         TreeCareLog[]
+  adoptions        TreeAdoption[]
+  harvestBookings  HarvestBooking[]
+  interactionTasks VisitorInteractionTask[]
+  fulfillmentTasks Task[]
+
+  @@map("orchard_tree")
+}
+
+model TreeCareLog {
+  id        String      @id @default(cuid())
+  treeId    String
+  logType   String
+  content   String      @db.Text
+  imageUrl  String?
+  operator  String
+  createdAt DateTime    @default(now()) @map("created_at")
+  tree      OrchardTree @relation(fields: [treeId], references: [id])
+
+  @@index([treeId, createdAt])
+  @@map("tree_care_log")
+}
+
+model TreeAdoption {
+  id                  String                   @id @default(cuid())
+  adoptionCode        String?                  @unique @map("adoption_code")
+  treeId              String
+  plan                String
+  adopterName         String?
+  adopterPhone        String?
+  adopterId           String?
+  rightsJson          Json?
+  status              String                   @default("pending_payment")
+  agreementVersion    String                   @default("v1") @map("agreement_version")
+  paidAt              DateTime?                @map("paid_at")
+  activatedAt         DateTime?                @map("activated_at")
+  nextCareAt          DateTime?                @map("next_care_at")
+  renewalAt           DateTime?                @map("renewal_at")
+  version             Int                      @default(1)
+  createdAt           DateTime                 @default(now()) @map("created_at")
+  updatedAt           DateTime                 @updatedAt @map("updated_at")
+  tree                OrchardTree              @relation(fields: [treeId], references: [id])
+  adopter             User?                    @relation(fields: [adopterId], references: [id])
+  interactionTasks    VisitorInteractionTask[]
+  pointsAccount       AdoptionPoints?
+  redemptionRecords   RedemptionRecord[]
+  fulfillmentTasks    Task[]
+  fulfillmentEvidence FulfillmentEvidence[]
+  benefits            AdoptionBenefit[]
+  settlements         FulfillmentSettlement[]
+  previousRenewals    AdoptionRenewal[]        @relation("RenewalPreviousAdoption")
+  renewedFrom         AdoptionRenewal[]        @relation("RenewalNewAdoption")
+  feedbackTickets     FeedbackTicket[]
+
+  @@index([adopterPhone, createdAt])
+  @@map("tree_adoption")
+}
+
+model FulfillmentEvidence {
+  id          String              @id @default(cuid())
+  adoptionId  String              @map("adoption_id")
+  taskId      String              @map("task_id")
+  submittedBy String              @map("submitted_by")
+  description String              @db.Text
+  mediaJson   Json                @map("media_json")
+  version     Int
+  status      String              @default("submitted")
+  submittedAt DateTime            @default(now()) @map("submitted_at")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  adoption    TreeAdoption        @relation(fields: [adoptionId], references: [id], onDelete: Restrict)
+  task        Task                @relation(fields: [taskId], references: [id], onDelete: Restrict)
+  reviews     FulfillmentReview[]
+
+  @@unique([taskId, version])
+  @@index([adoptionId, submittedAt])
+  @@index([status, submittedAt])
+  @@map("fulfillment_evidence")
+}
+
+model FulfillmentReview {
+  id         String              @id @default(cuid())
+  evidenceId String              @map("evidence_id")
+  reviewerId String              @map("reviewer_id")
+  decision   String
+  reasonCode String?             @map("reason_code")
+  note       String?             @db.Text
+  createdAt  DateTime            @default(now()) @map("created_at")
+  evidence   FulfillmentEvidence @relation(fields: [evidenceId], references: [id], onDelete: Restrict)
+
+  @@index([evidenceId, createdAt])
+  @@map("fulfillment_review")
+}
+
+model AdoptionBenefit {
+  id          String       @id @default(cuid())
+  adoptionId  String       @map("adoption_id")
+  benefitKey  String       @map("benefit_key")
+  type        String
+  status      String       @default("locked")
+  detailsJson Json         @default("{}") @map("details_json")
+  selectedAt  DateTime?    @map("selected_at")
+  fulfilledAt DateTime?    @map("fulfilled_at")
+  confirmedAt DateTime?    @map("confirmed_at")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  adoption    TreeAdoption @relation(fields: [adoptionId], references: [id], onDelete: Restrict)
+
+  @@unique([adoptionId, benefitKey])
+  @@index([adoptionId, status])
+  @@map("adoption_benefit_v2")
+}
+
+model FulfillmentSettlement {
+  id         String       @id @default(cuid())
+  adoptionId String       @map("adoption_id")
+  taskId     String       @map("task_id")
+  villagerId String       @map("villager_id")
+  amount     Float
+  status     String       @default("draft")
+  approvedBy String?      @map("approved_by")
+  approvedAt DateTime?    @map("approved_at")
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  adoption   TreeAdoption @relation(fields: [adoptionId], references: [id], onDelete: Restrict)
+  task       Task         @relation(fields: [taskId], references: [id], onDelete: Restrict)
+  villager   Villager     @relation(fields: [villagerId], references: [id], onDelete: Restrict)
+
+  @@unique([taskId])
+  @@index([adoptionId, status])
+  @@index([villagerId, status])
+  @@map("fulfillment_settlement")
+}
+
+model AdoptionRenewal {
+  id                 String        @id @default(cuid())
+  previousAdoptionId String        @map("previous_adoption_id")
+  newAdoptionId      String?       @map("new_adoption_id")
+  status             String        @default("pending")
+  dueAt              DateTime      @map("due_at")
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  previousAdoption   TreeAdoption  @relation("RenewalPreviousAdoption", fields: [previousAdoptionId], references: [id], onDelete: Restrict)
+  newAdoption        TreeAdoption? @relation("RenewalNewAdoption", fields: [newAdoptionId], references: [id], onDelete: SetNull)
+
+  @@unique([previousAdoptionId])
+  @@index([status, dueAt])
+  @@map("adoption_renewal")
+}
+
+model AgentRun {
+  id            String          @id @default(cuid())
+  adoptionId    String?         @map("adoption_id")
+  taskId        String?         @map("task_id")
+  triggerType   String          @map("trigger_type")
+  status        String
+  modelProvider String?         @map("model_provider")
+  modelName     String?         @map("model_name")
+  promptVersion String?         @map("prompt_version")
+  stepCount     Int             @default(0) @map("step_count")
+  tokenUsage    Int?            @map("token_usage")
+  latencyMs     Int?            @map("latency_ms")
+  errorCode     String?         @map("error_code")
+  startedAt     DateTime        @default(now()) @map("started_at")
+  finishedAt    DateTime?       @map("finished_at")
+  toolCalls     AgentToolCall[]
+
+  @@index([adoptionId, startedAt])
+  @@index([status, startedAt])
+  @@map("agent_run")
+}
+
+model AgentToolCall {
+  id                 String   @id @default(cuid())
+  runId              String   @map("run_id")
+  toolName           String   @map("tool_name")
+  argumentsRedacted  Json     @default("{}") @map("arguments_redacted")
+  permissionDecision String   @map("permission_decision")
+  resultStatus       String   @map("result_status")
+  latencyMs          Int      @map("latency_ms")
+  createdAt          DateTime @default(now()) @map("created_at")
+  run                AgentRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, createdAt])
+  @@map("agent_tool_call")
+}
+
+model HarvestBooking {
+  id               String           @id @default(cuid())
+  treeId           String
+  scheduledDate    String
+  timeSlot         String
+  guestCount       Int
+  guestName        String?
+  guestPhone       String?
+  fruitDestination String?
+  destinationNote  String?          @db.Text
+  status           String           @default("pending")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+  tree             OrchardTree      @relation(fields: [treeId], references: [id])
+  shipment         HarvestShipment?
+
+  @@index([treeId, scheduledDate])
+  @@map("harvest_booking")
+}
+
+model HarvestShipment {
+  id               String         @id @default(cuid())
+  harvestBookingId String         @unique @map("harvest_booking_id")
+  recipientName    String
+  recipientPhone   String
+  recipientAddress String         @db.Text
+  courier          String?
+  trackingNumber   String?
+  status           String         @default("pending")
+  shippedAt        DateTime?
+  deliveredAt      DateTime?
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+  harvestBooking   HarvestBooking @relation(fields: [harvestBookingId], references: [id])
+
+  @@index([status, createdAt])
+  @@map("harvest_shipment")
+}
+
+model RouteGenerationLog {
+  id        String   @id @default(cuid())
+  routeId   String
+  duration  String
+  audience  String
+  weather   String
+  provider  String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("route_generation_log")
+}
+
+model Alert {
+  id         String    @id @default(cuid())
+  alertType  String
+  nodeId     String?
+  severity   String
+  message    String    @db.Text
+  status     String    @default("active")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  resolvedAt DateTime?
+
+  @@index([alertType, createdAt])
+  @@map("alert")
+}
+
+// ==== 建筑空间改造策略系统 ====
+
+model BuildingAssessment {
+  id         String   @id @default(cuid())
+  nodeId     String
+  assessorId String?  @map("assessor_id")
+  assessedAt DateTime @default(now()) @map("assessed_at")
+
+  // 综合评分 (1-5)
+  structuralScore Int @map("structural_score")
+  aestheticScore  Int @map("aesthetic_score")
+  functionalScore Int @map("functional_score")
+  safetyScore     Int @map("safety_score")
+  energyScore     Int @map("energy_score")
+  ecologicalScore Int @map("ecological_score")
+
+  // 拆除与再利用评估
+  demolitionRecommendation String? @map("demolition_recommendation")
+  demolitionReason         String? @map("demolition_reason") @db.Text
+  reusePotential           String? @map("reuse_potential")
+  retainedElements         Json    @default("[]") @map("retained_elements")
+
+  // 发现的问题
+  issues Json    @default("[]")
+  notes  String? @db.Text
+  photos Json    @default("[]")
+
+  // 评估来源
+  source String @default("admin")
+
+  node SpaceNode @relation(fields: [nodeId], references: [id])
+
+  @@index([nodeId, assessedAt])
+  @@map("building_assessment")
+}
+
+model SpatialDiagnosis {
+  id      String @id @default(cuid())
+  nodeId  String
+  bizDate String @map("biz_date")
+
+  // 诊断结论
+  urgency      String  @default("medium")
+  issues       Json    @default("[]")
+  evidenceJson Json    @default("{}") @map("evidence_json")
+  aiSummary    String? @map("ai_summary") @db.Text
+
+  // 诊断维度
+  energyIssues     Json @default("[]") @map("energy_issues")
+  spatialIssues    Json @default("[]") @map("spatial_issues")
+  ecologicalIssues Json @default("[]") @map("ecological_issues")
+
+  status    String   @default("draft")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  node                 SpaceNode            @relation(fields: [nodeId], references: [id])
+  renovationStrategies RenovationStrategy[]
+
+  @@index([nodeId, bizDate])
+  @@index([urgency, status])
+  @@map("spatial_diagnosis")
+}
+
+model RenovationStrategy {
+  id          String  @id @default(cuid())
+  nodeId      String
+  diagnosisId String? @map("diagnosis_id")
+
+  // 策略分类
+  category    String
+  title       String
+  description String @db.Text
+
+  // 改造维度: energy | spatial | ecological
+  dimension String
+
+  // 建筑专业内容
+  materials          Json @default("[]")
+  techniques         Json @default("[]")
+  energyConstruction Json @default("[]") @map("energy_construction")
+  ecologicalMeasures Json @default("[]") @map("ecological_measures")
+
+  // 干预类型与空间设计
+  interventionType   String? @map("intervention_type")
+  oldNewRelationship String? @map("old_new_relationship") @db.Text
+  architecturalForm  Json    @default("{}") @map("architectural_form")
+  buildingProgram    Json    @default("[]") @map("building_program")
+
+  // 预估
+  estimatedDuration  String? @map("estimated_duration")
+  difficultyLevel    String? @map("difficulty_level")
+  estimatedCostRange String? @map("estimated_cost_range")
+  expectedImpact     String? @map("expected_impact") @db.Text
+
+  // 优先级与状态
+  priority String @default("medium")
+  status   String @default("draft")
+
+  // 审核与执行
+  approvedBy  String?   @map("approved_by")
+  approvedAt  DateTime? @map("approved_at")
+  completedAt DateTime? @map("completed_at")
+  verifiedAt  DateTime? @map("verified_at")
+
+  // 效果评估
+  beforeMetrics Json @default("{}") @map("before_metrics")
+  afterMetrics  Json @default("{}") @map("after_metrics")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  node      SpaceNode         @relation(fields: [nodeId], references: [id])
+  diagnosis SpatialDiagnosis? @relation(fields: [diagnosisId], references: [id])
+
+  @@index([nodeId, status])
+  @@index([category, priority])
+  @@index([dimension, status])
+  @@map("renovation_strategy")
+}
+
+model SitePotential {
+  id     String @id @default(cuid())
+  nodeId String
+
+  locationName String  @map("location_name")
+  locationLat  Float   @map("location_lat")
+  locationLng  Float   @map("location_lng")
+  siteArea     Float?  @map("site_area")
+  currentUse   String? @map("current_use")
+
+  suitabilityScore   Int @map("suitability_score")
+  accessibilityScore Int @map("accessibility_score")
+  viewScore          Int @map("view_score")
+  ecologyImpactScore Int @map("ecology_impact_score")
+
+  recommendedProgram String? @map("recommended_program")
+  recommendedForm    String? @map("recommended_form")
+  recommendedFloors  Int?    @map("recommended_floors")
+  recommendedGFA     Float?  @map("recommended_gfa")
+
+  formKeywords Json    @default("[]") @map("form_keywords")
+  constraints  Json    @default("[]")
+  rationale    String? @db.Text
+
+  status    String   @default("proposed")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  node SpaceNode @relation(fields: [nodeId], references: [id])
+
+  @@index([nodeId, suitabilityScore])
+  @@map("site_potential")
+}
+
+model Courtyard {
+  id            String              @id @default(cuid())
+  name          String
+  sceneRealm    String
+  capacity      Int
+  inventoryType String              @default("entire_house")
+  priceRule     Json                @default("{}")
+  status        String              @default("active")
+  locationGeo   String?
+  description   String?             @db.Text
+  amenities     Json                @default("[]")
+  images        Json                @default("[]")
+  createdAt     DateTime            @default(now()) @map("created_at")
+  updatedAt     DateTime            @updatedAt @map("updated_at")
+  activities    CourtyardActivity[]
+
+  @@index([sceneRealm, status])
+  @@map("courtyard")
+}
+
+model CourtyardActivity {
+  id            String            @id @default(cuid())
+  courtyardId   String
+  courtyard     Courtyard         @relation(fields: [courtyardId], references: [id])
+  activityType  String
+  title         String
+  description   String            @db.Text
+  maxCapacity   Int
+  price         Float?
+  scheduledDate String
+  scheduledTime String
+  status        String            @default("open")
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+  bookings      ActivityBooking[]
+
+  @@index([courtyardId, scheduledDate])
+  @@map("courtyard_activity")
+}
+
+model ActivityBooking {
+  id         String            @id @default(cuid())
+  activityId String
+  guestName  String
+  guestPhone String
+  guestCount Int
+  status     String            @default("confirmed")
+  createdAt  DateTime          @default(now()) @map("created_at")
+  updatedAt  DateTime          @updatedAt @map("updated_at")
+  activity   CourtyardActivity @relation(fields: [activityId], references: [id])
+
+  @@map("activity_booking")
+}
+
+model ControlCommand {
+  id           String   @id @default(cuid())
+  commandType  String
+  targetNodeId String?
+  priority     String
+  reason       String   @db.Text
+  payload      Json?
+  status       String   @default("pending")
+  triggeredBy  String   @default("rule_engine")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@map("control_command")
+}
+
+model Notification {
+  id            String   @id @default(cuid())
+  recipientType String
+  recipientId   String
+  title         String
+  body          String   @db.Text
+  channel       String   @default("in_app")
+  category      String
+  refType       String?
+  refId         String?
+  isRead        Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([recipientType, recipientId, createdAt])
+  @@index([isRead, createdAt])
+  @@map("notification")
+}
+
+model VisitorInteractionTask {
+  id                  String       @id @default(cuid())
+  adoptionId          String
+  treeId              String
+  taskType            String
+  title               String
+  description         String?      @db.Text
+  status              String       @default("pending")
+  periodKey           String?
+  maxCompletions      Int          @default(1)
+  completionCount     Int          @default(0)
+  pointsPerCompletion Int          @default(0)
+  totalPointsEarned   Int          @default(0)
+  seasonEventId       String?
+  completedAt         DateTime?
+  imageUrl            String?
+  note                String?      @db.Text
+  points              Int          @default(0)
+  createdAt           DateTime     @default(now()) @map("created_at")
+  updatedAt           DateTime     @updatedAt @map("updated_at")
+  adoption            TreeAdoption @relation(fields: [adoptionId], references: [id])
+  tree                OrchardTree  @relation(fields: [treeId], references: [id])
+  seasonEvent         SeasonEvent? @relation(fields: [seasonEventId], references: [id])
+
+  @@index([adoptionId, periodKey, status])
+  @@index([adoptionId, taskType, periodKey])
+  @@index([treeId, createdAt])
+  @@map("visitor_interaction_task")
+}
+
+model AdoptionPoints {
+  id              String              @id @default(cuid())
+  adoptionId      String              @unique
+  totalPoints     Int                 @default(0)
+  availablePoints Int                 @default(0)
+  redeemedPoints  Int                 @default(0)
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+  adoption        TreeAdoption        @relation(fields: [adoptionId], references: [id])
+  transactions    PointsTransaction[]
+
+  @@map("adoption_points")
+}
+
+model PointsTransaction {
+  id               String         @id @default(cuid())
+  adoptionPointsId String
+  amount           Int
+  type             String
+  source           String
+  referenceId      String?
+  note             String?        @db.Text
+  createdAt        DateTime       @default(now()) @map("created_at")
+  adoptionPoints   AdoptionPoints @relation(fields: [adoptionPointsId], references: [id])
+
+  @@index([adoptionPointsId, createdAt])
+  @@index([adoptionPointsId, type])
+  @@map("points_transaction")
+}
+
+model SeasonEvent {
+  id          String                   @id @default(cuid())
+  solarTerm   String
+  title       String
+  description String?                  @db.Text
+  taskType    String
+  bonusPoints Int                      @default(0)
+  startDate   DateTime
+  endDate     DateTime
+  imageUrl    String?
+  status      String                   @default("active")
+  createdAt   DateTime                 @default(now()) @map("created_at")
+  updatedAt   DateTime                 @updatedAt @map("updated_at")
+  tasks       VisitorInteractionTask[]
+
+  @@index([startDate, endDate, status])
+  @@map("season_event")
+}
+
+model RedemptionOption {
+  id            String             @id @default(cuid())
+  title         String
+  description   String?            @db.Text
+  pointsCost    Int
+  type          String
+  stock         Int                @default(-1)
+  redeemedCount Int                @default(0)
+  imageUrl      String?
+  status        String             @default("active")
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  records       RedemptionRecord[]
+
+  @@map("redemption_option")
+}
+
+model RedemptionRecord {
+  id          String           @id @default(cuid())
+  adoptionId  String
+  optionId    String
+  pointsSpent Int
+  status      String           @default("pending")
+  note        String?          @db.Text
+  createdAt   DateTime         @default(now()) @map("created_at")
+  fulfilledAt DateTime?
+  adoption    TreeAdoption     @relation(fields: [adoptionId], references: [id])
+  option      RedemptionOption @relation(fields: [optionId], references: [id])
+
+  @@index([adoptionId, createdAt])
+  @@map("redemption_record")
+}
+
+model TicketProduct {
+  id          String        @id @default(cuid())
+  name        String
+  category    String
+  price       Float
+  totalStock  Int           @default(100)
+  soldCount   Int           @default(0)
+  status      String        @default("on_sale")
+  validFrom   String?
+  validTo     String?
+  description String?       @db.Text
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  orders      TicketOrder[]
+
+  @@index([category, status])
+  @@map("ticket_product")
+}
+
+model TicketOrder {
+  id          String        @id @default(cuid())
+  productId   String
+  userId      String?
+  quantity    Int           @default(1)
+  totalAmount Float         @default(0)
+  guestName   String?
+  guestPhone  String?
+  status      String        @default("pending_payment")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  product     TicketProduct @relation(fields: [productId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([guestPhone, createdAt])
+  @@map("ticket_order")
+}
+
+model PaymentOrder {
+  id            String    @id @default(cuid())
+  orderType     String
+  orderId       String
+  userId        String?
+  amount        Float
+  channel       String    @default("mock_demo")
+  status        String    @default("pending")
+  idempotentKey String    @unique
+  paidAt        DateTime?
+  expiresAt     DateTime?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@index([orderType, orderId])
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@map("payment_order")
+}
+
+model ConsentRecord {
+  id          String   @id @default(cuid())
+  userId      String
+  consentType String
+  granted     Boolean  @default(true)
+  ipAddress   String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, consentType])
+  @@index([userId])
+  @@map("consent_record")
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  actorId       String
+  action        String
+  targetType    String
+  targetId      String?
+  adoptionId    String?  @map("adoption_id")
+  actorType     String?  @map("actor_type")
+  correlationId String?  @map("correlation_id")
+  detail        Json     @default("{}")
+  ipAddress     String?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
+  @@index([adoptionId, createdAt])
+  @@index([correlationId])
+  @@map("audit_log")
+}
+
+// ==== 认养规则模拟（与真实运营数据完全隔离） ====
+
+model SimulationWorld {
+  id         String          @id
+  scenarioId String          @map("scenario_id")
+  randomSeed Int             @map("random_seed")
+  config     Json
+  payload    Json
+  worldHash  String          @map("world_hash")
+  dataOrigin String          @default("simulation") @map("data_origin")
+  createdAt  DateTime        @default(now()) @map("created_at")
+  runs       SimulationRun[]
+
+  @@index([scenarioId, randomSeed])
+  @@index([worldHash])
+  @@map("simulation_world")
+}
+
+model SimulationRun {
+  id             String              @id
+  pairId         String?             @map("pair_id")
+  worldId        String              @map("world_id")
+  runName        String              @map("run_name")
+  policyVersion  String              @map("policy_version")
+  policyRevision String              @map("policy_revision")
+  status         String              @default("pending")
+  result         Json?
+  metrics        Json?
+  decision       String?
+  errorMessage   String?             @map("error_message") @db.Text
+  startedAt      DateTime?           @map("started_at")
+  completedAt    DateTime?           @map("completed_at")
+  archivedAt     DateTime?           @map("archived_at")
+  dataOrigin     String              @default("simulation") @map("data_origin")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+  world          SimulationWorld     @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  events         SimulationEvent[]
+  badCases       SimulationBadCase[]
+
+  @@index([pairId])
+  @@index([worldId, policyVersion])
+  @@index([status, createdAt])
+  @@index([archivedAt, createdAt])
+  @@map("simulation_run")
+}
+
+model SimulationEvent {
+  id             String        @id
+  runId          String        @map("run_id")
+  scenarioId     String        @map("scenario_id")
+  randomSeed     Int           @map("random_seed")
+  eventType      String        @map("event_type")
+  occurredAt     DateTime      @map("occurred_at")
+  adoptionId     String?       @map("adoption_id")
+  taskId         String?       @map("task_id")
+  entityType     String?       @map("entity_type")
+  entityId       String?       @map("entity_id")
+  actorId        String?       @map("actor_id")
+  actorType      String        @map("actor_type")
+  fromStatus     String?       @map("from_status")
+  toStatus       String?       @map("to_status")
+  payload        Json?
+  dataOrigin     String        @default("simulation") @map("data_origin")
+  policyVersion  String        @map("policy_version")
+  policyRevision String        @map("policy_revision")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  run            SimulationRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, occurredAt])
+  @@index([runId, adoptionId, occurredAt])
+  @@index([runId, taskId, occurredAt])
+  @@index([scenarioId, randomSeed, occurredAt])
+  @@index([entityType, entityId, occurredAt])
+  @@index([actorId, occurredAt])
+  @@index([eventType, occurredAt])
+  @@index([policyVersion, occurredAt])
+  @@map("simulation_event")
+}
+
+model SimulationBadCase {
+  id                String        @id
+  runId             String        @map("run_id")
+  category          String
+  severity          String
+  title             String
+  description       String        @db.Text
+  taskId            String?       @map("task_id")
+  adoptionId        String?       @map("adoption_id")
+  eventIds          Json          @default("[]") @map("event_ids")
+  rootCause         String?       @map("root_cause") @db.Text
+  improvementAction String?       @map("improvement_action") @db.Text
+  dataOrigin        String        @default("simulation") @map("data_origin")
+  policyVersion     String        @map("policy_version")
+  policyRevision    String        @map("policy_revision")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  run               SimulationRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, category, severity])
+  @@index([runId, taskId])
+  @@index([policyVersion, createdAt])
+  @@map("simulation_bad_case")
+}

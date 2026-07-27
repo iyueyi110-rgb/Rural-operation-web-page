@@ -1,0 +1,73 @@
+import type { Metadata } from "next"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+
+import { FullscreenPageDeck } from "@web/components/fullscreen-page-deck"
+import { HeroScreen } from "@web/components/hero-screen"
+import { HistoryScroll } from "@web/components/history-scroll"
+import { HomeAdoptionFeature } from "@web/components/home-adoption-feature"
+import { HomeHeader } from "@web/components/home-header"
+import { RealmMapGateway } from "@web/components/realm-map-gateway"
+import { SystemModulesSection } from "@web/components/system-modules-section"
+import { VillageFlowSection } from "@web/components/village-flow-section"
+import type { Locale } from "@web/i18n/routing"
+import { getSiteUrl } from "@web/lib/site-url"
+import { getWeatherSummary } from "@web/lib/weather"
+
+export const dynamic = "force-dynamic"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string }
+}): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "metadata.home",
+  })
+
+  return {
+    metadataBase: getSiteUrl(),
+    title: t("title"),
+    description: t("description"),
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      images: ["/images/home/hero-village.webp"],
+    },
+  }
+}
+
+export default async function HomePage({
+  params,
+}: {
+  params: { locale: Locale }
+}) {
+  setRequestLocale(params.locale)
+  const weather = await getWeatherSummary()
+  const t = await getTranslations("home")
+
+  return (
+    <main className="overflow-hidden text-ink">
+      <HomeHeader locale={params.locale} />
+      <FullscreenPageDeck
+        pageLabels={[
+          t("deck.page1"),
+          t("deck.page2"),
+          t("deck.page3"),
+          t("deck.page4"),
+        ]}
+      >
+        <HeroScreen locale={params.locale} weather={weather} />
+        <div>
+          <SystemModulesSection locale={params.locale} />
+          <VillageFlowSection />
+        </div>
+        <div>
+          <HistoryScroll />
+          <RealmMapGateway />
+        </div>
+        <HomeAdoptionFeature locale={params.locale} />
+      </FullscreenPageDeck>
+    </main>
+  )
+}

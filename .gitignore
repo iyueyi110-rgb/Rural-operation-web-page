@@ -1,0 +1,23 @@
+node_modules/
+.next/
+.turbo/
+.agents/
+.vercel/
+dist/
+coverage/
+/outputs/simulation/
+/packages/simulation/outputs/
+/output/
+/tmp/
+**/.venv/
+
+# Local archives and generated diagnostics
+_aigc-archive/
+.playwright-cli/
+*.tsbuildinfo
+*.out.log
+*.err.log
+.env
+.env.*
+!.env.example
+.DS_Store

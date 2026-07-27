@@ -1,0 +1,1759 @@
+{
+  "metadata": {
+    "home": {
+      "title": "走馬村ポータル",
+      "description": "走馬村 Web/PWA の日本語プレースホルダー。"
+    },
+    "explore": {
+      "title": "走馬村を散策",
+      "description": "走馬村の歴史、天気、四境マップを巡る第2階層の散策ページ。"
+    },
+    "routes": {
+      "title": "走馬村ルート生成｜説明可能な行程",
+      "description": "滞在時間、来訪者、天気に合わせて走馬村の四境ルートを生成します。"
+    },
+    "booking": {
+      "title": "走馬村中庭予約",
+      "description": "中庭の在庫、日付、人数、予約注意事項、支払い待ち確認を表示します。"
+    },
+    "feedback": {
+      "title": "走馬村フィードバック",
+      "description": "内容、サービス、施設、支払いなどのフィードバックを送信し、追跡可能なチケットを作成します。"
+    },
+    "trees": {
+      "title": "走馬村ライチ樹里親",
+      "description": "里親可能なライチ樹、曖昧位置、権益、成長記録を表示します。"
+    },
+    "tickets": {
+      "title": "走馬村チケット",
+      "description": "チケットと活動の予約商品を表示します。"
+    },
+    "me": {
+      "title": "走馬村マイページ",
+      "description": "予約、里親、チケット注文の占位一覧を表示します。"
+    },
+    "privacy": {
+      "title": "走馬村プライバシー",
+      "description": "同意とプライバシー管理項目を表示します。"
+    },
+    "products": {
+      "title": "走馬村プロダクト予約｜オフライン確認注文",
+      "description": "走馬村の商品、ギフト、村の食事サービスを閲覧し、オフライン確認注文を送信します。"
+    },
+    "calendar": {
+      "title": "Zouma Farming Calendar",
+      "description": "View Zouma Village farming activities by solar term and season."
+    },
+    "activities": {
+      "title": "走馬村アクティビティ",
+      "description": "ライチ収穫食育祭、中庭イベント、研学ワークショップ、共居体験の予約を表示します。"
+    }
+  },
+  "trees": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "果樹里親段階"
+    },
+    "hero": {
+      "eyebrow": "Tree Adoption",
+      "title": "里親は一度の購入ではなく長い関係です",
+      "body": "里親可能な樹、樹プロフィール、権益、同意、成長記録を表示します。支払いは占位です。"
+    },
+    "guardrail": {
+      "locationTitle": "曖昧位置のみ",
+      "locationBody": "精確な GPS は公開しません。",
+      "paymentTitle": "支払い未接続",
+      "paymentBody": "現在は支払い待ち確認のみ表示します。"
+    },
+    "list": {
+      "eyebrow": "里親可能な樹",
+      "title": "記録のあるライチ樹を選択",
+      "body": "樹データはローカル構造化データです。",
+      "species": "品種",
+      "age": "樹齢",
+      "ageValue": "{count} 年",
+      "health": "健康",
+      "select": "選択",
+      "selected": "選択済み"
+    },
+    "availability": {
+      "available": "里親可",
+      "limited": "残り少ない",
+      "maintenance": "養護観察中"
+    },
+    "health": {
+      "excellent": "優良",
+      "good": "良好",
+      "fair": "観察中",
+      "poor": "要養護"
+    },
+    "profile": {
+      "eyebrow": "樹プロフィール",
+      "planTitle": "里親プラン",
+      "selectCta": "里親を選択",
+      "fireMemoryTitle": "山火事の記憶",
+      "fireMemoryEmpty": "運営側の山火事記録はまだ入力されていません。",
+      "newShootsTitle": "新芽記録",
+      "newShootsEmpty": "運営側の新芽記録はまだ入力されていません。",
+      "growthPhotosTitle": "成長写真",
+      "growthPhotoAlt": "{name} 成長写真 {index}",
+      "growthPhotosEmpty": "成長写真はまだありません。后台アップロード後に表示されます。",
+      "fruitDestinationTitle": "果実の行き先",
+      "fruitDestinationFallback": "運営側が今回の収穫果実の行き先を記録しました。",
+      "fruitDestinationEmpty": "果実の行き先記録はまだありません。収穫後に追加できます。",
+      "careLogsEmpty": "管理ログはまだありません。入力後は新しい順に表示されます。"
+    },
+    "experience": {
+      "environment": {
+        "eyebrow": "果樹園の微気候",
+        "title": "樹下の環境",
+        "description": "LoRa のリアルタイム値を優先し、切断時や整備中は季節の気候基準値へ切り替えます。",
+        "status": {
+          "loading": "センサー読取中",
+          "active": "LoRa リアルタイム",
+          "warning": "センサー切断",
+          "inactive": "機器整備中"
+        },
+        "metrics": {
+          "soilMoisture": "土壌水分",
+          "airHumidity": "空気湿度",
+          "lightIntensity": "日照強度"
+        },
+        "progressAria": "{label}の指標",
+        "baselineNote": "接続が戻るまで、走馬村の季節別気候基準値を表示します。",
+        "inactiveNote": "機器整備中のため、基準指標をグレー表示しています。"
+      },
+      "rights": {
+        "eyebrow": "Adoption Rights",
+        "title": "今回の里親権益",
+        "description": "収穫、来訪、専用樹名札、配送の権益が里親状態に応じて解放されます。",
+        "state": {
+          "unlocked": "有効",
+          "locked": "支払い待ち",
+          "preview": "プレビュー"
+        },
+        "cards": {
+          "harvestQuota": {
+            "title": "最低収穫保証",
+            "body": "今期は {quota} の収穫量または同等の農産物を保証します。"
+          },
+          "onsiteBooking": {
+            "title": "現地収穫予約",
+            "body": "収穫期の優先時間枠を選択できます。"
+          },
+          "nameplate": {
+            "title": "専用樹名札",
+            "body": "里親樹に名前とメッセージを加えられます。"
+          },
+          "coldChain": {
+            "title": "低温配送",
+            "body": "来村できない場合は収穫後の低温配送を選べます。"
+          }
+        },
+        "lockedNote": "支払い完了後、四つの権益が利用可能になります。",
+        "previewNote": "里親手続きを完了すると、プランに含まれる権益が解放されます。"
+      },
+      "growth": {
+        "eyebrow": "Growth Timeline",
+        "title": "ライチが実るまで",
+        "description": "横にスワイプして、開花、結実、成熟、収穫の変化を確認できます。",
+        "timelineAria": "ライチの成長段階",
+        "stages": {
+          "flowering": {
+            "label": "開花",
+            "body": "花序が開き、受粉を待ちます。",
+            "detail": "温湿度と降雨を観察し、樹冠の通風を保って花序を守ります。"
+          },
+          "fruiting": {
+            "label": "結実",
+            "body": "幼果が安定期に入ります。",
+            "detail": "幼果密度、枝の負荷、土壌水分に合わせて養護を調整します。"
+          },
+          "ripening": {
+            "label": "成熟",
+            "body": "果皮が色づき、糖度が上がります。",
+            "detail": "日照、果色、天気を見ながら収穫予約と品質記録を準備します。"
+          },
+          "harvest": {
+            "label": "収穫",
+            "body": "成熟果を摘み、権益を実現します。",
+            "detail": "予約時間に現地収穫するか、低温配送を選び、果実の行き先を記録します。"
+          }
+        }
+      }
+    },
+    "plans": {
+      "seasonal": {
+        "label": "一季",
+        "body": "初回体験向けの成長記録付きプラン。"
+      },
+      "annual": {
+        "label": "年間",
+        "body": "長期記録、活動、証書を含むプラン。"
+      }
+    },
+    "rights": {
+      "title": "権益",
+      "harvestBox": "季節の収穫ギフト",
+      "careUpdates": "養護記録と写真",
+      "certificate": "電子証書",
+      "farmEvent": "農園活動優先",
+      "familyClass": "親子教室優先"
+    },
+    "timeline": {
+      "title": "成長記録",
+      "spring": {
+        "date": "2026年3月",
+        "title": "春芽観察",
+        "body": "新芽は安定しています。"
+      },
+      "pruning": {
+        "date": "2026年4月",
+        "title": "軽剪定",
+        "body": "通風枝を整理しました。"
+      },
+      "photo": {
+        "date": "2026年6月",
+        "title": "写真更新",
+        "body": "プロフィール写真を更新しました。"
+      },
+      "flower": {
+        "date": "2026年4月",
+        "title": "花期観察",
+        "body": "花序は良好です。"
+      },
+      "care": {
+        "date": "2026年5月",
+        "title": "養護観察",
+        "body": "里親確認を一時停止しています。"
+      },
+      "note": {
+        "date": "2026年6月",
+        "title": "維持メモ",
+        "body": "次回確認後に再開します。"
+      }
+    },
+    "agreement": {
+      "title": "同意確認",
+      "body": "権益、更新頻度、収穫方法、支払い未接続状態を理解しました。"
+    },
+    "messages": {
+      "unavailable": "この樹は現在確認できません。",
+      "needAgreement": "同意後に確認してください。",
+      "submitFailed": "里親注文の送信に失敗しました。後でもう一度お試しください。"
+    },
+    "form": {
+      "confirm": "里親確認",
+      "confirming": "里親注文を作成中"
+    },
+    "order": {
+      "title": "里親注文を作成しました",
+      "body": "注文は支払い待ちです。",
+      "status": "注文状態：支払い待ち",
+      "paymentStatus": "支払い：未接続",
+      "paymentEntry": "支払い未接続",
+      "idLabel": "里親注文番号",
+      "createdAtLabel": "作成時刻"
+    },
+    "trees": {
+      "lz018": {
+        "name": "雲荔 018",
+        "species": "妃子笑ライチ",
+        "summary": "状態が安定し記録が揃っています。",
+        "location": "北側果樹園、精確座標は非公開。",
+        "imageAlt": "雲荔 018、樹齢12年の妃子笑ライチ樹",
+        "prices": {
+          "seasonal": "¥399",
+          "annual": "¥999"
+        }
+      },
+      "lz026": {
+        "name": "雲荔 026",
+        "species": "桂味ライチ",
+        "summary": "親子里親と食育に適しています。",
+        "location": "中央果樹園、教室動線付近。",
+        "imageAlt": "雲荔 026、樹齢8年の桂味ライチ樹",
+        "prices": {
+          "seasonal": "¥359",
+          "annual": "¥899"
+        }
+      },
+      "lz041": {
+        "name": "雲荔 041",
+        "species": "老樹ライチ",
+        "summary": "老樹のため観察中です。",
+        "location": "南側老樹区、座標は内部利用のみ。",
+        "imageAlt": "雲荔 041、観察中の樹齢23年の古いライチ樹",
+        "prices": {
+          "seasonal": "未定",
+          "annual": "未定"
+        }
+      }
+    },
+    "shipment": {
+      "title": "収穫代行と配送",
+      "body": "樹木ページから収穫日時と配送先を送信できます。公開表示では連絡先と住所をマスクします。",
+      "enableLabel": "収穫代行と配送を希望する",
+      "dateLabel": "収穫日",
+      "timeSlotLabel": "時間帯",
+      "guestCountLabel": "人数",
+      "recipientNameLabel": "受取人",
+      "recipientPhoneLabel": "電話番号",
+      "recipientAddressLabel": "配送先住所",
+      "submit": "配送依頼を送信",
+      "submitting": "送信中",
+      "success": "配送依頼を作成しました。運営が収穫と物流を確認します。",
+      "failed": "送信に失敗しました。内容を確認して再試行してください。",
+      "destination": "収穫代行と配送",
+      "destinationNote": "利用者が樹木ページで収穫代行と配送を選択しました。",
+      "statusTitle": "物流状態",
+      "courier": "配送会社",
+      "trackingNumber": "追跡番号",
+      "statuses": {
+        "pending": "未処理",
+        "picking": "収穫中",
+        "shipping": "配送中",
+        "delivered": "配達済み"
+      }
+    }
+  },
+  "tickets": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "チケット MVP"
+    },
+    "hero": {
+      "eyebrow": "Tickets",
+      "title": "チケットと活動の予約占位",
+      "body": "実決済と核销接続前の商品構造を表示します。"
+    },
+    "card": {
+      "price": "価格",
+      "stock": "在庫",
+      "pendingPayment": "支払い未接続"
+    },
+    "notice": {
+      "title": "予約説明",
+      "body": "現在は実際のチケットコードを発行しません。"
+    },
+    "products": {
+      "ancientRoad": {
+        "scene": "古道",
+        "name": "音声ガイド券",
+        "summary": "ガイド機器と茶休憩の占位。",
+        "price": "¥39 から",
+        "stock": "毎日40枠"
+      },
+      "lycheeClass": {
+        "scene": "荔田",
+        "name": "親子ライチ食育",
+        "summary": "樹プロフィールと加工体験。",
+        "price": "¥98 から",
+        "stock": "週末残り少ない"
+      },
+      "resilienceWorkshop": {
+        "scene": "韧谷",
+        "name": "雨洪工坊",
+        "summary": "水安全と生態修復课程。",
+        "price": "¥128 から",
+        "stock": "団体予約"
+      }
+    },
+    "list": {
+      "eyebrow": "予約可能商品",
+      "title": "チケットまたは活動を選択",
+      "body": "現在は商品占位です。後続で実在庫と核销コードに接続します。",
+      "select": "予約を選択",
+      "selected": "選択済み"
+    },
+    "form": {
+      "eyebrow": "予約情報",
+      "title": "日付と枚数を選択",
+      "dateLabel": "日付",
+      "quantityLabel": "枚数",
+      "quantityValue": "{count} 枚",
+      "confirm": "予約を確認",
+      "confirming": "予約注文を作成中"
+    },
+    "summary": {
+      "title": "注文概要",
+      "product": "商品",
+      "date": "日付",
+      "quantity": "枚数"
+    },
+    "order": {
+      "title": "予約を作成しました",
+      "body": "チケット予約注文は支払い待ちです。現在支払いは未接続です。",
+      "status": "注文状態：支払い待ち",
+      "paymentEntry": "支払い入口は未接続",
+      "idLabel": "注文番号"
+    },
+    "messages": {
+      "submitFailed": "予約送信に失敗しました。もう一度お試しください。"
+    },
+    "dates": {
+      "jun21": "2026年6月21日",
+      "jun28": "2026年6月28日",
+      "jul05": "2026年7月5日"
+    }
+  },
+  "me": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "マイページ MVP"
+    },
+    "hero": {
+      "eyebrow": "Member Center",
+      "title": "注文一覧占位",
+      "body": "予約、果樹里親、チケット注文を集約します。"
+    },
+    "orders": {
+      "booking": {
+        "type": "中庭予約",
+        "title": "岭上共居院 · 支払い待ち",
+        "status": "支払い未接続",
+        "date": "2026年6月20日"
+      },
+      "tree": {
+        "type": "果樹里親",
+        "title": "雲荔 018 · 一季",
+        "status": "支払い待ち",
+        "date": "2026年6月12日"
+      },
+      "ticket": {
+        "type": "チケット",
+        "title": "雨洪工坊 · 占位",
+        "status": "未使用",
+        "date": "未定"
+      }
+    },
+    "reminder": {
+      "title": "ライチ収穫期のお知らせ",
+      "body": "現在はアプリ内バナーで通知します。里親ユーザーは収穫期前に管理ログ、活動予約、現地引換案内を確認できます。"
+    },
+    "lookup": {
+      "title": "マイ里親記録",
+      "initialMessage": "里親登録時の電話番号を入力してください。システムはマスク済み情報で検索します。",
+      "found": "里親記録が見つかりました。",
+      "empty": "一致する里親記録はありません。",
+      "failed": "検索に失敗しました。後でもう一度お試しください。",
+      "phonePlaceholder": "電話番号を入力",
+      "loading": "検索中",
+      "submit": "里親記録を検索",
+      "tree": "樹木",
+      "plan": "プラン",
+      "status": "状態",
+      "noShipment": "収穫代行物流はまだありません。",
+      "shipmentTitle": "収穫代行物流",
+      "signed": "受領済み",
+      "harvestBooking": "収穫予約：{date} / {status}",
+      "steps": {
+        "pending": "収穫待ち",
+        "picking": "収穫中",
+        "shipping": "配送中",
+        "delivered": "配達済み"
+      }
+    }
+  },
+  "privacy": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "プライバシー MVP"
+    },
+    "hero": {
+      "eyebrow": "Privacy",
+      "title": "同意項目占位",
+      "body": "プライバシー、データ収集、AI 処理同意を表示します。"
+    },
+    "items": {
+      "policy": {
+        "title": "プライバシー方針",
+        "body": "方針バージョンと確認状態を表示します。",
+        "status": "確認済み"
+      },
+      "data": {
+        "title": "データ収集",
+        "body": "行程、予約、フィードバックデータ範囲を説明します。",
+        "status": "管理可"
+      },
+      "ai": {
+        "title": "AI 処理",
+        "body": "AI 入力は先に匿名化します。",
+        "status": "既定オフ"
+      },
+      "location": {
+        "title": "位置情報",
+        "body": "ルートと樹木档案では区域レベルの位置を使い、精密座標は外部 AI に送信しません。",
+        "status": "撤回可"
+      }
+    }
+  },
+  "common": {
+    "back": "戻る",
+    "loading": "走馬村の内容を準備しています",
+    "errorTitle": "ページを読み込めませんでした",
+    "errorBody": "しばらくしてからもう一度お試しください。",
+    "retry": "再読み込み",
+    "updatedAt": "{date} 更新"
+  },
+  "home": {
+    "nav": {
+      "homeAria": "上部へ戻る",
+      "aria": "ホームナビゲーション",
+      "mark": "走",
+      "brand": "走馬村",
+      "realms": "四境",
+      "weather": "天気",
+      "routes": "ルート",
+      "booking": "中庭",
+      "tickets": "チケット",
+      "adoption": "里親",
+      "me": "マイページ",
+      "privacy": "プライバシー",
+      "login": "ログイン",
+      "start": "開始",
+      "products": "商品",
+      "calendar": "Calendar",
+      "more": "その他",
+      "menu": "ナビゲーションを開く",
+      "closeMenu": "ナビゲーションを閉じる",
+      "activities": "イベント",
+      "interactions": "インタラクション"
+    },
+    "hero": {
+      "badge": "AIGC を活用した山村更新モデル",
+      "title": "雲脈寿嶺、荔水走馬",
+      "subtitle": "一本の樹の里親から始め、来訪者、村民、運営、空間更新を一つの村落クラウドブレインにつなぎます。",
+      "primaryCta": "四境を見る",
+      "secondaryCta": "今日の提案",
+      "imageAlt": "走馬村の鳥瞰",
+      "startBrowsing": "散策を始める",
+      "videoAlt": "龍渓河、山稜、走馬村の田園を映す空撮映像",
+      "tagline1": "山地の村 · AIGCレジリエント更新",
+      "tagline2": "運営できる四つの体験領域",
+      "tagline3": "閲覧 · 予約 · 認養 · 再訪",
+      "systemLogic": "AIGCクラウドブレイン · 五流協同運営",
+      "location": "重慶市長寿区鳳城街道走馬村",
+      "narrative": "里親関係 -> 村民タスク -> 運営智策 -> 空間更新",
+      "metricAbout": "約",
+      "metricUnits": {
+        "0": "km?",
+        "1": "畝",
+        "2": "畝"
+      },
+      "scrollHint": "次の画面へ進む",
+      "positioning": "発表にも試験運営にも使える農村オペレーティングシステムです。前台は長期関係をつくり、后台はそれをタスク、データ、空間判断へ変換します。",
+      "spatialSystem": "山地村落の運営断面",
+      "nodes": {
+        "0": "来訪者の里親入口",
+        "1": "村民の養護タスク",
+        "2": "運営の復盤ループ",
+        "3": "建築空間更新"
+      },
+      "activityShowcase": {
+        "name": "荔枝収穫食育デー",
+        "kicker": "村落活動の紹介",
+        "summary": "果樹園収穫、食育講座、岭上村宴、里親樹の再訪をつなぐ週末プログラム。",
+        "date": "6.28 日 09:30",
+        "location": "荔田共生境",
+        "highlights": {
+          "0": "親子収穫体験",
+          "1": "荔枝食育講座",
+          "2": "岭上村宴予約",
+          "3": "里親樹再訪"
+        }
+      }
+    },
+    "history": {
+      "eyebrow": "歴史の奥行き",
+      "title": "一つの山稜をたどる四つの物語",
+      "description": "地方志の沿革と古道の実物資料から、現在の四境計画までをつなぐ、出典確認済みの村落史です。",
+      "sections": {
+        "tang": {
+          "title": "唐代の楽温県：地域史の遠景",
+          "body": "『長寿区志』に記された唐代の楽温県建置は、現在の長寿地域を理解する時間軸を示します。ここでは地域史の背景として扱い、古代の県域や県治を現在の走馬村と同一視しません。",
+          "source": "根拠：『長寿区志』の行政沿革に関する記載。地域史として校閲済み。"
+        },
+        "lychee": {
+          "title": "ライチ古道：妃子園の手がかり",
+          "body": "『涪州志』には天宝年間の妃子園に関する記載が残り、長寿一帯のライチ栽培と山地交通の歴史的な関係を示します。走馬嶺の物語は果樹園、古道、季節の旅を結びますが、未確認の具体的経路は創作しません。",
+          "source": "根拠：『涪州志』天宝年間の妃子園関連記載。文献上の手がかりを確定した経路として扱いません。"
+        },
+        "milestone": {
+          "title": "光緒二十三年：一基の道標",
+          "body": "走馬嶺で出土した清代光緒二十三年の道標は、古道交通を伝える実物資料です。地方志の大きな時間軸を、村人や旅人が道を選んだ日常の尺度へと引き寄せます。",
+          "source": "根拠：走馬嶺出土の光緒二十三年道標。今後の展示は検証済み資料に従います。"
+        },
+        "modern": {
+          "title": "現代の走馬村：共に育つ四境",
+          "body": "現在の長寿区鳳城街道走馬村は、古道叙事境、荔田共生境、韧谷研学境、岭上共居境によって新しい農村体験を組み立てています。ここでいう走馬村は九龍坡区の走馬古鎮とは別の地理的実体です。",
+          "source": "根拠：現代走馬村の四境計画。所在地は重慶市長寿区鳳城街道走馬村として確認。"
+        }
+      },
+      "audio": {
+        "tang": "楽温県の物語を聞く",
+        "lychee": "ライチ古道の物語を聞く",
+        "milestone": "道標の物語を聞く",
+        "modern": "現代の四境の物語を聞く",
+        "pending": "音声制作中"
+      }
+    },
+    "quickActions": {
+      "tickets": "チケット予約",
+      "me": "マイページ",
+      "villager": "村民",
+      "privacy": "プライバシー"
+    },
+    "stats": {
+      "area": {
+        "value": "約 1.8 km²",
+        "label": "計画範囲"
+      },
+      "forest": {
+        "value": "3107 畝",
+        "label": "山林"
+      },
+      "fields": {
+        "value": "2383 畝",
+        "label": "畑と果樹園"
+      }
+    },
+    "weather": {
+      "eyebrow": "天気と来訪メモ",
+      "temperature": "19.7℃",
+      "summary": "天気連携は次の段階で追加します。",
+      "realtime": "重慶市長寿区走馬村",
+      "pending": "未設定",
+      "configureHint": "QWEATHER_API_KEY を設定するとリアルタイム天気へ自動切替します",
+      "configureLink": "ルート提案を見る"
+    },
+    "playCards": {
+      "route": {
+        "title": "半日ルート",
+        "body": "初回来訪向けの軽量ルート。",
+        "link": "ルート生成"
+      },
+      "courtyard": {
+        "title": "中庭プレビュー",
+        "body": "在庫連携は後続段階で追加します。",
+        "link": "中庭を見る"
+      },
+      "tree": {
+        "title": "果樹里親",
+        "body": "樹木記録を中心にした年間関係。",
+        "link": "里親を見る"
+      }
+    },
+    "guardrails": {
+      "title": "軽量プラットフォーム優先",
+      "body": "実資源を整理し、過度な景区化を避けます。"
+    },
+    "realms": {
+      "eyebrow": "Four Realms",
+      "title": "運営可能な四つの農村体験",
+      "description": "各場面は内容、ルート、予約、里親制度につながります。",
+      "ancientRoad": {
+        "title": "古道叙事境",
+        "summary": "古道と地域記憶の徒歩体験。",
+        "cta": "詳細は次段階",
+        "titleImageAlt": "山道の風景"
+      },
+      "lycheeField": {
+        "title": "荔田共生境",
+        "summary": "一本の木から一卓の食へ。",
+        "cta": "里親プレビュー",
+        "titleImageAlt": "果樹園と田園"
+      },
+      "resilienceValley": {
+        "title": "韧谷研学境",
+        "summary": "水環境と学習体験。",
+        "cta": "天気を見る",
+        "titleImageAlt": "水辺の谷"
+      },
+      "ridgeDwelling": {
+        "title": "岭上共居境",
+        "summary": "滞在、工房、共創生活の中庭。",
+        "cta": "中庭プレビュー",
+        "titleImageAlt": "中庭の風景"
+      }
+    },
+    "mapGateway": {
+      "eyebrow": "四境空間",
+      "title": "探索する方向を選ぶ",
+      "description": "地図から四つの農村体験へ入れます。領域ポリゴンまたはリンクを選び、シーン、ルート、予約、里親制度へ進んでください。",
+      "mapAria": "走馬村四境のインタラクティブ地図",
+      "legendAria": "四境シーンへの入口",
+      "locationLabel": "重慶市長寿区走馬村",
+      "anchorHint": "道標、古木、薬舗の中庭",
+      "provider": {
+        "loading": "地図を読み込み中",
+        "amap": "高徳衛星地図",
+        "leaflet": "Leaflet 地図"
+      },
+      "anchors": {
+        "milestone": "光緒の道標",
+        "ancientTree": "古いライチの木",
+        "courtyard": "薬舗の中庭"
+      }
+    },
+    "booking": {
+      "eyebrow": "Courtyard Preview",
+      "title": "中庭予約の入口",
+      "body": "カレンダーと在庫は後続段階で追加します。",
+      "status": "予約フローは後続段階で公開",
+      "imageAlt": "伝統的な石造りの中庭"
+    },
+    "adoption": {
+      "eyebrow": "Tree Adoption Preview",
+      "title": "果樹里親には儀式感と信頼感が必要",
+      "body": "樹木記録と管理ログを中心とした長期関係。",
+      "imageAlt": "走馬村の里親可能なライチ果樹園",
+      "imageBadge": "一本の樹から始まる長い関係",
+      "cta": "果樹の里親になる",
+      "ctaHint": "里親可能な樹木、記録、権益、成長履歴を直接確認します。",
+      "steps": {
+        "1": {
+          "title": "樹木記録",
+          "body": "品種、樹齢、健康状態、曖昧位置。"
+        },
+        "2": {
+          "title": "成長記録",
+          "body": "管理イベントと季節写真。"
+        },
+        "3": {
+          "title": "権益",
+          "body": "活動、収穫、証明書。"
+        }
+      }
+    },
+    "deck": {
+      "page1": "クラウドブレイン",
+      "page2": "運営ロジック",
+      "page3": "歴史と四境",
+      "page4": "里親入口"
+    },
+    "systemModules": {
+      "kicker": "システムモジュール",
+      "title": "展示サイトではなく、運営できる農村 OS",
+      "body": "前台の閲覧、里親、予約、フィードバックはすべて、后台クラウドブレインが空間、タスク、活動、産業更新を判断する根拠になります。",
+      "items": {
+        "0": {
+          "tag": "関係入口",
+          "title": "ライチ樹の里親",
+          "body": "樹プロフィール、権益、成長記録、収穫履行で一度の訪問を年間の再訪関係へ変えます。",
+          "status": "接続済み"
+        },
+        "1": {
+          "tag": "来訪者サービス",
+          "title": "ルート推薦",
+          "body": "天気、人群、時間、节点容量を合わせて説明可能な山地ルートを生成します。",
+          "status": "利用可"
+        },
+        "2": {
+          "tag": "空間経営",
+          "title": "院落予約",
+          "body": "岭上院落、食育教室、古道驿站を予約可能な運営単元へ変換します。",
+          "status": "MVP"
+        },
+        "3": {
+          "tag": "協作ネットワーク",
+          "title": "村民タスク",
+          "body": "里親、活動、フィードバックから、養護、案内、食事、物流の低訓練タスクを生成します。",
+          "status": "連動中"
+        },
+        "4": {
+          "tag": "クラウド判断",
+          "title": "運営智策",
+          "body": "客流、消費、反馈、生態、生産データを審査可能なアクションカードへ集約します。",
+          "status": "后台稼働"
+        },
+        "5": {
+          "tag": "建築結果",
+          "title": "空間更新",
+          "body": "滞在、リスク、産業需要が驿站、院落、工坊、水岸修復の優先順位を導きます。",
+          "status": "計画入力"
+        }
+      }
+    },
+    "cloudPreview": {
+      "kicker": "AIGC Cloud Brain",
+      "title": "五流運営ビュー",
+      "cards": {
+        "0": {
+          "label": "来訪者関係",
+          "value": "里親再訪",
+          "body": "樹プロフィール、活動、通知、注文を長期接点へつなぎます。"
+        },
+        "1": {
+          "label": "現場協作",
+          "value": "タスク分配",
+          "body": "村民、节点、収益、養護記録が后台で閉ループになります。"
+        },
+        "2": {
+          "label": "空間判断",
+          "value": "更新根拠",
+          "body": "客流、风险、反馈で建築节点の改造優先度を判断します。"
+        }
+      }
+    },
+    "operationFlow": {
+      "kicker": "運営ロジック",
+      "title": "一本の樹が全村システムを動かす仕組み",
+      "body": "里親はページの終点ではなく、来訪者関係、村民協作、運営復盤、建築空間更新の起点です。",
+      "steps": {
+        "0": {
+          "label": "来訪者端",
+          "title": "一本の樹を里親にする",
+          "body": "樹プロフィールで権益と成長記録を確認し、年間の再訪関係を残します。"
+        },
+        "1": {
+          "label": "村民端",
+          "title": "養護タスクを生成",
+          "body": "水やり、剪定、撮影、案内、収穫、物流を実行可能なタスクへ分解します。"
+        },
+        "2": {
+          "label": "運営端",
+          "title": "注文と反馈を蓄積",
+          "body": "予約、消費、活動、満足度、現場問題を統一運営ビューへ入れます。"
+        },
+        "3": {
+          "label": "クラウドブレイン",
+          "title": "智策カードを形成",
+          "body": "AIGC が五流データを要約し、ルート、活動、施設、风险処理を提案します。"
+        },
+        "4": {
+          "label": "建築空間",
+          "title": "更新节点を逆算",
+          "body": "高頻度滞在、産業需要、风险点が院落、驿站、工坊、水岸更新の根拠になります。"
+        }
+      },
+      "result": "建築空間は先に置かれた景観ではありません。運営が続く中で、人が集まり、タスクが生まれ、风险が現れる場所に更新の必要性が生まれます。"
+    }
+  },
+  "booking": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "中庭予約段階"
+    },
+    "hero": {
+      "eyebrow": "Courtyard Booking",
+      "title": "予約可否、滞在条件、支払い待ちを明確にする",
+      "body": "この段階はローカル構造化在庫を使い、実際の支払いには接続しません。中庭、日付、人数、支払い方式を選び、支払い待ちの予約確認を作成します。"
+    },
+    "guardrail": {
+      "title": "支払い入口は未接続",
+      "body": "現在は予約確認と支払い待ち状態のみ表示します。実支払いは後続で統一支払い注文、冪等キー、サンドボックスを経由します。"
+    },
+    "list": {
+      "eyebrow": "中庭リスト",
+      "title": "今回予約する中庭を選択",
+      "body": "中庭はまず岭上滞在、ライチ食育、古道駅站の三類資源として整理し、後で /api/v1/courtyards へ移行します。",
+      "capacity": "受入人数",
+      "price": "価格メモ",
+      "minNights": "最少泊数",
+      "select": "選択",
+      "selected": "選択済み"
+    },
+    "form": {
+      "eyebrow": "予約情報",
+      "title": "日付、人数、支払い方式を確認",
+      "dateLabel": "宿泊または利用日",
+      "guestsLabel": "人数",
+      "guestsValue": "{count} 人",
+      "paymentModeLabel": "支払い方式",
+      "confirm": "予約を確認",
+      "confirming": "予約を作成中"
+    },
+    "dates": {
+      "jun20": "2026年6月20日",
+      "jun21": "2026年6月21日",
+      "jun27": "2026年6月27日",
+      "jun28": "2026年6月28日"
+    },
+    "inventory": {
+      "available": "予約可",
+      "limited": "残り少ない",
+      "booked": "満室",
+      "maintenance": "整備中"
+    },
+    "paymentModes": {
+      "deposit": "予約金",
+      "full": "全額"
+    },
+    "summary": {
+      "title": "注文概要",
+      "courtyard": "中庭",
+      "date": "日付",
+      "guests": "人数",
+      "paymentMode": "支払い方式"
+    },
+    "notice": {
+      "title": "予約注意事項",
+      "activitiesTitle": "最近の活動",
+      "activitiesEmpty": "この中庭の最近の活動はありません。"
+    },
+    "messages": {
+      "capacityExceeded": "人数がこの中庭の上限を超えています。人数を減らすか大きい中庭を選択してください。",
+      "submitFailed": "予約の送信に失敗しました。後でもう一度お試しください。"
+    },
+    "order": {
+      "title": "予約を作成しました",
+      "body": "注文は支払い待ち状態です。支払い入口はまだ接続されていないため、実際の請求は発生しません。",
+      "status": "注文状態：支払い待ち",
+      "paymentStatus": "支払い状態：支払い接続待ち",
+      "paymentEntry": "支払い入口は未接続",
+      "idLabel": "注文番号",
+      "createdAtLabel": "作成時刻"
+    },
+    "courtyards": {
+      "ridgeShared": {
+        "name": "岭上共居院",
+        "summary": "小チームの宿泊や半日共創活動に向き、村宴、朝の農事、岭上散策につながります。",
+        "location": "岭上共居境・程家湾と涂家湾付近",
+        "price": "¥680 から",
+        "notice": "到着時間は前日確認を推奨します。宿泊には有効な身分証が必要で、駐車後は短距離送迎または徒歩が中心です。",
+        "imageAlt": "岭上共居院の中庭空間"
+      },
+      "lycheeFood": {
+        "name": "荔下共有院",
+        "summary": "親子家族と食育グループ向けで、収穫、食育講座、村宴準備、短時間滞在に適しています。",
+        "location": "荔田共生境・ライチとリュウガン果園付近",
+        "price": "¥298 から",
+        "notice": "食育講座の材料は事前確認が必要です。雨天は屋内講座を残し、ぬかるむ収穫区間を取り消します。",
+        "imageAlt": "荔下共有院と石造りの家"
+      },
+      "ancientStation": {
+        "name": "古道駅站院",
+        "summary": "古道軽遊、音声ガイド、茶歇補給に対応しますが、現在は整備準備中です。",
+        "location": "古道叙事境・走馬嶺古道ノード付近",
+        "price": "未定",
+        "notice": "この中庭は整備中のため予約確認できません。他の中庭を選択してください。",
+        "imageAlt": "古道駅站院と伝統的な庭"
+      }
+    },
+    "amenities": {
+      "sharedKitchen": "共有キッチン",
+      "courtyardTea": "中庭茶歇",
+      "lowCarbonRoom": "低炭素客室",
+      "parkingTransfer": "駐車送迎",
+      "foodClassroom": "食育教室",
+      "harvestTable": "収穫テーブル",
+      "familyFriendly": "親子向け",
+      "rainShelter": "雨天転換",
+      "audioGuide": "音声ガイド",
+      "teaBreak": "茶歇補給",
+      "lightWalk": "軽い散策",
+      "historyWall": "古道物語壁"
+    }
+  },
+  "feedback": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "フィードバックと管理段階"
+    },
+    "hero": {
+      "eyebrow": "Feedback",
+      "title": "現地の声を追跡できる運営チケットへ",
+      "body": "この段階では、分類、緊急度、満足度、本文を含むフィードバック入口を開放します。送信後はチケット番号が作成され、管理画面に表示されます。"
+    },
+    "guardrail": {
+      "title": "内容は先に匿名化します",
+      "body": "電話番号や精確な座標はチケット化前にマスクされます。将来 AI 要約を使う場合も、匿名化とバックエンドのモデルアダプターを通します。"
+    },
+    "form": {
+      "eyebrow": "送信",
+      "title": "対応が必要な体験を教えてください",
+      "body": "場所、時間、状況をできるだけ具体的に記入してください。内容は公開されず、保留中チケットとして登録されます。",
+      "categoryLabel": "分類",
+      "severityLabel": "緊急度",
+      "ratingLabel": "満足度",
+      "ratingAria": "{count} 点の満足度",
+      "contentLabel": "内容",
+      "contentPlaceholder": "例：ビジターセンターから陶家湾駐車場への案内表示が少し分かりにくいです。",
+      "remaining": "残り {count} 文字",
+      "submit": "送信",
+      "submitting": "送信中"
+    },
+    "categories": {
+      "content": "内容説明",
+      "service": "サービス",
+      "facility": "施設案内",
+      "payment": "支払い",
+      "other": "その他"
+    },
+    "severities": {
+      "low": "記録",
+      "medium": "要対応",
+      "high": "体験に影響",
+      "urgent": "現地緊急"
+    },
+    "statuses": {
+      "submitted": "送信済み",
+      "assigned": "割当済み",
+      "processing": "対応中",
+      "resolved": "解決済み",
+      "closed": "終了"
+    },
+    "messages": {
+      "contentRequired": "8 文字以上入力してください。",
+      "submitFailed": "送信できませんでした。しばらくしてから再試行してください。"
+    },
+    "result": {
+      "title": "送信結果",
+      "body": "送信後、チケット番号と現在の状態がここに表示されます。管理画面で対応記録を更新できます。",
+      "empty": "フォームを送信すると追跡可能なチケットが作成されます。",
+      "success": "送信しました",
+      "ticketId": "チケット番号",
+      "status": "現在の状態"
+    }
+  },
+  "routes": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "ルート生成段階"
+    },
+    "hero": {
+      "eyebrow": "Route Generator",
+      "title": "時間、来訪者、天気で説明可能な行程を生成",
+      "body": "初版はルールベースのシミュレーションで、実際の AI や地図 API は呼び出しません。結果には総時間、歩行強度、天気対応、予約ノード、雨天代替を表示します。",
+      "summaryTime": "閲覧目安 3分",
+      "summaryLocation": "重慶市長寿区 · 走馬村"
+    },
+    "form": {
+      "eyebrow": "入力条件",
+      "title": "今回の歩き方を指定",
+      "body": "提供された範囲図と衛星図を参照し、MVP に適したテンプレートルールでルートカードを生成します。",
+      "durationLabel": "滞在時間",
+      "durationOptions": {
+        "halfDay": "半日",
+        "oneDay": "一日",
+        "twoDays": "二日"
+      },
+      "audienceLabel": "来訪者タイプ",
+      "audienceOptions": {
+        "senior": "シニア向け",
+        "family": "親子家族",
+        "regular": "一般来訪者"
+      },
+      "weatherLabel": "天気条件",
+      "weatherOptions": {
+        "sunny": "晴天",
+        "rainy": "雨天",
+        "hot": "高温"
+      },
+      "ruleTitle": "バックエンド適配層で生成",
+      "ruleBody": "フロントは滞在時間、来訪者、天気タグを /api/v1/routes/generate に送信し、バックエンドが ModelProviderAdapter 経由で DeepSeek モデルを呼び出して推奨ルートを返します。",
+      "generate": "ルート生成",
+      "generating": "生成中"
+    },
+    "map": {
+      "eyebrow": "地図ベース",
+      "title": "範囲図と衛星図の比較",
+      "scope": "範囲図",
+      "satellite": "衛星図",
+      "scopeAlt": "走馬村の計画範囲、既存道路、新設道路、駐車施設の図",
+      "satelliteAlt": "走馬村周辺の衛星地図"
+    },
+    "result": {
+      "eyebrow": "おすすめ結果",
+      "totalTime": "総時間",
+      "mobility": "歩行強度",
+      "weather": "天気対応",
+      "waypoints": "ルートノード",
+      "reservationNodes": "事前予約",
+      "fallback": "雨天代替",
+      "notice": "移動メモ",
+      "bookingCta": "予約可能ノードを見る",
+      "provider": "生成元：{provider}",
+      "providerFallback": "AI 呼び出しが一時的に利用できません。ローカル推奨ルートを表示しています。",
+      "providerOnline": "AI 推薦 · {provider}",
+      "providerPreview": "AI は接続済みです。ルート生成でモデル推奨を取得します。"
+    },
+    "waypoints": {
+      "visitorCenter": "ビジターセンター",
+      "taojiawan": "陶家湾駐車ポイント",
+      "ancientRoad": "走馬嶺古道",
+      "lycheeGarden": "ライチとリュウガン果園",
+      "waterfrontRest": "龍溪水辺休憩点",
+      "foodClassroom": "荔下共有院の食育教室",
+      "treeAdoption": "デジタル果樹里親ポイント",
+      "resilienceWorkshop": "龍溪レジリエンス工房",
+      "ridgeCourtyard": "岭上共居院",
+      "indoorStory": "屋内古道ストーリー点",
+      "shadedAncientRoad": "木陰の古道短線",
+      "villageMeal": "村宴と農産品展示販売点",
+      "morningFarm": "朝の農事体験点",
+      "xikouStation": "溪口駅舎",
+      "lingwangTeaRoom": "岭望茶室",
+      "fengwangTeaRoom": "峰望茶室",
+      "lijingCoCreationCenter": "荔晶共創センター",
+      "zoumaCultureCenter": "走馬文化センター",
+      "zoumaStation": "走馬駅舎",
+      "integratedServiceCenter": "総合サービスセンター",
+      "researchCenter": "研学センター",
+      "ecologicalDemoCenter": "生態モデルセンター",
+      "ecologicalRestaurant": "生態レストラン",
+      "ancientLycheePavilion": "古荔亭",
+      "experienceField": "体験田",
+      "tianyuanExperiencePoint": "田園体験ポイント",
+      "camp": "キャンプ地",
+      "homestay": "民宿",
+      "viewingPlatform": "展望台",
+      "researchWorkshop": "研学工房",
+      "studyHomestay": "研学民宿",
+      "studyNode": "研学",
+      "homestayCluster": "民宿エリア"
+    },
+    "reservationNodes": {
+      "audioGuide": "音声ガイド機器",
+      "shuttle": "送迎または短距離移動補助",
+      "foodClass": "親子食育講座",
+      "treeAdoption": "ライチ樹里親枠",
+      "villageMeal": "村宴席",
+      "courtyardTea": "中庭ティーブレイク",
+      "indoorWorkshop": "屋内研学工房",
+      "rainGear": "雨具と防滑案内",
+      "coolRest": "避暑休憩点",
+      "courtyardStay": "岭上中庭宿泊",
+      "xikouParking": "溪口駅舎の集散と駐車",
+      "teaRoom": "岭望茶室の受付",
+      "lycheeWorkshop": "ライチ加工と里親説明",
+      "serviceCenterMeal": "総合サービスセンターの食事席",
+      "serviceCenterStay": "総合サービスセンター宿泊と駐車",
+      "researchWorkshop": "研学センター講座と工房"
+    },
+    "plans": {
+      "gentleAncientRoad": {
+        "title": "シニア向け古道ライトルート",
+        "summary": "ビジターセンターから入り、傾斜と歩行距離を抑えながら古道叙事、陶家湾、水辺休憩を体験します。",
+        "totalTime": "2.5 時間",
+        "mobility": "低強度",
+        "weather": "晴天優先",
+        "rainFallback": "雨天時は古道区間を短縮し、屋内ストーリー点と中庭茶歇へ切り替えます。",
+        "notice": "正午を避け、陶家湾またはビジターセンター付近の駐車点を優先します。"
+      },
+      "familyLycheeClass": {
+        "title": "親子ライチ食育ルート",
+        "summary": "ライチ果園、食育教室、里親入口を中心に組み、長距離の登りを減らします。",
+        "totalTime": "3 時間",
+        "mobility": "低から中",
+        "weather": "晴天向け",
+        "rainFallback": "雨天は食育教室と樹木記録説明を残し、ぬかるむ採摘区間を外します。",
+        "notice": "食育講座と里親説明は事前予約を推奨し、子どもは水辺境界に近づきすぎないようにします。"
+      },
+      "regularFourRealms": {
+        "title": "四境一日連結ルート",
+        "summary": "古道、荔田、水辺、岭上院落を一日でつなぎ、走馬村を体系的に理解します。",
+        "totalTime": "6 時間",
+        "mobility": "中強度",
+        "weather": "晴天最適",
+        "rainFallback": "雨天は古道短線、食育教室、韧性工房、中庭滞在へ変更します。",
+        "notice": "一日ルートはノードが多いため、昼食と中庭休憩の時間を確保してください。"
+      },
+      "rainStudyRoute": {
+        "title": "雨天韧谷研学ルート",
+        "summary": "韧性工房、食育教室、屋内古道ストーリーを中心にし、滑りやすい区間を減らします。",
+        "totalTime": "2.5 時間",
+        "mobility": "低強度",
+        "weather": "雨天縮小",
+        "rainFallback": "強い雨や警報時は、ビジターセンターと屋内工房だけを残します。",
+        "notice": "雨天は水辺境界と未舗装の坂道を避け、駐車点からの移動補助を優先します。"
+      },
+      "hotLowRiskRoute": {
+        "title": "高温低リスク短線",
+        "summary": "木陰、中庭、水辺休憩点を選び、直射日光の区間を短くします。",
+        "totalTime": "2 時間",
+        "mobility": "低強度",
+        "weather": "高温避暑",
+        "rainFallback": "高温後に雨が来た場合は、中庭茶歇と屋内説明へ切り替えます。",
+        "notice": "高温日は午前または夕方の出行を推奨し、補水点と休憩点を優先します。"
+      },
+      "twoDayCourtyard": {
+        "title": "二日岭上共居ルート",
+        "summary": "一日目に四境主線と村宴、夜は岭上院落に宿泊し、二日目に朝の農事と韧谷研学を行います。",
+        "totalTime": "2 日",
+        "mobility": "中強度",
+        "weather": "晴天最適",
+        "rainFallback": "雨天は中庭、村宴、工房、屋内講座を残し、長距離の山地歩行を外します。",
+        "notice": "中庭宿泊、村宴、翌日の研学講座は事前に枠を確保する必要があります。"
+      },
+      "narrativeSixStops": {
+        "title": "六つの拠点を巡る物語ルート",
+        "summary": "ビジターセンター、古道、ライチ畑、水辺、尾根の中庭、レジリエンス工房をつなぐルートです。",
+        "totalTime": "5.5 時間",
+        "mobility": "中程度",
+        "weather": "晴天向き",
+        "rainFallback": "雨天時は水辺の滞在を短縮し、屋内工房と中庭での休憩を増やします。",
+        "notice": "昼食、工房、中庭の受け入れ枠を事前に確保してください。"
+      }
+    }
+  },
+  "scenes": {
+    "detail": {
+      "backHome": "ホームへ戻る",
+      "ruleTitle": "内容の境界",
+      "ruleBody": "このページは整理済み資料のみを使います。今後の AI 解説には出典、更新時刻、信頼度が必要です。",
+      "nextTitle": "次の体験",
+      "nextBody": "四境ページはまず構造化内容と入口を用意し、後続でルート、予約、里親、フィードバックにつなぎます。"
+    },
+    "ancientRoad": {
+      "eyebrow": "古道・駅站・長寿文化",
+      "title": "古道叙事境",
+      "summary": "走馬嶺古道の記憶を歩ける文化ルートにします。",
+      "imageAlt": "山地古道の風景",
+      "tags": {
+        "heritage": "遺産保護",
+        "walk": "徒歩ルート",
+        "audio": "音声ガイド"
+      },
+      "metrics": {
+        "length": {
+          "value": "約 670m",
+          "label": "現存古道"
+        },
+        "nodes": {
+          "value": "3 種",
+          "label": "古道、泉、駅站"
+        },
+        "audience": {
+          "value": "軽体力",
+          "label": "初回来訪向け"
+        }
+      },
+      "blocks": {
+        "story": {
+          "title": "歴史を歩ける空間へ",
+          "body": "古道、駅站、碑、泉、地域記憶をわかりやすい順序に整理します。"
+        },
+        "experience": {
+          "title": "展示板だけにしない",
+          "body": "今後、音声ガイド、AI 要約、研学カード、予約ノードにつなぎます。"
+        },
+        "operation": {
+          "title": "低介入を優先",
+          "body": "境界保護、小修繕、安全提示、村の日常を重視します。"
+        }
+      },
+      "ctas": {
+        "route": "古道ルート生成",
+        "booking": "近くの中庭を見る"
+      }
+    },
+    "lycheeField": {
+      "eyebrow": "荔枝・食育・里親",
+      "title": "荔田共生境",
+      "summary": "荔枝を里親、収穫、加工、食育、再訪につなげます。",
+      "imageAlt": "荔枝畑と田園",
+      "tags": {
+        "adoption": "樹木記録",
+        "food": "食育工房",
+        "festival": "季節活動"
+      },
+      "metrics": {
+        "tree": {
+          "value": "一本の木",
+          "label": "関係の起点"
+        },
+        "season": {
+          "value": "四季",
+          "label": "農事リズム"
+        },
+        "family": {
+          "value": "親子向け",
+          "label": "収穫と食育"
+        }
+      },
+      "blocks": {
+        "tree": {
+          "title": "一本の木から長期関係へ",
+          "body": "今後、樹木記録、健康状態、曖昧位置、管理ログ、証明書を表示します。"
+        },
+        "table": {
+          "title": "一本の木から一卓へ",
+          "body": "収穫、加工、飲品、土産、村宴、親子课程を体験鏈にします。"
+        },
+        "trust": {
+          "title": "権益を明確にする",
+          "body": "活動参加、収穫受取、配送、更新頻度を明示します。"
+        }
+      },
+      "ctas": {
+        "adoption": "里親プレビュー",
+        "route": "親子ルート生成"
+      }
+    },
+    "resilienceValley": {
+      "eyebrow": "龍溪水脈・雨洪・研学",
+      "title": "韧谷研学境",
+      "summary": "水系治理を生態回廊、親水体験、自然教室へ変換します。",
+      "imageAlt": "水辺の谷と生態工房",
+      "tags": {
+        "water": "水系修復",
+        "study": "自然観察",
+        "weather": "雨天代替"
+      },
+      "metrics": {
+        "system": {
+          "value": "6 種",
+          "label": "屋根、院坝、田坎、塘体、湿地、河岸"
+        },
+        "safety": {
+          "value": "警報優先",
+          "label": "雨天と高温提示"
+        },
+        "course": {
+          "value": "研学向け",
+          "label": "水安全课程"
+        }
+      },
+      "blocks": {
+        "water": {
+          "title": "生態が基盤",
+          "body": "雨水庭園、生態溝、池浄化、湿地緩衝で維持可能な水系を作ります。"
+        },
+        "learning": {
+          "title": "治理を课程へ",
+          "body": "水位、水質、雨洪路径、水電記憶を学習内容にします。"
+        },
+        "weather": {
+          "title": "ルートは天気に応答",
+          "body": "後続のルート生成では雨、高温、警報に応じてリスクを下げます。"
+        }
+      },
+      "ctas": {
+        "route": "雨天ルート生成",
+        "feedback": "現地反馈"
+      }
+    },
+    "ridgeDwelling": {
+      "eyebrow": "岭上院落・民宿・共創生活",
+      "title": "岭上共居境",
+      "summary": "闲置院落を生活、滞在、創業、低炭素運営に再利用します。",
+      "imageAlt": "岭上院落の風景",
+      "tags": {
+        "stay": "中庭滞在",
+        "lowCarbon": "绿色改造",
+        "shared": "村民共享"
+      },
+      "metrics": {
+        "courtyard": {
+          "value": "多院",
+          "label": "分散型運営単位"
+        },
+        "stay": {
+          "value": "半日から二日",
+          "label": "滞在产品"
+        },
+        "community": {
+          "value": "共益",
+          "label": "将来の收益规则"
+        }
+      },
+      "blocks": {
+        "renovation": {
+          "title": "低介入改修",
+          "body": "屋根、石基、灰瓦、院坝、田坎を保ち、安全と快適性を高めます。"
+        },
+        "life": {
+          "title": "院落は背景ではない",
+          "body": "民宿、工坊、共享厨房、活動室、農产品展示を真实生活に接続します。"
+        },
+        "operation": {
+          "title": "予約から再訪へ",
+          "body": "後続で日历库存、入住须知、订单确认、支付入口を追加します。"
+        }
+      },
+      "ctas": {
+        "booking": "院落予約を見る",
+        "route": "二日ルート生成"
+      }
+    }
+  },
+  "products": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "商品 MVP"
+    },
+    "hero": {
+      "eyebrow": "Products",
+      "title": "村の商品を閲覧可能な再訪注文へつなげる",
+      "body": "現段階では実決済に接続しません。商品を選び、連絡先を入力してオフライン確認注文を作成します。"
+    },
+    "list": {
+      "eyebrow": "商品一覧",
+      "title": "商品または村の食事サービスを選択",
+      "body": "商品は管理画面の Product テーブルから取得し、消費ノードに関連付けできます。価格未設定の商品は相談価格として表示します。",
+      "select": "選択",
+      "selected": "選択済み",
+      "negotiable": "相談価格"
+    },
+    "form": {
+      "eyebrow": "注文情報",
+      "title": "オフライン確認情報を入力",
+      "nameLabel": "連絡先名",
+      "phoneLabel": "電話番号",
+      "quantityLabel": "数量",
+      "quantityValue": "{count} 点",
+      "confirm": "注文を作成",
+      "submitting": "作成中"
+    },
+    "summary": {
+      "title": "注文概要",
+      "product": "商品",
+      "quantity": "数量",
+      "amount": "金額"
+    },
+    "notice": {
+      "title": "予約説明",
+      "body": "この注文はオフライン確認待ちとなり、実際の支払いは発生しません。運営担当者が管理画面で処理できます。"
+    },
+    "order": {
+      "title": "注文を作成しました",
+      "body": "商品注文はオフライン確認待ちです。",
+      "status": "状態：オフライン確認待ち",
+      "idLabel": "注文番号"
+    },
+    "messages": {
+      "loading": "商品を読み込み中",
+      "loadFailed": "商品を利用できません",
+      "demoFallback": "実データが空のため、デモ用の商品データを表示しています。",
+      "contactRequired": "連絡先名と電話番号を入力してください",
+      "submitFailed": "注文送信に失敗しました。もう一度お試しください。"
+    }
+  },
+  "calendar": {
+    "nav": {
+      "backHome": "Back home",
+      "phase": "Farming Calendar MVP"
+    },
+    "hero": {
+      "eyebrow": "Farming Calendar",
+      "title": "Zouma Village seasonal farming calendar",
+      "body": "A timeline for pruning, fertilizing, harvest, processing and village events.",
+      "summaryTime": "閲覧目安 3分",
+      "summaryLocation": "重慶市長寿区 · 走馬村"
+    },
+    "filters": {
+      "title": "Filters",
+      "all": "All",
+      "activityType": "Activity type",
+      "status": "Status",
+      "treeSpecies": "Tree species"
+    },
+    "timeline": {
+      "title": "Solar term timeline"
+    },
+    "activityTypes": {
+      "planting": "Planting",
+      "pruning": "Pruning",
+      "fertilizing": "Fertilizing",
+      "harvesting": "Harvesting",
+      "processing": "Processing",
+      "festival": "Festival"
+    },
+    "statuses": {
+      "upcoming": "Upcoming",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "species": {
+      "lychee": "Lychee",
+      "longan": "Longan"
+    },
+    "messages": {
+      "loading": "Loading farming calendar",
+      "empty": "No farming calendar items match the filters",
+      "demoFallback": "実データが空のため、デモ用の農事データを表示しています。"
+    }
+  },
+  "activities": {
+    "nav": {
+      "backHome": "ホームへ戻る",
+      "phase": "村の活動紹介"
+    },
+    "hero": {
+      "eyebrow": "村の活動",
+      "title": "活動は里親関係を現地体験に変えます",
+      "body": "収穫、食育、中庭の食事、共居体験を通じて、一本の樹を再訪できる村の運営イベントへつなげます。",
+      "summaryTime": "約3分で確認",
+      "summaryLocation": "重慶市長寿区 · 走馬村"
+    },
+    "showcase": {
+      "label": "本期主活動",
+      "name": "ライチ収穫食育祭",
+      "date": "6月下旬 · 果樹園と尾根の中庭",
+      "body": "親子収穫、食育講座、果実選別、村の食事、里親樹の再訪を週末の活動単位にまとめます。"
+    },
+    "filters": {
+      "title": "活動を絞り込む",
+      "type": "活動タイプ",
+      "date": "活動日",
+      "all": "すべて"
+    },
+    "types": {
+      "village_feast": "尾根の食事会",
+      "food_class": "食育講座",
+      "harvest": "収穫リビジット",
+      "guided_walk": "古道ガイド",
+      "study": "研学行程",
+      "workshop": "共創ワークショップ",
+      "exhibition": "展示案内",
+      "co_living": "共居体験"
+    },
+    "statuses": {
+      "open": "予約受付中",
+      "full": "満席",
+      "cancelled": "中止",
+      "draft": "準備中",
+      "closed": "終了"
+    },
+    "card": {
+      "capacity": "{booked}/{max} 名",
+      "offlinePrice": "現地確認"
+    },
+    "actions": {
+      "book": "活動を予約",
+      "full": "満席",
+      "cancelled": "中止",
+      "closed": "終了",
+      "draft": "準備中"
+    },
+    "form": {
+      "title": "予約情報",
+      "body": "連絡先を残すと活動予約を送信できます。運営側が人数と現地手配を確認します。",
+      "name": "氏名",
+      "phone": "電話番号",
+      "guestCount": "参加人数",
+      "guestCountValue": "{count} 名",
+      "noteTitle": "運営メモ",
+      "noteBody": "活動予約は運営コンソールに入り、村民タスク、通知、受け入れ計画に変換できます。"
+    },
+    "messages": {
+      "bookingFailed": "予約に失敗しました。氏名、電話番号、人数を確認してください。",
+      "bookingConfirmed": "活動予約を確認しました。",
+      "empty": "該当する活動はありません",
+      "emptyBody": "タイプや日付を調整するか、本期主活動の予約可能ノードを確認してください。",
+      "demoFallback": "実データが空のため、デモ用のアクティビティデータを表示しています。"
+    },
+    "order": {
+      "title": "予約を作成しました"
+    }
+  },
+  "villagerSystem": {
+    "common": {
+      "loading": "読み込み中",
+      "error": "ページを表示できません",
+      "retry": "再試行",
+      "refresh": "更新",
+      "saving": "保存中"
+    },
+    "nav": {
+      "back": "戻る",
+      "dashboard": "ホーム",
+      "tasks": "タスク",
+      "earnings": "収益",
+      "notifications": "通知",
+      "logout": "退出"
+    },
+    "login": {
+      "eyebrow": "村民ポータル",
+      "title": "村民ログイン",
+      "body": "登録済みの電話番号でタスクと収益を確認できます。",
+      "phone": "電話番号",
+      "phonePlaceholder": "登録済み電話番号",
+      "otp": "確認コード",
+      "otpPlaceholder": "6桁のコード",
+      "request": "コードを取得",
+      "requesting": "生成中",
+      "verify": "ログイン",
+      "verifying": "確認中",
+      "developmentOtp": "デモモード：SMS が利用できません。コード {otp} を使用してください。",
+      "requestError": "該当する村民が見つかりません",
+      "verifyError": "コードが無効または期限切れです"
+    },
+    "dashboard": {
+      "eyebrow": "今日の協働",
+      "greeting": "こんにちは、{name}",
+      "monthlyCompleted": "今月完了",
+      "monthlyEarnings": "今月の収益",
+      "pendingTasks": "未処理",
+      "latestTasks": "最近のタスク",
+      "latestNotifications": "最新通知"
+    },
+    "tasks": {
+      "eyebrow": "タスク協働",
+      "title": "マイタスク",
+      "empty": "タスクはありません",
+      "noNode": "場所未指定",
+      "noDescription": "説明なし",
+      "noDeadline": "期限未設定",
+      "filters": {
+        "pending": "未受領",
+        "active": "進行中",
+        "completed": "完了"
+      },
+      "actions": {
+        "pending": "受け取る",
+        "accepted": "開始",
+        "in_progress": "完了する"
+      },
+      "knowledge": {
+        "open": "手入れルールを確認",
+        "placeholder": "このタスクに関するルールを入力してください",
+        "ask": "質問を送信",
+        "asking": "検索中",
+        "failed": "手入れルールを一時的に確認できません"
+      },
+      "evidence": {
+        "title": "履行証跡を提出",
+        "help": "手入れ対象と作業結果を確認できる画像を2枚以上アップロードしてください。",
+        "placeholder": "実際に行った手入れ作業を説明してください",
+        "submit": "証跡を提出",
+        "requirements": "画像を2枚以上選択し、作業説明を入力してください。",
+        "failed": "証跡の提出に失敗しました。画像を確認して再試行してください。"
+      }
+    },
+    "earnings": {
+      "eyebrow": "労働収益",
+      "title": "マイ収益",
+      "total": "累計収益",
+      "monthly": "今月",
+      "trend": "最近の収益",
+      "completedTasks": "完了タスク",
+      "empty": "タスク完了後に収益が表示されます"
+    },
+    "notifications": {
+      "eyebrow": "メッセージ",
+      "title": "通知",
+      "markAll": "すべて既読",
+      "empty": "通知はありません"
+    },
+    "touristNotifications": {
+      "open": "通知を開く",
+      "eyebrow": "果樹園からのお知らせ",
+      "title": "通知センター",
+      "body": "樹木とアクティビティの最新情報を確認します。",
+      "noIdentity": "認養・予約・チケット購入時に電話番号を登録してください。",
+      "categories": {
+        "all": "すべて",
+        "tree": "樹木",
+        "activity": "活動"
+      }
+    },
+    "touristIdentity": {
+      "phone": "連絡先電話番号",
+      "phonePlaceholder": "11桁の携帯番号"
+    },
+    "interactions": {
+      "eyebrow": "認養体験",
+      "title": "マイ体験",
+      "body": "果樹の作業を完了し、手入れ記録を残しましょう。",
+      "empty": "未完了の体験タスクはありません",
+      "notePlaceholder": "任意の作業メモ",
+      "upload": "写真をアップロードして完了",
+      "shareText": "走馬村で果樹 {treeCode} を認養しています。成長を一緒に見守りましょう。",
+      "points": {
+        "watering": "10点",
+        "fertilizing": "10点",
+        "photo_upload": "15点",
+        "diary": "20点",
+        "share": "15点"
+      },
+      "descriptions": {
+        "watering": "認養した果樹に水を与える",
+        "fertilizing": "施肥作業を記録する",
+        "photo_upload": "最新の成長写真を投稿する",
+        "diary": "手入れの観察を書く",
+        "share": "果樹の成長を共有する"
+      },
+      "actions": {
+        "watering": "水やり完了",
+        "fertilizing": "施肥完了",
+        "photo_upload": "写真を投稿",
+        "diary": "日記を送信",
+        "share": "コピーして完了"
+      },
+      "dashboard": {
+        "metaTitle": "体験タスクシステム｜走馬村",
+        "metaDescription": "認養した果樹のタスク、ポイント、交換記録を確認します。",
+        "phase": "認養体験",
+        "title": "体験タスクシステム",
+        "body": "認養した一本の果樹を中心に、手入れタスク、ポイント、再訪関係を管理します。",
+        "entryTitle": "今月の体験タスク",
+        "entryBody": "進捗を確認し、水やりや写真投稿をすばやく完了できます。",
+        "currentAdoption": "現在の認養",
+        "totalPoints": "利用可能ポイント",
+        "availablePoints": "利用可能ポイント",
+        "totalEarned": "累計獲得",
+        "monthlyProgress": "今月の進捗",
+        "pending": "未完了",
+        "pointsTitle": "ポイントセンター",
+        "tasksTitle": "手入れタスク",
+        "viewAll": "体験システムへ",
+        "quickWater": "クイック水やり",
+        "quickPhoto": "クイック写真"
+      },
+      "identity": {
+        "title": "認養情報を確認",
+        "body": "認養時に登録した電話番号を入力すると、active の果樹と体験タスクを読み込みます。",
+        "phone": "認養電話番号",
+        "lookup": "認養を検索",
+        "adoptCta": "果樹を認養する"
+      },
+      "timeline": {
+        "title": "手入れタイムライン",
+        "empty": "手入れ記録はまだありません"
+      },
+      "redemption": {
+        "title": "ポイント交換",
+        "empty": "交換できる特典はまだありません",
+        "redeem": "交換する",
+        "success": "交換を申請しました",
+        "insufficient": "ポイントが不足しています"
+      },
+      "season": {
+        "eventTag": "季節限定",
+        "bonusPoints": "追加 +{points} 点",
+        "endsIn": "残り {days} 日"
+      },
+      "states": {
+        "loadFailed": "体験データを読み込めませんでした。後でもう一度お試しください。",
+        "noActiveAdoption": "この電話番号には active の認養記録がありません。",
+        "lookupFailed": "認養検索に失敗しました。電話番号を確認してください。",
+        "completed": "タスクが完了し、ポイントが加算されました。",
+        "uploadFailed": "写真のアップロードまたは送信に失敗しました。もう一度選択してください。",
+        "completeFailed": "タスク送信に失敗しました。後でもう一度お試しください。",
+        "demoFallback": "実データが空のため、デモ用の降格データを表示しています。",
+        "demoNotice": "デモモード：タスク、ポイント、交換は体験フローの表示用で、実データベースには保存されません。",
+        "demoCompleted": "デモタスクが完了し、ポイントを画面内で加算しました。",
+        "done": "完了"
+      }
+    },
+    "metadata": {
+      "login": {
+        "title": "村民ログイン｜走馬村",
+        "description": "村民ポータルにログイン"
+      },
+      "dashboard": {
+        "title": "村民ホーム｜走馬村",
+        "description": "タスク・収益・通知を確認"
+      },
+      "tasks": {
+        "title": "村民タスク｜走馬村",
+        "description": "タスクの進捗を管理"
+      },
+      "earnings": {
+        "title": "村民収益｜走馬村",
+        "description": "労働収益を確認"
+      },
+      "notifications": {
+        "title": "村民通知｜走馬村",
+        "description": "タスク通知を確認"
+      },
+      "touristNotifications": {
+        "title": "通知センター｜走馬村",
+        "description": "樹木と活動の通知を確認"
+      }
+    }
+  }
+}

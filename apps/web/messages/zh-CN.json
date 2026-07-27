@@ -1,0 +1,1759 @@
+{
+  "metadata": {
+    "home": {
+      "title": "云脉寿岭，荔水走马｜走马村前台系统",
+      "description": "走马村四境门户、天气推荐、院落预约与荔枝树认养的 Web/PWA 前台。"
+    },
+    "explore": {
+      "title": "开始浏览｜走马村历史与四境地图",
+      "description": "进入走马村二级探索页，浏览历史长卷、天气提示与四境互动地图。"
+    },
+    "routes": {
+      "title": "走马村路线生成｜可解释游线",
+      "description": "按时长、人群和天气生成走马村四境游线，展示范围图、卫星图和预约节点。"
+    },
+    "booking": {
+      "title": "走马村院落预约｜日历库存与订单确认",
+      "description": "查看走马村院落库存、日期、人数和预订须知，完成待支付状态的预约确认。"
+    },
+    "feedback": {
+      "title": "走马村反馈｜意见提交与工单跟进",
+      "description": "提交走马村内容、服务、设施、支付和其他反馈，并生成可跟进的反馈工单。"
+    },
+    "trees": {
+      "title": "走马村荔枝树认养｜树档案与成长记录",
+      "description": "查看可认养荔枝树、模糊位置、权益说明、认养协议和成长记录时间线。"
+    },
+    "tickets": {
+      "title": "走马村门票预购｜活动与体验名额",
+      "description": "查看走马村门票、活动和研学产品预购占位。"
+    },
+    "me": {
+      "title": "走马村个人中心｜订单占位",
+      "description": "查看走马村预约、认养和票务订单列表占位。"
+    },
+    "privacy": {
+      "title": "走马村隐私中心｜授权管理占位",
+      "description": "查看隐私政策、数据采集和 AI 处理授权项占位。"
+    },
+    "products": {
+      "title": "走马村农产品预订｜线下确认订单",
+      "description": "浏览走马村农产品、伴手礼和村宴服务，提交线下确认订单。"
+    },
+    "calendar": {
+      "title": "走马村农事日历｜节气与农事时间线",
+      "description": "按节气查看走马村的荔枝、龙眼、采摘、加工和节庆农事安排。"
+    },
+    "activities": {
+      "title": "走马村活动宣传｜院落活动与研学工坊",
+      "description": "查看走马村荔枝采摘食育节、院落活动、研学工坊与共居体验预约。"
+    }
+  },
+  "common": {
+    "back": "返回上一级",
+    "loading": "正在整理走马村今日内容",
+    "errorTitle": "页面暂时没有加载成功",
+    "errorBody": "请稍后重试，系统会保留当前浏览入口。",
+    "retry": "重新加载",
+    "updatedAt": "更新于 {date}"
+  },
+  "home": {
+    "nav": {
+      "homeAria": "返回走马村首页顶部",
+      "aria": "首页导航",
+      "mark": "走",
+      "brand": "走马村",
+      "realms": "四境",
+      "weather": "天气",
+      "routes": "路线",
+      "booking": "院落预定",
+      "tickets": "门票",
+      "adoption": "认养",
+      "me": "个人中心",
+      "privacy": "隐私中心",
+      "login": "登录",
+      "start": "开始浏览",
+      "products": "农产",
+      "calendar": "农事",
+      "more": "更多",
+      "menu": "打开导航菜单",
+      "closeMenu": "关闭导航菜单",
+      "activities": "活动",
+      "interactions": "互动"
+    },
+    "hero": {
+      "badge": "长寿区山地乡村 AIGC 韧性更新样板",
+      "title": "云脉寿岭，荔水走马",
+      "subtitle": "从认养一棵树开始，把游客、村民、运营和空间更新接入同一套乡村云脑。",
+      "positioning": "这是一个面向项目汇报和真实试运营的数字村落系统：前台负责建立长期关系，后台负责把关系转成任务、数据和空间决策。",
+      "primaryCta": "查看四境",
+      "secondaryCta": "今日推荐",
+      "imageAlt": "走马村山岭、溪河、村落和田园的整体鸟瞰图",
+      "startBrowsing": "开始浏览",
+      "videoAlt": "龙溪河、山岭与走马村田园的航拍影像",
+      "tagline1": "山地乡村 · AIGC韧性更新",
+      "tagline2": "四境可运营体验",
+      "tagline3": "可浏览 · 可预约 · 可认养 · 可复访",
+      "systemLogic": "AIGC 云脑驱动 · 五流协同运营",
+      "location": "重庆长寿区凤城街道走马村",
+      "narrative": "认养关系 -> 村民任务 -> 运营智策 -> 建筑空间",
+      "spatialSystem": "山地村落运营剖面",
+      "nodes": {
+        "0": "游客端认养入口",
+        "1": "村民端养护任务",
+        "2": "运营端智策复盘",
+        "3": "建筑空间更新"
+      },
+      "metricAbout": "约",
+      "metricUnits": {
+        "0": "km?",
+        "1": "亩",
+        "2": "亩"
+      },
+      "scrollHint": "向下浏览下一屏",
+      "activityShowcase": {
+        "name": "荔枝采摘食育节",
+        "kicker": "村落活动宣传展示",
+        "summary": "从果园采摘、食育课堂到岭上村宴，把一棵荔枝树变成可参与的周末活动。",
+        "date": "06.28 周日 09:30",
+        "location": "荔田共生境",
+        "highlights": {
+          "0": "亲子采摘体验",
+          "1": "荔枝食育课堂",
+          "2": "岭上村宴预约",
+          "3": "认养树回访礼"
+        }
+      }
+    },
+    "history": {
+      "eyebrow": "历史纵深",
+      "title": "沿一条山岭，读懂四段走马",
+      "description": "从地方志中的建制沿革到走马岭实物遗存，再到今天的四境共建，这是一条经过来源校对的村落叙事线。",
+      "sections": {
+        "tang": {
+          "title": "唐代乐温县：地域历史的远景",
+          "body": "《长寿区志》所载唐代乐温县建制，为今天长寿地域的历史沿革提供了时间坐标。这里把它作为区域背景呈现，不将古代县域边界或治所位置直接等同于今天的走马村。",
+          "source": "来源依据：《长寿区志》相关建制沿革记载；文案已按区域史口径校对。"
+        },
+        "lychee": {
+          "title": "荔枝古道：妃子园留下的线索",
+          "body": "《涪州志》保存了天宝年间妃子园相关记载，为长寿一带荔枝生产与山地交通的历史联系留下线索。走马岭古道的叙事由此连接果林、驿路与季节性的行旅记忆。",
+          "source": "来源依据：《涪州志》天宝年间妃子园相关记载；不把文献线索扩写为未经证实的具体路线。"
+        },
+        "milestone": {
+          "title": "光绪二十三年：一方指路碑",
+          "body": "走马岭出土的清光绪二十三年指路碑，是古道交通可被触摸的实物见证。碑刻所指向的道路网络，让地方志中的宏观时间落到村民往来、商旅辨路的日常尺度。",
+          "source": "来源依据：走马岭出土清光绪二十三年指路碑实物；后续展示以文物核验信息为准。"
+        },
+        "modern": {
+          "title": "当代走马村：四境共同生长",
+          "body": "今天的长寿区凤城街道走马村，以古道叙事境、荔田共生境、韧谷研学境和岭上共居境组织新的乡村体验。这里所说的走马村并非九龙坡区走马古镇，两者是不同的地理实体。",
+          "source": "来源依据：当代走马村四境规划；行政区划明确为重庆市长寿区凤城街道走马村。"
+        }
+      },
+      "audio": {
+        "tang": "收听乐温县建制讲述",
+        "lychee": "收听荔枝古道讲述",
+        "milestone": "收听指路碑讲述",
+        "modern": "收听当代四境讲述",
+        "pending": "音频制作中"
+      }
+    },
+    "quickActions": {
+      "tickets": "门票预购",
+      "me": "个人中心",
+      "villager": "村民入口",
+      "privacy": "隐私中心"
+    },
+    "stats": {
+      "area": {
+        "value": "约 1.8 km²",
+        "label": "概念研究范围"
+      },
+      "forest": {
+        "value": "3107 亩",
+        "label": "林地与山岭本底"
+      },
+      "fields": {
+        "value": "2383 亩",
+        "label": "耕地与果林资源"
+      }
+    },
+    "weather": {
+      "eyebrow": "今日天气与出行提示",
+      "temperature": "19.7℃",
+      "summary": "以温和天气作为首页默认示例；后续阶段接入天气服务后，将根据降雨、高温和预警自动调整路线建议。",
+      "realtime": "重庆市长寿区走马村",
+      "pending": "待配置",
+      "configureHint": "配置 QWEATHER_API_KEY 后自动切换为实时天气",
+      "configureLink": "查看路线建议"
+    },
+    "playCards": {
+      "route": {
+        "title": "半日轻游",
+        "body": "云驿报到、古道漫行、荔田停留和水岸休憩，适合首次到访。",
+        "link": "生成路线"
+      },
+      "courtyard": {
+        "title": "最近可订院落",
+        "body": "优先展示岭上共居院和低碳民宿院，后续接入日历库存。",
+        "link": "查看院落"
+      },
+      "tree": {
+        "title": "荔枝树认养",
+        "body": "从树档案、成长记录到收获权益，建立全年复访关系。",
+        "link": "查看认养"
+      }
+    },
+    "guardrails": {
+      "title": "轻平台优先",
+      "body": "首页先组织真实资源和清晰入口，不做重景区化包装，也不让数字展示盖过乡村生活。"
+    },
+    "systemModules": {
+      "kicker": "系统模块",
+      "title": "不是展示站，而是可运营的乡村操作系统",
+      "body": "前台的每一次浏览、认养、预约和反馈，都会成为后台云脑判断空间、任务、活动和产业更新的依据。",
+      "items": {
+        "0": {
+          "tag": "关系入口",
+          "title": "荔枝树认养",
+          "body": "用树档案、权益、成长记录和收获兑现，把一次访问变成全年复访关系。",
+          "status": "已接入"
+        },
+        "1": {
+          "tag": "游客服务",
+          "title": "路线推荐",
+          "body": "结合天气、人群、时长和节点容量，生成可解释的山地游线。",
+          "status": "可使用"
+        },
+        "2": {
+          "tag": "空间经营",
+          "title": "院落预约",
+          "body": "把岭上院落、食育课堂和古道驿站转成可预订、可确认的运营单元。",
+          "status": "MVP"
+        },
+        "3": {
+          "tag": "协作网络",
+          "title": "村民任务",
+          "body": "认养、活动和反馈生成低培训成本任务，让村民参与养护、导览、餐食与物流。",
+          "status": "联动中"
+        },
+        "4": {
+          "tag": "云脑决策",
+          "title": "运营智策",
+          "body": "把客流、消费、反馈、生态与生产数据汇总成可审核的行动建议。",
+          "status": "后台在线"
+        },
+        "5": {
+          "tag": "建筑结果",
+          "title": "空间更新",
+          "body": "持续运营暴露出的停留、风险和产业需求，反推驿站、院落、工坊与水岸修复。",
+          "status": "规划承接"
+        }
+      }
+    },
+    "cloudPreview": {
+      "kicker": "AIGC Cloud Brain",
+      "title": "五流运营总览",
+      "cards": {
+        "0": {
+          "label": "游客关系",
+          "value": "认养复访",
+          "body": "把树档案、活动、通知和订单连接成长期触达。"
+        },
+        "1": {
+          "label": "现场协作",
+          "value": "任务分派",
+          "body": "村民、节点、收益和养护记录在后台形成闭环。"
+        },
+        "2": {
+          "label": "空间决策",
+          "value": "更新依据",
+          "body": "用客流、风险和反馈判断建筑节点的改造优先级。"
+        }
+      }
+    },
+    "operationFlow": {
+      "kicker": "运营逻辑",
+      "title": "一棵树如何带动全村系统运转",
+      "body": "认养不是页面终点，而是游客关系、村民协作、运营复盘和建筑空间更新的起点。",
+      "steps": {
+        "0": {
+          "label": "游客端",
+          "title": "认养一棵树",
+          "body": "用户进入树档案，确认权益与成长记录，留下全年复访关系。"
+        },
+        "1": {
+          "label": "村民端",
+          "title": "生成养护任务",
+          "body": "浇灌、修剪、拍照、导览、采摘和物流被拆成可执行任务。"
+        },
+        "2": {
+          "label": "运营端",
+          "title": "沉淀订单与反馈",
+          "body": "预约、消费、活动、满意度和现场问题进入统一运营视图。"
+        },
+        "3": {
+          "label": "云脑系统",
+          "title": "形成智策卡",
+          "body": "AIGC 汇总五流数据，给出路线、活动、设施和风险处理建议。"
+        },
+        "4": {
+          "label": "建筑空间",
+          "title": "反推更新节点",
+          "body": "高频停留、产业需求和风险点成为院落、驿站、工坊与水岸更新依据。"
+        }
+      },
+      "result": "因此建筑空间不是先验造景，而是运营系统持续运行后自然浮现的结果：哪里有人、哪里有任务、哪里有风险，哪里才需要被改造。"
+    },
+    "realms": {
+      "eyebrow": "Four Realms",
+      "title": "四境不是四个景点，而是四种可运营的乡村体验",
+      "description": "每个场景都连接内容、路线、预约、认养或反馈，帮助游客从看见走马村走向参与走马村。",
+      "ancientRoad": {
+        "title": "古道叙事境",
+        "summary": "修复古道节点、驿站记忆和长寿文化展示，形成慢行游线、声音导览和文化研学入口。",
+        "cta": "下一步开放详情",
+        "titleImageAlt": "山岭古道与清晨光线中的行旅场景"
+      },
+      "lycheeField": {
+        "title": "荔田共生境",
+        "summary": "围绕荔枝种植、采摘、加工、食育、认养和节庆活动，把一棵树延展成一桌宴。",
+        "cta": "查看认养预告",
+        "titleImageAlt": "走马村果林与田园肌理"
+      },
+      "resilienceValley": {
+        "title": "韧谷研学境",
+        "summary": "把龙溪河、山谷雨洪、湿地净化和水电记忆转化为生态修复、自然观察和水安全教育。",
+        "cta": "查看天气提示",
+        "titleImageAlt": "水岸、院落和山谷形成的韧性生态场景"
+      },
+      "ridgeDwelling": {
+        "title": "岭上共居境",
+        "summary": "通过绿色建筑改造、院落更新和公共空间补足，承载民宿、乡创、工坊和村民共享生活。",
+        "cta": "查看院落预告",
+        "titleImageAlt": "岭上院落与庭院中的乡村共居场景"
+      }
+    },
+    "mapGateway": {
+      "eyebrow": "四境空间",
+      "title": "选择你的探索方向",
+      "description": "在地图上进入四种乡村体验。点击境域多边形或下方入口，即可继续查看场景、路线、预约与认养内容。",
+      "mapAria": "走马村四境互动地图",
+      "legendAria": "四境场景入口",
+      "locationLabel": "重庆市长寿区走马村",
+      "anchorHint": "指路碑、古树与药铺合院",
+      "provider": {
+        "loading": "地图加载中",
+        "amap": "高德卫星图",
+        "leaflet": "Leaflet 地图"
+      },
+      "anchors": {
+        "milestone": "光绪指路碑",
+        "ancientTree": "古荔枝树",
+        "courtyard": "药铺合院"
+      }
+    },
+    "booking": {
+      "eyebrow": "Courtyard Preview",
+      "title": "院落预约先从可理解的入住入口开始",
+      "body": "首页先展示院落资源、入住提示和库存接入位置。下一阶段后，将补齐日历、人数、预订须知和订单确认。",
+      "status": "预约流程将在院落预约阶段开放",
+      "imageAlt": "走马村石头房子和传统院落空间"
+    },
+    "adoption": {
+      "eyebrow": "Tree Adoption Preview",
+      "title": "荔枝树认养要有仪式感，也要有信任感",
+      "body": "认养不是一次购买，而是树档案、养护日志、节气提醒、采摘活动和收获兑现组成的长期关系。",
+      "imageAlt": "走马村荔枝果林与可认养荔枝树",
+      "imageBadge": "一棵树，一段长期关系",
+      "cta": "立即认养一棵树",
+      "ctaHint": "直接进入可认养树木列表，查看树档案、权益和成长记录。",
+      "steps": {
+        "1": {
+          "title": "树档案",
+          "body": "展示树种、树龄、健康状态和模糊位置。"
+        },
+        "2": {
+          "title": "成长记录",
+          "body": "用养护日志记录浇灌、修剪、采摘和照片。"
+        },
+        "3": {
+          "title": "权益兑现",
+          "body": "明确活动参与、收获领取和认养证书。"
+        }
+      }
+    },
+    "deck": {
+      "page1": "项目总览",
+      "page2": "历史纵深",
+      "page3": "四境空间",
+      "page4": "参与方式"
+    }
+  },
+  "booking": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "院落预约阶段"
+    },
+    "hero": {
+      "eyebrow": "Courtyard Booking",
+      "title": "院落预约先把可订、可住、待支付说清楚",
+      "body": "本阶段使用本地结构化库存，不接真实支付。用户可以选择院落、日期、人数和支付方式，生成待支付订单确认。"
+    },
+    "guardrail": {
+      "title": "支付入口待接入",
+      "body": "当前只展示预约确认和待支付状态，不模拟真实扣款；后续接入支付时必须走统一支付单、幂等键和沙箱模式。"
+    },
+    "list": {
+      "eyebrow": "院落列表",
+      "title": "选择一个本次可预约的院落",
+      "body": "院落先按岭上共居、荔田食育和古道驿站三类资源组织，后续再迁移到 /api/v1/courtyards。",
+      "capacity": "可接待人数",
+      "price": "价格提示",
+      "minNights": "最少晚数",
+      "select": "选择院落",
+      "selected": "已选择"
+    },
+    "form": {
+      "eyebrow": "预约信息",
+      "title": "确认日期、人数和支付方式",
+      "dateLabel": "入住或使用日期",
+      "guestsLabel": "到访人数",
+      "guestsValue": "{count} 人",
+      "paymentModeLabel": "支付方式",
+      "confirm": "确认预约",
+      "confirming": "正在生成预约"
+    },
+    "dates": {
+      "jun20": "2026 年 6 月 20 日",
+      "jun21": "2026 年 6 月 21 日",
+      "jun27": "2026 年 6 月 27 日",
+      "jun28": "2026 年 6 月 28 日"
+    },
+    "inventory": {
+      "available": "可订",
+      "limited": "余量紧张",
+      "booked": "已订满",
+      "maintenance": "维护中"
+    },
+    "paymentModes": {
+      "deposit": "定金",
+      "full": "全款"
+    },
+    "summary": {
+      "title": "订单摘要",
+      "courtyard": "院落",
+      "date": "日期",
+      "guests": "人数",
+      "paymentMode": "支付方式"
+    },
+    "notice": {
+      "title": "预订须知",
+      "activitiesTitle": "近期活动",
+      "activitiesEmpty": "暂无该院落近期活动。"
+    },
+    "messages": {
+      "capacityExceeded": "当前人数超过该院落接待上限，请减少人数或选择更大院落。",
+      "submitFailed": "预约提交失败，请稍后重试。"
+    },
+    "order": {
+      "title": "预约已生成",
+      "body": "订单已进入待支付状态。当前支付入口尚未接入，不会发生真实扣款。",
+      "status": "订单状态：待支付",
+      "paymentStatus": "支付状态：待接入支付",
+      "paymentEntry": "支付入口待接入",
+      "idLabel": "订单号",
+      "createdAtLabel": "创建时间"
+    },
+    "courtyards": {
+      "ridgeShared": {
+        "name": "岭上共居院",
+        "summary": "适合小团队住一晚或做半日共创活动，连接村宴、晨间农事和岭上慢行。",
+        "location": "岭上共居境 · 靠近程家湾与涂家湾",
+        "price": "¥680 起",
+        "notice": "建议提前一天确认到达时间；夜宿需携带有效证件，停车后以短程接驳或步行为主。",
+        "imageAlt": "岭上共居院的院落空间"
+      },
+      "lycheeFood": {
+        "name": "荔下共享院",
+        "summary": "面向亲子家庭和食育小组，适合采摘、食育课堂、村宴前置准备和短暂停留。",
+        "location": "荔田共生境 · 靠近荔枝与桂圆果园",
+        "price": "¥298 起",
+        "notice": "食育课程需提前确认物料；雨天保留室内课堂，取消泥地采摘段。",
+        "imageAlt": "荔下共享院和石屋院落"
+      },
+      "ancientStation": {
+        "name": "古道驿站院",
+        "summary": "服务古道轻游、声音导览和茶歇补给，当前处于维护准备状态。",
+        "location": "古道叙事境 · 靠近走马岭古道节点",
+        "price": "待定",
+        "notice": "该院落正在维护准备，暂不开放确认预约；可先选择其他院落。",
+        "imageAlt": "古道驿站院和传统庭院"
+      }
+    },
+    "amenities": {
+      "sharedKitchen": "共享厨房",
+      "courtyardTea": "院落茶歇",
+      "lowCarbonRoom": "低碳客房",
+      "parkingTransfer": "停车接驳",
+      "foodClassroom": "食育课堂",
+      "harvestTable": "采摘餐桌",
+      "familyFriendly": "亲子友好",
+      "rainShelter": "雨天转场",
+      "audioGuide": "声音导览",
+      "teaBreak": "茶歇补给",
+      "lightWalk": "轻体力慢行",
+      "historyWall": "古道故事墙"
+    }
+  },
+  "feedback": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "反馈和后台阶段"
+    },
+    "hero": {
+      "eyebrow": "Feedback",
+      "title": "把现场反馈变成可跟进的运营工单",
+      "body": "本阶段开放前台反馈提交入口，支持分类、紧急程度、满意度和文字说明。提交后会生成工单编号，并进入后台反馈管理列表。"
+    },
+    "guardrail": {
+      "title": "反馈内容会先脱敏",
+      "body": "手机号和精确坐标等敏感信息会在进入工单前做基础遮盖。后续若接入 AI 总结，也必须先通过脱敏与后端模型适配层。"
+    },
+    "form": {
+      "eyebrow": "提交反馈",
+      "title": "告诉我们这次体验哪里需要跟进",
+      "body": "请尽量描述发生的位置、时间和现象。系统会先生成待处理工单，不会公开展示你的反馈内容。",
+      "categoryLabel": "反馈分类",
+      "severityLabel": "紧急程度",
+      "ratingLabel": "满意度",
+      "ratingAria": "{count} 分满意度",
+      "contentLabel": "反馈内容",
+      "contentPlaceholder": "例如：游客中心到陶家湾停车点的导视不够明显，老人找路时需要工作人员二次说明。",
+      "remaining": "还可输入 {count} 字",
+      "submit": "提交反馈",
+      "submitting": "正在提交"
+    },
+    "categories": {
+      "content": "内容讲解",
+      "service": "服务接待",
+      "facility": "设施导视",
+      "payment": "支付订单",
+      "other": "其他问题"
+    },
+    "severities": {
+      "low": "普通记录",
+      "medium": "需要跟进",
+      "high": "影响体验",
+      "urgent": "现场紧急"
+    },
+    "statuses": {
+      "submitted": "已提交",
+      "assigned": "已分派",
+      "processing": "处理中",
+      "resolved": "已解决",
+      "closed": "已关闭"
+    },
+    "messages": {
+      "contentRequired": "请至少输入 8 个字的反馈内容。",
+      "submitFailed": "反馈暂时没有提交成功，请稍后重试。"
+    },
+    "result": {
+      "title": "提交结果",
+      "body": "提交成功后，这里会显示工单编号和当前状态；后台可继续更新处理记录。",
+      "empty": "填写并提交反馈后，系统会生成一个可跟进的工单。",
+      "success": "反馈已提交",
+      "ticketId": "工单编号",
+      "status": "当前状态"
+    }
+  },
+  "trees": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "荔枝树认养阶段"
+    },
+    "hero": {
+      "eyebrow": "Tree Adoption",
+      "title": "认养不是一次购买，而是一棵树的长期关系",
+      "body": "本阶段展示可认养树列表、树档案、认养协议、权益说明和成长记录。支付只保留待接入入口，不发生真实扣款。"
+    },
+    "guardrail": {
+      "locationTitle": "只展示模糊位置",
+      "locationBody": "树档案不公开精确 GPS，只展示果园片区和相对方位，保护果园经营安全与用户隐私。",
+      "paymentTitle": "支付入口待接入",
+      "paymentBody": "当前仅生成待支付认养确认。后续接入支付时必须走统一支付单、幂等键和沙箱模式。"
+    },
+    "list": {
+      "eyebrow": "可认养树",
+      "title": "选择一棵有档案和记录的荔枝树",
+      "body": "树档案先用本地结构化数据，后续可迁移到 /api/v1/trees，并与养护日志和证书服务连接。",
+      "species": "树种",
+      "age": "树龄",
+      "ageValue": "{count} 年",
+      "health": "健康状态",
+      "select": "选择认养",
+      "selected": "已选择"
+    },
+    "availability": {
+      "available": "可认养",
+      "limited": "名额紧张",
+      "maintenance": "养护观察中"
+    },
+    "health": {
+      "excellent": "优良",
+      "good": "良好",
+      "fair": "观察中",
+      "poor": "需养护"
+    },
+    "profile": {
+      "eyebrow": "树档案",
+      "planTitle": "认养方案",
+      "selectCta": "选择认养",
+      "fireMemoryTitle": "山火记忆",
+      "fireMemoryEmpty": "运营后台尚未录入山火记忆。",
+      "newShootsTitle": "新梢记录",
+      "newShootsEmpty": "运营后台尚未录入新梢记录。",
+      "growthPhotosTitle": "成长照片",
+      "growthPhotoAlt": "{name} 成长照片 {index}",
+      "growthPhotosEmpty": "暂无成长照片，后台上传后会在这里展示。",
+      "fruitDestinationTitle": "果实去向",
+      "fruitDestinationFallback": "运营后台已记录本次采摘果实去向。",
+      "fruitDestinationEmpty": "暂无果实去向记录，采摘完成后可在后台补充。",
+      "careLogsEmpty": "暂无养护日志，后台录入后会按时间倒序显示。"
+    },
+    "experience": {
+      "environment": {
+        "eyebrow": "果园微气候",
+        "title": "树下环境",
+        "description": "优先读取 LoRa 传感数据；断线或维护时切换为当季历史气候基准值。",
+        "status": {
+          "loading": "读取传感数据",
+          "active": "LoRa 实时",
+          "warning": "传感断线",
+          "inactive": "设备维护中"
+        },
+        "metrics": {
+          "soilMoisture": "土壤水分",
+          "airHumidity": "空气湿度",
+          "lightIntensity": "光照强度"
+        },
+        "progressAria": "{label}指标进度",
+        "baselineNote": "当前显示走马村当季历史气候基准值，传感恢复后会自动切回实时数据。",
+        "inactiveNote": "设备正在维护，指标暂以历史基准灰显。"
+      },
+      "rights": {
+        "eyebrow": "Adoption Rights",
+        "title": "本次认养权益",
+        "description": "权益随认养状态动态解锁，收获、到访、树牌与配送均保留明确兑现入口。",
+        "state": {
+          "unlocked": "已生效",
+          "locked": "待支付",
+          "preview": "权益预览"
+        },
+        "cards": {
+          "harvestQuota": {
+            "title": "最低产量保障",
+            "body": "本周期保障 {quota} 收获额度或等值农产品。"
+          },
+          "onsiteBooking": {
+            "title": "实地采摘预约",
+            "body": "采收季可优先选择到村采摘时段。"
+          },
+          "nameplate": {
+            "title": "专属树牌定制",
+            "body": "为认养树生成专属姓名与祝福树牌。"
+          },
+          "coldChain": {
+            "title": "冷链包邮",
+            "body": "无法到村时可选择采摘后冷链配送。"
+          }
+        },
+        "lockedNote": "完成支付后，四项权益会自动高亮并进入可使用状态。",
+        "previewNote": "完成认养后即可按所选方案解锁对应权益。"
+      },
+      "growth": {
+        "eyebrow": "Growth Timeline",
+        "title": "一颗荔枝的生长旅程",
+        "description": "横向滑动选择生长节点，查看花期、挂果、转熟与采收的阶段变化。",
+        "timelineAria": "荔枝生长阶段",
+        "stages": {
+          "flowering": {
+            "label": "花期",
+            "body": "花序展开，等待授粉。",
+            "detail": "花期重点观察温湿度与降雨，保持树冠通风，减少花序损伤。"
+          },
+          "fruiting": {
+            "label": "挂果",
+            "body": "幼果形成，进入稳果期。",
+            "detail": "挂果期记录幼果密度与枝条承载，结合土壤水分安排精细养护。"
+          },
+          "ripening": {
+            "label": "转熟",
+            "body": "果皮着色，糖度累积。",
+            "detail": "转熟期持续观察光照、果色和天气，准备采收预约与品质记录。"
+          },
+          "harvest": {
+            "label": "采收",
+            "body": "成熟采摘，兑现权益。",
+            "detail": "按预约时段采收并记录果实去向，可到村体验或选择冷链配送。"
+          }
+        }
+      }
+    },
+    "plans": {
+      "seasonal": {
+        "label": "一季认养",
+        "body": "适合首次体验，包含阶段性成长记录和一次收获权益。"
+      },
+      "annual": {
+        "label": "全年认养",
+        "body": "适合长期陪伴，覆盖节气提醒、养护更新、活动和证书。"
+      }
+    },
+    "rights": {
+      "title": "权益说明",
+      "harvestBox": "季节收获礼盒或等值农产品权益",
+      "careUpdates": "节气养护记录和照片更新",
+      "certificate": "电子认养证书",
+      "farmEvent": "优先参与采摘或养护活动",
+      "familyClass": "亲子食育课堂优先名额"
+    },
+    "timeline": {
+      "title": "成长记录",
+      "spring": {
+        "date": "2026 年 3 月",
+        "title": "春梢观察",
+        "body": "新梢抽发稳定，叶色均匀，进入春季巡护记录。"
+      },
+      "pruning": {
+        "date": "2026 年 4 月",
+        "title": "轻修剪",
+        "body": "完成通风枝整理，保留树冠形态，不做过度修剪。"
+      },
+      "photo": {
+        "date": "2026 年 6 月",
+        "title": "档案照片更新",
+        "body": "补充树冠、树干和果园片区照片，用于后续认养证书。"
+      },
+      "flower": {
+        "date": "2026 年 4 月",
+        "title": "花期观察",
+        "body": "花序状态良好，适合亲子课堂讲解荔枝生长节律。"
+      },
+      "care": {
+        "date": "2026 年 5 月",
+        "title": "养护观察",
+        "body": "进入养护观察期，暂缓开放认养确认。"
+      },
+      "note": {
+        "date": "2026 年 6 月",
+        "title": "维护备注",
+        "body": "建议完成下一次专业复核后再开放认养。"
+      }
+    },
+    "agreement": {
+      "title": "认养协议确认",
+      "body": "我已了解认养权益、养护更新频率、收获兑现方式和支付待接入状态。"
+    },
+    "messages": {
+      "unavailable": "当前树木暂不开放确认认养，可选择其他可认养树。",
+      "needAgreement": "请先确认认养协议，再生成认养订单。",
+      "submitFailed": "认养提交失败，请稍后重试。"
+    },
+    "form": {
+      "confirm": "确认认养",
+      "confirming": "正在生成认养单"
+    },
+    "order": {
+      "title": "认养已生成",
+      "body": "认养订单已进入待支付状态。当前支付入口尚未接入，不会发生真实扣款。",
+      "status": "订单状态：待支付",
+      "paymentStatus": "支付状态：待接入支付",
+      "paymentEntry": "支付入口待接入",
+      "idLabel": "认养单号",
+      "createdAtLabel": "创建时间"
+    },
+    "trees": {
+      "lz018": {
+        "name": "云荔 018 号",
+        "species": "妃子笑荔枝",
+        "summary": "树势稳定、结果记录完整，适合作为首批认养样板树。",
+        "location": "荔田共生境北侧果园片区，靠近村道但不展示精确坐标。",
+        "imageAlt": "云荔 018 号十二年生妃子笑荔枝树",
+        "prices": {
+          "seasonal": "¥399",
+          "annual": "¥999"
+        }
+      },
+      "lz026": {
+        "name": "云荔 026 号",
+        "species": "桂味荔枝",
+        "summary": "适合亲子认养和食育课堂联动，名额较少。",
+        "location": "荔田共生境中部果园片区，靠近食育课堂动线。",
+        "imageAlt": "云荔 026 号八年生桂味荔枝树",
+        "prices": {
+          "seasonal": "¥359",
+          "annual": "¥899"
+        }
+      },
+      "lz041": {
+        "name": "云荔 041 号",
+        "species": "老树荔枝",
+        "summary": "树龄较高，当前以养护观察和记录展示为主。",
+        "location": "荔田共生境南侧老树片区，坐标仅作内部养护使用。",
+        "imageAlt": "云荔 041 号二十三年生养护观察老荔枝树",
+        "prices": {
+          "seasonal": "待定",
+          "annual": "待定"
+        }
+      }
+    },
+    "shipment": {
+      "title": "代摘代寄",
+      "body": "可在树档案页提交代摘时间和收货信息。前台展示物流时会自动脱敏手机号和地址。",
+      "enableLabel": "需要代摘并寄送果实",
+      "dateLabel": "采摘日期",
+      "timeSlotLabel": "时间段",
+      "guestCountLabel": "采摘人数",
+      "recipientNameLabel": "收件人",
+      "recipientPhoneLabel": "手机号",
+      "recipientAddressLabel": "收货地址",
+      "submit": "提交代摘代寄",
+      "submitting": "提交中",
+      "success": "代摘代寄单已生成，等待后台确认采摘和物流。",
+      "failed": "提交失败，请检查信息后重试。",
+      "destination": "代摘代寄",
+      "destinationNote": "游客在树档案页选择代摘代寄，果实寄往填写地址。",
+      "statusTitle": "物流状态",
+      "courier": "快递公司",
+      "trackingNumber": "快递单号",
+      "statuses": {
+        "pending": "待处理",
+        "picking": "采摘中",
+        "shipping": "寄送中",
+        "delivered": "已送达"
+      }
+    }
+  },
+  "tickets": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "门票预购 MVP"
+    },
+    "hero": {
+      "eyebrow": "Tickets",
+      "title": "门票和活动先做可预购的产品占位",
+      "body": "本阶段不接真实支付，先展示门票、食育课和研学工坊的产品结构，后续接入票务库存与统一支付单。"
+    },
+    "card": {
+      "price": "预购价格",
+      "stock": "名额状态",
+      "pendingPayment": "支付入口待接入"
+    },
+    "notice": {
+      "title": "预购说明",
+      "body": "当前仅展示产品和待支付入口，不生成真实票务核销码。后续接入 /api/v1/tickets/products 与 /api/v1/ticket-orders。"
+    },
+    "products": {
+      "ancientRoad": {
+        "scene": "古道叙事境",
+        "name": "古道声音导览票",
+        "summary": "包含古道节点讲解、茶歇预留和轻量导览设备占位。",
+        "price": "¥39 起",
+        "stock": "每日 40 个名额"
+      },
+      "lycheeClass": {
+        "scene": "荔田共生境",
+        "name": "亲子荔枝食育课",
+        "summary": "围绕果树档案、采摘知识和小型加工体验组织。",
+        "price": "¥98 起",
+        "stock": "周末余量紧张"
+      },
+      "resilienceWorkshop": {
+        "scene": "韧谷研学境",
+        "name": "雨洪韧性工坊",
+        "summary": "面向研学团队的水安全和生态修复课程。",
+        "price": "¥128 起",
+        "stock": "团队预约制"
+      }
+    },
+    "list": {
+      "eyebrow": "可预购产品",
+      "title": "选择门票或活动",
+      "body": "当前为产品占位，后续接入真实库存与核销码。",
+      "select": "选择预购",
+      "selected": "已选择"
+    },
+    "form": {
+      "eyebrow": "预购信息",
+      "title": "选择日期和数量",
+      "dateLabel": "日期",
+      "quantityLabel": "数量",
+      "quantityValue": "{count} 张",
+      "confirm": "确认预购",
+      "confirming": "正在生成预购单"
+    },
+    "summary": {
+      "title": "订单摘要",
+      "product": "产品",
+      "date": "日期",
+      "quantity": "数量"
+    },
+    "order": {
+      "title": "预购已生成",
+      "body": "门票预购订单已进入待支付状态。当前支付尚未接入。",
+      "status": "订单状态：待支付",
+      "paymentEntry": "支付入口待接入",
+      "idLabel": "订单编号"
+    },
+    "messages": {
+      "submitFailed": "预购提交失败，请重试"
+    },
+    "dates": {
+      "jun21": "2026 年 6 月 21 日",
+      "jun28": "2026 年 6 月 28 日",
+      "jul05": "2026 年 7 月 5 日"
+    }
+  },
+  "me": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "个人中心 MVP"
+    },
+    "hero": {
+      "eyebrow": "Member Center",
+      "title": "个人中心先展示订单列表占位",
+      "body": "这里聚合院落预约、树木认养和票务活动订单。登录、实名和支付记录将在后续后端阶段接入。"
+    },
+    "orders": {
+      "booking": {
+        "type": "院落预约",
+        "title": "岭上共居院 · 待支付",
+        "status": "待接入支付",
+        "date": "2026 年 6 月 20 日"
+      },
+      "tree": {
+        "type": "树木认养",
+        "title": "云荔 018 号 · 一季认养",
+        "status": "待支付",
+        "date": "2026 年 6 月 12 日"
+      },
+      "ticket": {
+        "type": "活动票务",
+        "title": "雨洪韧性工坊 · 预购占位",
+        "status": "未核销",
+        "date": "待确认"
+      }
+    },
+    "reminder": {
+      "title": "荔枝采摘季提醒",
+      "body": "当前采用站内横幅提醒替代在线推送。认养用户可在采摘季前查看养护日志、活动预约和线下核销说明。"
+    },
+    "lookup": {
+      "title": "我的认养",
+      "initialMessage": "输入认养时预留的手机号，系统会按脱敏号码查询。",
+      "found": "已找到认养记录。",
+      "empty": "暂无匹配认养记录。",
+      "failed": "查询失败，请稍后重试。",
+      "phonePlaceholder": "请输入手机号",
+      "loading": "查询中",
+      "submit": "查询认养",
+      "tree": "树木",
+      "plan": "方案",
+      "status": "状态",
+      "noShipment": "暂无代摘物流。",
+      "shipmentTitle": "代摘物流",
+      "signed": "已签收",
+      "harvestBooking": "采摘预约：{date} / {status}",
+      "steps": {
+        "pending": "待采摘",
+        "picking": "采摘中",
+        "shipping": "运输中",
+        "delivered": "已送达"
+      }
+    }
+  },
+  "privacy": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "隐私中心 MVP"
+    },
+    "hero": {
+      "eyebrow": "Privacy",
+      "title": "隐私中心先展示授权项占位",
+      "body": "当前用于展示隐私政策、数据采集和 AI 处理授权结构。后续接入 consent_record 后可支持授权和撤回。"
+    },
+    "items": {
+      "policy": {
+        "title": "隐私政策",
+        "body": "展示当前隐私政策版本和用户确认状态。",
+        "status": "已确认"
+      },
+      "data": {
+        "title": "数据采集",
+        "body": "说明行程偏好、预约信息和反馈内容的采集范围。",
+        "status": "可管理"
+      },
+      "ai": {
+        "title": "AI 处理",
+        "body": "路线生成和反馈总结前必须完成脱敏处理。",
+        "status": "默认关闭"
+      },
+      "location": {
+        "title": "位置信息",
+        "body": "路线和树档案只使用区域级位置，精确坐标不会进入外部 AI 服务。",
+        "status": "可撤回"
+      }
+    }
+  },
+  "routes": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "路线生成阶段"
+    },
+    "hero": {
+      "eyebrow": "Route Generator",
+      "title": "按时长、人群和天气生成可解释游线",
+      "body": "第一版采用规则模拟，不调用真实 AI 或地图 API。路线结果会说明总时长、步行强度、天气策略、预约节点和雨天备选。",
+      "summaryTime": "预计浏览 3 分钟",
+      "summaryLocation": "重庆长寿区 · 走马村"
+    },
+    "form": {
+      "eyebrow": "输入条件",
+      "title": "告诉系统这次怎么走",
+      "body": "结合你提供的规划范围图和卫星地图，先用模板规则生成适合 MVP 的路线卡。",
+      "durationLabel": "游览时长",
+      "durationOptions": {
+        "halfDay": "半日",
+        "oneDay": "一日",
+        "twoDays": "两日"
+      },
+      "audienceLabel": "人群类型",
+      "audienceOptions": {
+        "senior": "老人友好",
+        "family": "亲子家庭",
+        "regular": "普通游客"
+      },
+      "weatherLabel": "天气偏好",
+      "weatherOptions": {
+        "sunny": "晴天",
+        "rainy": "雨天",
+        "hot": "高温"
+      },
+      "ruleTitle": "通过后端模型适配层生成",
+      "ruleBody": "前端只提交时长、人群和天气标签到 /api/v1/routes/generate；后端通过 ModelProviderAdapter 调用 DeepSeek 模型返回推荐路线。",
+      "generate": "生成路线",
+      "generating": "正在生成"
+    },
+    "map": {
+      "eyebrow": "地图底图",
+      "title": "范围图与卫星图对照",
+      "scope": "范围图",
+      "satellite": "卫星图",
+      "scopeAlt": "走马村规划范围、现状道路、新建道路和停车设施示意图",
+      "satelliteAlt": "走马村周边卫星地图"
+    },
+    "result": {
+      "eyebrow": "推荐结果",
+      "totalTime": "总时长",
+      "mobility": "步行强度",
+      "weather": "天气策略",
+      "waypoints": "路线节点",
+      "reservationNodes": "需提前预约",
+      "fallback": "雨天备选",
+      "notice": "出行提示",
+      "bookingCta": "查看可预约节点",
+      "provider": "生成来源：{provider}",
+      "providerFallback": "AI 调用暂不可用，已临时切换为本地推荐路线",
+      "providerOnline": "AI 推荐 · {provider}",
+      "providerPreview": "AI 已接入，点击生成路线获取模型推荐"
+    },
+    "waypoints": {
+      "visitorCenter": "游客中心",
+      "taojiawan": "陶家湾停车点",
+      "ancientRoad": "走马岭古道",
+      "lycheeGarden": "荔枝与桂圆果园",
+      "waterfrontRest": "龙溪水岸休憩点",
+      "foodClassroom": "荔下共享院食育课堂",
+      "treeAdoption": "数字果树认养点",
+      "resilienceWorkshop": "龙溪韧性工坊",
+      "ridgeCourtyard": "岭上共居院",
+      "indoorStory": "室内古道故事点",
+      "shadedAncientRoad": "树荫古道短线",
+      "villageMeal": "村宴与农产品展销点",
+      "morningFarm": "晨间农事体验点",
+      "xikouStation": "溪口驿站",
+      "lingwangTeaRoom": "岭望茶室",
+      "fengwangTeaRoom": "峰望茶室",
+      "lijingCoCreationCenter": "荔晶共创中心",
+      "zoumaCultureCenter": "走马文化中心",
+      "zoumaStation": "走马驿站",
+      "integratedServiceCenter": "综合服务中心",
+      "researchCenter": "研学中心",
+      "ecologicalDemoCenter": "生态示范中心",
+      "ecologicalRestaurant": "生态餐厅",
+      "ancientLycheePavilion": "古荔亭",
+      "experienceField": "体验田",
+      "tianyuanExperiencePoint": "田园体验点",
+      "camp": "营地",
+      "homestay": "民宿",
+      "viewingPlatform": "观景台",
+      "researchWorkshop": "研学工坊",
+      "studyHomestay": "研学民宿",
+      "studyNode": "研学",
+      "homestayCluster": "民宿组团"
+    },
+    "reservationNodes": {
+      "audioGuide": "声音导览设备",
+      "shuttle": "接驳或短程代步",
+      "foodClass": "亲子食育课程",
+      "treeAdoption": "荔枝树认养名额",
+      "villageMeal": "村宴席位",
+      "courtyardTea": "院落茶歇",
+      "indoorWorkshop": "室内研学工坊",
+      "rainGear": "雨具与防滑提示",
+      "coolRest": "避暑休息点",
+      "courtyardStay": "岭上院落住宿",
+      "xikouParking": "溪口驿站集散与停车",
+      "teaRoom": "岭望茶室接待",
+      "lycheeWorkshop": "荔枝加工与认养讲解",
+      "serviceCenterMeal": "综合服务中心餐厅席位",
+      "serviceCenterStay": "综合服务中心住宿与停车",
+      "researchWorkshop": "研学中心课程与工坊"
+    },
+    "plans": {
+      "gentleAncientRoad": {
+        "title": "老人友好古道轻游",
+        "summary": "从游客中心进入，控制坡度和步行距离，重点体验古道叙事、陶家湾节点和水岸休憩。",
+        "totalTime": "2.5 小时",
+        "mobility": "低强度",
+        "weather": "晴天优先",
+        "rainFallback": "如遇降雨，缩短古道段，转入室内故事点和院落茶歇。",
+        "notice": "建议避开正午时段，优先选择陶家湾或游客中心附近停车点。"
+      },
+      "familyLycheeClass": {
+        "title": "亲子荔田食育线",
+        "summary": "围绕荔枝果园、食育课堂和认养入口组织，减少长距离爬坡，适合带娃家庭。",
+        "totalTime": "3 小时",
+        "mobility": "低到中",
+        "weather": "晴天友好",
+        "rainFallback": "雨天保留食育课堂和树档案讲解，取消泥地采摘段。",
+        "notice": "建议提前预约食育课程和认养讲解，儿童需避开水岸边界。"
+      },
+      "regularFourRealms": {
+        "title": "四境一日串联线",
+        "summary": "从古道、荔田、水岸到岭上院落完整串联，适合普通游客第一次系统理解走马村。",
+        "totalTime": "6 小时",
+        "mobility": "中强度",
+        "weather": "晴天最佳",
+        "rainFallback": "雨天改为古道短线、食育课堂、韧性工坊和院落停留。",
+        "notice": "一日线跨越节点较多，建议预留午餐和院落休息时间。"
+      },
+      "rainStudyRoute": {
+        "title": "雨天韧谷研学线",
+        "summary": "以韧性工坊、食育课堂和室内古道故事为主，降低湿滑路段风险。",
+        "totalTime": "2.5 小时",
+        "mobility": "低强度",
+        "weather": "雨天降级",
+        "rainFallback": "若出现强降雨或预警，仅保留游客中心和室内工坊。",
+        "notice": "雨天不建议进入临水边界和未铺装坡道，优先使用停车点接驳。"
+      },
+      "hotLowRiskRoute": {
+        "title": "高温低风险短线",
+        "summary": "选择树荫、院落和水岸休息点，压缩暴晒路段，适合老人或体力较弱游客。",
+        "totalTime": "2 小时",
+        "mobility": "低强度",
+        "weather": "高温避晒",
+        "rainFallback": "如高温后遇阵雨，转入院落茶歇和室内讲解。",
+        "notice": "高温时段建议上午或傍晚出行，补水点和休息点优先。"
+      },
+      "twoDayCourtyard": {
+        "title": "两日岭上共居线",
+        "summary": "第一天完成四境主线和村宴，夜宿岭上院落；第二天做晨间农事和韧谷研学。",
+        "totalTime": "2 天",
+        "mobility": "中强度",
+        "weather": "晴天最佳",
+        "rainFallback": "雨天保留院落、村宴、工坊和室内课程，取消长距离山地慢行。",
+        "notice": "需提前锁定院落住宿、村宴和第二天研学课程名额。"
+      },
+      "narrativeSixStops": {
+        "title": "六站叙事联动线",
+        "summary": "串联游客中心、古道、荔田、水岸、岭上院落和韧性工坊的完整叙事路线。",
+        "totalTime": "5.5 小时",
+        "mobility": "中等强度",
+        "weather": "晴天最佳",
+        "rainFallback": "雨天缩短水岸停留，把更多时间转入室内工坊和院落茶歇。",
+        "notice": "建议提前预留午餐、工坊和院落接待名额。"
+      }
+    }
+  },
+  "scenes": {
+    "detail": {
+      "backHome": "返回首页",
+      "ruleTitle": "内容边界",
+      "ruleBody": "本页只使用已整理的项目资料与概念文本，不编造历史，不替代后续实地核验。后续 AI 讲解必须绑定来源、更新时间和置信度。",
+      "nextTitle": "下一步体验",
+      "nextBody": "四境页面先完成结构化内容和行动入口，后续阶段会继续接入路线生成、预约、认养和反馈闭环。"
+    },
+    "ancientRoad": {
+      "eyebrow": "古道 · 驿站 · 长寿文化",
+      "title": "古道叙事境",
+      "summary": "把走马岭古道从零散遗存转译为可行走、可讲述、可传播的长寿文化线路。",
+      "imageAlt": "走马岭古道与山地行旅场景",
+      "tags": {
+        "heritage": "遗存保护",
+        "walk": "慢行游线",
+        "audio": "声音导览"
+      },
+      "metrics": {
+        "length": {
+          "value": "约 670m",
+          "label": "现存古道线索"
+        },
+        "nodes": {
+          "value": "3 类",
+          "label": "古道、古泉、驿站节点"
+        },
+        "audience": {
+          "value": "轻体力",
+          "label": "适合首次到访"
+        }
+      },
+      "blocks": {
+        "story": {
+          "title": "让历史成为可行走的空间",
+          "body": "围绕古道、驿站、指路碑、古泉和长寿文化建立统一解说体系，把交通记忆转化为游客能理解的行走顺序。"
+        },
+        "experience": {
+          "title": "叙事不只停留在展板",
+          "body": "页面后续会承接声音导览、AI 摘要、研学问题卡和预约节点，让游客从看介绍进入现场行动。"
+        },
+        "operation": {
+          "title": "低干预更新优先",
+          "body": "古道节点以小修小补、边界保护、安全提示和村民生活继续在场为原则，不做脱离真实村落的仿古包装。"
+        }
+      },
+      "ctas": {
+        "route": "生成古道路线",
+        "booking": "查看附近院落"
+      }
+    },
+    "lycheeField": {
+      "eyebrow": "荔枝 · 食育 · 认养",
+      "title": "荔田共生境",
+      "summary": "把荔枝从单一农产品升级为可认养、可采摘、可加工、可食育、可复访的乡村产业入口。",
+      "imageAlt": "走马村荔枝果林与田园肌理",
+      "tags": {
+        "adoption": "数字树档案",
+        "food": "食育工坊",
+        "festival": "节气活动"
+      },
+      "metrics": {
+        "tree": {
+          "value": "一棵树",
+          "label": "认养关系起点"
+        },
+        "season": {
+          "value": "四时",
+          "label": "农事与节庆节奏"
+        },
+        "family": {
+          "value": "亲子友好",
+          "label": "采摘与食育适配"
+        }
+      },
+      "blocks": {
+        "tree": {
+          "title": "从一棵树建立长期关系",
+          "body": "认养页面后续会展示树种、树龄、健康状态、模糊位置、养护日志和证书权益，让信任可追踪。"
+        },
+        "table": {
+          "title": "从一棵树到一桌宴",
+          "body": "荔枝采摘、加工、饮品、伴手礼、村宴和亲子课程共同形成可购买、可参与、可传播的体验链路。"
+        },
+        "trust": {
+          "title": "权益兑现要清楚",
+          "body": "认养不是一次性购买，必须明确活动参与、收获领取、物流回传和养护更新频率。"
+        }
+      },
+      "ctas": {
+        "adoption": "进入认养预告",
+        "route": "生成亲子路线"
+      }
+    },
+    "resilienceValley": {
+      "eyebrow": "龙溪水脉 · 雨洪 · 研学",
+      "title": "韧谷研学境",
+      "summary": "把水系从被动治理对象转化为韧性生态廊道、亲水体验带和自然课堂。",
+      "imageAlt": "龙溪水脉、山谷和生态工坊场景",
+      "tags": {
+        "water": "水系修复",
+        "study": "自然观察",
+        "weather": "雨天降级"
+      },
+      "metrics": {
+        "system": {
+          "value": "6 类",
+          "label": "屋面、院坝、田坎、塘体、湿地、河岸"
+        },
+        "safety": {
+          "value": "预警优先",
+          "label": "雨天与高温提示"
+        },
+        "course": {
+          "value": "研学友好",
+          "label": "水安全与生态课程"
+        }
+      },
+      "blocks": {
+        "water": {
+          "title": "生态织补是底盘",
+          "body": "雨水花园、生态沟渠、塘体净化、湿地缓冲和河岸整理共同构成可维护的韧性水系统。"
+        },
+        "learning": {
+          "title": "把治理转成课程",
+          "body": "水位、水质、雨洪路径和水电记忆可转译为自然观察、水安全教育和生态工坊内容。"
+        },
+        "weather": {
+          "title": "路线必须响应天气",
+          "body": "后续路线生成会根据降雨、高温和预警自动降低风险，提示老人、亲子和普通游客的不同选择。"
+        }
+      },
+      "ctas": {
+        "route": "生成雨天路线",
+        "feedback": "提交现场反馈"
+      }
+    },
+    "ridgeDwelling": {
+      "eyebrow": "岭上院落 · 民宿 · 共创生活",
+      "title": "岭上共居境",
+      "summary": "让闲置院落重新承载村民生活、游客停留、青年创业和低碳乡村运营。",
+      "imageAlt": "岭上院落、庭院和乡村共居场景",
+      "tags": {
+        "stay": "院落停留",
+        "lowCarbon": "绿色改造",
+        "shared": "村民共享"
+      },
+      "metrics": {
+        "courtyard": {
+          "value": "多院",
+          "label": "分布式运营单元"
+        },
+        "stay": {
+          "value": "半日到两日",
+          "label": "不同停留产品"
+        },
+        "community": {
+          "value": "共益",
+          "label": "房屋入股与运营分成预留"
+        }
+      },
+      "blocks": {
+        "renovation": {
+          "title": "低干预更新",
+          "body": "保留坡屋顶、石基、灰瓦、院坝和田坎肌理，以安全修缮、自然通风和雨水回用提升使用价值。"
+        },
+        "life": {
+          "title": "院落不是景观背景",
+          "body": "民宿、研学工坊、共享厨房、村民活动室和农产品展销应共同服务真实生活和游客停留。"
+        },
+        "operation": {
+          "title": "从可订到可复访",
+          "body": "后续院落预约会接入日历库存、入住须知、订单确认和支付入口，避免只做展示页。"
+        }
+      },
+      "ctas": {
+        "booking": "查看院落预约",
+        "route": "生成两日路线"
+      }
+    }
+  },
+  "products": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "农产品 MVP"
+    },
+    "hero": {
+      "eyebrow": "Products",
+      "title": "把村庄产品变成可浏览、可复访的订单入口",
+      "body": "当前不接真实支付。游客可选择农产品、伴手礼或村宴服务，留下联系方式并生成线下确认订单。"
+    },
+    "list": {
+      "eyebrow": "农产品列表",
+      "title": "选择农产品或村宴服务",
+      "body": "产品来自后台 Product 表，可关联消费节点；未填写价格的产品显示为面议。",
+      "select": "选择",
+      "selected": "已选择",
+      "negotiable": "面议"
+    },
+    "form": {
+      "eyebrow": "订单信息",
+      "title": "填写线下确认信息",
+      "nameLabel": "联系人",
+      "phoneLabel": "联系电话",
+      "quantityLabel": "数量",
+      "quantityValue": "{count} 件",
+      "confirm": "生成线下订单",
+      "submitting": "正在生成"
+    },
+    "summary": {
+      "title": "订单摘要",
+      "product": "产品",
+      "quantity": "数量",
+      "amount": "金额"
+    },
+    "notice": {
+      "title": "预订说明",
+      "body": "该订单仅进入线下确认状态，不会发生真实支付。运营人员可在后台订单中继续处理。"
+    },
+    "order": {
+      "title": "订单已生成",
+      "body": "农产品订单已进入线下确认状态。",
+      "status": "订单状态：待线下确认",
+      "idLabel": "订单编号"
+    },
+    "messages": {
+      "loading": "正在加载产品",
+      "loadFailed": "产品暂时不可用",
+      "demoFallback": "真实产品数据暂为空，已切换为降级演示数据。",
+      "contactRequired": "请填写联系人和联系电话",
+      "submitFailed": "订单提交失败，请重试"
+    }
+  },
+  "calendar": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "农事日历 MVP"
+    },
+    "hero": {
+      "eyebrow": "Farming Calendar",
+      "title": "按节气看见走马村的农事节奏",
+      "body": "从修剪、施肥、采摘到加工和节庆，把荔枝果园的农事节奏、农产品和村宴服务整合成一条可查看、可预订的体验线。",
+      "summaryTime": "预计浏览 3 分钟",
+      "summaryLocation": "重庆长寿区 · 走马村"
+    },
+    "filters": {
+      "title": "筛选",
+      "all": "全部",
+      "activityType": "农事类型",
+      "status": "状态",
+      "treeSpecies": "树种"
+    },
+    "timeline": {
+      "title": "节气时间线"
+    },
+    "activityTypes": {
+      "planting": "栽种",
+      "pruning": "修剪",
+      "fertilizing": "施肥",
+      "harvesting": "采摘",
+      "processing": "加工",
+      "festival": "节庆"
+    },
+    "statuses": {
+      "upcoming": "未开始",
+      "active": "进行中",
+      "completed": "已完成"
+    },
+    "species": {
+      "lychee": "荔枝",
+      "longan": "龙眼"
+    },
+    "messages": {
+      "loading": "正在加载农事日历",
+      "empty": "暂无符合条件的农事条目",
+      "demoFallback": "真实农事数据暂为空，已切换为降级演示数据。"
+    }
+  },
+  "activities": {
+    "nav": {
+      "backHome": "返回首页",
+      "phase": "村落活动宣传"
+    },
+    "hero": {
+      "eyebrow": "村落活动",
+      "title": "活动不是单次热闹，而是认养关系的现场化",
+      "body": "从果园采摘、食育课堂、岭上村宴到共居体验，把一棵树延展成可参与、可预约、可复访的村落运营事件。",
+      "summaryTime": "预计浏览 3 分钟",
+      "summaryLocation": "重庆长寿区 · 走马村"
+    },
+    "showcase": {
+      "label": "本期主活动",
+      "name": "荔枝采摘食育节",
+      "date": "6 月下旬 · 果园与岭上院落",
+      "body": "亲子采摘、食育课堂、果实分级、村宴预约和认养树回访共同组成一个周末活动单元。"
+    },
+    "filters": {
+      "title": "筛选活动",
+      "type": "活动类型",
+      "date": "活动日期",
+      "all": "全部类型"
+    },
+    "types": {
+      "village_feast": "岭上村宴",
+      "food_class": "食育课堂",
+      "harvest": "采摘回访",
+      "guided_walk": "古道导览",
+      "study": "研学行程",
+      "workshop": "共创工坊",
+      "exhibition": "展陈导览",
+      "co_living": "共居体验"
+    },
+    "statuses": {
+      "open": "开放预约",
+      "full": "名额已满",
+      "cancelled": "已取消",
+      "draft": "筹备中",
+      "closed": "已结束"
+    },
+    "card": {
+      "capacity": "{booked}/{max} 人",
+      "offlinePrice": "线下确认"
+    },
+    "actions": {
+      "book": "预约活动",
+      "full": "已满",
+      "cancelled": "已取消",
+      "closed": "已结束",
+      "draft": "筹备中"
+    },
+    "form": {
+      "title": "预约信息",
+      "body": "留下联系人后即可为开放活动提交预约，运营端会继续确认人数和现场安排。",
+      "name": "姓名",
+      "phone": "手机号",
+      "guestCount": "参与人数",
+      "guestCountValue": "{count} 人",
+      "noteTitle": "运营提示",
+      "noteBody": "活动预约会进入统一运营后台，后续可生成村民协作任务、通知和现场接待安排。"
+    },
+    "messages": {
+      "bookingFailed": "预约失败，请检查姓名、手机号和人数。",
+      "bookingConfirmed": "活动预约已确认。",
+      "empty": "暂无符合条件的活动",
+      "emptyBody": "可以调整类型或日期，也可以回到本期主活动查看可预约节点。",
+      "demoFallback": "真实活动数据暂为空，已切换为降级演示数据。"
+    },
+    "order": {
+      "title": "预约已生成"
+    }
+  },
+  "villagerSystem": {
+    "common": {
+      "loading": "正在加载",
+      "error": "页面暂时无法显示",
+      "retry": "重新尝试",
+      "refresh": "刷新",
+      "saving": "正在保存"
+    },
+    "nav": {
+      "back": "返回",
+      "dashboard": "仪表盘",
+      "tasks": "任务",
+      "earnings": "收益",
+      "notifications": "通知",
+      "logout": "退出"
+    },
+    "login": {
+      "eyebrow": "村民轻门户",
+      "title": "村民登录",
+      "body": "使用登记手机号获取临时验证码，进入你的任务与收益中心。",
+      "phone": "手机号",
+      "phonePlaceholder": "请输入登记手机号",
+      "otp": "验证码",
+      "otpPlaceholder": "6 位验证码",
+      "request": "获取验证码",
+      "requesting": "正在生成",
+      "verify": "登录",
+      "verifying": "正在验证",
+      "developmentOtp": "演示模式：短信不可用，直接使用验证码 {otp}",
+      "requestError": "未找到匹配的在岗村民",
+      "verifyError": "验证码错误或已过期"
+    },
+    "dashboard": {
+      "eyebrow": "今日协作",
+      "greeting": "你好，{name}",
+      "monthlyCompleted": "本月完成",
+      "monthlyEarnings": "本月收益",
+      "pendingTasks": "待处理",
+      "latestTasks": "最近任务",
+      "latestNotifications": "最新通知"
+    },
+    "tasks": {
+      "eyebrow": "任务协作",
+      "title": "我的任务",
+      "empty": "当前没有任务",
+      "noNode": "未指定节点",
+      "noDescription": "暂无任务说明",
+      "noDeadline": "未设置截止日期",
+      "filters": {
+        "pending": "待接取",
+        "active": "进行中",
+        "completed": "已完成"
+      },
+      "actions": {
+        "pending": "接取任务",
+        "accepted": "开始任务",
+        "in_progress": "完成任务"
+      },
+      "knowledge": {
+        "open": "询问养护规则",
+        "placeholder": "输入与当前任务相关的规则问题",
+        "ask": "发送问题",
+        "asking": "查询中",
+        "failed": "暂时无法查询养护规则"
+      },
+      "evidence": {
+        "title": "提交履约凭证",
+        "help": "至少上传两张能够识别养护对象和操作结果的图片。",
+        "placeholder": "说明实际完成的养护动作",
+        "submit": "提交凭证",
+        "requirements": "请选择至少两张图片并填写养护说明。",
+        "failed": "凭证提交失败，请检查图片后重试。"
+      }
+    },
+    "earnings": {
+      "eyebrow": "劳动收益",
+      "title": "我的收益",
+      "total": "累计收益",
+      "monthly": "本月收益",
+      "trend": "近期收益趋势",
+      "completedTasks": "已完成任务",
+      "empty": "完成任务后，收益记录会显示在这里"
+    },
+    "notifications": {
+      "eyebrow": "消息中心",
+      "title": "我的通知",
+      "markAll": "全部标记为已读",
+      "empty": "暂无通知"
+    },
+    "touristNotifications": {
+      "open": "打开通知中心",
+      "eyebrow": "果园消息",
+      "title": "通知中心",
+      "body": "查看认养树木与活动的最新消息。",
+      "noIdentity": "完成认养、预约或购票并留下手机号后即可查看通知。",
+      "categories": {
+        "all": "全部",
+        "tree": "树木",
+        "activity": "活动"
+      }
+    },
+    "touristIdentity": {
+      "phone": "联系电话",
+      "phonePlaceholder": "请输入 11 位手机号"
+    },
+    "interactions": {
+      "eyebrow": "认养互动",
+      "title": "我的互动",
+      "body": "完成果树互动任务，留下属于你的养护记录。",
+      "empty": "当前没有待完成的互动任务",
+      "notePlaceholder": "可选：记录本次操作",
+      "upload": "拍照并完成",
+      "shareText": "我正在走马村认养果树 {treeCode}，一起见证它的成长。",
+      "points": {
+        "watering": "10 分",
+        "fertilizing": "10 分",
+        "photo_upload": "15 分",
+        "diary": "20 分",
+        "share": "15 分"
+      },
+      "descriptions": {
+        "watering": "为认养果树完成一次浇水",
+        "fertilizing": "记录一次施肥养护",
+        "photo_upload": "上传一张最新成长照片",
+        "diary": "写下本次养护观察",
+        "share": "把果树成长分享给朋友"
+      },
+      "actions": {
+        "watering": "完成浇水",
+        "fertilizing": "完成施肥",
+        "photo_upload": "上传照片",
+        "diary": "提交日记",
+        "share": "复制分享并完成"
+      },
+      "dashboard": {
+        "metaTitle": "互动任务系统｜走马村",
+        "metaDescription": "查看认养果树任务、积分与兑换记录。",
+        "phase": "认养互动",
+        "title": "互动任务系统",
+        "body": "围绕一棵认养树，完成养护任务、记录积分，也把复访关系留在系统里。",
+        "entryTitle": "本月互动任务",
+        "entryBody": "查看进度，快速完成浇水或照片上传。",
+        "currentAdoption": "当前认养",
+        "totalPoints": "可用积分",
+        "availablePoints": "可用积分",
+        "totalEarned": "累计获得",
+        "monthlyProgress": "本月完成",
+        "pending": "待完成",
+        "pointsTitle": "积分中心",
+        "tasksTitle": "养护任务",
+        "viewAll": "进入互动系统",
+        "quickWater": "快速浇水",
+        "quickPhoto": "快速拍照"
+      },
+      "identity": {
+        "title": "识别认养身份",
+        "body": "输入认养时留下的手机号，系统会读取你的 active 认养树和互动任务。",
+        "phone": "认养手机号",
+        "lookup": "查询认养",
+        "adoptCta": "去认养一棵树"
+      },
+      "timeline": {
+        "title": "养护时间线",
+        "empty": "还没有养护记录"
+      },
+      "redemption": {
+        "title": "积分兑换",
+        "empty": "暂无可兑换权益",
+        "redeem": "立即兑换",
+        "success": "兑换已提交",
+        "insufficient": "积分不足"
+      },
+      "season": {
+        "eventTag": "季节限定",
+        "bonusPoints": "额外 +{points} 分",
+        "endsIn": "剩余 {days} 天"
+      },
+      "states": {
+        "loadFailed": "互动数据暂时没有加载成功，请稍后重试。",
+        "noActiveAdoption": "当前手机号没有 active 认养记录。",
+        "lookupFailed": "认养查询失败，请检查手机号后重试。",
+        "completed": "任务已完成，积分已入账。",
+        "uploadFailed": "照片上传或提交失败，请重新选择照片。",
+        "completeFailed": "任务提交失败，请稍后重试。",
+        "demoFallback": "真实互动数据暂为空，已切换为降级演示数据。",
+        "demoNotice": "演示模式：当前任务、积分和兑换仅用于展示完整互动闭环，不会写入真实数据库。",
+        "demoCompleted": "演示任务已完成，积分已在页面内模拟入账。",
+        "done": "已完成"
+      }
+    },
+    "metadata": {
+      "login": {
+        "title": "村民登录｜走马村",
+        "description": "走马村村民轻门户登录"
+      },
+      "dashboard": {
+        "title": "村民仪表盘｜走马村",
+        "description": "查看村民任务、收益与通知"
+      },
+      "tasks": {
+        "title": "村民任务｜走马村",
+        "description": "管理村民任务进度"
+      },
+      "earnings": {
+        "title": "村民收益｜走马村",
+        "description": "查看村民劳动收益"
+      },
+      "notifications": {
+        "title": "村民通知｜走马村",
+        "description": "查看村民任务通知"
+      },
+      "touristNotifications": {
+        "title": "通知中心｜走马村",
+        "description": "查看树木与活动通知"
+      }
+    }
+  }
+}
