@@ -1,6 +1,7 @@
 import { access, readdir, readFile } from "node:fs/promises"
 import { dirname, extname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
+import { inspectDocumentationText } from "./check-docs-language.mjs"
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..")
 const ignoredDirectories = new Set([
@@ -62,6 +63,10 @@ const files = await markdownFiles(repositoryRoot)
 for (const file of files) {
   const markdown = await readFile(file, "utf8")
   const { targets, unclosedFence } = localTargets(markdown)
+  const relativeFile = file.slice(repositoryRoot.length + 1)
+  failures.push(
+    ...inspectDocumentationText({ file: relativeFile, markdown }),
+  )
   if (unclosedFence) failures.push(`${file}: unclosed ${unclosedFence} fence`)
   for (const item of targets) {
     const destination = resolve(dirname(file), item.target)

@@ -10,7 +10,7 @@
     "test": "turbo test",
     "type-check": "turbo type-check",
     "format": "prettier --check .",
-    "docs:check": "node scripts/check-docs.mjs",
+    "docs:check": "node --test scripts/check-docs-language.test.mjs && node scripts/check-docs.mjs",
     "quality:gate": "node scripts/quality-gate.mjs",
     "simulation:run": "pnpm --filter @zouma/simulation cli run --cwd ../..",
     "simulation:regression": "pnpm --filter @zouma/simulation cli regression --cwd ../..",
