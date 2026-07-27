@@ -175,8 +175,8 @@ README 中必须注明模拟系统的边界：
 
 1. **纯文档操作**：只修改 `README.md`，不触碰代码、依赖、配置。
 2. **保留技术信息**：本地启动命令、模拟系统说明、验证步骤必须保留。
-3. **不虚构链接**：如果不知道 Demo 部署地址，用 `<!-- TODO: 填入部署地址 -->` 占位。
-4. **中英双语**：README 标题和关键段落提供中英对照，主体使用中文。
+3. **不虚构链接**：如果 Demo 尚未通过验活，则保持 Website 为空，并在正文说明准入标准。
+4. **中文说明**：README 标题、关键段落和验收说明统一使用中文。
 5. **提交规范**：commit message 使用 `docs: rewrite README with tree adoption narrative`。
 
 ---
@@ -189,7 +189,7 @@ README 中必须注明模拟系统的边界：
 - [ ] 保留 macOS 一键启动说明
 - [ ] 保留模拟系统的边界声明
 - [ ] 保留本地开发启动命令和验证步骤
-- [ ] 不包含虚构的 Demo URL（用 TODO 占位）
+- [ ] 不包含虚构或未经验活的 Demo URL
 - [ ] GitHub About 文案已给出（供手动设置）
 - [ ] 提交信息符合 conventional commits 格式
 - [ ] `pnpm build` 和 `pnpm type-check` 仍通过（文档修改不应影响构建）
