@@ -1,6 +1,6 @@
-# @zouma/contracts
+# `@zouma/contracts` 领域合约
 
-Web、Admin 和共享包之间的 TypeScript 领域合约。内容覆盖场景、订单、认养履约、村民任务、知识回答、模拟系统、设施控制和空间改造。
+Web、Admin 和共享包之间的 TypeScript 领域合约，覆盖场景、订单、认养履约、村民任务、知识回答、模拟系统、设施控制和空间改造。
 
 ```ts
 import type {
@@ -10,7 +10,7 @@ import type {
 } from "@zouma/contracts"
 ```
 
-## Rules
+## 约束
 
 - 合约是跨 workspace 边界，不放运行时副作用。
 - 新字段优先向后兼容；破坏性变更必须同步所有消费者和测试。

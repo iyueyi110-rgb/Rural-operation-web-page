@@ -1,7 +1,7 @@
 ---
-name: Feature request
+name: 功能建议
 about: 提议可验证的新能力
-title: "[Feature] "
+title: "[功能] "
 labels: enhancement
 ---
 

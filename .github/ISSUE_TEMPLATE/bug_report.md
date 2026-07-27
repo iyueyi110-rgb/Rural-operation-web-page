@@ -1,7 +1,7 @@
 ---
-name: Bug report
+name: 缺陷报告
 about: 报告可复现的问题
-title: "[Bug] "
+title: "[缺陷] "
 labels: bug
 ---
 

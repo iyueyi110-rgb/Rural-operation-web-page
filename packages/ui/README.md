@@ -1,4 +1,4 @@
-# @zouma/ui
+# `@zouma/ui` 共享界面组件
 
 Web 与 Admin 共享的轻量 React/Next.js 组件层。
 
@@ -8,7 +8,7 @@ Web 与 Admin 共享的轻量 React/Next.js 组件层。
 import { EmptyState, PageHeader } from "@zouma/ui"
 ```
 
-## Rules
+## 约束
 
 - 组件保持业务无关，领域数据在应用层组装。
 - 保留键盘访问、语义化标签、移动端布局和清晰的空/错/加载状态。

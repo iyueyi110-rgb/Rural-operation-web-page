@@ -6,6 +6,7 @@
 
 ### 产品与业务
 
+- [AI 产品经理招聘证据索引](portfolio/README.md)
 - [产品需求文档](product/PRD.md)
 - [产品定位与设计原则](product/PRODUCT_POSITIONING.md)
 - [项目亮点](product/HIGHLIGHTS.md)
@@ -34,7 +35,7 @@
 - [知识库评测报告](reports/adoption-v2/rag-eval-report.md)
 - [Agent 评测报告](reports/adoption-v2/agent-eval-report.md)
 - [视觉回归报告](reports/adoption-v2/visual-regression-report.md)
-- [私有项目发布检查清单](operations/private-release-checklist.md)
+- [作品集发布检查清单](operations/private-release-checklist.md)
 
 ### 历史材料
 
