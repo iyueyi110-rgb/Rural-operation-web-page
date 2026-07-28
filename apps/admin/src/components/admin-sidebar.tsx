@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { ChevronDown, RefreshCw } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
+import { useAdminAccess } from "@admin/components/admin-access"
 import { adminCopy } from "@admin/lib/admin-copy"
 import {
   adminNavGroups,
@@ -17,6 +18,7 @@ import {
 const defaultOpenGroups: AdminNavGroupKey[] = ["command", "fieldOps"]
 
 export function AdminSidebar({ onRefresh }: { onRefresh?: () => void }) {
+  const { canWrite } = useAdminAccess()
   const pathname = usePathname()
   const activeGroup = getAdminNavGroup(pathname)
   const [openGroups, setOpenGroups] = useState<AdminNavGroupKey[]>(() => [
@@ -51,6 +53,18 @@ export function AdminSidebar({ onRefresh }: { onRefresh?: () => void }) {
           <div className="truncate text-sm font-extrabold">{adminCopy.shell.brand}</div>
           <div className="text-xs font-semibold text-white/52">{adminCopy.shell.subtitle}</div>
         </div>
+      </div>
+
+      {/* 访客模式 / 管理员模式 */}
+      <div className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-white/10 px-3 py-2">
+        <span className="text-xs font-bold text-white/62">
+          {canWrite ? adminCopy.shell.adminMode : adminCopy.shell.guestMode}
+        </span>
+        {!canWrite ? (
+          <Link className="text-xs font-extrabold text-white" href="/login">
+            {adminCopy.shell.adminLogin}
+          </Link>
+        ) : null}
       </div>
 
       <div className="mt-4 grid gap-2 lg:hidden">
