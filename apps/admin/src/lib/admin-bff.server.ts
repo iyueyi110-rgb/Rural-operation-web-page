@@ -3,6 +3,7 @@ import {
   readCookie,
   verifyAdminSession,
 } from "./admin-session.server"
+import { isGuestAdminRequestAllowed } from "./admin-guest-access"
 
 interface AdminBffDependencies {
   sessionSecret: string
@@ -26,12 +27,16 @@ export async function proxyAdminRequest(
   path: string[],
   dependencies: AdminBffDependencies,
 ) {
-  const session = readCookie(
-    request.headers.get("cookie"),
-    ADMIN_SESSION_COOKIE,
-  )
-  if (!(await verifyAdminSession(session, dependencies.sessionSecret))) {
-    return jsonError("Unauthorized", 401)
+  const pathname = `/${path.join("/")}`
+  const guestAllowed = isGuestAdminRequestAllowed(request.method, pathname)
+  if (!guestAllowed) {
+    const session = readCookie(
+      request.headers.get("cookie"),
+      ADMIN_SESSION_COOKIE,
+    )
+    if (!(await verifyAdminSession(session, dependencies.sessionSecret))) {
+      return jsonError("Unauthorized", 401)
+    }
   }
   const origin = request.headers.get("origin")
   if (

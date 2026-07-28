@@ -64,24 +64,97 @@ test("Admin sessions require the server-only password and expire", async () => {
   )
 })
 
-test("unauthenticated BFF requests are rejected without calling Web", async () => {
-  let upstreamCalls = 0
+const guestPostPaths = [
+  ["knowledge", "query"],
+  ["ai", "query"],
+  ["ai", "generate-content"],
+  ["renovation", "run-weekly"],
+  ["infrastructure", "decide"],
+] as const
+
+test("anonymous Admin reads are proxied with the server token", async () => {
+  let upstream: Request | undefined
   const response = await proxyAdminRequest(
-    new Request("http://admin.local/api/admin/simulations/runs"),
-    ["simulations", "runs"],
+    new Request("http://admin.local/api/admin/orders?page=1"),
+    ["orders"],
     {
       sessionSecret: "s".repeat(32),
       webApiBase: "http://web.local/api/v1",
       adminApiToken: "web-service-token",
-      fetcher: async () => {
-        upstreamCalls += 1
-        return new Response("unexpected")
+      fetcher: async (input, init) => {
+        upstream = new Request(input, init)
+        return Response.json({ data: [] })
       },
     },
   )
 
-  assert.equal(response.status, 401)
-  assert.equal(upstreamCalls, 0)
+  assert.equal(response.status, 200)
+  assert.equal(upstream?.headers.get("x-admin-token"), "web-service-token")
+  assert.equal(upstream?.headers.has("cookie"), false)
+})
+
+test("anonymous visitors can call only the five approved POST capabilities", async () => {
+  for (const pathSegments of guestPostPaths) {
+    let upstreamCalls = 0
+    const pathname = pathSegments.join("/")
+    const response = await proxyAdminRequest(
+      new Request(`http://admin.local/api/admin/${pathname}`, {
+        method: "POST",
+        headers: {
+          origin: "http://admin.local",
+          "content-type": "application/json",
+        },
+        body: "{}",
+      }),
+      [...pathSegments],
+      {
+        sessionSecret: "s".repeat(32),
+        webApiBase: "http://web.local/api/v1",
+        adminApiToken: "web-service-token",
+        fetcher: async () => {
+          upstreamCalls += 1
+          return Response.json({ data: {} })
+        },
+      },
+    )
+
+    assert.equal(response.status, 200, pathname)
+    assert.equal(upstreamCalls, 1, pathname)
+  }
+})
+
+test("anonymous write paths outside the exact allowlist are rejected", async () => {
+  for (const pathSegments of [
+    ["ai", "query", "history"],
+    ["knowledge", "escalations"],
+    ["infrastructure", "commands"],
+    ["simulations", "runs"],
+  ]) {
+    let upstreamCalls = 0
+    const response = await proxyAdminRequest(
+      new Request(
+        `http://admin.local/api/admin/${pathSegments.join("/")}`,
+        {
+          method: "POST",
+          headers: { origin: "http://admin.local" },
+          body: "{}",
+        },
+      ),
+      pathSegments,
+      {
+        sessionSecret: "s".repeat(32),
+        webApiBase: "http://web.local/api/v1",
+        adminApiToken: "web-service-token",
+        fetcher: async () => {
+          upstreamCalls += 1
+          return new Response("unexpected")
+        },
+      },
+    )
+
+    assert.equal(response.status, 401, pathSegments.join("/"))
+    assert.equal(upstreamCalls, 0, pathSegments.join("/"))
+  }
 })
 
 test("only the authenticated server proxy adds the Web admin token", async () => {
@@ -183,6 +256,59 @@ test("the BFF rejects cross-origin mutations before forwarding", async () => {
   assert.equal(upstreamCalls, 0)
 })
 
+test("anonymous approved POST capabilities still reject cross-origin requests", async () => {
+  let upstreamCalls = 0
+  const response = await proxyAdminRequest(
+    new Request("http://admin.local/api/admin/ai/query", {
+      method: "POST",
+      headers: { origin: "http://attacker.local" },
+      body: "{}",
+    }),
+    ["ai", "query"],
+    {
+      sessionSecret: "s".repeat(32),
+      webApiBase: "http://web.local/api/v1",
+      adminApiToken: "web-service-token",
+      fetcher: async () => {
+        upstreamCalls += 1
+        return new Response("unexpected")
+      },
+    },
+  )
+
+  assert.equal(response.status, 403)
+  assert.equal(upstreamCalls, 0)
+})
+
+test("authenticated administrators retain protected write access", async () => {
+  const secret = "s".repeat(32)
+  const session = await createAdminSession(secret)
+  let upstreamCalls = 0
+  const response = await proxyAdminRequest(
+    new Request("http://admin.local/api/admin/tasks", {
+      method: "POST",
+      headers: {
+        cookie: `${ADMIN_SESSION_COOKIE}=${session}`,
+        origin: "http://admin.local",
+      },
+      body: "{}",
+    }),
+    ["tasks"],
+    {
+      sessionSecret: secret,
+      webApiBase: "http://web.local/api/v1",
+      adminApiToken: "web-service-token",
+      fetcher: async () => {
+        upstreamCalls += 1
+        return Response.json({ data: {} })
+      },
+    },
+  )
+
+  assert.equal(response.status, 200)
+  assert.equal(upstreamCalls, 1)
+})
+
 test("the login route creates a hardened HttpOnly cookie only for valid credentials", async () => {
   const previousPassword = process.env.ADMIN_LOGIN_PASSWORD
   const previousSecret = process.env.ADMIN_SESSION_SECRET
@@ -235,17 +361,10 @@ test("the login route creates a hardened HttpOnly cookie only for valid credenti
   }
 })
 
-test("middleware rejects an unauthenticated Admin page", async () => {
-  const previousSecret = process.env.ADMIN_SESSION_SECRET
-  process.env.ADMIN_SESSION_SECRET = "s".repeat(32)
-  try {
-    const response = await middleware(
-      new NextRequest("http://admin.local/simulations"),
-    )
-    assert.equal(response.status, 307)
-    assert.equal(response.headers.get("location"), "http://admin.local/login")
-  } finally {
-    if (previousSecret === undefined) delete process.env.ADMIN_SESSION_SECRET
-    else process.env.ADMIN_SESSION_SECRET = previousSecret
-  }
+test("middleware allows an anonymous Admin page", async () => {
+  const response = await middleware(
+    new NextRequest("http://admin.local/simulations"),
+  )
+  assert.equal(response.status, 200)
+  assert.equal(response.headers.has("location"), false)
 })

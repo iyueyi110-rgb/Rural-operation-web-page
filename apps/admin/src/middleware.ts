@@ -4,18 +4,29 @@ import {
   ADMIN_SESSION_COOKIE,
   verifyAdminSession,
 } from "@admin/lib/admin-session.server"
+import { isGuestAdminRequestAllowed } from "@admin/lib/admin-guest-access"
 
 export async function middleware(request: NextRequest) {
+  if (!request.nextUrl.pathname.startsWith("/api/")) {
+    return NextResponse.next()
+  }
+  if (
+    isGuestAdminRequestAllowed(
+      request.method,
+      request.nextUrl.pathname,
+    )
+  ) {
+    return NextResponse.next()
+  }
+
   const session = request.cookies.get(ADMIN_SESSION_COOKIE)?.value
   const authenticated = await verifyAdminSession(
     session,
     process.env.ADMIN_SESSION_SECRET ?? "",
   )
-  if (authenticated) return NextResponse.next()
-  if (request.nextUrl.pathname.startsWith("/api/")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
-  return NextResponse.redirect(new URL("/login", request.url))
+  return authenticated
+    ? NextResponse.next()
+    : NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 }
 
 export const config = {
