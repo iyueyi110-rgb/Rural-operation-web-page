@@ -18,7 +18,7 @@ import {
 const defaultOpenGroups: AdminNavGroupKey[] = ["command", "fieldOps"]
 
 export function AdminSidebar({ onRefresh }: { onRefresh?: () => void }) {
-  const { canWrite } = useAdminAccess()
+  const { canWrite, sessionExpired } = useAdminAccess()
   const pathname = usePathname()
   const activeGroup = getAdminNavGroup(pathname)
   const [openGroups, setOpenGroups] = useState<AdminNavGroupKey[]>(() => [
@@ -57,7 +57,11 @@ export function AdminSidebar({ onRefresh }: { onRefresh?: () => void }) {
 
       <div className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-white/10 px-3 py-2">
         <span className="text-xs font-bold text-white/62">
-          {canWrite ? adminCopy.shell.adminMode : adminCopy.shell.guestMode}
+          {sessionExpired
+            ? adminCopy.shell.sessionExpired
+            : canWrite
+              ? adminCopy.shell.adminMode
+              : adminCopy.shell.guestMode}
         </span>
         {!canWrite ? (
           <Link className="text-xs font-extrabold text-white" href="/login">

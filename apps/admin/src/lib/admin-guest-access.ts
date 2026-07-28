@@ -8,14 +8,27 @@ const guestAdminPostPaths = new Set([
 
 function relativeAdminPath(pathname: string) {
   const adminPrefix = "/api/admin"
-  return pathname.startsWith(`${adminPrefix}/`)
-    ? pathname.slice(adminPrefix.length)
-    : pathname
+  if (
+    !pathname.startsWith("/") ||
+    pathname.includes("?") ||
+    pathname.includes("#") ||
+    pathname.includes("\\")
+  ) {
+    return null
+  }
+  if (pathname === adminPrefix) return "/"
+  if (pathname.startsWith(`${adminPrefix}/`)) {
+    return pathname.slice(adminPrefix.length)
+  }
+  if (pathname.startsWith("/api/")) return null
+  return pathname
 }
 
 export function isGuestAdminRequestAllowed(method: string, pathname: string) {
+  const relativePath = relativeAdminPath(pathname)
+  if (relativePath === null) return false
   const normalizedMethod = method.toUpperCase()
   if (normalizedMethod === "GET" || normalizedMethod === "HEAD") return true
   if (normalizedMethod !== "POST") return false
-  return guestAdminPostPaths.has(relativeAdminPath(pathname))
+  return guestAdminPostPaths.has(relativePath)
 }

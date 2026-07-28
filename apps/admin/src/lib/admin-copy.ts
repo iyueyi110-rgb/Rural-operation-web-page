@@ -12,6 +12,7 @@ export const adminCopy = {
     guestMode: "访客模式",
     adminMode: "管理员模式",
     adminLogin: "管理员登录",
+    sessionExpired: "管理员会话已失效，当前为访客只读",
     writeLoginRequired: "登录管理员后可操作",
     empty: "暂无反馈工单",
     apiHint: "当前读取前台 /api/v1/feedback，工单已接入数据库持久化。",

@@ -4,6 +4,7 @@ import {
   verifyAdminSession,
 } from "./admin-session.server"
 import { isGuestAdminRequestAllowed } from "./admin-guest-access"
+import { trustedAdminClientIdentifier } from "./admin-login-rate-limit.server"
 
 interface AdminBffDependencies {
   sessionSecret: string
@@ -55,6 +56,10 @@ export async function proxyAdminRequest(
   headers.delete("cookie")
   headers.delete("host")
   headers.delete("content-length")
+  headers.delete("x-forwarded-for")
+  headers.delete("x-real-ip")
+  headers.delete("x-vercel-forwarded-for")
+  headers.set("X-Forwarded-For", trustedAdminClientIdentifier(request))
   headers.set("X-Admin-Token", dependencies.adminApiToken)
 
   const hasBody = request.method !== "GET" && request.method !== "HEAD"

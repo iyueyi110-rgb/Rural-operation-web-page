@@ -1,10 +1,48 @@
-import { fetchWithTimeout } from "@zouma/utils/fetch-timeout"
+import { fetchWithTimeout as fetchWithTimeoutBase } from "@zouma/utils/fetch-timeout"
 
+import { notifyAdminSessionExpired } from "@admin/components/admin-access"
 import { adminCopy } from "@admin/lib/admin-copy"
-
-export { fetchWithTimeout }
+import { isGuestAdminRequestAllowed } from "@admin/lib/admin-guest-access"
 
 export const adminApiBase = "/api/admin"
+
+function requestMethod(input: RequestInfo | URL, init: RequestInit) {
+  return init.method ?? (input instanceof Request ? input.method : "GET")
+}
+
+function requestPathname(input: RequestInfo | URL) {
+  const url =
+    input instanceof Request
+      ? input.url
+      : input instanceof URL
+        ? input.href
+        : input
+  return new URL(url, "http://admin.local").pathname
+}
+
+function isProtectedAdminRequest(
+  input: RequestInfo | URL,
+  init: RequestInit,
+) {
+  const pathname = requestPathname(input)
+  return (
+    (pathname === adminApiBase ||
+      pathname.startsWith(`${adminApiBase}/`)) &&
+    !isGuestAdminRequestAllowed(requestMethod(input, init), pathname)
+  )
+}
+
+export async function fetchWithTimeout(
+  input: RequestInfo | URL,
+  init: RequestInit = {},
+  timeoutMs = 15_000,
+) {
+  const response = await fetchWithTimeoutBase(input, init, timeoutMs)
+  if (response.status === 401 && isProtectedAdminRequest(input, init)) {
+    notifyAdminSessionExpired()
+  }
+  return response
+}
 
 export async function fetchAdminApi<T>(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers)

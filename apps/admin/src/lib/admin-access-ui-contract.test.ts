@@ -5,10 +5,16 @@ import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 
 import {
+  ADMIN_SESSION_EXPIRED_EVENT,
   ADMIN_WRITE_LOGIN_MESSAGE,
+  adminAccessReducer,
   adminWriteControlProps,
   useAdminAccess,
 } from "../components/admin-access"
+import {
+  adminApiBase,
+  fetchWithTimeout as fetchAdminWithTimeout,
+} from "./admin-api"
 
 function source(relativePath: string) {
   const url = new URL(relativePath, import.meta.url)
@@ -355,12 +361,58 @@ test("admin write control props disable guests and preserve explicit disabled st
   assert.deepEqual(adminWriteControlProps(true, true), { disabled: true })
 })
 
+test("an expired session fails closed and disables protected write controls", () => {
+  const expired = adminAccessReducer(
+    { canWrite: true, sessionExpired: false },
+    { type: "session-expired" },
+  )
+
+  assert.deepEqual(expired, { canWrite: false, sessionExpired: true })
+  assert.equal(adminWriteControlProps(expired.canWrite).disabled, true)
+})
+
+test("only a protected Admin API 401 publishes the session-expired event", async () => {
+  const originalFetch = globalThis.fetch
+  const originalWindow = globalThis.window
+  const eventTarget = new EventTarget()
+  let expiredEvents = 0
+  eventTarget.addEventListener(ADMIN_SESSION_EXPIRED_EVENT, () => {
+    expiredEvents += 1
+  })
+
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: eventTarget,
+  })
+  globalThis.fetch = async () => Response.json(
+    { error: "Unauthorized" },
+    { status: 401 },
+  )
+
+  try {
+    await fetchAdminWithTimeout(`${adminApiBase}/tasks`, { method: "POST" })
+    assert.equal(expiredEvents, 1)
+
+    await fetchAdminWithTimeout(`${adminApiBase}/tasks`)
+    await fetchAdminWithTimeout(`${adminApiBase}/ai/query`, { method: "POST" })
+    assert.equal(expiredEvents, 1)
+  } finally {
+    globalThis.fetch = originalFetch
+    Object.defineProperty(globalThis, "window", {
+      configurable: true,
+      value: originalWindow,
+    })
+  }
+})
+
 test("the Admin shell provides guest access state to client components", () => {
   assert.match(accessSource, /createContext/)
   assert.match(accessSource, /AdminAccessProvider/)
   assert.match(accessSource, /useAdminAccess/)
   assert.match(accessSource, /adminWriteControlProps/)
   assert.match(shellSource, /<AdminAccessProvider canWrite=\{canWrite\}>/)
+  assert.match(accessSource, /addEventListener\(ADMIN_SESSION_EXPIRED_EVENT/)
+  assert.match(accessSource, /dispatch\(\{ type: "session-expired" \}\)/)
 })
 
 test("the JSX guard locator rejects sibling and already-closed fieldset guards", () => {
@@ -508,10 +560,13 @@ test("write guards merge representative pre-existing disabled conditions", () =>
 test("the sidebar distinguishes guest and administrator modes", () => {
   assert.match(copySource, /guestMode: "访客模式"/)
   assert.match(copySource, /adminMode: "管理员模式"/)
-  assert.match(sidebarSource, /const \{ canWrite \} = useAdminAccess\(\)/)
   assert.match(
     sidebarSource,
-    /canWrite \? adminCopy\.shell\.adminMode : adminCopy\.shell\.guestMode/,
+    /const \{ canWrite, sessionExpired \} = useAdminAccess\(\)/,
+  )
+  assert.match(
+    sidebarSource,
+    /sessionExpired[\s\S]*adminCopy\.shell\.sessionExpired/,
   )
   assert.match(
     sidebarSource.slice(sidebarSource.indexOf("!canWrite ? ("), sidebarSource.indexOf("!canWrite ? (") + 800),
