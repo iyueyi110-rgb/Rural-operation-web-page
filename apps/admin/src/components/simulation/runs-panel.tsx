@@ -14,6 +14,10 @@ import {
   type SimulationConfigForm,
 } from "@admin/lib/simulation-admin"
 import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
+import {
   controlClass,
   IconButton,
   labelClass,
@@ -53,6 +57,8 @@ export function RunsPanel({
   onRefresh: () => void
   runs: SimulationRun[]
 }) {
+  const { canWrite } = useAdminAccess()
+
   return (
     <div className="grid gap-5 2xl:grid-cols-[400px_minmax(0,1fr)]">
       <section className="rounded-xl border border-stone bg-white p-5 shadow-soft">
@@ -61,6 +67,10 @@ export function RunsPanel({
           title="模拟运行配置"
           description="默认创建共享世界的 V0/V1 成对运行；规则版本不能改变外生随机条件。"
         />
+        <fieldset
+          className="m-0 min-w-0 border-0 p-0"
+          {...adminWriteControlProps(canWrite)}
+        >
         <div className="mt-5 grid grid-cols-2 gap-3">
           <NumberField
             label="模拟种子"
@@ -156,7 +166,7 @@ export function RunsPanel({
         </div>
         <button
           className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-lychee px-5 text-sm font-extrabold text-white shadow-[0_12px_24px_rgba(185,56,53,0.2)] disabled:opacity-50"
-          disabled={busyAction === "create"}
+          {...adminWriteControlProps(canWrite, busyAction === "create")}
           onClick={onCreate}
           type="button"
         >
@@ -167,6 +177,7 @@ export function RunsPanel({
           )}
           一键运行 V0/V1 模拟对照
         </button>
+        </fieldset>
       </section>
       <section className="min-w-0 rounded-xl border border-stone bg-white shadow-soft">
         <div className="flex items-center justify-between border-b border-stone px-5 py-4">
@@ -248,19 +259,24 @@ export function RunsPanel({
                       >
                         <ChevronRight className="h-4 w-4" />
                       </IconButton>
-                      <IconButton
-                        label="复制模拟运行"
-                        onClick={() => onClone(run)}
+                      <fieldset
+                        className="m-0 flex min-w-0 gap-1 border-0 p-0"
+                        {...adminWriteControlProps(canWrite)}
                       >
-                        <Copy className="h-4 w-4" />
-                      </IconButton>
-                      <IconButton
-                        label="归档模拟运行"
-                        onClick={() => onArchive(run)}
-                        tone="danger"
-                      >
-                        <Archive className="h-4 w-4" />
-                      </IconButton>
+                        <IconButton
+                          label="复制模拟运行"
+                          onClick={() => onClone(run)}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </IconButton>
+                        <IconButton
+                          label="归档模拟运行"
+                          onClick={() => onArchive(run)}
+                          tone="danger"
+                        >
+                          <Archive className="h-4 w-4" />
+                        </IconButton>
+                      </fieldset>
                     </div>
                   </td>
                 </tr>

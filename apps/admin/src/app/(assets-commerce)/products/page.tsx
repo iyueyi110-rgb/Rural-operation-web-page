@@ -7,6 +7,10 @@ import {
   AdminDataTable,
   type TableColumn,
 } from "@admin/components/admin-data-table"
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { AdminNotice } from "@admin/components/admin-page-shell"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
 import {
@@ -37,6 +41,7 @@ interface NodeRow {
 }
 
 export default function ProductsPage() {
+  const { canWrite } = useAdminAccess()
   const [products, setProducts] = useState<ProductRow[]>([])
   const [nodes, setNodes] = useState<NodeRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -175,7 +180,10 @@ export default function ProductsPage() {
           <PackagePlus className="h-5 w-5 text-water" />
           {adminCopy.products.create}
         </div>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
+        <fieldset
+          className="m-0 mt-4 grid min-w-0 gap-3 border-0 p-0 md:grid-cols-3"
+          {...adminWriteControlProps(canWrite)}
+        >
           <input
             className="h-10 rounded-md border border-stone bg-rice px-3"
             onChange={(event) => setForm({ ...form, name: event.target.value })}
@@ -244,9 +252,10 @@ export default function ProductsPage() {
             placeholder={adminCopy.products.description}
             value={form.description}
           />
-        </div>
+        </fieldset>
         <button
           className="mt-4 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white"
+          {...adminWriteControlProps(canWrite)}
           onClick={saveProduct}
           type="button"
         >

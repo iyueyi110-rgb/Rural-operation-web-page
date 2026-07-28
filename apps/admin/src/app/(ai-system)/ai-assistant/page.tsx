@@ -4,6 +4,10 @@ import Image from "next/image"
 import { BookOpen, Bot, Database, Send, UserRoundCheck } from "lucide-react"
 import { useState } from "react"
 
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
@@ -35,6 +39,7 @@ interface AssistantAnswer {
 type AssistantMode = "knowledge" | "operations"
 
 export default function AiAssistantPage() {
+  const { canWrite } = useAdminAccess()
   const [question, setQuestion] = useState("")
   const [items, setItems] = useState<ChatItem[]>([])
   const [isAsking, setIsAsking] = useState(false)
@@ -231,8 +236,11 @@ export default function AiAssistantPage() {
                   ) : null}
                   <button
                     className="ml-auto flex items-center gap-2 rounded-full border border-stone px-3 py-2 font-bold text-ink transition hover:border-moss hover:text-moss disabled:opacity-50"
-                    disabled={transferredIds.has(item.id)}
-                    onClick={() => void transferToHuman(item)}
+                    onClick={() => transferToHuman(item)}
+                    {...adminWriteControlProps(
+                      canWrite,
+                      transferredIds.has(item.id),
+                    )}
                     type="button"
                   >
                     <UserRoundCheck className="h-4 w-4" />

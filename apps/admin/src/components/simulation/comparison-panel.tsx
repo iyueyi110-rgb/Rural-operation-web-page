@@ -11,6 +11,10 @@ import {
   formatMetricValue,
 } from "@admin/lib/simulation-admin"
 import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
+import {
   ActionButton,
   controlClass,
   labelClass,
@@ -46,6 +50,7 @@ export function ComparisonPanel({
   onCompare: () => void
   runs: SimulationRun[]
 }) {
+  const { canWrite } = useAdminAccess()
   const v0 = runs.find((run) => run.id === ids.v0RunId)
   const v1 = runs.find((run) => run.id === ids.v1RunId)
   const rows = comparisonRows(comparison, v0, v1)
@@ -79,18 +84,23 @@ export function ComparisonPanel({
             value={ids.v1RunId}
             onChange={(v1RunId) => onChange({ ...ids, v1RunId })}
           />
-          <ActionButton
-            disabled={busy}
-            icon={
-              busy ? (
-                <LoaderCircle className="h-4 w-4 animate-spin" />
-              ) : (
-                <GitCompareArrows className="h-4 w-4" />
-              )
-            }
-            label="生成模拟对比"
-            onClick={onCompare}
-          />
+          <fieldset
+            className="m-0 min-w-0 border-0 p-0"
+            {...adminWriteControlProps(canWrite)}
+          >
+            <ActionButton
+              disabled={busy}
+              icon={
+                busy ? (
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
+                ) : (
+                  <GitCompareArrows className="h-4 w-4" />
+                )
+              }
+              label="生成模拟对比"
+              onClick={onCompare}
+            />
+          </fieldset>
         </div>
         <div className="mt-4 grid overflow-hidden rounded-xl border border-stone sm:grid-cols-2">
           <PolicyRail label="V0 · 轮询与人工处理" run={v0} tone="baseline" />

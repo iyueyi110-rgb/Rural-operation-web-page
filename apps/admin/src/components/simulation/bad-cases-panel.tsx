@@ -1,6 +1,10 @@
 import { RefreshCw, Save } from "lucide-react"
 
 import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
+import {
   ActionButton,
   controlClass,
   labelClass,
@@ -36,6 +40,7 @@ export function BadCasesPanel({
   runs: SimulationRun[]
   setRunId: (id: string) => void
 }) {
+  const { canWrite } = useAdminAccess()
   const summary = countBy(badCases, (item) => item.category ?? "未分类")
   const policyComparison = buildBadCasePolicyComparison(badCases)
   return (
@@ -141,6 +146,10 @@ export function BadCasesPanel({
                 ? item.eventIds.join(" → ")
                 : "由运行详情追溯"}
             </div>
+            <fieldset
+              className="m-0 min-w-0 border-0 p-0"
+              {...adminWriteControlProps(canWrite)}
+            >
             <label className="mt-4 block">
               <span className={labelClass}>模拟根因</span>
               <textarea
@@ -180,13 +189,17 @@ export function BadCasesPanel({
             </label>
             <button
               className="mt-4 flex h-10 items-center gap-2 rounded-full bg-ink px-5 text-sm font-extrabold text-white disabled:opacity-50"
-              disabled={busyAction === `bad-case:${item.id}`}
+              {...adminWriteControlProps(
+                canWrite,
+                busyAction === `bad-case:${item.id}`,
+              )}
               onClick={() => onSave(item)}
               type="button"
             >
               <Save className="h-4 w-4" />
               保存模拟复盘
             </button>
+            </fieldset>
           </article>
         ))}
         {!badCases.length ? (

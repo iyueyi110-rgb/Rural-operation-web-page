@@ -21,6 +21,25 @@ const shellSource = source("../app/admin-shell.tsx")
 const sidebarSource = source("../components/admin-sidebar.tsx")
 const copySource = source("./admin-copy.ts")
 
+const protectedControlSources = [
+  "../components/active-alerts-panel.tsx",
+  "../components/recommendation-review-panel.tsx",
+  "../app/feedback-admin.tsx",
+  "../app/(assets-commerce)/activities/page.tsx",
+  "../app/(assets-commerce)/harvest/page.tsx",
+  "../app/(assets-commerce)/products/page.tsx",
+  "../app/(assets-commerce)/trees/page.tsx",
+  "../app/(ai-system)/devices/page.tsx",
+  "../app/(command)/reports/page.tsx",
+  "../app/(field-ops)/alerts/page.tsx",
+  "../app/(village-work)/farming/page.tsx",
+  "../app/(village-work)/tasks/page.tsx",
+  "../app/(village-work)/villagers/page.tsx",
+  "../components/simulation/runs-panel.tsx",
+  "../components/simulation/comparison-panel.tsx",
+  "../components/simulation/bad-cases-panel.tsx",
+]
+
 function AdminAccessDefaultProbe() {
   return createElement("span", null, String(useAdminAccess().canWrite))
 }
@@ -62,6 +81,37 @@ test("the Admin shell provides guest access state to client components", () => {
   assert.match(accessSource, /useAdminAccess/)
   assert.match(accessSource, /adminWriteControlProps/)
   assert.match(shellSource, /<AdminAccessProvider canWrite=\{canWrite\}>/)
+})
+
+test("every protected mutation surface consumes the shared write guard", () => {
+  for (const relativePath of protectedControlSources) {
+    const fileSource = source(relativePath)
+    assert.match(fileSource, /useAdminAccess/, relativePath)
+    assert.match(fileSource, /adminWriteControlProps/, relativePath)
+  }
+})
+
+test("guest AI questions remain enabled while human escalation requires login", () => {
+  const page = source("../app/(ai-system)/ai-assistant/page.tsx")
+  assert.match(page, /onClick=\{askQuestion\}/)
+  assert.match(
+    page,
+    /onClick=\{\(\) => transferToHuman\(item\)\}[\s\S]{0,240}adminWriteControlProps/,
+  )
+})
+
+test("guest decision generation remains enabled while command changes require login", () => {
+  const page = source("../app/(ai-system)/infrastructure/page.tsx")
+  assert.match(page, /onClick=\{runDecision\}/)
+  assert.match(page, /updateCommand[\s\S]*adminWriteControlProps/)
+  assert.match(page, /submitManualReading[\s\S]*adminWriteControlProps/)
+})
+
+test("renovation diagnosis and content generation remain guest capabilities", () => {
+  const renovation = source("../app/(renovation)/renovation/page.tsx")
+  const contentFactory = source("../app/(ai-system)/content-factory/page.tsx")
+  assert.match(renovation, /onClick=\{runDiagnosis\}/)
+  assert.match(contentFactory, /\/ai\/generate-content/)
 })
 
 test("the sidebar distinguishes guest and administrator modes", () => {

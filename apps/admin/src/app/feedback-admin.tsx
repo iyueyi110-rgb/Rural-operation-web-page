@@ -3,6 +3,10 @@
 import { AlertTriangle, CheckCircle2, RefreshCw, SendHorizontal } from "lucide-react"
 import { useEffect, useMemo, useState, type ReactNode } from "react"
 
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { AdminNotice, AdminPageShell } from "@admin/components/admin-page-shell"
 import { adminCopy } from "@admin/lib/admin-copy"
 import { adminApiBase, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
@@ -37,6 +41,7 @@ function formatDate(value: string) {
 }
 
 export function FeedbackContent() {
+  const { canWrite } = useAdminAccess()
   const [records, setRecords] = useState<FeedbackRecord[]>([])
   const [selectedId, setSelectedId] = useState("")
   const [note, setNote] = useState("")
@@ -216,38 +221,46 @@ export function FeedbackContent() {
                 </p>
               </div>
 
-              <label className="mt-5 grid gap-2">
-                <span className="text-sm font-bold">{adminCopy.detail.noteLabel}</span>
-                <textarea
-                  className="min-h-[96px] resize-none rounded-md border border-stone bg-rice p-3 text-sm leading-6 outline-none transition focus:border-ink"
-                  onChange={(event) => setNote(event.target.value)}
-                  placeholder={adminCopy.detail.notePlaceholder}
-                  value={note}
-                />
-              </label>
+              <fieldset
+                className="m-0 min-w-0 border-0 p-0"
+                {...adminWriteControlProps(canWrite)}
+              >
+                <label className="mt-5 grid gap-2">
+                  <span className="text-sm font-bold">{adminCopy.detail.noteLabel}</span>
+                  <textarea
+                    className="min-h-[96px] resize-none rounded-md border border-stone bg-rice p-3 text-sm leading-6 outline-none transition focus:border-ink"
+                    onChange={(event) => setNote(event.target.value)}
+                    placeholder={adminCopy.detail.notePlaceholder}
+                    value={note}
+                  />
+                </label>
 
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                {statusOrder.map((status) => (
-                  <button
-                    className={
-                      selectedRecord.status === status
-                        ? "flex h-10 items-center justify-center gap-2 rounded-md bg-ink px-3 text-sm font-bold text-white"
-                        : "flex h-10 items-center justify-center gap-2 rounded-md border border-stone bg-rice px-3 text-sm font-bold text-ink transition hover:border-ink"
-                    }
-                    disabled={updatingStatus !== "" || selectedRecord.status === status}
-                    key={status}
-                    onClick={() => updateStatus(status)}
-                    type="button"
-                  >
-                    {updatingStatus === status ? (
-                      <RefreshCw aria-hidden="true" className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <SendHorizontal aria-hidden="true" className="h-4 w-4" />
-                    )}
-                    {adminCopy.statuses[status]}
-                  </button>
-                ))}
-              </div>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  {statusOrder.map((status) => (
+                    <button
+                      className={
+                        selectedRecord.status === status
+                          ? "flex h-10 items-center justify-center gap-2 rounded-md bg-ink px-3 text-sm font-bold text-white"
+                          : "flex h-10 items-center justify-center gap-2 rounded-md border border-stone bg-rice px-3 text-sm font-bold text-ink transition hover:border-ink"
+                      }
+                      {...adminWriteControlProps(
+                        canWrite,
+                        updatingStatus !== "" || selectedRecord.status === status,
+                      )}
+                      key={status}
+                      onClick={() => updateStatus(status)}
+                      type="button"
+                    >
+                      {updatingStatus === status ? (
+                        <RefreshCw aria-hidden="true" className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <SendHorizontal aria-hidden="true" className="h-4 w-4" />
+                      )}
+                      {adminCopy.statuses[status]}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
 
               <div className="mt-5">
                 <div className="flex items-center gap-2 text-sm font-bold">

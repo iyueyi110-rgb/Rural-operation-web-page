@@ -3,6 +3,10 @@
 import { useCallback, useEffect, useState } from "react"
 import { CloudRain, Droplets, Gauge, Thermometer, Waves } from "lucide-react"
 
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { adminApiBase, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
@@ -35,6 +39,7 @@ const sensorMeta = {
 } as const
 
 export default function InfrastructurePage() {
+  const { canWrite } = useAdminAccess()
   const [sensors, setSensors] = useState<SensorReading[]>([])
   const [commands, setCommands] = useState<ControlCommand[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -147,7 +152,10 @@ export default function InfrastructurePage() {
 
       <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
         <h2 className="text-lg font-extrabold">手动录入读数</h2>
-        <div className="mt-4 grid gap-3 md:grid-cols-5">
+        <fieldset
+          className="m-0 mt-4 grid min-w-0 gap-3 border-0 p-0 md:grid-cols-5"
+          {...adminWriteControlProps(canWrite)}
+        >
           <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setManualReading({ ...manualReading, sensorId: event.target.value })} placeholder="传感器 ID" value={manualReading.sensorId} />
           <select className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setManualReading({ ...manualReading, type: event.target.value })} value={manualReading.type}>
             <option value="rainfall">降雨量</option>
@@ -158,8 +166,8 @@ export default function InfrastructurePage() {
           </select>
           <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setManualReading({ ...manualReading, value: event.target.value })} placeholder="数值" value={manualReading.value} />
           <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setManualReading({ ...manualReading, unit: event.target.value })} placeholder="单位" value={manualReading.unit} />
-          <button className="h-10 rounded-full bg-ink px-4 text-sm font-bold text-white" onClick={submitManualReading} type="button">录入</button>
-        </div>
+          <button className="h-10 rounded-full bg-ink px-4 text-sm font-bold text-white" onClick={submitManualReading} {...adminWriteControlProps(canWrite)} type="button">录入</button>
+        </fieldset>
       </section>
 
       <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
@@ -181,12 +189,12 @@ export default function InfrastructurePage() {
                 <div className="mt-3 flex flex-wrap gap-2">
                   {command.status === "pending" ? (
                     <>
-                      <button className="rounded-full bg-moss px-3 py-1 text-xs font-bold text-white" onClick={() => updateCommand(command.id, "approved")} type="button">批准</button>
-                      <button className="rounded-full border border-stone px-3 py-1 text-xs font-bold" onClick={() => updateCommand(command.id, "rejected")} type="button">驳回</button>
+                      <button className="rounded-full bg-moss px-3 py-1 text-xs font-bold text-white" onClick={() => updateCommand(command.id, "approved")} {...adminWriteControlProps(canWrite)} type="button">批准</button>
+                      <button className="rounded-full border border-stone px-3 py-1 text-xs font-bold" onClick={() => updateCommand(command.id, "rejected")} {...adminWriteControlProps(canWrite)} type="button">驳回</button>
                     </>
                   ) : null}
                   {command.status === "approved" ? (
-                    <button className="rounded-full bg-water px-3 py-1 text-xs font-bold text-white" onClick={() => updateCommand(command.id, "executed")} type="button">标记执行</button>
+                    <button className="rounded-full bg-water px-3 py-1 text-xs font-bold text-white" onClick={() => updateCommand(command.id, "executed")} {...adminWriteControlProps(canWrite)} type="button">标记执行</button>
                   ) : null}
                 </div>
               </article>

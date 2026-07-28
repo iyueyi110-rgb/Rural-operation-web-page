@@ -7,6 +7,10 @@ import {
   type TableColumn,
 } from "@admin/components/admin-data-table"
 import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
+import {
   adminApiBase,
   fetchAdminApi,
   fetchWithTimeout,
@@ -35,6 +39,7 @@ interface TreeRow extends Record<string, unknown> {
 }
 
 export default function TreesAdminPage() {
+  const { canWrite } = useAdminAccess()
   const [trees, setTrees] = useState<TreeRow[]>([])
   const [selected, setSelected] = useState<TreeRow | null>(null)
   const [fireMemory, setFireMemory] = useState("")
@@ -205,6 +210,10 @@ export default function TreesAdminPage() {
                   {selected.treeCode}
                 </h2>
               </div>
+              <fieldset
+                className="m-0 grid min-w-0 gap-4 border-0 p-0"
+                {...adminWriteControlProps(canWrite)}
+              >
               <label className="grid gap-2 text-sm font-bold">
                 山火记忆
                 <textarea
@@ -234,7 +243,7 @@ export default function TreesAdminPage() {
                 <input
                   accept="image/jpeg,image/png,image/webp"
                   className="rounded-md border border-stone bg-rice p-3 text-sm"
-                  disabled={isUploading}
+                  {...adminWriteControlProps(canWrite, isUploading)}
                   onChange={(event) => {
                     void uploadGrowthPhoto(event.target.files?.[0] ?? null)
                     event.currentTarget.value = ""
@@ -244,40 +253,48 @@ export default function TreesAdminPage() {
               </label>
               <button
                 className="h-11 rounded-full bg-ink px-5 text-sm font-bold text-white"
+                {...adminWriteControlProps(canWrite, isUploading)}
                 onClick={saveTree}
                 type="button"
               >
                 {isUploading ? "上传中..." : adminCopy.trees.save}
               </button>
+              </fieldset>
 
               <div className="border-t border-stone pt-4">
                 <p className="text-sm font-bold text-water">
                   {adminCopy.trees.careLogs}
                 </p>
-                <select
-                  className="mt-3 h-10 w-full rounded-md border border-stone bg-rice px-3"
-                  onChange={(event) => setLogType(event.target.value)}
-                  value={logType}
+                <fieldset
+                  className="m-0 min-w-0 border-0 p-0"
+                  {...adminWriteControlProps(canWrite)}
                 >
-                  <option value="watering">浇灌</option>
-                  <option value="pruning">修剪</option>
-                  <option value="fertilizing">施肥</option>
-                  <option value="pest_control">病虫害</option>
-                  <option value="photo">照片</option>
-                  <option value="harvest">采摘</option>
-                </select>
-                <textarea
-                  className="mt-3 min-h-20 w-full rounded-md border border-stone bg-rice p-3 text-sm font-semibold"
-                  onChange={(event) => setLogContent(event.target.value)}
-                  value={logContent}
-                />
-                <button
-                  className="mt-3 h-10 w-full rounded-full bg-moss px-5 text-sm font-bold text-white"
-                  onClick={addCareLog}
-                  type="button"
-                >
-                  {adminCopy.trees.addLog}
-                </button>
+                  <select
+                    className="mt-3 h-10 w-full rounded-md border border-stone bg-rice px-3"
+                    onChange={(event) => setLogType(event.target.value)}
+                    value={logType}
+                  >
+                    <option value="watering">浇灌</option>
+                    <option value="pruning">修剪</option>
+                    <option value="fertilizing">施肥</option>
+                    <option value="pest_control">病虫害</option>
+                    <option value="photo">照片</option>
+                    <option value="harvest">采摘</option>
+                  </select>
+                  <textarea
+                    className="mt-3 min-h-20 w-full rounded-md border border-stone bg-rice p-3 text-sm font-semibold"
+                    onChange={(event) => setLogContent(event.target.value)}
+                    value={logContent}
+                  />
+                  <button
+                    className="mt-3 h-10 w-full rounded-full bg-moss px-5 text-sm font-bold text-white"
+                    {...adminWriteControlProps(canWrite)}
+                    onClick={addCareLog}
+                    type="button"
+                  >
+                    {adminCopy.trees.addLog}
+                  </button>
+                </fieldset>
                 <div className="mt-4 grid gap-3">
                   {selected.careLogs.map((log) => (
                     <article

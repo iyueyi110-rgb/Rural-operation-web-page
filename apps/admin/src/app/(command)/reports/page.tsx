@@ -9,6 +9,10 @@ import {
   AdminPanel,
 } from "@admin/components/admin-page-shell"
 import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
+import {
   adminApiBase,
   fetchAdminApi,
   fetchWithTimeout,
@@ -30,6 +34,7 @@ interface DailyReport {
 }
 
 export default function ReportsPage() {
+  const { canWrite } = useAdminAccess()
   const [reports, setReports] = useState<DailyReport[]>([])
   const [selectedId, setSelectedId] = useState("")
   const [date, setDate] = useState(today())
@@ -98,6 +103,10 @@ export default function ReportsPage() {
       title={adminCopy.reports.title}
     >
       <AdminPanel className="flex flex-wrap items-end gap-3 p-4">
+        <fieldset
+          className="m-0 flex min-w-0 flex-wrap items-end gap-3 border-0 p-0"
+          {...adminWriteControlProps(canWrite)}
+        >
         <label className="grid gap-1 text-sm font-bold">
           {adminCopy.reports.selectDate}
           <input
@@ -109,7 +118,7 @@ export default function ReportsPage() {
         </label>
         <button
           className="flex h-10 items-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white disabled:opacity-50"
-          disabled={isGenerating}
+          {...adminWriteControlProps(canWrite, isGenerating)}
           onClick={generateReport}
           type="button"
         >
@@ -120,6 +129,7 @@ export default function ReportsPage() {
             ? adminCopy.reports.generating
             : adminCopy.reports.generate}
         </button>
+        </fieldset>
       </AdminPanel>
 
       {error ? <AdminNotice tone="error">{error}</AdminNotice> : null}
