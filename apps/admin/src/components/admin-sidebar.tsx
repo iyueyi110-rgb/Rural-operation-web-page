@@ -55,7 +55,6 @@ export function AdminSidebar({ onRefresh }: { onRefresh?: () => void }) {
         </div>
       </div>
 
-      {/* 访客模式 / 管理员模式 */}
       <div className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-white/10 px-3 py-2">
         <span className="text-xs font-bold text-white/62">
           {canWrite ? adminCopy.shell.adminMode : adminCopy.shell.guestMode}

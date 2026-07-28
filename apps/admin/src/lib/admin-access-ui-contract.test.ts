@@ -1,6 +1,14 @@
 import assert from "node:assert/strict"
 import { existsSync, readFileSync } from "node:fs"
 import test from "node:test"
+import { createElement } from "react"
+import { renderToStaticMarkup } from "react-dom/server"
+
+import {
+  ADMIN_WRITE_LOGIN_MESSAGE,
+  adminWriteControlProps,
+  useAdminAccess,
+} from "../components/admin-access"
 
 function source(relativePath: string) {
   const url = new URL(relativePath, import.meta.url)
@@ -11,12 +19,41 @@ const accessSource = source("../components/admin-access.tsx")
 const layoutSource = source("../app/layout.tsx")
 const shellSource = source("../app/admin-shell.tsx")
 const sidebarSource = source("../components/admin-sidebar.tsx")
+const copySource = source("./admin-copy.ts")
+
+function AdminAccessDefaultProbe() {
+  return createElement("span", null, String(useAdminAccess().canWrite))
+}
 
 test("the root layout derives only a boolean write capability from the HttpOnly session", () => {
   assert.match(layoutSource, /cookies\(\)/)
   assert.match(layoutSource, /verifyAdminSession/)
-  assert.match(layoutSource, /<AdminShell canWrite=\{canWrite\}>/)
-  assert.doesNotMatch(layoutSource, /ADMIN_API_TOKEN/)
+  const adminShellTag = layoutSource.match(/<AdminShell\b[^>]*>/)?.[0] ?? ""
+  assert.equal(adminShellTag, "<AdminShell canWrite={canWrite}>")
+  assert.doesNotMatch(
+    adminShellTag,
+    /\b\w*(?:session|secret|token|password)\w*\s*=/iu,
+  )
+})
+
+test("the Admin access context defaults to read-only access", () => {
+  assert.equal(
+    renderToStaticMarkup(createElement(AdminAccessDefaultProbe)),
+    "<span>false</span>",
+  )
+})
+
+test("admin write control props disable guests and preserve explicit disabled state", () => {
+  assert.deepEqual(adminWriteControlProps(false), {
+    disabled: true,
+    title: ADMIN_WRITE_LOGIN_MESSAGE,
+  })
+  assert.deepEqual(adminWriteControlProps(false, true), {
+    disabled: true,
+    title: ADMIN_WRITE_LOGIN_MESSAGE,
+  })
+  assert.deepEqual(adminWriteControlProps(true), { disabled: false })
+  assert.deepEqual(adminWriteControlProps(true, true), { disabled: true })
 })
 
 test("the Admin shell provides guest access state to client components", () => {
@@ -28,7 +65,16 @@ test("the Admin shell provides guest access state to client components", () => {
 })
 
 test("the sidebar distinguishes guest and administrator modes", () => {
-  assert.match(sidebarSource, /访客模式/)
-  assert.match(sidebarSource, /管理员模式/)
-  assert.match(sidebarSource, /href="\/login"/)
+  assert.match(copySource, /guestMode: "访客模式"/)
+  assert.match(copySource, /adminMode: "管理员模式"/)
+  assert.match(sidebarSource, /const \{ canWrite \} = useAdminAccess\(\)/)
+  assert.match(
+    sidebarSource,
+    /canWrite \? adminCopy\.shell\.adminMode : adminCopy\.shell\.guestMode/,
+  )
+  assert.match(
+    sidebarSource,
+    /!canWrite \? \([\s\S]*?<Link className="text-xs font-extrabold text-white" href="\/login">/,
+  )
+  assert.doesNotMatch(sidebarSource, /访客模式|管理员模式/u)
 })
