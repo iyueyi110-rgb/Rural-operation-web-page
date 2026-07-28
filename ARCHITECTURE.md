@@ -7,7 +7,7 @@
 ```text
 浏览器
   ├─ apps/web   ── 游客、认养用户、村民体验与 /api/v1
-  └─ apps/admin ── 运营端与经过身份验证的后台代理
+  └─ apps/admin ── 运营端与支持访客读取和管理员写入的后台代理
                          │
                          ▼
   contracts · database · knowledge · prompts · simulation · ui · utils
@@ -28,8 +28,9 @@
 ### 运营端：`apps/admin`
 
 - 提供资产、任务、村民、规则模拟、AI 辅助、预警、报告和改造管理界面。
-- 浏览器会话使用 HttpOnly 签名 Cookie；服务端之间的后台令牌不会发送给浏览器。
-- 后台 BFF 代理经过授权的 Web API 请求，并规范化上游响应。
+- Admin 页面与读取接口允许匿名访客访问；匿名能力还精确包含五个 `POST` 路径：`/knowledge/query`、`/ai/query`、`/ai/generate-content`、`/renovation/run-weekly` 与 `/infrastructure/decide`。
+- 除匿名读取和上述五个精确生成能力外，其他写请求必须通过 HttpOnly 签名管理员会话；Admin BFF 在服务端执行最终鉴权并规范化上游响应。
+- 服务端之间使用的后台令牌只由 Admin BFF 附加，不会发送给浏览器。
 
 ## 共享包
 
