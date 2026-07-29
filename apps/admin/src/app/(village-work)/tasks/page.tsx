@@ -7,6 +7,10 @@ import {
   AdminDataTable,
   type TableColumn,
 } from "@admin/components/admin-data-table"
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
 import {
   adminApiBase,
@@ -111,6 +115,7 @@ const webAppBase = (
 ).replace(/\/api\/v1\/?$/u, "")
 
 export default function TasksPage() {
+  const { canWrite } = useAdminAccess()
   const [tasks, setTasks] = useState<TaskRow[]>([])
   const [villagers, setVillagers] = useState<VillagerRow[]>([])
   const [nodes, setNodes] = useState<NodeRow[]>([])
@@ -413,7 +418,10 @@ export default function TasksPage() {
               {adminCopy.tasks.create}
             </button>
           </div>
-          <div className="mt-4 grid gap-3">
+          <fieldset
+            className="m-0 mt-4 grid min-w-0 gap-3 border-0 p-0"
+            {...adminWriteControlProps(canWrite)}
+          >
             {selected?.adoptionId ? (
               <div className="rounded-md border border-moss/20 bg-moss/5 p-3 text-xs font-bold text-moss">
                 认养履约任务 · {selected.adoptionId}
@@ -494,7 +502,7 @@ export default function TasksPage() {
               type="number"
               value={form.earnings}
             />
-          </div>
+          </fieldset>
 
           {selected?.adoptionId && evidence.length ? (
             <div className="mt-5 border-t border-stone pt-4">
@@ -520,7 +528,10 @@ export default function TasksPage() {
                 )}
               </div>
               {evidence[0]!.status === "submitted" ? (
-                <div className="mt-3 grid gap-2">
+                <fieldset
+                  className="m-0 mt-3 grid min-w-0 gap-2 border-0 p-0"
+                  {...adminWriteControlProps(canWrite)}
+                >
                   <textarea
                     className="min-h-20 rounded-md border border-stone bg-rice px-3 py-2 text-sm"
                     onChange={(event) => setReviewReason(event.target.value)}
@@ -530,6 +541,7 @@ export default function TasksPage() {
                   <div className="flex gap-2">
                     <button
                       className="h-10 rounded-full bg-moss px-5 text-sm font-bold text-white"
+                      {...adminWriteControlProps(canWrite)}
                       onClick={() => void reviewEvidence("approve")}
                       type="button"
                     >
@@ -537,20 +549,25 @@ export default function TasksPage() {
                     </button>
                     <button
                       className="h-10 rounded-full border border-lychee px-5 text-sm font-bold text-lychee"
+                      {...adminWriteControlProps(canWrite)}
                       onClick={() => void reviewEvidence("reject")}
                       type="button"
                     >
                       退回补充
                     </button>
                   </div>
-                </div>
+                </fieldset>
               ) : null}
             </div>
           ) : null}
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <fieldset
+            className="m-0 mt-4 flex min-w-0 flex-wrap gap-2 border-0 p-0"
+            {...adminWriteControlProps(canWrite)}
+          >
             <button
               className="h-10 rounded-full bg-ink px-5 text-sm font-bold text-white"
+              {...adminWriteControlProps(canWrite)}
               onClick={() => saveTask()}
               type="button"
             >
@@ -559,6 +576,7 @@ export default function TasksPage() {
             {selected && nextStatus ? (
               <button
                 className="h-10 rounded-full border border-stone px-5 text-sm font-bold text-ink"
+                {...adminWriteControlProps(canWrite)}
                 onClick={() => saveTask(nextStatus)}
                 type="button"
               >
@@ -571,13 +589,14 @@ export default function TasksPage() {
             selected.status !== "cancelled" ? (
               <button
                 className="h-10 rounded-full border border-lychee px-5 text-sm font-bold text-lychee"
+                {...adminWriteControlProps(canWrite)}
                 onClick={() => saveTask("cancelled")}
                 type="button"
               >
                 {adminCopy.tasks.statusOptions.cancelled}
               </button>
             ) : null}
-          </div>
+          </fieldset>
         </section>
       </div>
     </div>

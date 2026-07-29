@@ -2,6 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react"
 
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { AdminNotice, AdminPageShell, AdminPanel } from "@admin/components/admin-page-shell"
 import { adminApiBase, fetchAdminApi, fetchWithTimeout } from "@admin/lib/admin-api"
@@ -18,6 +22,7 @@ interface AlertRow extends Record<string, unknown> {
 }
 
 export default function AlertsPage() {
+  const { canWrite } = useAdminAccess()
   const [rows, setRows] = useState<AlertRow[]>([])
   const [status, setStatus] = useState("active")
   const [type, setType] = useState("")
@@ -94,8 +99,8 @@ export default function AlertsPage() {
       label: "操作",
       render: (_value, row) => (
         <span className="flex gap-2">
-          {row.source === "behavior" && row.status === "active" ? <button className="text-water" onClick={() => updateStatus(row.id, "acknowledged")} type="button">确认</button> : null}
-          {row.source === "behavior" && row.status === "acknowledged" ? <button className="text-moss" onClick={() => updateStatus(row.id, "resolved")} type="button">解决</button> : null}
+          {row.source === "behavior" && row.status === "active" ? <button className="text-water" {...adminWriteControlProps(canWrite)} onClick={() => updateStatus(row.id, "acknowledged")} type="button">确认</button> : null}
+          {row.source === "behavior" && row.status === "acknowledged" ? <button className="text-moss" {...adminWriteControlProps(canWrite)} onClick={() => updateStatus(row.id, "resolved")} type="button">解决</button> : null}
         </span>
       ),
     },

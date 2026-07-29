@@ -3,6 +3,10 @@
 import { ClipboardPlus, Siren } from "lucide-react"
 import { useState } from "react"
 
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
@@ -25,6 +29,7 @@ export function ActiveAlertsPanel({
   alerts,
   onAssigned,
 }: ActiveAlertsPanelProps) {
+  const { canWrite } = useAdminAccess()
   const [busyId, setBusyId] = useState("")
   const [assignedIds, setAssignedIds] = useState<string[]>([])
   const [message, setMessage] = useState("")
@@ -103,7 +108,10 @@ export function ActiveAlertsPanel({
               </div>
               <button
                 className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-orange-300 px-3 text-xs font-extrabold text-[#25170b] transition hover:bg-orange-200 disabled:cursor-not-allowed disabled:opacity-45"
-                disabled={busyId === alert.id || assigned}
+                {...adminWriteControlProps(
+                  canWrite,
+                  busyId === alert.id || assigned,
+                )}
                 onClick={() => assign(alert)}
                 type="button"
               >

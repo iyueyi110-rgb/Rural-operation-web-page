@@ -3,6 +3,8 @@ import {
   readCookie,
   verifyAdminSession,
 } from "./admin-session.server"
+import { isGuestAdminRequestAllowed } from "./admin-guest-access"
+import { trustedAdminClientIdentifier } from "./admin-login-rate-limit.server"
 
 interface AdminBffDependencies {
   sessionSecret: string
@@ -26,12 +28,16 @@ export async function proxyAdminRequest(
   path: string[],
   dependencies: AdminBffDependencies,
 ) {
-  const session = readCookie(
-    request.headers.get("cookie"),
-    ADMIN_SESSION_COOKIE,
-  )
-  if (!(await verifyAdminSession(session, dependencies.sessionSecret))) {
-    return jsonError("Unauthorized", 401)
+  const pathname = `/${path.join("/")}`
+  const guestAllowed = isGuestAdminRequestAllowed(request.method, pathname)
+  if (!guestAllowed) {
+    const session = readCookie(
+      request.headers.get("cookie"),
+      ADMIN_SESSION_COOKIE,
+    )
+    if (!(await verifyAdminSession(session, dependencies.sessionSecret))) {
+      return jsonError("Unauthorized", 401)
+    }
   }
   const origin = request.headers.get("origin")
   if (
@@ -50,6 +56,10 @@ export async function proxyAdminRequest(
   headers.delete("cookie")
   headers.delete("host")
   headers.delete("content-length")
+  headers.delete("x-forwarded-for")
+  headers.delete("x-real-ip")
+  headers.delete("x-vercel-forwarded-for")
+  headers.set("X-Forwarded-For", trustedAdminClientIdentifier(request))
   headers.set("X-Admin-Token", dependencies.adminApiToken)
 
   const hasBody = request.method !== "GET" && request.method !== "HEAD"

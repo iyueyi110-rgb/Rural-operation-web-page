@@ -4,6 +4,10 @@ import { Check, Lightbulb, X } from "lucide-react"
 import { useState } from "react"
 import type { ReactNode } from "react"
 
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { fetchAdminApi } from "@admin/lib/admin-api"
 import { formatEvidenceEntries } from "@admin/lib/dashboard-data"
 
@@ -32,6 +36,7 @@ export function RecommendationReviewPanel({
   onReviewed,
   emptyLabel = "暂无待审核智策卡。",
 }: RecommendationReviewPanelProps) {
+  const { canWrite } = useAdminAccess()
   const [busyId, setBusyId] = useState("")
   const [message, setMessage] = useState("")
 
@@ -145,7 +150,7 @@ export function RecommendationReviewPanel({
               <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   className="inline-flex h-9 items-center gap-2 rounded-full bg-emerald-300 px-4 text-sm font-extrabold text-[#102019] transition hover:bg-emerald-200 disabled:opacity-45"
-                  disabled={busyId === item.id}
+                  {...adminWriteControlProps(canWrite, busyId === item.id)}
                   onClick={() => review(item.id, "approve")}
                   type="button"
                 >
@@ -154,7 +159,7 @@ export function RecommendationReviewPanel({
                 </button>
                 <button
                   className="inline-flex h-9 items-center gap-2 rounded-full bg-white/5 px-4 text-sm font-bold text-white/70 transition hover:bg-red-400/15 hover:text-red-200 disabled:opacity-45"
-                  disabled={busyId === item.id}
+                  {...adminWriteControlProps(canWrite, busyId === item.id)}
                   onClick={() => review(item.id, "reject")}
                   type="button"
                 >

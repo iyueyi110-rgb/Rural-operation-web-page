@@ -4,10 +4,14 @@
 
 ## 安全模型
 
+- 匿名访客可以浏览全部后台数据，并可调用知识问答、运营问答、内容生成、空间诊断和设施决策建议生成。
+- 匿名能力严格限于全部 `GET`/`HEAD` 请求，以及以下五个精确 `POST` 路径：`/knowledge/query`、`/ai/query`、`/ai/generate-content`、`/renovation/run-weekly` 与 `/infrastructure/decide`。
+- 除上述精确白名单外，所有写操作都必须持有有效管理员 HttpOnly 会话。
 - 管理员口令只提交给本应用的 session Route Handler。
 - 登录成功后使用签名 HttpOnly cookie。
 - Admin BFF 在服务端附加 `ADMIN_API_TOKEN`，浏览器不会接触该 token。
 - 生产环境必须设置强 `ADMIN_LOGIN_PASSWORD` 和至少 32 字符的 `ADMIN_SESSION_SECRET`。
+- 访客读取范围包含现有接口返回的业务数据和个人信息，部署前必须确认该公开范围符合运营要求。
 
 ## 常用命令
 

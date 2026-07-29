@@ -7,6 +7,10 @@ import {
   AdminDataTable,
   type TableColumn,
 } from "@admin/components/admin-data-table"
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { AdminNotice } from "@admin/components/admin-page-shell"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
 import {
@@ -71,6 +75,7 @@ const activityTypes = [
 const statuses = ["upcoming", "active", "completed"] as const
 
 export default function FarmingPage() {
+  const { canWrite } = useAdminAccess()
   const [rows, setRows] = useState<FarmingRow[]>([])
   const [selected, setSelected] = useState<FarmingRow | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -249,7 +254,10 @@ export default function FarmingPage() {
               ? adminCopy.farming.activityTitle
               : adminCopy.farming.create}
           </div>
-          <div className="mt-4 grid gap-3">
+          <fieldset
+            className="m-0 mt-4 grid min-w-0 gap-3 border-0 p-0"
+            {...adminWriteControlProps(canWrite)}
+          >
             <select
               className="h-10 rounded-md border border-stone bg-rice px-3"
               onChange={(event) =>
@@ -333,9 +341,10 @@ export default function FarmingPage() {
               placeholder={adminCopy.farming.description}
               value={form.description}
             />
-          </div>
+          </fieldset>
           <button
             className="mt-4 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white"
+            {...adminWriteControlProps(canWrite)}
             onClick={saveFarming}
             type="button"
           >

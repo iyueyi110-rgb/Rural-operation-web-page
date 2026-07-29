@@ -3,6 +3,10 @@
 import { AlertTriangle, Plus, RadioTower, RefreshCw } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
 import { adminApiBase, fetchAdminApi, fetchWithTimeout, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
@@ -27,6 +31,7 @@ interface NodeRow {
 }
 
 export default function DevicesPage() {
+  const { canWrite } = useAdminAccess()
   const [devices, setDevices] = useState<DeviceRow[]>([])
   const [nodes, setNodes] = useState<NodeRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -113,7 +118,10 @@ export default function DevicesPage() {
           <Plus className="h-5 w-5 text-water" />
           {adminCopy.devices.create}
         </div>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
+        <fieldset
+          className="m-0 mt-4 grid min-w-0 gap-3 border-0 p-0 md:grid-cols-3"
+          {...adminWriteControlProps(canWrite)}
+        >
           <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setForm({ ...form, deviceId: event.target.value })} placeholder={adminCopy.devices.deviceId} value={form.deviceId} />
           <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setForm({ ...form, name: event.target.value })} placeholder={adminCopy.devices.name} value={form.name} />
           <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setForm({ ...form, type: event.target.value })} placeholder={adminCopy.devices.type} value={form.type} />
@@ -129,8 +137,8 @@ export default function DevicesPage() {
             ))}
           </select>
           <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setForm({ ...form, location: event.target.value })} placeholder={adminCopy.devices.location} value={form.location} />
-        </div>
-        <button className="mt-4 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white" onClick={saveDevice} type="button">
+        </fieldset>
+        <button className="mt-4 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white" {...adminWriteControlProps(canWrite)} onClick={saveDevice} type="button">
           {adminCopy.devices.save}
         </button>
       </section>

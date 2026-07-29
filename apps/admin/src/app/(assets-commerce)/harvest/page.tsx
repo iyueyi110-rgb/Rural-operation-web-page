@@ -2,6 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
 import { adminApiBase, fetchAdminApi } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
@@ -41,6 +45,7 @@ function getNextShipmentStatus(status?: ShipmentRow["status"]) {
 }
 
 export default function HarvestPage() {
+  const { canWrite } = useAdminAccess()
   const [rows, setRows] = useState<HarvestRow[]>([])
   const [selectedId, setSelectedId] = useState("")
   const [isLoading, setIsLoading] = useState(true)
@@ -155,16 +160,16 @@ export default function HarvestPage() {
       label: "操作",
       render: (_value, row) => (
         <span className="flex flex-wrap gap-2">
-          <button className="text-moss" onClick={() => updateStatus(row.id, "confirmed")} type="button">
+          <button className="text-moss" {...adminWriteControlProps(canWrite)} onClick={() => updateStatus(row.id, "confirmed")} type="button">
             确认
           </button>
-          <button className="text-water" onClick={() => updateStatus(row.id, "completed")} type="button">
+          <button className="text-water" {...adminWriteControlProps(canWrite)} onClick={() => updateStatus(row.id, "completed")} type="button">
             完成
           </button>
-          <button className="text-lychee" onClick={() => updateDestination(row, "加工")} type="button">
+          <button className="text-lychee" {...adminWriteControlProps(canWrite)} onClick={() => updateDestination(row, "加工")} type="button">
             加工
           </button>
-          <button className="text-ink/70" onClick={() => updateDestination(row, "销售")} type="button">
+          <button className="text-ink/70" {...adminWriteControlProps(canWrite)} onClick={() => updateDestination(row, "销售")} type="button">
             销售
           </button>
           <button className="font-bold text-water" onClick={() => setSelectedId(row.id)} type="button">
@@ -187,7 +192,10 @@ export default function HarvestPage() {
         <aside className="rounded-lg border border-stone bg-white p-5 shadow-soft">
           <p className="text-sm font-bold text-water">代摘代寄</p>
           <h2 className="mt-1 text-lg font-extrabold">{selectedRow ? `${selectedRow.treeId} / ${selectedRow.scheduledDate}` : "请选择采摘单"}</h2>
-          <div className="mt-4 grid gap-3">
+          <fieldset
+            className="m-0 mt-4 grid min-w-0 gap-3 border-0 p-0"
+            {...adminWriteControlProps(canWrite)}
+          >
             <label className="grid gap-1 text-sm font-bold text-ink/70">
               收件人
               <input className="h-10 rounded-md border border-stone px-3" onChange={(event) => setShipmentDraft((draft) => ({ ...draft, recipientName: event.target.value }))} value={shipmentDraft.recipientName} />
@@ -218,10 +226,10 @@ export default function HarvestPage() {
                 ))}
               </select>
             </label>
-            <button className="mt-2 h-11 rounded-full bg-ink px-5 text-sm font-bold text-white disabled:opacity-50" disabled={!selectedRow} onClick={saveShipment} type="button">
+            <button className="mt-2 h-11 rounded-full bg-ink px-5 text-sm font-bold text-white disabled:opacity-50" {...adminWriteControlProps(canWrite, !selectedRow)} onClick={saveShipment} type="button">
               保存物流
             </button>
-          </div>
+          </fieldset>
         </aside>
       </div>
     </div>

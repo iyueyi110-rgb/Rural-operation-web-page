@@ -7,6 +7,10 @@ import {
   AdminDataTable,
   type TableColumn,
 } from "@admin/components/admin-data-table"
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
 import { fetchAdminApi, nodeDisplayName } from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
@@ -47,6 +51,7 @@ const skillOptions = [
 ] as const
 
 export default function VillagersPage() {
+  const { canWrite } = useAdminAccess()
   const [villagers, setVillagers] = useState<VillagerRow[]>([])
   const [nodes, setNodes] = useState<NodeRow[]>([])
   const [selected, setSelected] = useState<VillagerRow | null>(null)
@@ -283,7 +288,10 @@ export default function VillagersPage() {
           <div className="text-lg font-extrabold">
             {selected ? adminCopy.villagers.detail : adminCopy.villagers.create}
           </div>
-          <div className="mt-4 grid gap-3">
+          <fieldset
+            className="m-0 mt-4 grid min-w-0 gap-3 border-0 p-0"
+            {...adminWriteControlProps(canWrite)}
+          >
             <input
               className="h-10 rounded-md border border-stone bg-rice px-3"
               onChange={(event) =>
@@ -345,10 +353,11 @@ export default function VillagersPage() {
                 ))}
               </div>
             </div>
-          </div>
+          </fieldset>
 
           <button
             className="mt-4 h-10 rounded-full bg-ink px-5 text-sm font-bold text-white"
+            {...adminWriteControlProps(canWrite)}
             onClick={saveVillager}
             type="button"
           >

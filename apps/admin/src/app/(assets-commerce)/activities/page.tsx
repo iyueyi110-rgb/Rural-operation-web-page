@@ -6,6 +6,10 @@ import {
   AdminDataTable,
   type TableColumn,
 } from "@admin/components/admin-data-table"
+import {
+  adminWriteControlProps,
+  useAdminAccess,
+} from "@admin/components/admin-access"
 import { AdminNotice } from "@admin/components/admin-page-shell"
 import {
   adminApiBase,
@@ -36,6 +40,7 @@ interface BookingRow extends Record<string, unknown> {
 }
 
 export default function ActivitiesAdminPage() {
+  const { canWrite } = useAdminAccess()
   const [activities, setActivities] = useState<ActivityRow[]>([])
   const [bookings, setBookings] = useState<BookingRow[]>([])
   const [selectedActivityId, setSelectedActivityId] = useState("")
@@ -139,6 +144,7 @@ export default function ActivitiesAdminPage() {
           </button>
           <button
             className="text-lychee"
+            {...adminWriteControlProps(canWrite)}
             onClick={() => updateStatus(row.id, "cancelled")}
             type="button"
           >
@@ -184,7 +190,10 @@ export default function ActivitiesAdminPage() {
         <h2 className="text-lg font-extrabold">
           {adminCopy.activities.create}
         </h2>
-        <div className="mt-4 grid gap-3 md:grid-cols-4">
+        <fieldset
+          className="m-0 mt-4 grid min-w-0 gap-3 border-0 p-0 md:grid-cols-4"
+          {...adminWriteControlProps(canWrite)}
+        >
           <input
             className="h-10 rounded-md border border-stone bg-rice px-3"
             onChange={(event) =>
@@ -243,14 +252,16 @@ export default function ActivitiesAdminPage() {
           />
           <button
             className="h-10 rounded-full bg-ink px-4 text-sm font-bold text-white"
+            {...adminWriteControlProps(canWrite)}
             onClick={createActivity}
             type="button"
           >
             {adminCopy.activities.create}
           </button>
-        </div>
+        </fieldset>
         <textarea
           className="mt-3 min-h-20 w-full rounded-md border border-stone bg-rice p-3 text-sm font-semibold"
+          {...adminWriteControlProps(canWrite)}
           onChange={(event) =>
             setForm({ ...form, description: event.target.value })
           }
