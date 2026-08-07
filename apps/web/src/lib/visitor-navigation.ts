@@ -3,6 +3,7 @@ import type { Locale } from "@web/i18n/routing"
 import { buildExploreHref } from "./home-navigation"
 
 export interface VisitorNavLabels {
+  demo: string
   tickets: string
   calendar: string
   activities: string
@@ -23,6 +24,10 @@ export interface VisitorNavItem {
 }
 
 export function buildVisitorNavItems(locale: Locale, labels: VisitorNavLabels) {
+  const demoNavItem: VisitorNavItem = {
+    href: `/${locale}/demo`,
+    label: labels.demo,
+  }
   const coreNavItems: VisitorNavItem[] = [
     { href: `/${locale}/tickets`, label: labels.tickets },
     { href: `/${locale}/calendar`, label: labels.calendar },
@@ -45,7 +50,13 @@ export function buildVisitorNavItems(locale: Locale, labels: VisitorNavLabels) {
   return {
     accountItems,
     coreNavItems,
-    mobileItems: [...coreNavItems, ...moreNavItems, ...accountItems],
+    demoNavItem,
+    mobileItems: [
+      demoNavItem,
+      ...coreNavItems,
+      ...moreNavItems,
+      ...accountItems,
+    ],
     moreNavItems,
   }
 }

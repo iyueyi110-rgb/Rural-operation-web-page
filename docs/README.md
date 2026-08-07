@@ -7,9 +7,18 @@
 ### 产品与业务
 
 - [AI 产品经理招聘证据索引](portfolio/README.md)
+- [3 分钟 Demo 演示脚本](portfolio/DEMO_SCRIPT.md)
+- [面试版项目摘要](portfolio/INTERVIEW_SUMMARY.md)
+- [三分钟项目讲解稿](portfolio/INTERVIEW_TALK_TRACK.md)
+- [面试高频追问表](portfolio/INTERVIEW_QA.md)
 - [产品需求文档](product/PRD.md)
 - [产品定位与设计原则](product/PRODUCT_POSITIONING.md)
 - [项目亮点](product/HIGHLIGHTS.md)
+- [功能状态与实现边界](product/FEATURE_STATUS.md)
+- [调研证据与产品决策](product/RESEARCH_AND_DECISIONS.md)
+- [认养履约异常矩阵](product/EXCEPTION_MATRIX.md)
+- [指标树与真实试点方案](product/METRICS_AND_PILOT.md)
+- [商业与运营模型](product/BUSINESS_AND_OPERATIONS.md)
 - [项目演讲稿](product/pitch-deck.md)
 
 ### 技术与开发
@@ -46,12 +55,12 @@
 
 ## 旧路径迁移
 
-| 旧位置 | 新位置 |
-| --- | --- |
-| 根目录 `PRD.md`、`PRODUCT.md` | `docs/product/` |
-| 根目录 `DATA_STRUCTURE.md` | `docs/tech/database-schema.md` |
-| `docs/simulation-*.md` | `docs/simulation/` |
-| `docs/adoption-v2/` | `docs/reports/adoption-v2/` |
-| 根目录 `PROJECT_RULES.md`、`CODEX_*.md` | `.codex/` |
+| 旧位置                                  | 新位置                         |
+| --------------------------------------- | ------------------------------ |
+| 根目录 `PRD.md`、`PRODUCT.md`           | `docs/product/`                |
+| 根目录 `DATA_STRUCTURE.md`              | `docs/tech/database-schema.md` |
+| `docs/simulation-*.md`                  | `docs/simulation/`             |
+| `docs/adoption-v2/`                     | `docs/reports/adoption-v2/`    |
+| 根目录 `PROJECT_RULES.md`、`CODEX_*.md` | `.codex/`                      |
 
 移动记录保留在 Git 历史中；仓库不保留重复跳转文件。

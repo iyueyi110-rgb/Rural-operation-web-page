@@ -4,6 +4,10 @@
       "title": "Zouma Village Portal",
       "description": "A placeholder English experience for the Zouma Village Web/PWA."
     },
+    "demo": {
+      "title": "LZ-018 adoption fulfillment demo | Zouma Village",
+      "description": "Follow the LZ-018 case through adoption, villager fulfillment, operations review, benefits and Bad Case analysis."
+    },
     "explore": {
       "title": "Explore Zouma Village",
       "description": "Open a second-level journey through Zouma Village history, weather and the Four Realms map."
@@ -502,6 +506,8 @@
       "aria": "Home navigation",
       "mark": "Z",
       "brand": "Zouma Village",
+      "demo": "3-min demo",
+      "demoLogin": "Demo login",
       "realms": "Realms",
       "weather": "Weather",
       "routes": "Routes",
@@ -1537,6 +1543,133 @@
     },
     "order": {
       "title": "Booking created"
+    }
+  },
+  "portfolioDemo": {
+    "nav": {
+      "home": "Back home",
+      "aria": "Core demo destinations",
+      "tree": "Tree profile",
+      "villager": "Villager",
+      "admin": "Operations",
+      "badCase": "Bad Case"
+    },
+    "hero": {
+      "badge": "3-minute interview entry",
+      "title": "LZ-018 adoption fulfillment demo",
+      "body": "One implemented golden case connects the adopter, villager and operations workflows. Start with the normal loop, then inspect evidence rejection and human review boundaries.",
+      "start": "Start the 7-step demo",
+      "treeCta": "View the LZ-018 profile",
+      "imageAlt": "Profile photo of LZ-018 Feizixiao lychee tree"
+    },
+    "readiness": {
+      "full": {
+        "label": "Golden case loaded",
+        "title": "Full data path available",
+        "body": "The LZ-018 golden case and two evidence versions were detected. Writes still require the relevant user, villager or administrator authentication."
+      },
+      "readonly": {
+        "label": "Read-only fallback",
+        "title": "Stable read-only path shown",
+        "body": "When the database is unavailable, the feature is disabled or golden data is missing, only verifiable pages and flow links are shown. Orders, uploads, reviews and settlements are never reported as successful."
+      }
+    },
+    "disclaimer": "Demo data. Simulated operations data does not represent real business results.",
+    "facts": {
+      "roles": "collaborating roles",
+      "steps": "demo actions",
+      "case": "core case"
+    },
+    "filters": {
+      "aria": "Filter demo steps by role",
+      "all": "All",
+      "user": "Adopter",
+      "villager": "Villager",
+      "operator": "Operations"
+    },
+    "roles": {
+      "user": "Adopter",
+      "villager": "Villager fulfillment",
+      "operator": "Operations review"
+    },
+    "journey": {
+      "eyebrow": "Single core workflow",
+      "title": "One continuous adoption fulfillment timeline",
+      "body": "Open the implemented pages in order. Role filters emphasize relevant steps without hiding cross-role handoffs."
+    },
+    "steps": {
+      "profile": {
+        "title": "Inspect the LZ-018 tree profile",
+        "body": "Confirm species, age, blurred location, health, growth records and benefits before treating adoption as more than a one-off purchase.",
+        "cta": "Open tree profile",
+        "status": {
+          "full": "Available to browse",
+          "readonly": "Fallback data available"
+        }
+      },
+      "adopt": {
+        "title": "Select the annual plan and enter pending payment",
+        "body": "Choose LZ-018 and the annual plan from the adoption list. The system creates a pending-payment demo state; WeChat and Alipay charging are not connected.",
+        "cta": "Choose a plan",
+        "status": {
+          "full": "User login required to create",
+          "readonly": "Plans are read-only"
+        }
+      },
+      "accept": {
+        "title": "Villager accepts the care task",
+        "body": "After OTP login, the villager reviews the deadline, earnings and evidence requirements. Rejection or timeout enters operations exception handling.",
+        "cta": "Open villager login",
+        "status": {
+          "full": "Villager OTP required",
+          "readonly": "Login entry available"
+        }
+      },
+      "evidence": {
+        "title": "Upload two fulfillment photos",
+        "body": "The task requires at least two identifiable images. Upload failure, insufficient images or version conflicts are never presented as successful submission.",
+        "cta": "View villager tasks",
+        "status": {
+          "full": "Villager OTP required",
+          "readonly": "No fabricated writes"
+        }
+      },
+      "review": {
+        "title": "Operations rejects once, then approves",
+        "body": "The golden case retains two evidence versions: blurry images are rejected, the villager resubmits, and a human approves. That review gates benefits and settlement.",
+        "cta": "Open operations tasks",
+        "status": {
+          "full": "Admin password required to write",
+          "readonly": "Guest read-only"
+        }
+      },
+      "benefit": {
+        "title": "Check benefits, settlement and renewal",
+        "body": "After approval, review harvest delivery benefits, villager settlement and renewal. Refund requests only create a ticket for human review.",
+        "cta": "Use demo user login",
+        "status": {
+          "full": "Demo user login required",
+          "readonly": "Boundaries are visible"
+        }
+      },
+      "badCase": {
+        "title": "Explain rule limits with one Bad Case",
+        "body": "Finish with an event chain for prolonged rain, task delay or delayed benefits, and explain why simulation cannot prove business value or automatically promote rules.",
+        "cta": "Open Bad Case",
+        "status": {
+          "full": "Guest-readable",
+          "readonly": "Simulation fallback available"
+        }
+      }
+    },
+    "boundaries": {
+      "eyebrow": "State the limits",
+      "title": "Four boundaries to explain before the demo ends",
+      "body": "These are product decisions, not footnotes. The current system proves traceability and accountable decisions without presenting unvalidated capabilities as production results.",
+      "payment": "Real WeChat and Alipay charging is not connected; pending payment is a demo workflow state.",
+      "refund": "Refund requests create a human-review ticket; there is no automatic refund or fault decision.",
+      "agent": "The Agent only produces shadow suggestions. Missing model keys trigger an explicit fallback, and it cannot modify orders or settlements.",
+      "review": "Evidence approval, exception decisions and settlement release retain a human gate."
     }
   },
   "villagerSystem": {

@@ -9,7 +9,7 @@ import type {
   TreeCareLogData,
 } from "@zouma/contracts"
 
-import { orchardTreeOptions } from "@web/lib/trees-data"
+import { normalizeTreeCode, orchardTreeOptions } from "@web/lib/trees-data"
 import { resolveTreeHiddenGeo } from "@web/lib/tree-geo"
 
 export { isAdminRequest } from "@web/lib/admin-request"
@@ -33,7 +33,7 @@ export interface TreeAdoptionRightsSummary {
 
 const fallbackTrees: TreeProfile[] = orchardTreeOptions.map((tree) => ({
   id: tree.id,
-  treeCode: tree.id,
+  treeCode: tree.treeCode,
   species: tree.species,
   age: tree.age,
   healthStatus: tree.healthStatus,
@@ -104,8 +104,13 @@ function enrichTree(tree: {
   }>
 }): TreeProfile {
   const staticTree =
-    orchardTreeOptions.find((option) => option.id === tree.treeCode) ??
-    orchardTreeOptions.find((option) => option.treeCode === tree.treeCode)
+    orchardTreeOptions.find(
+      (option) => normalizeTreeCode(option.id) === normalizeTreeCode(tree.treeCode),
+    ) ??
+    orchardTreeOptions.find(
+      (option) =>
+        normalizeTreeCode(option.treeCode) === normalizeTreeCode(tree.treeCode),
+    )
 
   return {
     id: tree.id,
@@ -166,13 +171,16 @@ export async function listTreeProfiles(): Promise<TreeProfile[]> {
 export async function getTreeProfile(
   code: string,
 ): Promise<TreeProfile | null> {
+  const normalizedCode = normalizeTreeCode(code)
   try {
     const tree = await prisma.orchardTree.findFirst({
       where: {
         OR: [
           { treeCode: code },
           { treeCode: code.toLowerCase() },
+          { treeCode: normalizedCode },
           { id: code },
+          { id: normalizedCode },
         ],
       },
       include: {
@@ -192,7 +200,11 @@ export async function getTreeProfile(
   }
 
   return (
-    fallbackTrees.find((tree) => tree.treeCode === code || tree.id === code) ??
+    fallbackTrees.find(
+      (tree) =>
+        normalizeTreeCode(tree.treeCode) === normalizedCode ||
+        normalizeTreeCode(tree.id) === normalizedCode,
+    ) ??
     null
   )
 }

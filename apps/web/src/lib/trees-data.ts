@@ -17,6 +17,11 @@ export interface OrchardTreeOption extends OrchardTree {
   }>
 }
 
+/** Keep formatted public codes and compact database ids interchangeable. */
+export function normalizeTreeCode(code: string): string {
+  return code.trim().toLowerCase().replace(/[^a-z0-9]/g, "")
+}
+
 export const adoptionPlanOptions = [
   { value: "seasonal", labelKey: "plans.seasonal.label", bodyKey: "plans.seasonal.body" },
   { value: "annual", labelKey: "plans.annual.label", bodyKey: "plans.annual.body" },

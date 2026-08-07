@@ -11,12 +11,13 @@ import { Section } from "@ui/index"
 
 export async function HomeHeader({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: "home" })
-  const { accountItems, coreNavItems, mobileItems, moreNavItems } =
+  const { coreNavItems, demoNavItem, mobileItems, moreNavItems } =
     buildVisitorNavItems(locale, {
       activities: t("nav.activities"),
       adoption: t("nav.adoption"),
       booking: t("nav.booking"),
       calendar: t("nav.calendar"),
+      demo: t("nav.demo"),
       interactions: t("nav.interactions"),
       me: t("quickActions.me"),
       privacy: t("quickActions.privacy"),
@@ -85,17 +86,23 @@ export async function HomeHeader({ locale }: { locale: Locale }) {
 
         <div className="flex shrink-0 items-center gap-2">
           <Link
-            className="hidden h-10 items-center gap-2 rounded-full border border-white/18 px-3 text-sm font-semibold text-white transition hover:bg-white/10 sm:inline-flex sm:px-4"
+            className="hidden h-10 items-center gap-2 rounded-full border border-white/18 px-3 text-sm font-semibold text-white transition hover:bg-white/10 xl:inline-flex xl:px-4"
             href={`/${locale}#top`}
           >
             <UserRound aria-hidden="true" className="h-4 w-4" />
             {t("nav.login")}
           </Link>
           <Link
-            className="hidden h-10 items-center gap-2 rounded-full border border-lychee/40 bg-lychee/10 px-3 text-sm font-semibold text-lychee transition hover:bg-lychee/20 sm:inline-flex sm:px-4"
+            className="hidden h-10 items-center gap-2 rounded-full border border-lychee/40 bg-lychee/10 px-3 text-sm font-semibold text-lychee transition hover:bg-lychee/20 2xl:inline-flex 2xl:px-4"
             href={`/${locale}/me/demo-login`}
           >
-            演示登录
+            {t("nav.demoLogin")}
+          </Link>
+          <Link
+            className="hidden h-10 items-center gap-2 rounded-full bg-lychee px-4 text-sm font-semibold text-white transition hover:bg-[#a8312f] sm:inline-flex"
+            href={demoNavItem.href}
+          >
+            {demoNavItem.label}
           </Link>
           <Link
             className="hidden h-10 items-center gap-2 rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-rice sm:inline-flex"

@@ -4,6 +4,7 @@ import test from "node:test"
 import { buildVisitorNavItems } from "./visitor-navigation"
 
 const labels = {
+  demo: "3 分钟演示",
   tickets: "门票预购",
   calendar: "农事",
   activities: "活动",
@@ -24,6 +25,7 @@ test("builds a complete mobile visitor navigation for every public entry", () =>
   assert.deepEqual(
     nav.mobileItems.map((item) => item.href),
     [
+      "/zh-CN/demo",
       "/zh-CN/tickets",
       "/zh-CN/calendar",
       "/zh-CN/activities",
