@@ -17,6 +17,7 @@ export async function VisitorHeaderActions({
     adoption: t("nav.adoption"),
     booking: t("nav.booking"),
     calendar: t("nav.calendar"),
+    demo: t("nav.demo"),
     interactions: t("nav.interactions"),
     me: t("quickActions.me"),
     privacy: t("quickActions.privacy"),

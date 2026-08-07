@@ -13,14 +13,19 @@ test("demo login route issues a visitor JWT without a phone number", () => {
 
   assert.match(source, /export async function POST/)
   assert.match(source, /demo_\$\{randomUUID\(\)\.slice\(0,\s*8\)\}/)
-  assert.match(source, /createJWT\(\{\s*userId,\s*role: "visitor"\s*\},\s*jwtSalt\)/)
+  assert.match(
+    source,
+    /createJWT\(\{\s*userId,\s*role: "visitor"\s*\},\s*jwtSalt\)/,
+  )
   assert.match(source, /mobile: "demo_user"/)
   assert.match(source, /demoMode: true/)
 })
 
 test("demo login page saves the token and routes to the localized account page", () => {
   const pageSource = readSource("../app/[locale]/me/demo-login/page.tsx")
-  const clientSource = readSource("../app/[locale]/me/demo-login/demo-login-client.tsx")
+  const clientSource = readSource(
+    "../app/[locale]/me/demo-login/demo-login-client.tsx",
+  )
 
   assert.match(pageSource, /DemoLoginClient/)
   assert.match(clientSource, /fetch\("\/api\/v1\/auth\/demo-login"/)
@@ -33,7 +38,7 @@ test("home header exposes the demo login entry", () => {
   const source = readSource("../components/home-header.tsx")
 
   assert.match(source, /href=\{`\/\$\{locale\}\/me\/demo-login`\}/)
-  assert.match(source, /演示登录/)
+  assert.match(source, /t\("nav\.demoLogin"\)/)
 })
 
 test("database-backed GET routes return degraded responses when Prisma queries fail", () => {
@@ -43,7 +48,10 @@ test("database-backed GET routes return degraded responses when Prisma queries f
   const feedbackSource = readSource("../app/api/v1/feedback/route.ts")
 
   assert.match(reportsSource, /catch \(error\)/)
-  assert.match(reportsSource, /buildFallbackDailyReport\(getChinaDateString\(\)\)/)
+  assert.match(
+    reportsSource,
+    /buildFallbackDailyReport\(getChinaDateString\(\)\)/,
+  )
   assert.match(reportsSource, /degraded: true/)
 
   assert.match(adoptionsSource, /catch \(error\)/)
