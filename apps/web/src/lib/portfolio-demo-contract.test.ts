@@ -30,6 +30,11 @@ test("portfolio demo keeps seven implemented handoff steps and real deep links",
   assert.match(journeySource, /\$\{adminBaseUrl\}\/simulations/)
 })
 
+test("portfolio demo never falls back to localhost for production Admin links", () => {
+  assert.match(pageSource, /process\.env\.NODE_ENV === "production"/)
+  assert.match(pageSource, /https:\/\/zouma-village-admin\.vercel\.app/)
+})
+
 test("portfolio demo distinguishes full data from read-only degradation", () => {
   assert.match(readinessSource, /ADOPTION_V2_ENABLED/)
   assert.match(readinessSource, /ADOPT-2026-LZ018-001/)
