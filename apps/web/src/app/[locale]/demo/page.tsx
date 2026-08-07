@@ -47,7 +47,10 @@ export default async function PortfolioDemoPage({
   const t = await getTranslations("portfolioDemo")
   const readiness = await getDemoReadiness()
   const adminBaseUrl = (
-    process.env.NEXT_PUBLIC_ADMIN_URL ?? "http://localhost:3001"
+    process.env.NEXT_PUBLIC_ADMIN_URL ??
+    (process.env.NODE_ENV === "production"
+      ? "https://zouma-village-admin.vercel.app"
+      : "http://localhost:3001")
   ).replace(/\/$/u, "")
 
   return (
