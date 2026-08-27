@@ -4,7 +4,7 @@
 
 > 面向乡村文旅的认养履约与权益管理作品集：用可追踪流程连接认养用户、村民履约人员和村级运营方，用规则模拟与固定评测验证产品决策。
 
-**快速入口：** [30 秒招聘证据](docs/portfolio/README.md) · [产品需求](docs/product/PRD.md) · [业务与设计原则](docs/product/PRODUCT_POSITIONING.md) · [规则模拟](packages/simulation/README.md) · [技术架构](ARCHITECTURE.md) · [文档中心](docs/README.md)
+**快速入口：** [项目证据](docs/portfolio/README.md) · [产品需求](docs/product/PRD.md) · [业务与设计原则](docs/product/PRODUCT_POSITIONING.md) · [规则模拟](packages/simulation/README.md) · [技术架构](ARCHITECTURE.md) · [文档中心](docs/README.md)
 
 ![认养一棵树项目预览](docs/assets/social-preview.png)
 
@@ -40,7 +40,7 @@
 
 > **模拟运营数据，不代表真实业务结果。** 模拟结果只用于发现规则缺口、校准护栏和决定下一轮实验，不能证明真实用户增长、村民效率或运营收益。
 
-V1 在按时提交、最终审核和人工介入等模拟过程指标上出现改善，但公平性、验收率和容量相关护栏并未在全部场景同步改善，因此 40 组结论均为“模拟结果暂不支持升级”。具体口径、结果和复现路径见[招聘证据索引](docs/portfolio/README.md)。
+V1 在按时提交、最终审核和人工介入等模拟过程指标上出现改善，但公平性、验收率和容量相关护栏并未在全部场景同步改善，因此 40 组结论均为“模拟结果暂不支持升级”。具体口径、结果和复现路径见[项目证据索引](docs/portfolio/README.md)。
 
 ### 知识助手与 Agent
 
