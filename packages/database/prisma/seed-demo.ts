@@ -721,7 +721,7 @@ async function seedDemoReportsAndRecommendations(nodes: Record<string, string>) 
     create: {
       id: `demo-report-${compactDate(demoDate)}`,
       date: demoDate,
-      title: "走马村云脑日报",
+      title: "走马村运营日报（演示）",
       summary: "今日荔枝园转化较高，水岸节点安全风险上升，建议将亲水区域导流到古道阴影段。",
       sections: [
         { title: "客流", content: "四境合计 478 人次，荔枝园峰值 64 人。" },
@@ -733,7 +733,7 @@ async function seedDemoReportsAndRecommendations(nodes: Record<string, string>) 
       generatedAt: demoNow,
     },
     update: {
-      title: "走马村云脑日报",
+      title: "走马村运营日报（演示）",
       summary: "今日荔枝园转化较高，水岸节点安全风险上升，建议将亲水区域导流到古道阴影段。",
       sections: [
         { title: "客流", content: "四境合计 478 人次，荔枝园峰值 64 人。" },

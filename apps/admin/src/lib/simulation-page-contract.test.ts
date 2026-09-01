@@ -99,7 +99,7 @@ test("keeps the simulation evidence boundary visible and handles unavailable API
 
 test("shows complete configuration, rule evidence checks, and four comparison breakdowns", () => {
   assert.match(detailSource, /模拟完整配置/)
-  assert.match(detailSource, /基于规则的模拟凭证检查/)
+  assert.match(detailSource, /基于规则的模拟材料检查/)
   assert.match(detailSource, /模拟通过/)
   assert.match(detailSource, /模拟失败/)
   assert.match(detailSource, /模拟待检查/)

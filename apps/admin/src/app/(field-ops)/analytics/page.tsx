@@ -112,7 +112,7 @@ export default function AnalyticsPage() {
 
   return (
     <AdminPageShell
-      description="对照节点客流、消费收入和路线生成记录，定位转化效率变化。"
+      description="对照演示客流、消费金额和路线生成记录，查看页面中的指标变化。"
       eyebrow={adminCopy.shell.subtitle}
       title={adminCopy.analytics.title}
     >
@@ -128,8 +128,8 @@ export default function AnalyticsPage() {
           onChange={(event) => setSortKey(event.target.value as SortKey)}
           value={sortKey}
         >
-          <option value="conversionRate">按转化率</option>
-          <option value="revenue">按收入</option>
+          <option value="conversionRate">按演示转化率</option>
+          <option value="revenue">按演示金额</option>
           <option value="peopleCount">按客流</option>
         </select>
       </AdminPanel>
@@ -147,7 +147,7 @@ export default function AnalyticsPage() {
         <div className="mt-4">
           <AdminDataTable
             columns={routeColumns}
-            emptyLabel="暂无路线生成记录。"
+            emptyLabel="还没有路线生成记录。用户生成路线后再刷新页面。"
             isLoading={isLoading}
             rows={routeRows}
           />

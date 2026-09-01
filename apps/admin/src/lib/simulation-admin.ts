@@ -68,7 +68,7 @@ export const scenarioOptions: Array<{
   {
     value: "LOW_SUBMISSION_QUALITY",
     label: "低质量提交",
-    description: "凭证完整度与清晰度承压",
+    description: "养护照片和说明的完整度与清晰度承压",
   },
   {
     value: "REMOTE_ZONE_LOAD",

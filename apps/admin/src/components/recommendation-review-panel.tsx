@@ -34,7 +34,7 @@ interface RecommendationReviewPanelProps {
 export function RecommendationReviewPanel({
   items,
   onReviewed,
-  emptyLabel = "暂无待审核智策卡。",
+  emptyLabel = "还没有待审核的运营建议，可稍后刷新。",
 }: RecommendationReviewPanelProps) {
   const { canWrite } = useAdminAccess()
   const [busyId, setBusyId] = useState("")
@@ -49,10 +49,14 @@ export function RecommendationReviewPanel({
         method: "POST",
         body: JSON.stringify({ action, approvedBy: "运营后台" }),
       })
-      setMessage(action === "approve" ? "智策卡已审核通过。" : "智策卡已驳回。")
+      setMessage(
+        action === "approve"
+          ? "运营建议已通过审核，后续动作仍受权限和人工确认限制。"
+          : "运营建议已驳回，不会进入后续执行。",
+      )
       onReviewed?.()
     } catch {
-      setMessage("审核操作失败，请稍后重试。")
+      setMessage("审核结果没有保存成功，请检查网络后重新提交。")
     } finally {
       setBusyId("")
     }
@@ -121,7 +125,9 @@ export function RecommendationReviewPanel({
                     ))}
                   </dl>
                 ) : (
-                  <span className="text-white/40">暂无结构化指标</span>
+                  <span className="text-white/40">
+                    这条建议没有结构化指标，请先核对原始记录。
+                  </span>
                 )}
               </Triad>
 
@@ -205,9 +211,9 @@ function recommendationTypeLabel(type: string) {
     maintenance: "设施维护",
     adoption_deadline_risk: "认养截止风险",
     adoption_unclaimed_task: "认养任务待接取",
-    adoption_evidence_incomplete: "履约凭证不完整",
+    adoption_evidence_incomplete: "养护照片或说明不完整",
     adoption_weather_delay: "天气延误风险",
-    adoption_repeated_exception: "重复履约异常",
+    adoption_repeated_exception: "养护任务重复异常",
   }
   return labels[type] ?? type
 }

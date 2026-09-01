@@ -111,7 +111,8 @@ const demoRecommendations: RecommendationRow[] = [
       orders: 5,
       source: "demo_fallback",
     },
-    message: "荔枝礼盒与认养回访关注度较高，建议补齐礼盒库存并同步前台权益说明。",
+    message:
+      "荔枝礼盒与认养回访关注度较高，建议补齐礼盒库存并同步前台权益说明。",
     actionSteps: ["补货荔枝礼盒", "补充认养树回访权益文案"],
     ownerRole: "operator",
     expectedImpact: "提升农产品转化并减少现场咨询等待。",
@@ -150,13 +151,13 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center gap-2 text-xs font-extrabold text-[#d7b56d]">
             <span className="h-2 w-2 rounded-full bg-[#d7b56d]" />
-            AIGC Cloud Brain
+            运营记录总览
           </div>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight">
             五流运营总览
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-white/50">
-            生产、游客、生态、产品反馈与智策卡在同一屏协同，数据按业务节奏自动更新。
+            在同一页查看生产、游客、生态、产品反馈和待确认建议。这里展示的是演示数据，不代表真实运营结果。
           </p>
         </div>
         <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-white/50">
@@ -182,7 +183,7 @@ export default function DashboardPage() {
               value={production.data?.completedTasks ?? 0}
             />
             <Metric
-              label="完成收益"
+              label="演示任务金额"
               value={`¥${production.data?.completedEarnings ?? 0}`}
             />
           </div>
@@ -207,7 +208,7 @@ export default function DashboardPage() {
             <Metric label="峰值客流" value={behavior.data?.peakVisitors ?? 0} />
             <Metric label="消费订单" value={behavior.data?.orderCount ?? 0} />
             <Metric
-              label="消费金额"
+              label="演示消费金额"
               value={`¥${behavior.data?.revenue ?? 0}`}
             />
           </div>
@@ -226,7 +227,10 @@ export default function DashboardPage() {
           <ModuleError message={ecology.error} />
           <div className="mb-4 grid grid-cols-3 gap-2">
             {(ecology.data?.sensors ?? []).slice(0, 3).map((sensor) => (
-              <div className="rounded-lg border border-white/8 bg-white/[0.045] p-3" key={sensor.id}>
+              <div
+                className="rounded-lg border border-white/8 bg-white/[0.045] p-3"
+                key={sensor.id}
+              >
                 <div className="truncate text-[11px] font-bold text-white/40">
                   {sensorTypeLabel(sensor.type)}
                 </div>
@@ -286,7 +290,7 @@ export default function DashboardPage() {
             icon={<Sparkles aria-hidden="true" className="h-5 w-5" />}
             loading={recommendations.loading}
             onRefresh={recommendations.refresh}
-            title="运营智策卡"
+            title="待确认运营建议"
           >
             <ModuleError message={recommendations.error} />
             <RecommendationReviewPanel
@@ -311,7 +315,7 @@ function useModuleData<T>(loader: () => Promise<T>, refreshInterval: number) {
     try {
       setData(await loader())
     } catch {
-      setError("数据暂时不可用，请稍后刷新。")
+      setError("数据没有加载成功，请检查前台 API 和网络后重新刷新。")
     } finally {
       setLoading(false)
     }
@@ -483,5 +487,7 @@ function sensorTypeLabel(type: string) {
 }
 
 function todayInChina() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(new Date())
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(
+    new Date(),
+  )
 }

@@ -69,7 +69,9 @@ export function ActiveAlertsPanel({
         <p aria-live="polite" className="text-xs font-semibold text-orange-200">
           {message}
         </p>
-        <p className="text-sm font-semibold text-white/45">暂无活跃告警。</p>
+        <p className="text-sm font-semibold text-white/45">
+          当前没有需要处理的告警。新告警出现后会显示在这里。
+        </p>
       </div>
     )
   }

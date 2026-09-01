@@ -32,7 +32,7 @@ export default function RecommendationsPage() {
       )
       setItems(result.data)
     } catch {
-      setError("智策卡加载失败，请确认前台 API 已启动。")
+      setError("运营建议没有加载成功，请确认前台 API 已启动后再刷新。")
     } finally {
       setLoading(false)
     }
@@ -48,12 +48,11 @@ export default function RecommendationsPage() {
         <div>
           <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.18em] text-emerald-300">
             <Sparkles aria-hidden="true" className="h-4 w-4" />
-            Decision Center
+            Review Suggestions
           </div>
-          <h1 className="mt-2 text-3xl font-extrabold">智策中心</h1>
+          <h1 className="mt-2 text-3xl font-extrabold">运营建议审核</h1>
           <p className="mt-2 text-sm text-white/50">
-            按 Evidence、Action、Impact
-            审核建议，执行动作仅允许访问系统内部白名单接口。
+            查看建议依据、行动步骤和预期影响。通过后也只允许执行系统内部白名单动作，高风险操作仍需人工确认。
           </p>
         </div>
         <button
@@ -70,7 +69,11 @@ export default function RecommendationsPage() {
         </button>
       </header>
 
-      <div aria-label="智策卡状态" className="mt-6 flex gap-2" role="tablist">
+      <div
+        aria-label="运营建议状态"
+        className="mt-6 flex flex-wrap gap-2"
+        role="tablist"
+      >
         {tabs.map((tab) => (
           <button
             aria-selected={status === tab.value}
@@ -97,11 +100,11 @@ export default function RecommendationsPage() {
         ) : null}
         {loading && !items.length ? (
           <p className="text-sm font-semibold text-white/45">
-            正在加载智策卡...
+            正在加载运营建议...
           </p>
         ) : (
           <RecommendationReviewPanel
-            emptyLabel={`暂无${tabs.find((tab) => tab.value === status)?.label ?? ""}智策卡。`}
+            emptyLabel={`没有${tabs.find((tab) => tab.value === status)?.label ?? ""}的运营建议，可切换状态或稍后刷新。`}
             items={items}
             onReviewed={loadItems}
           />

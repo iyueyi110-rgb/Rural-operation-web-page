@@ -1,6 +1,7 @@
 "use client"
 
 import { CreditCard, ShieldAlert, X } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { fetchWithAuth } from "@web/lib/auth-client"
@@ -27,6 +28,7 @@ export function DemoPaymentDialog({
   orderTitle,
   onPaid,
 }: DemoPaymentDialogProps) {
+  const t = useTranslations("demoPayment")
   const [open, setOpen] = useState(false)
   const [paymentOrderId, setPaymentOrderId] = useState("")
   const [busy, setBusy] = useState<"prepare" | "confirm" | null>(null)
@@ -54,7 +56,7 @@ export function DemoPaymentDialog({
       setPaymentOrderId(result.data.paymentOrderId)
       setOpen(true)
     } catch {
-      setError("演示支付初始化失败，请稍后重试。")
+      setError(t("prepareFailed"))
     } finally {
       setBusy(null)
     }
@@ -74,7 +76,7 @@ export function DemoPaymentDialog({
       setPaid(true)
       onPaid?.()
     } catch {
-      setError("演示支付确认失败，请稍后重试。")
+      setError(t("confirmFailed"))
     } finally {
       setBusy(null)
     }
@@ -89,7 +91,7 @@ export function DemoPaymentDialog({
         type="button"
       >
         <CreditCard aria-hidden="true" className="h-4 w-4" />
-        {paid ? "已完成演示支付" : busy === "prepare" ? "正在进入演示支付" : "进入支付（演示模式）"}
+        {paid ? t("paid") : busy === "prepare" ? t("preparing") : t("open")}
       </button>
       {error && !open ? (
         <p className="mt-2 text-xs font-semibold text-[#b93835]">{error}</p>
@@ -100,11 +102,15 @@ export function DemoPaymentDialog({
           <div className="w-full max-w-md rounded-lg bg-white p-5 shadow-2xl">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="text-sm font-extrabold text-ink">演示支付确认</div>
-                <h2 className="mt-2 break-words text-2xl font-extrabold text-ink">{orderTitle}</h2>
+                <div className="text-sm font-extrabold text-ink">
+                  {t("dialogTitle")}
+                </div>
+                <h2 className="mt-2 break-words text-2xl font-extrabold text-ink">
+                  {orderTitle}
+                </h2>
               </div>
               <button
-                aria-label="关闭"
+                aria-label={t("close")}
                 className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line text-ink/70"
                 onClick={() => setOpen(false)}
                 type="button"
@@ -116,26 +122,34 @@ export function DemoPaymentDialog({
             <div className="mt-5 rounded-md border border-[#f0c36a] bg-[#fff5d6] p-4 text-sm leading-6 text-[#6c4b00]">
               <div className="flex items-center gap-2 font-extrabold">
                 <ShieldAlert aria-hidden="true" className="h-4 w-4" />
-                演示模式：支付功能为模拟演示，不会产生真实交易
+                {t("warningTitle")}
               </div>
-              <p className="mt-1">点击确认支付即可模拟支付成功，并同步更新订单状态。</p>
+              <p className="mt-1">{t("warningBody")}</p>
             </div>
 
             <dl className="mt-5 grid gap-3 text-sm">
               <div className="flex justify-between gap-4">
-                <dt className="text-ink/58">支付金额</dt>
-                <dd className="font-extrabold text-lychee">¥{amount.toFixed(2)}</dd>
+                <dt className="text-ink/58">{t("amount")}</dt>
+                <dd className="font-extrabold text-lychee">
+                  ¥{amount.toFixed(2)}
+                </dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-ink/58">订单编号</dt>
-                <dd className="max-w-[220px] truncate font-semibold">{orderId}</dd>
+                <dt className="text-ink/58">{t("orderId")}</dt>
+                <dd className="max-w-[220px] truncate font-semibold">
+                  {orderId}
+                </dd>
               </div>
             </dl>
 
-            {error ? <p className="mt-4 text-sm font-semibold text-[#b93835]">{error}</p> : null}
+            {error ? (
+              <p className="mt-4 text-sm font-semibold text-[#b93835]">
+                {error}
+              </p>
+            ) : null}
             {paid ? (
               <p className="mt-4 rounded-md bg-moss/10 p-3 text-sm font-bold text-moss">
-                演示支付已完成，订单状态已更新。
+                {t("success")}
               </p>
             ) : null}
             <button
@@ -144,7 +158,7 @@ export function DemoPaymentDialog({
               onClick={confirmPayment}
               type="button"
             >
-              {busy === "confirm" ? "正在确认" : "确认支付（演示模式）"}
+              {busy === "confirm" ? t("confirming") : t("confirm")}
             </button>
           </div>
         </div>

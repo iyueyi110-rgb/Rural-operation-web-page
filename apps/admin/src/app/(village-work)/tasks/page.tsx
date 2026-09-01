@@ -206,7 +206,7 @@ export default function TasksPage() {
     const latest = evidence[0]
     if (!latest) return
     if (decision === "reject" && !reviewReason.trim()) {
-      setMessage("退回凭证前请填写原因。")
+      setMessage(adminCopy.tasks.rejectReasonRequired)
       return
     }
     try {
@@ -220,16 +220,16 @@ export default function TasksPage() {
         }),
       })
       setMessage(
-        decision === "approve" ? "履约凭证已通过。" : "履约凭证已退回。",
+        decision === "approve"
+          ? adminCopy.tasks.approveSuccess
+          : adminCopy.tasks.rejectSuccess,
       )
       setReviewReason("")
       await loadData()
       setSelected(null)
       setEvidence([])
-    } catch (error) {
-      setMessage(
-        `审核失败：${error instanceof Error ? error.message : "请稍后重试"}`,
-      )
+    } catch {
+      setMessage(adminCopy.tasks.reviewFailed)
     }
   }
 
@@ -424,7 +424,7 @@ export default function TasksPage() {
           >
             {selected?.adoptionId ? (
               <div className="rounded-md border border-moss/20 bg-moss/5 p-3 text-xs font-bold text-moss">
-                认养履约任务 · {selected.adoptionId}
+                {adminCopy.tasks.adoptionTask} · {selected.adoptionId}
               </div>
             ) : null}
             <input
@@ -507,7 +507,7 @@ export default function TasksPage() {
           {selected?.adoptionId && evidence.length ? (
             <div className="mt-5 border-t border-stone pt-4">
               <div className="font-extrabold">
-                履约凭证 v{evidence[0]!.version}
+                {adminCopy.tasks.careRecord} v{evidence[0]!.version}
               </div>
               <p className="mt-2 text-sm leading-6 text-ink/65">
                 {evidence[0]!.description}
@@ -522,7 +522,7 @@ export default function TasksPage() {
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      查看图片 {index + 1}
+                      {adminCopy.tasks.viewPhoto} {index + 1}
                     </a>
                   ) : null,
                 )}
@@ -535,17 +535,17 @@ export default function TasksPage() {
                   <textarea
                     className="min-h-20 rounded-md border border-stone bg-rice px-3 py-2 text-sm"
                     onChange={(event) => setReviewReason(event.target.value)}
-                    placeholder="审核意见；退回时必填"
+                    placeholder={adminCopy.tasks.reviewPlaceholder}
                     value={reviewReason}
                   />
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <button
                       className="h-10 rounded-full bg-moss px-5 text-sm font-bold text-white"
                       {...adminWriteControlProps(canWrite)}
                       onClick={() => void reviewEvidence("approve")}
                       type="button"
                     >
-                      审核通过
+                      {adminCopy.tasks.approveReview}
                     </button>
                     <button
                       className="h-10 rounded-full border border-lychee px-5 text-sm font-bold text-lychee"
@@ -553,7 +553,7 @@ export default function TasksPage() {
                       onClick={() => void reviewEvidence("reject")}
                       type="button"
                     >
-                      退回补充
+                      {adminCopy.tasks.requestMore}
                     </button>
                   </div>
                 </fieldset>

@@ -30,7 +30,7 @@ interface AdoptionRow {
 
 export function MeDashboardClient() {
   const locale = useLocale()
-  const interactionsT = useTranslations("villagerSystem.interactions.dashboard")
+  const t = useTranslations("me.dashboard")
   const [orders, setOrders] = useState<OrderRow[]>([])
   const [adoptions, setAdoptions] = useState<AdoptionRow[]>([])
   const [loading, setLoading] = useState(true)
@@ -67,21 +67,17 @@ export function MeDashboardClient() {
 
   if (loading) {
     return (
-      <p className="mt-8 text-sm font-semibold text-ink/58">
-        正在读取个人订单与认养记录。
-      </p>
+      <p className="mt-8 text-sm font-semibold text-ink/58">{t("loading")}</p>
     )
   }
 
   if (!loggedIn) {
     return (
       <div className="mt-8 rounded-lg border border-line bg-white p-5">
-        <h2 className="text-xl font-extrabold">登录后查看您的订单和认养</h2>
-        <p className="mt-2 text-sm leading-6 text-ink/62">
-          当前没有检测到游客登录态。完成手机号登录后，这里会展示真实订单、认养树和权益状态。
-        </p>
+        <h2 className="text-xl font-extrabold">{t("loginTitle")}</h2>
+        <p className="mt-2 text-sm leading-6 text-ink/62">{t("loginBody")}</p>
         <Link className="btn-primary mt-4 h-11 px-5" href={`/${locale}`}>
-          返回首页登录
+          {t("loginAction")}
         </Link>
       </div>
     )
@@ -93,17 +89,13 @@ export function MeDashboardClient() {
     <div className="mt-8 grid gap-5">
       {empty ? (
         <div className="rounded-lg border border-line bg-white p-5">
-          <h2 className="text-xl font-extrabold">
-            您还没有订单，去认养一棵荔枝树吧
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-ink/62">
-            认养成功后，树档案、养护记录和活动提醒会汇总到这里。
-          </p>
+          <h2 className="text-xl font-extrabold">{t("emptyTitle")}</h2>
+          <p className="mt-2 text-sm leading-6 text-ink/62">{t("emptyBody")}</p>
           <Link
             className="btn-primary mt-4 h-11 px-5"
             href={`/${locale}/trees`}
           >
-            查看荔枝树认养
+            {t("emptyAction")}
           </Link>
         </div>
       ) : null}
@@ -134,7 +126,9 @@ export function MeDashboardClient() {
           key={adoption.id}
         >
           <div>
-            <div className="text-sm font-bold text-water">tree_adoption</div>
+            <div className="text-sm font-bold text-water">
+              {t("adoptionType")}
+            </div>
             <h2 className="mt-2 text-xl font-extrabold">
               {adoption.tree.treeCode}
             </h2>
@@ -153,7 +147,7 @@ export function MeDashboardClient() {
                 className="btn-primary btn-sm mt-2 md:justify-self-end"
                 href={`/${locale}/me/interactions`}
               >
-                {interactionsT("viewAll")}
+                {t("viewCare")}
               </Link>
             ) : null}
           </div>

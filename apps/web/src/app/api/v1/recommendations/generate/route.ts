@@ -107,7 +107,7 @@ export async function POST(request: Request) {
         message: fallback.content,
         actionSteps: [
           "复核天气、客流、设备与工单数据",
-          "待 AI 服务恢复后重新生成智策",
+          "待 AI 服务恢复后重新生成建议草稿",
         ],
         ownerRole: "operator",
         confidence: 0,

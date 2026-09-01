@@ -302,7 +302,7 @@ export default function SimulationsPage() {
       if (switchTab) setActiveTab("events")
     } catch (caughtError) {
       setEvents([])
-      setError(errorMessage(caughtError, "模拟事件加载失败"))
+      setError(errorMessage(caughtError, "模拟事件加载失败，请刷新页面后重试"))
     } finally {
       setBusyAction("")
     }
@@ -321,7 +321,7 @@ export default function SimulationsPage() {
       if (switchTab) setActiveTab("badCases")
     } catch (caughtError) {
       setBadCases([])
-      setError(errorMessage(caughtError, "模拟 Bad Case 加载失败"))
+      setError(errorMessage(caughtError, "问题案例加载失败，请刷新页面后重试"))
     } finally {
       setBusyAction("")
     }
@@ -415,11 +415,11 @@ export default function SimulationsPage() {
               <span className="text-white">规则模拟</span>
             </div>
             <h1 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">
-              认养履约规则模拟实验台
+              认养与养护规则模拟
             </h1>
             <p className="mt-2 max-w-3xl text-sm font-medium leading-6 text-white/64">
               在同一个固定世界中并行观察 V0 与
-              V1，从任务分配到权益履约逐事件复盘。
+              V1，并按事件查看任务分配、养护记录审核和权益处理。
             </p>
           </div>
           <div className="grid min-w-[320px] grid-cols-3 gap-px self-stretch overflow-hidden rounded-xl border border-white/12 bg-white/12">

@@ -149,8 +149,8 @@ function diagnoseSpatial(input: DiagnosisInput): DiagnosisIssue[] {
   if (assessment && assessment.functionalScore <= 2 && input.conversionRate !== null && input.conversionRate < 0.05) {
     issues.push({
       code: "S2_LOW_FUNCTIONAL_EFFICIENCY",
-      title: "功能效率与转化率偏低",
-      description: `功能评分 ${assessment.functionalScore}/5，消费转化率低于 5%，空间组织不利于运营。`,
+      title: "演示功能评分和转化率较低",
+      description: `演示功能评分 ${assessment.functionalScore}/5，演示消费转化率低于 5%。请结合现场记录人工复核，不要把该结果作为真实运营结论。`,
       severity: "major",
       dimension: "spatial",
       evidenceKeys: ["functionalScore", "conversionRate"],

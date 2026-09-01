@@ -66,8 +66,8 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale }
 }): Promise<Metadata> {
-  const title = "空间改造公示 | 走马村云脑"
-  const description = "走马村空间改造诊断、干预策略和新建选址潜力的公众展示。"
+  const title = "空间改造方案 Demo | 走马村"
+  const description = "使用演示数据查看空间改造记录、方案草稿和选址参考。"
 
   return {
     metadataBase: getSiteUrl(),
