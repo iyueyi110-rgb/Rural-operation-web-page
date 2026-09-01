@@ -1,5 +1,6 @@
 {
   "name": "zouma-village-system",
+  "description": "乡村果树认养与履约管理 Demo，覆盖认养、养护任务、审核、权益领取和售后流程。",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@11.6.0",

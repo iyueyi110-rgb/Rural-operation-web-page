@@ -87,15 +87,19 @@ export default function TreesAdminPage() {
           adoptStatus: selected.adoptStatus,
         }),
       })
-      setMessage("档案已保存。")
+      setMessage("树档案已保存，认养人重新打开页面后可看到更新。")
       await loadTrees()
     } catch {
-      setMessage("档案保存失败。")
+      setMessage("树档案没有保存成功，请检查网络后重新保存。")
     }
   }
 
   async function addCareLog() {
-    if (!selected || !logContent.trim()) return
+    if (!selected) return
+    if (!logContent.trim()) {
+      setMessage("请先填写本次养护内容，再添加养护记录。")
+      return
+    }
     try {
       await fetchAdminApi(`/trees/${selected.treeCode}/care-logs`, {
         method: "POST",
@@ -105,10 +109,10 @@ export default function TreesAdminPage() {
           operator: "运营后台",
         }),
       })
-      setMessage("养护日志已录入。")
+      setMessage("养护记录已添加，认养人可以在树档案中查看。")
       await loadTrees()
     } catch {
-      setMessage("养护日志录入失败。")
+      setMessage("养护记录没有添加成功，请检查内容和网络后重试。")
     }
   }
 
@@ -126,7 +130,7 @@ export default function TreesAdminPage() {
     })
 
     if (!uploadResponse.ok) {
-      setMessage("图片上传失败。")
+      setMessage("成长照片上传失败，请检查网络和图片格式后重新选择。")
       setIsUploading(false)
       return
     }
@@ -136,7 +140,7 @@ export default function TreesAdminPage() {
     }
     const imageUrl = uploadPayload.data?.url
     if (!imageUrl) {
-      setMessage("图片上传失败。")
+      setMessage("上传结果中没有图片地址，请重新选择照片上传。")
       setIsUploading(false)
       return
     }
@@ -152,10 +156,10 @@ export default function TreesAdminPage() {
           adoptStatus: selected.adoptStatus,
         }),
       })
-      setMessage("图片已追加到树档案。")
+      setMessage("成长照片已添加到树档案。")
       await loadTrees()
     } catch {
-      setMessage("图片已上传但档案保存失败。")
+      setMessage("照片已上传，但树档案没有更新成功，请重新保存档案。")
     } finally {
       setIsUploading(false)
     }
@@ -214,51 +218,53 @@ export default function TreesAdminPage() {
                 className="m-0 grid min-w-0 gap-4 border-0 p-0"
                 {...adminWriteControlProps(canWrite)}
               >
-              <label className="grid gap-2 text-sm font-bold">
-                山火记忆
-                <textarea
-                  className="min-h-28 rounded-md border border-stone bg-rice p-3 font-semibold"
-                  onChange={(event) => setFireMemory(event.target.value)}
-                  value={fireMemory}
-                />
-              </label>
-              <label className="grid gap-2 text-sm font-bold">
-                新梢记录
-                <textarea
-                  className="min-h-28 rounded-md border border-stone bg-rice p-3 font-semibold"
-                  onChange={(event) => setNewShootsRecord(event.target.value)}
-                  value={newShootsRecord}
-                />
-              </label>
-              <label className="grid gap-2 text-sm font-bold">
-                图片 URL 列表
-                <textarea
-                  className="min-h-20 rounded-md border border-stone bg-rice p-3 font-mono text-xs"
-                  onChange={(event) => setGrowthPhotosText(event.target.value)}
-                  value={growthPhotosText}
-                />
-              </label>
-              <label className="grid gap-2 text-sm font-bold">
-                上传成长照片
-                <input
-                  accept="image/jpeg,image/png,image/webp"
-                  className="rounded-md border border-stone bg-rice p-3 text-sm"
+                <label className="grid gap-2 text-sm font-bold">
+                  山火记忆
+                  <textarea
+                    className="min-h-28 rounded-md border border-stone bg-rice p-3 font-semibold"
+                    onChange={(event) => setFireMemory(event.target.value)}
+                    value={fireMemory}
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold">
+                  新梢记录
+                  <textarea
+                    className="min-h-28 rounded-md border border-stone bg-rice p-3 font-semibold"
+                    onChange={(event) => setNewShootsRecord(event.target.value)}
+                    value={newShootsRecord}
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold">
+                  图片 URL 列表
+                  <textarea
+                    className="min-h-20 rounded-md border border-stone bg-rice p-3 font-mono text-xs"
+                    onChange={(event) =>
+                      setGrowthPhotosText(event.target.value)
+                    }
+                    value={growthPhotosText}
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-bold">
+                  上传成长照片
+                  <input
+                    accept="image/jpeg,image/png,image/webp"
+                    className="rounded-md border border-stone bg-rice p-3 text-sm"
+                    {...adminWriteControlProps(canWrite, isUploading)}
+                    onChange={(event) => {
+                      void uploadGrowthPhoto(event.target.files?.[0] ?? null)
+                      event.currentTarget.value = ""
+                    }}
+                    type="file"
+                  />
+                </label>
+                <button
+                  className="h-11 rounded-full bg-ink px-5 text-sm font-bold text-white"
                   {...adminWriteControlProps(canWrite, isUploading)}
-                  onChange={(event) => {
-                    void uploadGrowthPhoto(event.target.files?.[0] ?? null)
-                    event.currentTarget.value = ""
-                  }}
-                  type="file"
-                />
-              </label>
-              <button
-                className="h-11 rounded-full bg-ink px-5 text-sm font-bold text-white"
-                {...adminWriteControlProps(canWrite, isUploading)}
-                onClick={saveTree}
-                type="button"
-              >
-                {isUploading ? "上传中..." : adminCopy.trees.save}
-              </button>
+                  onClick={saveTree}
+                  type="button"
+                >
+                  {isUploading ? "上传中..." : adminCopy.trees.save}
+                </button>
               </fieldset>
 
               <div className="border-t border-stone pt-4">

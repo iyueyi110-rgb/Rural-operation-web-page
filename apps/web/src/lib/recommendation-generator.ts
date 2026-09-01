@@ -18,7 +18,7 @@ const allowedActionEndpoints = new Set([
   "/api/v1/alerts",
 ])
 
-const recommendationSystemPrompt = `你是走马村云脑运营智策助手。根据输入的 F1 村民生产、F2 游客行为、F3 生态感知、F4 农产品反馈和 F5 运营智策闭环数据，只生成一张最高优先级智策卡。
+const recommendationSystemPrompt = `你是走马村运营建议草稿助手。根据输入的村民任务、游客行为、生态记录、产品反馈和运营记录，只生成一张最高优先级建议草稿。草稿必须由运营人员确认，不能直接触发退款、判责、审核或结算。
 严格返回 JSON 对象，不要 Markdown。必须包含：
 - type: weather_plan | crowd_diversion | inventory_alert | maintenance
 - target_object: string 或 null
@@ -26,7 +26,7 @@ const recommendationSystemPrompt = `你是走马村云脑运营智策助手。�
 - message: 对证据与问题的简洁解释
 - action_steps: 至少一项，每项含 action；需要系统动作时可含 api_trigger_endpoint、method、payload（Action）
 - owner_role: operator | villager
-- expected_impact: 可衡量的预期影响（Impact）
+- expected_impact: 可检查的预期变化，不得把模拟数据写成真实业务效果（Impact）
 - confidence: 0 到 1
 api_trigger_endpoint 只能从 /api/v1/scenes/promotion/active、/api/v1/tasks、/api/v1/notifications、/api/v1/alerts 中选择；没有安全动作时省略该字段。`
 
@@ -152,7 +152,8 @@ export function normalizeRecommendationPayload(
 }
 
 export function isAllowedRecommendationEndpoint(endpoint: string) {
-  if (endpoint.startsWith("http://") || endpoint.startsWith("https://")) return false
+  if (endpoint.startsWith("http://") || endpoint.startsWith("https://"))
+    return false
   if (endpoint.includes("..")) return false
 
   const path = endpoint.split("?")[0]

@@ -88,7 +88,7 @@ export function DetailPanel({
           <SectionHeading
             eyebrow="过程转化"
             title="四个模拟漏斗"
-            description="接单、提交、审核与权益履约使用同一事件口径。"
+            description="任务领取、记录提交、审核和权益处理使用同一事件口径。"
           />
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {runFunnels(run).map((funnel) => (
@@ -177,7 +177,7 @@ function EvidenceCheckPanel({
     <section className="rounded-xl border border-stone bg-white p-5 shadow-soft">
       <SectionHeading
         eyebrow="规则预检"
-        title="基于规则的模拟凭证检查"
+        title="基于规则的模拟材料检查"
         description="不接入真实图像审核；按照片、字段、树号、时间和描述规则确定性检查。"
       />
       <div className="mt-4 grid grid-cols-3 gap-2">
@@ -207,7 +207,7 @@ function EvidenceCheckPanel({
         ))}
         {!summary.items.length ? (
           <p className="p-5 text-center text-xs font-bold text-ink/42">
-            暂无模拟提交凭证。
+            还没有模拟提交记录。请先选择一次包含提交事件的模拟运行。
           </p>
         ) : null}
       </div>

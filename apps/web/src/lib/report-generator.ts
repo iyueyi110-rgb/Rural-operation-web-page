@@ -281,7 +281,7 @@ export async function generateDailyReport(date = getChinaDateString()) {
   const villagerSection = {
     type: "feedback",
     title: "村民任务协作",
-    content: `当日完成任务 ${villagerStats.completedTaskCount} 个，任务收益合计 ¥${villagerStats.totalEarnings}，参与村民 ${villagerStats.participantCount} 人。`,
+    content: `当日演示完成任务 ${villagerStats.completedTaskCount} 个，演示任务金额合计 ¥${villagerStats.totalEarnings}，演示参与村民 ${villagerStats.participantCount} 人。以上不是实际接单或收入。`,
   }
   const sections = [
     ...parsed.sections.filter((section) => section.type !== "infrastructure"),

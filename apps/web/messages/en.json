@@ -1,12 +1,12 @@
 {
   "metadata": {
     "home": {
-      "title": "Zouma Village Portal",
-      "description": "A placeholder English experience for the Zouma Village Web/PWA."
+      "title": "Adopt a tree and follow its care | Zouma Village",
+      "description": "A rural tree-adoption product demo covering adoption, care tasks, review and benefit collection."
     },
     "demo": {
       "title": "LZ-018 adoption fulfillment demo | Zouma Village",
-      "description": "Follow the LZ-018 case through adoption, villager fulfillment, operations review, benefits and Bad Case analysis."
+      "description": "Follow LZ-018 through adoption, care tasks, human review, adoption benefits and exception handling."
     },
     "explore": {
       "title": "Explore Zouma Village",
@@ -60,8 +60,8 @@
     },
     "hero": {
       "eyebrow": "Tree Adoption",
-      "title": "Adoption is a long-term relationship with a tree",
-      "body": "This phase shows adoptable trees, profiles, rights, agreement and growth records. Payment remains a reserved entry."
+      "title": "Meet the tree before you adopt it",
+      "body": "Review its profile, care records and adoption benefits. This demo only creates a sample adoption order and never charges you."
     },
     "guardrail": {
       "locationTitle": "Blurred locations only",
@@ -71,18 +71,18 @@
     },
     "list": {
       "eyebrow": "Adoptable trees",
-      "title": "Choose a documented lychee tree",
-      "body": "Tree data is local and can later migrate to /api/v1/trees.",
+      "title": "View the lychee trees available for adoption",
+      "body": "Each tree includes its age, health, general location and latest care records.",
       "species": "Species",
       "age": "Age",
       "ageValue": "{count} years",
       "health": "Health",
-      "select": "Select",
-      "selected": "Selected"
+      "select": "View this tree",
+      "selected": "Viewing"
     },
     "availability": {
       "available": "Available",
-      "limited": "Limited",
+      "limited": "Available",
       "maintenance": "Under care"
     },
     "health": {
@@ -94,18 +94,18 @@
     "profile": {
       "eyebrow": "Tree profile",
       "planTitle": "Plan",
-      "selectCta": "Select adoption",
+      "selectCta": "Adopt this tree",
       "fireMemoryTitle": "Fire memory",
       "fireMemoryEmpty": "No fire memory has been entered by operations yet.",
       "newShootsTitle": "New shoot record",
       "newShootsEmpty": "No new shoot record has been entered by operations yet.",
       "growthPhotosTitle": "Growth photos",
       "growthPhotoAlt": "{name} growth photo {index}",
-      "growthPhotosEmpty": "No growth photos yet. They will appear after upload.",
+      "growthPhotosEmpty": "No growth photos yet. They will appear after operations uploads them.",
       "fruitDestinationTitle": "Fruit destination",
       "fruitDestinationFallback": "Operations recorded the destination for this harvest.",
-      "fruitDestinationEmpty": "No fruit destination record yet. It can be added after harvest.",
-      "careLogsEmpty": "No care logs yet. New logs will appear in reverse chronological order."
+      "fruitDestinationEmpty": "No fruit destination yet. Operations can add it after harvest.",
+      "careLogsEmpty": "No care records yet. Approved care tasks will appear here."
     },
     "experience": {
       "environment": {
@@ -129,8 +129,8 @@
       },
       "rights": {
         "eyebrow": "Adoption Rights",
-        "title": "Rights for this adoption",
-        "description": "Harvest, visits, a custom nameplate and delivery unlock with the adoption status.",
+        "title": "Adoption benefit progress",
+        "description": "See whether harvest, visit, nameplate and delivery benefits are ready to collect.",
         "state": {
           "unlocked": "Active",
           "locked": "Pending payment",
@@ -154,8 +154,8 @@
             "body": "Have the harvest packed and shipped when you cannot visit."
           }
         },
-        "lockedNote": "All four rights become available after payment is completed.",
-        "previewNote": "Complete an adoption to unlock the rights included in your plan."
+        "lockedNote": "This demo is still pending payment, so these benefits cannot be collected yet.",
+        "previewNote": "Confirm an adoption plan to see its included benefits."
       },
       "growth": {
         "eyebrow": "Growth Timeline",
@@ -239,20 +239,20 @@
     },
     "agreement": {
       "title": "Agreement",
-      "body": "I understand the rights, update rhythm, harvest method and pending payment state."
+      "body": "I understand the adoption benefits, care-record schedule, harvest method and that this demo does not take real payment."
     },
     "messages": {
-      "unavailable": "This tree is not open for confirmation.",
-      "needAgreement": "Accept the agreement before confirming.",
-      "submitFailed": "Adoption submission failed. Please try again later."
+      "unavailable": "This tree is not available for adoption. Return to the list and choose another tree.",
+      "needAgreement": "Read and accept the agreement before adopting this tree.",
+      "submitFailed": "The adoption order was not created. Check your connection and submit again."
     },
     "form": {
-      "confirm": "Confirm adoption",
+      "confirm": "Adopt this tree",
       "confirming": "Creating adoption"
     },
     "order": {
-      "title": "Adoption created",
-      "body": "The adoption order is pending payment.",
+      "title": "Demo adoption order created",
+      "body": "This adoption is in a pending-payment demo state. No charge or real order was created.",
       "status": "Order status: pending payment",
       "paymentStatus": "Payment status: not connected",
       "paymentEntry": "Payment pending",
@@ -263,7 +263,7 @@
       "lz018": {
         "name": "Yunli 018",
         "species": "Feizixiao lychee",
-        "summary": "Stable and well documented.",
+        "summary": "The demo includes a complete tree profile and care records.",
         "location": "North lychee orchard area, precise coordinates hidden.",
         "imageAlt": "Yunli 018, a twelve-year-old Feizixiao lychee tree",
         "prices": {
@@ -274,7 +274,7 @@
       "lz026": {
         "name": "Yunli 026",
         "species": "Guiwei lychee",
-        "summary": "Good for family adoption and classes.",
+        "summary": "The care record includes notes for a family food-education activity.",
         "location": "Central orchard area near class route.",
         "imageAlt": "Yunli 026, an eight-year-old Guiwei lychee tree",
         "prices": {
@@ -307,7 +307,7 @@
       "submit": "Submit shipment request",
       "submitting": "Submitting",
       "success": "Shipment request created. The team will confirm picking and logistics.",
-      "failed": "Submission failed. Please check the form and try again.",
+      "failed": "The request was not created. Check the form and your connection, then submit again.",
       "destination": "Pick and ship",
       "destinationNote": "Visitor chose pick-and-ship from the tree profile.",
       "statusTitle": "Shipment status",
@@ -408,8 +408,8 @@
     },
     "hero": {
       "eyebrow": "Member Center",
-      "title": "Order list placeholder",
-      "body": "Bookings, tree adoption and ticket orders are grouped here."
+      "title": "View orders and adoption records",
+      "body": "Sign in to view demo orders, adopted trees, care records and adoption benefit status."
     },
     "orders": {
       "booking": {
@@ -439,15 +439,15 @@
       "title": "My adoptions",
       "initialMessage": "Enter the phone number left during adoption. The system searches with masked identity data.",
       "found": "Adoption records found.",
-      "empty": "No matching adoption records.",
-      "failed": "Lookup failed. Try again later.",
+      "empty": "No adoption record matched. Check the phone number and search again.",
+      "failed": "Adoption records did not load. Check your connection and search again.",
       "phonePlaceholder": "Enter phone number",
       "loading": "Searching",
-      "submit": "Search adoptions",
+      "submit": "View adoption records",
       "tree": "Tree",
       "plan": "Plan",
       "status": "Status",
-      "noShipment": "No pick-and-ship logistics yet.",
+      "noShipment": "No pick-and-ship record yet. Submit a request to track it here.",
       "shipmentTitle": "Pick-and-ship logistics",
       "signed": "Delivered",
       "harvestBooking": "Harvest booking: {date} / {status}",
@@ -457,6 +457,17 @@
         "shipping": "Shipping",
         "delivered": "Delivered"
       }
+    },
+    "dashboard": {
+      "loading": "Loading orders and adoption records.",
+      "loginTitle": "Sign in to view orders and adoption records",
+      "loginBody": "You are not signed in. After phone sign-in, you can view demo orders, adopted trees and adoption benefits.",
+      "loginAction": "Return home to sign in",
+      "emptyTitle": "No orders or adoption records yet",
+      "emptyBody": "After you adopt a tree, its profile, care records and adoption benefits will appear here.",
+      "emptyAction": "View adoptable trees",
+      "adoptionType": "Tree adoption",
+      "viewCare": "View care records"
     }
   },
   "privacy": {
@@ -496,9 +507,25 @@
     "back": "Back",
     "loading": "Preparing today's Zouma Village content",
     "errorTitle": "The page could not load",
-    "errorBody": "Please try again later.",
+    "errorBody": "Check your connection and reload. If it still fails, return home and choose another page.",
     "retry": "Retry",
     "updatedAt": "Updated {date}"
+  },
+  "demoPayment": {
+    "prepareFailed": "The demo payment did not start. Check your connection and open it again.",
+    "confirmFailed": "The demo payment status did not update. Check your connection and confirm again.",
+    "paid": "Demo payment status updated",
+    "preparing": "Opening demo explanation",
+    "open": "View demo payment explanation",
+    "dialogTitle": "Confirm demo payment",
+    "close": "Close",
+    "warningTitle": "Demo mode: confirmation only updates local demo status; it never charges you or creates a real transaction",
+    "warningBody": "After you continue, the order will show “demo payment complete” so you can view the remaining flow.",
+    "amount": "Payment amount",
+    "orderId": "Order ID",
+    "success": "Demo payment complete. The order status was updated.",
+    "confirming": "Updating demo status",
+    "confirm": "Confirm and update demo status"
   },
   "home": {
     "nav": {
@@ -527,20 +554,20 @@
       "interactions": "Tasks"
     },
     "hero": {
-      "badge": "AIGC-enabled resilient mountain village",
-      "title": "Cloud Veins, Lychee Waters, Zouma",
-      "subtitle": "Start with one adopted tree, then connect visitors, villagers, operations and spatial renewal to one village cloud brain.",
-      "primaryCta": "View realms",
-      "secondaryCta": "Today",
+      "badge": "Rural tree-adoption product demo",
+      "title": "Adopt a tree and see how it grows",
+      "subtitle": "From adoption to care, every task, review and benefit has a record.",
+      "primaryCta": "View adoptable trees",
+      "secondaryCta": "View the demo flow",
       "imageAlt": "Aerial view of Zouma Village",
       "startBrowsing": "Start exploring",
       "videoAlt": "Aerial view of the Longxi River, mountain ridges and Zouma Village",
-      "tagline1": "Mountain village - AIGC resilient renewal",
-      "tagline2": "Four operable realm experiences",
-      "tagline3": "Browse · Book · Adopt · Return",
-      "systemLogic": "AIGC cloud brain · five-flow operations",
+      "tagline1": "Rural tree-adoption demo",
+      "tagline2": "Care progress you can follow",
+      "tagline3": "Adopt · Care · Review · Benefits",
+      "systemLogic": "Every care task and review is recorded",
       "location": "Zouma Village, Fengcheng, Changshou, Chongqing",
-      "narrative": "Adoption relationship -> villager tasks -> operation advice -> spatial renewal",
+      "narrative": "Adopt -> care task -> upload record -> review -> collect benefits",
       "metricAbout": "About",
       "metricUnits": {
         "0": "km?",
@@ -548,13 +575,13 @@
         "2": "mu"
       },
       "scrollHint": "Scroll to the next screen",
-      "positioning": "A reporting-ready and pilot-ready rural operating system: the front end builds long-term relationships, while the back office turns them into tasks, data and spatial decisions.",
-      "spatialSystem": "Mountain village operation section",
+      "positioning": "Try the adoption, care-record, human-review and benefit flow. This demo has no real orders, payment or settlement.",
+      "spatialSystem": "Adoption process records",
       "nodes": {
         "0": "Visitor adoption entry",
         "1": "Villager care tasks",
-        "2": "Operator review loop",
-        "3": "Architectural renewal"
+        "2": "Human operations review",
+        "3": "Adoption benefit collection"
       },
       "activityShowcase": {
         "name": "Lychee Harvest Day",
@@ -646,13 +673,13 @@
       },
       "tree": {
         "title": "Tree adoption",
-        "body": "A yearly relationship built around tree records.",
-        "link": "View adoption"
+        "body": "Review the tree profile and adoption benefits before deciding.",
+        "link": "View adoptable trees"
       }
     },
     "guardrails": {
-      "title": "Light platform first",
-      "body": "The first screen organizes real resources without overbuilding."
+      "title": "This is a product demo",
+      "body": "Pages use demo and simulated data to test flows and permissions. They do not show a live operation."
     },
     "realms": {
       "eyebrow": "Four Realms",
@@ -711,12 +738,12 @@
     },
     "adoption": {
       "eyebrow": "Tree Adoption Preview",
-      "title": "Tree adoption needs ceremony and trust",
-      "body": "A long-term relationship around tree files and care logs.",
+      "title": "Adopt a tree and follow its care records",
+      "body": "Review the tree profile and benefits first. After adoption, each care task, photo note and review remains visible.",
       "imageAlt": "Adoptable lychee trees in Zouma Village orchard",
-      "imageBadge": "One tree, one lasting relationship",
-      "cta": "Adopt a tree now",
-      "ctaHint": "Go directly to available trees, profiles, rights and growth records.",
+      "imageBadge": "Tree updates continue after adoption",
+      "cta": "View adoptable trees",
+      "ctaHint": "Open the tree list to review profiles, adoption benefits and care records.",
       "steps": {
         "1": {
           "title": "Tree file",
@@ -733,84 +760,84 @@
       }
     },
     "deck": {
-      "page1": "Cloud Brain",
-      "page2": "Operating Logic",
+      "page1": "Project overview",
+      "page2": "Adoption records",
       "page3": "History and Realms",
       "page4": "Adoption Entry"
     },
     "systemModules": {
-      "kicker": "System modules",
-      "title": "Not a showcase site, a rural operating system",
-      "body": "Every visit, adoption, booking and feedback event on the front end becomes evidence for back-office decisions on space, tasks, activities and local industry.",
+      "kicker": "After adoption",
+      "title": "Keep following what happens after adoption",
+      "body": "Adopters follow tree updates, villagers take care tasks, and operators review care records and benefit progress.",
       "items": {
         "0": {
           "tag": "Relationship entry",
           "title": "Lychee tree adoption",
-          "body": "Tree profiles, rights, growth records and harvest fulfillment turn one visit into a year-long return relationship.",
-          "status": "Connected"
+          "body": "View the tree profile, adoption plan, care records and adoption benefits.",
+          "status": "Viewable"
         },
         "1": {
           "tag": "Visitor service",
           "title": "Route recommendation",
           "body": "Weather, audience, duration and node capacity combine into explainable mountain-village routes.",
-          "status": "Available"
+          "status": "Demo"
         },
         "2": {
           "tag": "Spatial business",
           "title": "Courtyard booking",
           "body": "Ridge courtyards, food classrooms and ancient-road stations become bookable operation units.",
-          "status": "MVP"
+          "status": "Flow demo"
         },
         "3": {
-          "tag": "Collaboration network",
-          "title": "Villager tasks",
-          "body": "Adoption, activities and feedback create low-training tasks for care, guiding, meals and logistics.",
-          "status": "Linked"
+          "tag": "Care tasks",
+          "title": "This week's tree care",
+          "body": "Villagers can see requirements, deadlines and the care photos they need to upload.",
+          "status": "Available in demo"
         },
         "4": {
-          "tag": "Cloud decision",
-          "title": "Operation advice",
-          "body": "Visitor flow, spending, feedback, ecology and production data become reviewable action cards.",
-          "status": "Back office live"
+          "tag": "Human review",
+          "title": "Review care records",
+          "body": "Operators inspect photos and notes, then explain what is missing before returning a record.",
+          "status": "Human confirmation"
         },
         "5": {
           "tag": "Architectural result",
           "title": "Spatial renewal",
           "body": "Dwell time, risk and industry demand guide priorities for stations, courtyards, workshops and waterfront repair.",
-          "status": "Planning input"
+          "status": "Plan preview"
         }
       }
     },
     "cloudPreview": {
-      "kicker": "AIGC Cloud Brain",
-      "title": "Five-flow operation view",
+      "kicker": "Back-office records",
+      "title": "Task, review and benefit progress",
       "cards": {
         "0": {
-          "label": "Visitor relationship",
-          "value": "Adoption return",
-          "body": "Tree profiles, events, notifications and orders form long-term reach."
+          "label": "Adopter",
+          "value": "Follow tree updates",
+          "body": "One adoption record links the tree profile, care updates and benefit progress."
         },
         "1": {
           "label": "Field collaboration",
           "value": "Task dispatch",
-          "body": "Villagers, nodes, earnings and care records close the loop in the back office."
+          "body": "Villagers can see task requirements, deadlines and submitted records."
         },
         "2": {
-          "label": "Spatial decision",
-          "value": "Renewal evidence",
-          "body": "Visitor flow, risk and feedback set priorities for architectural nodes."
+          "label": "Operations review",
+          "value": "Confirm completion",
+          "body": "Operators inspect care photos and notes. A person confirms the final result."
         }
       }
     },
     "operationFlow": {
-      "kicker": "Operation logic",
-      "title": "How one tree moves the whole village system",
-      "body": "Adoption is not the end of a page. It starts visitor relationships, villager collaboration, operational review and architectural renewal.",
+      "kicker": "Adoption flow",
+      "title": "What happens after you adopt a tree",
+      "body": "One adoption ID links the order, care tasks and care records so every role sees the same case.",
       "steps": {
         "0": {
           "label": "Visitor side",
           "title": "Adopt one tree",
-          "body": "The user enters a tree profile, confirms rights and growth records, and leaves a year-long return relationship."
+          "body": "Review the tree profile and benefits, then create a demo adoption order."
         },
         "1": {
           "label": "Villager side",
@@ -819,13 +846,13 @@
         },
         "2": {
           "label": "Operator side",
-          "title": "Collect orders and feedback",
-          "body": "Bookings, spending, activities, satisfaction and field issues enter one operation view."
+          "title": "Review the care record",
+          "body": "Check photos and notes. If something is missing, explain what the villager should add."
         },
         "3": {
-          "label": "Cloud brain",
-          "title": "Generate advice cards",
-          "body": "AIGC summarizes five-flow data and proposes route, activity, facility and risk actions."
+          "label": "Operations staff",
+          "title": "Confirm benefit progress",
+          "body": "After review, confirm benefits and settlement status. High-risk actions still require a person."
         },
         "4": {
           "label": "Built space",
@@ -833,7 +860,7 @@
           "body": "High-frequency stays, industry needs and risk points guide courtyard, station, workshop and waterfront updates."
         }
       },
-      "result": "Architectural space is not scenic decoration in advance. It appears from continuous operation: where people gather, tasks happen and risks emerge, renewal becomes necessary."
+      "result": "AI and rules do not decide refunds, fault or settlement. Operations staff must confirm them."
     }
   },
   "booking": {
@@ -1072,8 +1099,8 @@
       "bookingCta": "View reservable nodes",
       "provider": "Source: {provider}",
       "providerFallback": "AI call is temporarily unavailable. Showing the local route recommendation.",
-      "providerOnline": "AI recommendation ? {provider}",
-      "providerPreview": "AI is connected. Generate a route to get a model recommendation."
+      "providerOnline": "AI route suggestion draft · {provider}",
+      "providerPreview": "AI can draft a route suggestion. Check the weather and on-site conditions before travel."
     },
     "waypoints": {
       "visitorCenter": "Visitor Center",
@@ -1555,23 +1582,23 @@
       "badCase": "Bad Case"
     },
     "hero": {
-      "badge": "3-minute interview entry",
-      "title": "LZ-018 adoption fulfillment demo",
-      "body": "One implemented golden case connects the adopter, villager and operations workflows. Start with the normal loop, then inspect evidence rejection and human review boundaries.",
+      "badge": "3-minute product flow demo",
+      "title": "LZ-018 adoption and care-record demo",
+      "body": "Follow one adoption ID through adoption, care tasks, record submission, human review, benefits and exception handling.",
       "start": "Start the 7-step demo",
       "treeCta": "View the LZ-018 profile",
       "imageAlt": "Profile photo of LZ-018 Feizixiao lychee tree"
     },
     "readiness": {
       "full": {
-        "label": "Golden case loaded",
-        "title": "Full data path available",
-        "body": "The LZ-018 golden case and two evidence versions were detected. Writes still require the relevant user, villager or administrator authentication."
+        "label": "Demo case loaded",
+        "title": "LZ-018 process records available",
+        "body": "The LZ-018 demo case and two care-record versions were detected. Submission and review still require the relevant role to sign in."
       },
       "readonly": {
         "label": "Read-only fallback",
         "title": "Stable read-only path shown",
-        "body": "When the database is unavailable, the feature is disabled or golden data is missing, only verifiable pages and flow links are shown. Orders, uploads, reviews and settlements are never reported as successful."
+        "body": "When the database is unavailable, a feature is off or demo data is missing, only read-only pages and links are shown. The UI never invents submission, review or settlement results."
       }
     },
     "disclaimer": "Demo data. Simulated operations data does not represent real business results.",
@@ -1594,8 +1621,8 @@
     },
     "journey": {
       "eyebrow": "Single core workflow",
-      "title": "One continuous adoption fulfillment timeline",
-      "body": "Open the implemented pages in order. Role filters emphasize relevant steps without hiding cross-role handoffs."
+      "title": "Follow one adoption from step to step",
+      "body": "Each step opens an implemented demo page. Role filters only highlight the actions for that role."
     },
     "steps": {
       "profile": {
@@ -1618,7 +1645,7 @@
       },
       "accept": {
         "title": "Villager accepts the care task",
-        "body": "After OTP login, the villager reviews the deadline, earnings and evidence requirements. Rejection or timeout enters operations exception handling.",
+        "body": "After OTP login, the villager reviews the deadline, demo task amount, and care photo requirements. Rejection or timeout enters operations exception handling.",
         "cta": "Open villager login",
         "status": {
           "full": "Villager OTP required",
@@ -1626,8 +1653,8 @@
         }
       },
       "evidence": {
-        "title": "Upload two fulfillment photos",
-        "body": "The task requires at least two identifiable images. Upload failure, insufficient images or version conflicts are never presented as successful submission.",
+        "title": "Upload care photos and notes",
+        "body": "This task needs at least two photos that clearly show the tree and the care result. Missing photos or upload failures explain how to submit again.",
         "cta": "View villager tasks",
         "status": {
           "full": "Villager OTP required",
@@ -1636,7 +1663,7 @@
       },
       "review": {
         "title": "Operations rejects once, then approves",
-        "body": "The golden case retains two evidence versions: blurry images are rejected, the villager resubmits, and a human approves. That review gates benefits and settlement.",
+        "body": "The demo keeps two care-record versions: an unclear photo is returned, the villager adds material, and a reviewer confirms the result. The reviewer must explain what is missing.",
         "cta": "Open operations tasks",
         "status": {
           "full": "Admin password required to write",
@@ -1644,8 +1671,8 @@
         }
       },
       "benefit": {
-        "title": "Check benefits, settlement and renewal",
-        "body": "After approval, review harvest delivery benefits, villager settlement and renewal. Refund requests only create a ticket for human review.",
+        "title": "Check adoption benefits, settlement and renewal",
+        "body": "After care-record approval, review harvest delivery benefits, task settlement and renewal. Refund requests only create a human-review ticket.",
         "cta": "Use demo user login",
         "status": {
           "full": "Demo user login required",
@@ -1664,18 +1691,18 @@
     },
     "boundaries": {
       "eyebrow": "State the limits",
-      "title": "Four boundaries to explain before the demo ends",
-      "body": "These are product decisions, not footnotes. The current system proves traceability and accountable decisions without presenting unvalidated capabilities as production results.",
+      "title": "What this demo will not decide for you",
+      "body": "The project only tests flows, permissions and rules. The actions below are not live and are never decided directly by AI.",
       "payment": "Real WeChat and Alipay charging is not connected; pending payment is a demo workflow state.",
-      "refund": "Refund requests create a human-review ticket; there is no automatic refund or fault decision.",
-      "agent": "The Agent only produces shadow suggestions. Missing model keys trigger an explicit fallback, and it cannot modify orders or settlements.",
-      "review": "Evidence approval, exception decisions and settlement release retain a human gate."
+      "refund": "A refund request only creates a human-review ticket. Operations staff must confirm how the adoption and unclaimed benefits are handled.",
+      "agent": "AI only organizes notes, checks material completeness and drafts review comments. It cannot modify orders or settlements.",
+      "review": "Operations staff confirm care-record reviews, exception responsibility and settlement release."
     }
   },
   "villagerSystem": {
     "common": {
       "loading": "Loading",
-      "error": "This page is temporarily unavailable",
+      "error": "This page is temporarily unavailable. Refresh and try again.",
       "retry": "Try again",
       "refresh": "Refresh",
       "saving": "Saving"
@@ -1684,14 +1711,14 @@
       "back": "Back",
       "dashboard": "Dashboard",
       "tasks": "Tasks",
-      "earnings": "Earnings",
+      "earnings": "Demo task amounts",
       "notifications": "Alerts",
       "logout": "Log out"
     },
     "login": {
       "eyebrow": "Villager portal",
       "title": "Villager sign in",
-      "body": "Use your registered phone number to access tasks and earnings.",
+      "body": "Use your registered phone number to view care tasks and demo task amounts.",
       "phone": "Phone",
       "phonePlaceholder": "Registered phone number",
       "otp": "Verification code",
@@ -1701,59 +1728,72 @@
       "verify": "Sign in",
       "verifying": "Verifying",
       "developmentOtp": "Demo mode: SMS is unavailable. Use code {otp}.",
-      "requestError": "No active villager matches this phone",
-      "verifyError": "The code is invalid or expired"
+      "requestError": "No account matches this number. Check the registered phone number or contact an operator.",
+      "verifyError": "The code is invalid or expired. Request a new code and sign in again."
     },
     "dashboard": {
       "eyebrow": "Today's work",
       "greeting": "Hello, {name}",
       "monthlyCompleted": "Done this month",
-      "monthlyEarnings": "Monthly earnings",
+      "monthlyEarnings": "Demo amount this month",
       "pendingTasks": "To do",
       "latestTasks": "Recent tasks",
       "latestNotifications": "Latest alerts"
     },
     "tasks": {
       "eyebrow": "Task collaboration",
-      "title": "My tasks",
-      "empty": "No tasks here",
+      "title": "This week's tree care",
+      "empty": "There are no new care tasks this week.",
       "noNode": "No location",
       "noDescription": "No task description",
       "noDeadline": "No due date",
       "filters": {
         "pending": "Available",
-        "active": "In progress",
+        "active": "In care",
         "completed": "Completed"
       },
       "actions": {
-        "pending": "Accept task",
-        "accepted": "Start task",
-        "in_progress": "Complete task"
+        "pending": "Accept care task",
+        "accepted": "Start care",
+        "in_progress": "Upload care record"
+      },
+      "statuses": {
+        "pending": "Available",
+        "accepted": "In care",
+        "in_progress": "Waiting for submission",
+        "submitted": "Waiting for review",
+        "rejected": "More material needed",
+        "resubmitted": "Waiting for review",
+        "approved": "Completed",
+        "settled": "Completed",
+        "exception_reported": "Waiting for operations",
+        "overdue": "Past the deadline",
+        "completed": "Completed"
       },
       "knowledge": {
         "open": "Ask about care rules",
         "placeholder": "Enter a rule question related to this task",
         "ask": "Send question",
         "asking": "Searching",
-        "failed": "Care rules are temporarily unavailable"
+        "failed": "Care rules did not load. Check your connection and try again."
       },
       "evidence": {
-        "title": "Submit fulfillment evidence",
+        "title": "Upload this care record",
         "help": "Upload at least two images showing the care target and the result.",
-        "placeholder": "Describe the care work actually completed",
-        "submit": "Submit evidence",
-        "requirements": "Select at least two images and enter a care description.",
-        "failed": "Evidence submission failed. Check the images and try again."
+        "placeholder": "Describe what you did and the condition after care",
+        "submit": "Submit care record",
+        "requirements": "Upload at least two photos that clearly show the care result and add a note.",
+        "failed": "The care record did not upload. Check your connection and photo format, then submit again."
       }
     },
     "earnings": {
-      "eyebrow": "Work earnings",
-      "title": "My earnings",
-      "total": "Total earnings",
-      "monthly": "This month",
-      "trend": "Recent earnings",
+      "eyebrow": "Demo task amounts",
+      "title": "Task amount records",
+      "total": "Total demo amount",
+      "monthly": "Demo amount this month",
+      "trend": "Recent demo amounts",
       "completedTasks": "Completed tasks",
-      "empty": "Earnings will appear after tasks are completed"
+      "empty": "Demo task amounts will appear after a demo task is completed."
     },
     "notifications": {
       "eyebrow": "Message center",
@@ -1869,15 +1909,15 @@
       },
       "dashboard": {
         "title": "Villager dashboard | Zouma Village",
-        "description": "View tasks, earnings, and alerts"
+        "description": "View tasks, demo task amounts, and alerts"
       },
       "tasks": {
         "title": "Villager tasks | Zouma Village",
         "description": "Manage villager task progress"
       },
       "earnings": {
-        "title": "Villager earnings | Zouma Village",
-        "description": "View villager work earnings"
+        "title": "Demo task amounts | Zouma Village",
+        "description": "View demo task amounts; these are not real income"
       },
       "notifications": {
         "title": "Villager alerts | Zouma Village",

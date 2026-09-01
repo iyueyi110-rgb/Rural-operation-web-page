@@ -48,7 +48,7 @@ export function BadCasesPanel({
       <section className="rounded-xl border border-stone bg-white p-5 shadow-soft">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
-            eyebrow="根因闭环"
+            eyebrow="问题原因"
             title="模拟 Bad Case 复盘"
             description="固定分类、事件链与严重度由引擎生成；产品经理补充根因和改进动作。"
           />
@@ -150,61 +150,61 @@ export function BadCasesPanel({
               className="m-0 min-w-0 border-0 p-0"
               {...adminWriteControlProps(canWrite)}
             >
-            <label className="mt-4 block">
-              <span className={labelClass}>模拟根因</span>
-              <textarea
-                className={`${controlClass} mt-1.5 min-h-20 w-full py-2`}
-                placeholder="记录规则、容量或流程根因"
-                value={item.rootCause ?? ""}
-                onChange={(event) =>
-                  onChange(
-                    badCases.map((candidate) =>
-                      candidate.id === item.id
-                        ? { ...candidate, rootCause: event.target.value }
-                        : candidate,
-                    ),
-                  )
-                }
-              />
-            </label>
-            <label className="mt-3 block">
-              <span className={labelClass}>模拟改进动作</span>
-              <textarea
-                className={`${controlClass} mt-1.5 min-h-20 w-full py-2`}
-                placeholder="记录下一轮可验证的规则调整"
-                value={item.improvementAction ?? ""}
-                onChange={(event) =>
-                  onChange(
-                    badCases.map((candidate) =>
-                      candidate.id === item.id
-                        ? {
-                            ...candidate,
-                            improvementAction: event.target.value,
-                          }
-                        : candidate,
-                    ),
-                  )
-                }
-              />
-            </label>
-            <button
-              className="mt-4 flex h-10 items-center gap-2 rounded-full bg-ink px-5 text-sm font-extrabold text-white disabled:opacity-50"
-              {...adminWriteControlProps(
-                canWrite,
-                busyAction === `bad-case:${item.id}`,
-              )}
-              onClick={() => onSave(item)}
-              type="button"
-            >
-              <Save className="h-4 w-4" />
-              保存模拟复盘
-            </button>
+              <label className="mt-4 block">
+                <span className={labelClass}>模拟根因</span>
+                <textarea
+                  className={`${controlClass} mt-1.5 min-h-20 w-full py-2`}
+                  placeholder="记录规则、容量或流程根因"
+                  value={item.rootCause ?? ""}
+                  onChange={(event) =>
+                    onChange(
+                      badCases.map((candidate) =>
+                        candidate.id === item.id
+                          ? { ...candidate, rootCause: event.target.value }
+                          : candidate,
+                      ),
+                    )
+                  }
+                />
+              </label>
+              <label className="mt-3 block">
+                <span className={labelClass}>模拟改进动作</span>
+                <textarea
+                  className={`${controlClass} mt-1.5 min-h-20 w-full py-2`}
+                  placeholder="记录下一轮可验证的规则调整"
+                  value={item.improvementAction ?? ""}
+                  onChange={(event) =>
+                    onChange(
+                      badCases.map((candidate) =>
+                        candidate.id === item.id
+                          ? {
+                              ...candidate,
+                              improvementAction: event.target.value,
+                            }
+                          : candidate,
+                      ),
+                    )
+                  }
+                />
+              </label>
+              <button
+                className="mt-4 flex h-10 items-center gap-2 rounded-full bg-ink px-5 text-sm font-extrabold text-white disabled:opacity-50"
+                {...adminWriteControlProps(
+                  canWrite,
+                  busyAction === `bad-case:${item.id}`,
+                )}
+                onClick={() => onSave(item)}
+                type="button"
+              >
+                <Save className="h-4 w-4" />
+                保存模拟复盘
+              </button>
             </fieldset>
           </article>
         ))}
         {!badCases.length ? (
           <div className="rounded-xl border border-dashed border-stone bg-white p-12 text-center font-bold text-ink/42 xl:col-span-2">
-            暂无模拟 Bad Case。选择运行并加载复盘。
+            还没有模拟异常案例。请先选择一次运行，再加载复盘记录。
           </div>
         ) : null}
       </div>

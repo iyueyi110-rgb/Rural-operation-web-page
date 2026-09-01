@@ -5,9 +5,9 @@ export interface FallbackResponse {
 
 const fallbackResponses: Record<string, string> = {
   route: "AI 路线服务暂时不可用，已按路线模板为你保留可解释路线建议。",
-  content_factory: "AI 内容工厂暂时不可用，已显示审核过的预设内容方向。",
-  ai_query: "AI 问答暂时不可用，已显示走马村云脑的预设运营说明。",
-  recommendation: "AI 智策生成暂时不可用，请先查看规则层和现场数据建议。",
+  content_factory: "AI 文案草稿暂时不可用，已显示预设内容。你可以稍后重试。",
+  ai_query: "AI 数据整理暂时不可用，已显示预设说明。你可以稍后重试。",
+  recommendation: "AI 建议草稿暂时不可用，请先查看规则和现场记录。",
 }
 
 export function getFallbackResponse(queryType: string): FallbackResponse {

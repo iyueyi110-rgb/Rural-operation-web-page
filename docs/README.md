@@ -6,11 +6,8 @@
 
 ### 产品与业务
 
-- [AI 产品经理招聘证据索引](portfolio/README.md)
+- [项目证据索引](portfolio/README.md)
 - [3 分钟 Demo 演示脚本](portfolio/DEMO_SCRIPT.md)
-- [面试版项目摘要](portfolio/INTERVIEW_SUMMARY.md)
-- [三分钟项目讲解稿](portfolio/INTERVIEW_TALK_TRACK.md)
-- [面试高频追问表](portfolio/INTERVIEW_QA.md)
 - [产品需求文档](product/PRD.md)
 - [产品定位与设计原则](product/PRODUCT_POSITIONING.md)
 - [项目亮点](product/HIGHLIGHTS.md)
@@ -34,7 +31,6 @@
 - [指标定义](simulation/metrics-definition.md)
 - [测评方法](simulation/methodology.md)
 - [交付与运行](simulation/delivery-guide.md)
-- [40 组回归证据与简历材料](simulation/resume-analysis.md)
 
 ### 运营与报告
 

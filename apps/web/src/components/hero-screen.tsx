@@ -115,11 +115,7 @@ export function HeroScreen({
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <span className="block sm:hidden">
-              <span className="block">云脉寿岭,</span>
-              <span className="block">荔水走马</span>
-            </span>
-            <span className="hidden sm:inline">{heroTitle}</span>
+            <span>{heroTitle}</span>
           </motion.h1>
 
           <motion.p

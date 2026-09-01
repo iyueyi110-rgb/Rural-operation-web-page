@@ -599,7 +599,7 @@ export function runCausalSimulation(
         adoptionId: result.adoptionId,
         taskId: result.id,
         payload: {
-          checkName: "基于规则的模拟凭证检查",
+          checkName: "基于规则的模拟养护记录检查",
           checks: {
             photoCount: quality.fieldCompleteness >= 0.5,
             clarity: quality.photoClarity >= 0.35,

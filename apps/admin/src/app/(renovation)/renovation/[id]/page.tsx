@@ -207,7 +207,7 @@ function Section({ title, rows, fields }: { title: string; rows: Array<Record<st
               </div>
             ))}
           </div>
-        )) : <p className="text-sm text-ink/54">暂无记录。</p>}
+        )) : <p className="text-sm text-ink/54">还没有改造记录，请先补充一条现场记录。</p>}
       </div>
     </AdminPanel>
   )

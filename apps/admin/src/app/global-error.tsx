@@ -20,7 +20,8 @@ export default function GlobalError({
           <div className="max-w-md rounded-lg border border-line bg-white p-6 text-center shadow">
             <h1 className="text-xl font-semibold">运营后台暂时不可用</h1>
             <p className="mt-3 text-sm leading-6 text-ink/60">
-              系统布局加载失败。请刷新页面重试，或联系技术支持确认后台服务状态。
+              后台页面没有加载成功。请刷新页面；如果仍然失败，请确认前台 API
+              服务是否已启动。
             </p>
             <button
               className="mt-5 rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white"

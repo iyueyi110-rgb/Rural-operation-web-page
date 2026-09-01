@@ -190,8 +190,12 @@ export function VillagerTasksClient() {
             >
               <div>
                 <div className="text-lg font-extrabold">{task.title}</div>
-                <div className="mt-1 text-xs font-semibold text-water">
-                  {task.taskType} / {task.node?.slug ?? t("tasks.noNode")}
+                <div className="mt-1 flex flex-wrap items-center gap-2 text-xs font-semibold text-water">
+                  <span>{t(`tasks.statuses.${task.status}`)}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>
+                    {task.taskType} / {task.node?.slug ?? t("tasks.noNode")}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center gap-2 font-bold text-moss">

@@ -42,4 +42,4 @@
 - 数据库不可用时，公开演示页使用可识别的降级数据；特权写操作不伪造成功。
 - 类型检查、测试、文档链接、构建和固定种子模拟纳入统一质量门禁。
 
-经过复核的具体回归结论和面试话术见 [模拟结论与简历材料](../simulation/resume-analysis.md)。
+经过复核的具体回归结论、指标口径和复现方式见[项目证据索引](../portfolio/README.md)、[测评方法](../simulation/methodology.md)与[指标定义](../simulation/metrics-definition.md)。

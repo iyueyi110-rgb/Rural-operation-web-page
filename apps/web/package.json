@@ -1,5 +1,6 @@
 {
   "name": "@zouma/web",
+  "description": "认养用户与村民养护任务前台 Demo。",
   "version": "0.1.0",
   "private": true,
   "type": "module",

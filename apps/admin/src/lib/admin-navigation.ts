@@ -52,7 +52,7 @@ export const adminNavGroups: AdminNavGroup[] = [
   {
     key: "command",
     label: "指挥台",
-    description: "总览、智策与日报",
+    description: "总览、待确认建议与日报",
   },
   {
     key: "fieldOps",
@@ -76,8 +76,8 @@ export const adminNavGroups: AdminNavGroup[] = [
   },
   {
     key: "aiSystem",
-    label: "AI 与系统",
-    description: "内容、设备、设施与设置",
+    label: "辅助工具与系统",
+    description: "AI 草稿、设备、设施与设置",
   },
 ]
 
@@ -86,15 +86,15 @@ export const defaultAdminNavGroup = adminNavGroups[0] as AdminNavGroup
 export const adminNavItems: AdminNavItem[] = [
   {
     key: "dashboard",
-    label: "云脑总览",
+    label: "运营总览",
     href: "/dashboard",
-    description: "五流运营态势",
+    description: "演示数据与待处理事项",
     group: "command",
     icon: LayoutDashboard,
   },
   {
     key: "recommendations",
-    label: "智策中心",
+    label: "建议审核",
     href: "/admin/recommendations",
     description: "建议审核与执行",
     group: "command",
@@ -152,7 +152,7 @@ export const adminNavItems: AdminNavItem[] = [
     key: "trees",
     label: "树木管理",
     href: "/trees",
-    description: "认养树与养护日志",
+    description: "认养树与养护记录",
     group: "assetsCommerce",
     icon: Trees,
   },
@@ -168,7 +168,7 @@ export const adminNavItems: AdminNavItem[] = [
     key: "orders",
     label: "消费订单",
     href: "/orders",
-    description: "统一订单与收入",
+    description: "演示订单与金额",
     group: "assetsCommerce",
     icon: ShoppingCart,
   },
@@ -206,9 +206,9 @@ export const adminNavItems: AdminNavItem[] = [
   },
   {
     key: "tasks",
-    label: "任务调度",
+    label: "养护任务",
     href: "/tasks",
-    description: "任务分配与收益",
+    description: "任务分配、记录与演示金额",
     group: "villageWork",
     icon: ListChecks,
   },
@@ -216,7 +216,7 @@ export const adminNavItems: AdminNavItem[] = [
     key: "simulations",
     label: "规则模拟",
     href: "/simulations",
-    description: "认养履约 V0/V1 规则对照",
+    description: "认养与养护 V0/V1 规则对照",
     group: "villageWork",
     icon: GitCompareArrows,
   },
@@ -238,9 +238,9 @@ export const adminNavItems: AdminNavItem[] = [
   },
   {
     key: "contentFactory",
-    label: "内容工厂",
+    label: "AI 文案草稿",
     href: "/content-factory",
-    description: "导览词与活动脚本",
+    description: "导览词与活动脚本草稿",
     group: "aiSystem",
     icon: WandSparkles,
   },
@@ -248,7 +248,7 @@ export const adminNavItems: AdminNavItem[] = [
     key: "aiAssistant",
     label: "AI 助手",
     href: "/ai-assistant",
-    description: "自然语言运营查询",
+    description: "整理资料与运营查询，结果需人工确认",
     group: "aiSystem",
     icon: Bot,
   },

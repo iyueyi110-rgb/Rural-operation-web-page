@@ -21,7 +21,7 @@ import index from "@zouma/knowledge/index"
 
 const result = await answerKnowledgeQuestion({
   index,
-  question: "养护凭证需要包含什么？",
+  question: "养护记录需要包含什么？",
   role: "villager",
   allowDraft: true,
 })

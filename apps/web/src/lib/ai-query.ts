@@ -14,7 +14,7 @@ export async function answerOperationalQuestion(question: string) {
       `问题：${question}\n数据：${JSON.stringify(context)}\n请用中文回答，引用具体数字，不超过 200 字。如果当前数据不支持该查询，请回答“抱歉，当前数据暂不支持该查询。”`,
       {
         systemPrompt:
-          "你是走马村 AIGC 云脑数据分析助手。只能根据给定运营数据回答，不要生成 SQL，不要要求访问数据库，不要输出个人隐私信息。",
+          "你是走马村运营数据整理助手。只能根据给定的演示数据回答，不要生成 SQL，不要要求访问数据库，不要输出个人隐私信息，也不要把演示数据表述为真实业务结果。回答仅供运营人员参考。",
         temperature: 0.4,
       },
     )

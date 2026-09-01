@@ -183,7 +183,7 @@ export const metricLabels: Record<string, string> = {
   average_acceptance_hours: "模拟平均接单时间",
   average_review_hours: "模拟平均审核时间",
   review_return_rate: "模拟审核退回率",
-  rights_on_time_fulfillment_rate: "模拟权益按时履约率",
+  rights_on_time_fulfillment_rate: "模拟权益按时完成率",
   anomaly_detection_rate: "模拟异常发现率",
   assignment_fairness_cv: "模拟分配公平性 CV",
   manual_intervention_count: "模拟运营人工介入次数",
@@ -206,7 +206,7 @@ export const eventTypeLabels: Record<string, string> = {
   TASK_OVERDUE: "模拟任务逾期",
   REMINDER_SENT: "模拟提醒发送",
   WEATHER_DELAY_APPROVED: "模拟天气延期批准",
-  BENEFIT_FULFILLED: "模拟权益履约",
+  BENEFIT_FULFILLED: "模拟权益已完成",
   MANUAL_INTERVENTION: "模拟人工介入",
   ANOMALY_DETECTED: "模拟异常发现",
 }
@@ -534,9 +534,9 @@ export function runFunnels(run: SimulationRun) {
     {
       label: "模拟权益漏斗",
       steps: [
-        { label: "待履约", value: benefits.length },
+        { label: "等待权益处理", value: benefits.length },
         {
-          label: "按时履约",
+          label: "按时完成",
           value: benefits.filter((task) => task.rightsFulfilledOnTime).length,
         },
         { label: "已完成", value: completed },

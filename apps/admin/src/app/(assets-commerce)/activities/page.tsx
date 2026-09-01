@@ -101,7 +101,7 @@ export default function ActivitiesAdminPage() {
       setForm((current) => ({ ...current, title: "", description: "" }))
       await loadActivities()
     } catch {
-      setMessage("活动创建失败。")
+      setMessage("活动没有创建成功，请检查时间、地点和网络后重试。")
     }
   }
 
@@ -114,7 +114,7 @@ export default function ActivitiesAdminPage() {
       setMessage("活动状态已更新。")
       await loadActivities()
     } catch {
-      setMessage("活动状态更新失败。")
+      setMessage("活动状态没有更新成功，请检查网络后重试。")
     }
   }
 
@@ -283,7 +283,7 @@ export default function ActivitiesAdminPage() {
         <div className="mt-4">
           <AdminDataTable
             columns={bookingColumns}
-            emptyLabel="暂无预约。"
+            emptyLabel="还没有活动预约。用户提交预约后会显示在这里。"
             rows={bookings}
           />
         </div>

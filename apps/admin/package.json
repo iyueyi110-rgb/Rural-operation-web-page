@@ -1,5 +1,6 @@
 {
   "name": "@zouma/admin",
+  "description": "养护记录审核、认养权益和售后管理后台 Demo。",
   "version": "0.1.0",
   "private": true,
   "type": "module",

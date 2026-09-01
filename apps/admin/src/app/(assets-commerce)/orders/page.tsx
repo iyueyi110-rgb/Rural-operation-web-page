@@ -2,9 +2,16 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 
-import { AdminDataTable, type TableColumn } from "@admin/components/admin-data-table"
+import {
+  AdminDataTable,
+  type TableColumn,
+} from "@admin/components/admin-data-table"
 import { AdminStatCard } from "@admin/components/admin-stat-card"
-import { adminApiBase, fetchWithTimeout, nodeDisplayName } from "@admin/lib/admin-api"
+import {
+  adminApiBase,
+  fetchWithTimeout,
+  nodeDisplayName,
+} from "@admin/lib/admin-api"
 import { adminCopy } from "@admin/lib/admin-copy"
 
 interface SpaceNode {
@@ -51,18 +58,25 @@ export default function OrdersPage() {
       if (nodeId) params.set("nodeId", nodeId)
       if (date) params.set("date", date)
 
-      const [ordersResponse, nodesResponse, consumptionResponse] = await Promise.all([
-        fetchWithTimeout(`${adminApiBase}/orders?${params}`),
-        fetchWithTimeout(`${adminApiBase}/nodes`),
-        fetchWithTimeout(`${adminApiBase}/analytics/consumption/by-node`),
-      ])
+      const [ordersResponse, nodesResponse, consumptionResponse] =
+        await Promise.all([
+          fetchWithTimeout(`${adminApiBase}/orders?${params}`),
+          fetchWithTimeout(`${adminApiBase}/nodes`),
+          fetchWithTimeout(`${adminApiBase}/analytics/consumption/by-node`),
+        ])
 
-      if (!ordersResponse.ok || !nodesResponse.ok || !consumptionResponse.ok) throw new Error(adminCopy.common.error)
+      if (!ordersResponse.ok || !nodesResponse.ok || !consumptionResponse.ok)
+        throw new Error(adminCopy.common.error)
 
       const ordersResult = (await ordersResponse.json()) as { data: OrderRow[] }
       const nodesResult = (await nodesResponse.json()) as { data: SpaceNode[] }
       const consumptionResult = (await consumptionResponse.json()) as {
-        data: Array<{ nodeId: string | null; node: SpaceNode | null; totalAmount: number; orderCount: number }>
+        data: Array<{
+          nodeId: string | null
+          node: SpaceNode | null
+          totalAmount: number
+          orderCount: number
+        }>
       }
 
       setOrders(ordersResult.data)
@@ -76,7 +90,11 @@ export default function OrdersPage() {
         })),
       )
     } catch (caughtError) {
-      setError(caughtError instanceof Error ? caughtError.message : adminCopy.common.error)
+      setError(
+        caughtError instanceof Error
+          ? caughtError.message
+          : adminCopy.common.error,
+      )
     } finally {
       setIsLoading(false)
     }
@@ -87,17 +105,39 @@ export default function OrdersPage() {
   }, [loadData])
 
   const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0)
-  const avgOrder = orders.length ? Math.round((totalRevenue / orders.length) * 100) / 100 : 0
+  const avgOrder = orders.length
+    ? Math.round((totalRevenue / orders.length) * 100) / 100
+    : 0
   const columns = useMemo<Array<TableColumn<OrderRow>>>(
     () => [
-      { key: "id", label: "ID", render: (value) => <span title={String(value)}>{String(value).slice(0, 8)}</span> },
-      { key: "orderType", label: "类型", render: (value) => adminCopy.orders.types[value as keyof typeof adminCopy.orders.types] },
+      {
+        key: "id",
+        label: "ID",
+        render: (value) => (
+          <span title={String(value)}>{String(value).slice(0, 8)}</span>
+        ),
+      },
+      {
+        key: "orderType",
+        label: "类型",
+        render: (value) =>
+          adminCopy.orders.types[value as keyof typeof adminCopy.orders.types],
+      },
       { key: "productName", label: "商品" },
       { key: "quantity", label: "数量" },
       { key: "totalAmount", label: "金额", render: (value) => `¥${value}` },
-      { key: "node", label: "点位", render: (_value, row) => nodeDisplayName(row.node?.slug, row.node?.nameKey) },
+      {
+        key: "node",
+        label: "点位",
+        render: (_value, row) =>
+          nodeDisplayName(row.node?.slug, row.node?.nameKey),
+      },
       { key: "status", label: "状态" },
-      { key: "createdAt", label: "时间", render: (value) => new Date(String(value)).toLocaleString("zh-CN") },
+      {
+        key: "createdAt",
+        label: "时间",
+        render: (value) => new Date(String(value)).toLocaleString("zh-CN"),
+      },
     ],
     [],
   )
@@ -105,40 +145,83 @@ export default function OrdersPage() {
   return (
     <div className="grid gap-5">
       <header>
-        <p className="text-sm font-bold text-water">{adminCopy.shell.subtitle}</p>
-        <h1 className="mt-1 text-2xl font-extrabold">{adminCopy.orders.title}</h1>
+        <p className="text-sm font-bold text-water">
+          {adminCopy.shell.subtitle}
+        </p>
+        <h1 className="mt-1 text-2xl font-extrabold">
+          {adminCopy.orders.title}
+        </h1>
       </header>
 
       <div className="grid gap-3 rounded-lg border border-stone bg-white p-4 shadow-soft md:grid-cols-3">
         <label className="grid gap-1 text-sm font-bold">
           {adminCopy.orders.filterByType}
-          <select className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setOrderType(event.target.value)} value={orderType}>
+          <select
+            className="h-10 rounded-md border border-stone bg-rice px-3"
+            onChange={(event) => setOrderType(event.target.value)}
+            value={orderType}
+          >
             <option value="">{adminCopy.orders.allTypes}</option>
-            {Object.entries(adminCopy.orders.types).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            {Object.entries(adminCopy.orders.types).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
           </select>
         </label>
         <label className="grid gap-1 text-sm font-bold">
           {adminCopy.orders.filterByNode}
-          <select className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setNodeId(event.target.value)} value={nodeId}>
+          <select
+            className="h-10 rounded-md border border-stone bg-rice px-3"
+            onChange={(event) => setNodeId(event.target.value)}
+            value={nodeId}
+          >
             <option value="">{adminCopy.orders.allTypes}</option>
-            {nodes.map((node) => <option key={node.id} value={node.id}>{nodeDisplayName(node.slug, node.nameKey)}</option>)}
+            {nodes.map((node) => (
+              <option key={node.id} value={node.id}>
+                {nodeDisplayName(node.slug, node.nameKey)}
+              </option>
+            ))}
           </select>
         </label>
         <label className="grid gap-1 text-sm font-bold">
           日期
-          <input className="h-10 rounded-md border border-stone bg-rice px-3" onChange={(event) => setDate(event.target.value)} type="date" value={date} />
+          <input
+            className="h-10 rounded-md border border-stone bg-rice px-3"
+            onChange={(event) => setDate(event.target.value)}
+            type="date"
+            value={date}
+          />
         </label>
       </div>
 
-      {error ? <div className="rounded-md bg-lychee/10 p-3 text-sm font-bold text-lychee">{error}</div> : null}
+      {error ? (
+        <div className="rounded-md bg-lychee/10 p-3 text-sm font-bold text-lychee">
+          {error}
+        </div>
+      ) : null}
 
       <div className="grid gap-3 md:grid-cols-3">
-        <AdminStatCard label={adminCopy.orders.totalRevenue} value={`¥${totalRevenue}`} />
-        <AdminStatCard label={adminCopy.orders.totalOrders} value={orders.length} />
-        <AdminStatCard label={adminCopy.orders.avgOrder} value={`¥${avgOrder}`} />
+        <AdminStatCard
+          label={adminCopy.orders.totalRevenue}
+          value={`¥${totalRevenue}`}
+        />
+        <AdminStatCard
+          label={adminCopy.orders.totalOrders}
+          value={orders.length}
+        />
+        <AdminStatCard
+          label={adminCopy.orders.avgOrder}
+          value={`¥${avgOrder}`}
+        />
       </div>
 
-      <AdminDataTable columns={columns} emptyLabel={adminCopy.orders.noData} isLoading={isLoading} rows={orders} />
+      <AdminDataTable
+        columns={columns}
+        emptyLabel={adminCopy.orders.noData}
+        isLoading={isLoading}
+        rows={orders}
+      />
 
       <section className="rounded-lg border border-stone bg-white p-5 shadow-soft">
         <h2 className="text-lg font-extrabold">按点位消费汇总</h2>
@@ -146,10 +229,14 @@ export default function OrdersPage() {
           <AdminDataTable
             columns={[
               { key: "nodeName", label: "点位" },
-              { key: "totalAmount", label: "收入", render: (value) => `¥${value}` },
+              {
+                key: "totalAmount",
+                label: "演示订单金额",
+                render: (value) => `¥${value}`,
+              },
               { key: "orderCount", label: "订单数" },
             ]}
-            emptyLabel="暂无点位消费。"
+            emptyLabel="还没有点位消费记录。创建演示订单后可在这里查看。"
             rows={consumption}
           />
         </div>
@@ -159,5 +246,7 @@ export default function OrdersPage() {
 }
 
 function today() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(new Date())
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(
+    new Date(),
+  )
 }
